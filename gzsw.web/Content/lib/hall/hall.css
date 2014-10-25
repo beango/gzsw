@@ -1,0 +1,435 @@
+﻿span {
+    display: inline;
+}
+input{border:0}
+body {
+    margin-top: 2px;
+}
+
+.setting {
+    float: left; width: 50px;margin-left: 5px;
+}
+.setting .tab{
+    margin: 2px;
+    display: inline-block;
+	width: 32px;
+	height: 32px;
+	font-size: 12px;
+	line-height: 14px;
+	letter-spacing: 10px;
+}
+
+.tab img {
+    width: 32px;
+}
+
+.setting .sel {
+    background:#22809c;
+    display: inline-block;
+}
+
+
+.web-hall {
+    position: absolute;
+	max-width: 900px;
+	/*max-height: 500px;*/
+	overflow: hidden;
+	/*background: #00f09c;*/
+    left: 60px;
+    top: 40px;
+}
+.web-hall-bg{
+	width: 100%;
+    z-index: 10;
+}
+
+
+.hall-icon{
+	position:inherit;
+	top: 1px;
+	left: 1px;
+    z-index: 20;
+}
+
+.sel {
+    background:#22809c;
+}
+
+.web-hall span img.imgSize {
+    width: 20px;
+    height: 12px;
+}
+.web-hall em img.imgSize {
+    width: 20px;
+    height: 20px;
+}
+
+.device {
+    font-family: '黑体';
+    font-weight: bold;
+    width: 20px;
+    cursor: pointer;
+    text-align: center;
+}
+
+/***  VirtualMonitor ***/
+.showIcon {
+    display: block;
+    font-size: 12px;
+    width: 40px;
+    margin-top: 10px;
+    text-align: center;
+}
+.showIcon img{
+    width: 30px;
+}
+
+.hallNum {
+    width: 20px;
+    font-size: 12px;
+    text-align: center;
+    color: #000;
+}
+.userName {
+    text-align: center;
+    display: block;
+    width: 20px;
+    font-size: 12px;
+    line-height: 12px;
+	letter-spacing: 5px;
+	direction: rtl; 
+    color: #eb6100;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.title_span {
+    margin-left: 100px; 
+    font-weight: bolder; 
+    display: inline-block;
+    color: #eb6100;
+    font-size: 24px;
+}
+
+/** 温度计 **/
+.weather_red {
+    background-image: url("./images/thermometer_red.png");
+    background-color: #FFFFFF;
+    background-repeat: no-repeat;
+    background-position: 10px 0px;
+    /*background: url("./images/wenduji1.gif") no-repeat scroll 10px 0px #FFFFFF;*/
+    /*display: inline;*/
+    font-size: 11px;
+    position: relative;
+    width: 110px;
+    height: 30px;
+}
+.weather_green {
+    background-image: url("./images/thermometer_green.png");
+    background-color: #FFFFFF;
+    background-repeat: no-repeat;
+    background-position: 10px 0px;
+    font-size: 11px;
+    position: relative;
+    width: 110px;
+    height: 30px;
+}
+.weather_yellow {
+    background-image: url("./images/thermometer_yellow.png");
+    background-color: #FFFFFF;
+    background-repeat: no-repeat;
+    background-position: 10px 0px;
+    font-size: 11px;
+    position: relative;
+    width: 110px;
+    height: 30px;
+}
+.weather_glass {
+    background-image: url("./images/glass.png") ;
+    width: 84.5px; 
+    margin-left: 24px;
+    margin-top: 0px;
+    height: 12px;
+    display: block;
+}
+
+.numN {
+    float: left;
+    font-size:12px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+table.input {
+    margin-top: 10px;
+}
+table.input td {
+    min-height: 20px;
+    padding: 5px 0 5px 16px;
+    vertical-align: top;
+}
+.hall_btn {
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+
+.btnHall {
+    background: url(./images/buttonbg.png) no-repeat;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    border: 0px;
+}
+
+
+/*插件*/
+.plugin
+{
+	width:500px;
+	height:300px;
+    background-color: #000;
+}
+.video-main {
+    background: #dcdedd;
+}
+.video-left {
+    width: 500px;
+    float: left;
+}
+.video-right {
+    width: 156px;
+    float: left;
+    margin-left: 10px;
+    height: 340px;
+    background: url("./images/vidoControl.png")
+}
+.handle {
+    width: 492px;
+    height: 20px;
+    padding: 10px 5px 9px 2px;
+    border-bottom: 1px solid #e5e5e5;
+    /*background: #f5f5f5;*/
+}
+.realPlay {
+    float: left;
+    width: 100px;
+}
+.sound {
+    float: left;
+    margin-left: 230px;
+    width: 105px;
+}
+
+.startRealPlay {
+    cursor: pointer;
+    margin-top: -5px;
+    width:30px;
+    height:30px;
+    background: url("./images/startRealPlay.png") no-repeat 0px; display:inline-block; 
+}
+.stopRealPlay {
+    cursor: pointer;
+    margin-top: -5px;
+    width:30px;
+    height:30px;
+    background: url("./images/stopRealPlay.png") no-repeat 0px; display:inline-block;
+}
+.openSound {
+    cursor: pointer;
+    margin-top: -5px;
+    width:30px;
+    height:30px;
+    background: url("./images/openSound.png") no-repeat 0px; display:inline-block;
+}
+.closeSound {
+    cursor: pointer;
+    margin-top: -5px;
+    width:30px;
+    height:30px;
+    background: url("./images/closeSound.png") no-repeat 0px; display:inline-block;
+}
+.fullScreen {
+    border-style: none;
+    float: right;
+    cursor: pointer;
+    margin-top: -5px;
+    width:30px;
+    height:30px;
+    background: url("./images/fullScreen.png") no-repeat 0px; display:inline-block;
+}
+
+.Verticalslider{position: relative;text-align: left;height:5px;width:62px;border-radius:5px; background-color:#342a29;float:right;margin:8px 2px 8px;}
+.Vertical-slider-range{ background:#0d4d68;position: absolute;z-index: 1;height:100%;border-radius:5px; left:0px;top:0px;font-size:0px;}
+a.ui-slider-handle,a.ui-slider-handle:link,a.ui-slider-handle:visited,a.ui-slider-handle:hover{cursor:default;height:13px;;position: absolute;width:13px;z-index:2;background:url(./images/slider-handle.png) no-repeat;margin-left: -0.6em;top:-0.3em; padding:0px;border: 0px; }
+
+.directionControl {
+    margin-left: 10px;
+    margin-top: 10px;
+    width: 150px;
+}
+.directionControl td {
+    width: 40px;
+    height: 40px;
+}
+.directionControl td.center {
+    text-align: center;
+}
+.directionControl td.right {
+    text-align: right;
+}
+
+.autoControl {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/auto.png") no-repeat 0px; display:inline-block; 
+}
+.leftUpperControl {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/leftUpper.png") no-repeat 0px; display:inline-block; 
+}
+.upControl {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/up.png") no-repeat 0px; display:inline-block; 
+}
+.rightUpperControl {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/rightUpper.png") no-repeat 0px; display:inline-block;
+}
+.leftControl {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/left.png") no-repeat 0px; display:inline-block; 
+}
+.rightControl {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/right.png") no-repeat 0px; display:inline-block;
+}
+.leftDownControl {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/leftDown.png") no-repeat 0px; display:inline-block; 
+}
+.downControl {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/down.png") no-repeat 0px; display:inline-block; 
+}
+.rightDownControl {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/rightDown.png") no-repeat 0px; display:inline-block; 
+}
+
+.plusSign {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/plusSign.png") no-repeat 0px; display:inline-block;
+}
+.minusSign {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/minusSign.png") no-repeat 0px; display:inline-block;
+}
+
+/**2**/
+.autoControlSel {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/auto2.png") no-repeat 0px; display:inline-block; 
+}
+.leftUpperControlSel {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/leftUpper2.png") no-repeat 0px; display:inline-block; 
+}
+.upControlSel {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/up2.png") no-repeat 0px; display:inline-block; 
+}
+.rightUpperControlSel {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/rightUpper2.png") no-repeat 0px; display:inline-block;
+}
+.leftControlSel {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/left2.png") no-repeat 0px; display:inline-block; 
+}
+.rightControlSel {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/right2.png") no-repeat 0px; display:inline-block;
+}
+.leftDownControlSel {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/leftDown2.png") no-repeat 0px; display:inline-block; 
+}
+.downControlSel {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/down2.png") no-repeat 0px; display:inline-block; 
+}
+.rightDownControlSel {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/rightDown2.png") no-repeat 0px; display:inline-block; 
+}
+
+.plusSignSel {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/plusSign2.png") no-repeat 0px; display:inline-block;
+}
+.minusSignSel {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/minusSign2.png") no-repeat 0px; display:inline-block;
+}
+
+
+div.innerbox {
+    position:absolute;
+    top:30%;
+    width:80px;
+    height:200px;
+}
+div.outbox {
+    width:80px;
+    height:200px;
+    position:relative
+}
+
+.hid {
+    display: none;
+}

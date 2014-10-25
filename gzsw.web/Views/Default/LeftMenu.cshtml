@@ -1,0 +1,113 @@
+﻿@model IEnumerable<gzsw.controller.HomeController.MenuTree>
+@{ 
+    var topmenu = TempData["topMenu"] as gzsw.model.SYS_MENU;
+    var isMapServer = false;
+    if (ViewData["MapServer"] != null)
+    {
+        bool.TryParse(ViewData["MapServer"].ToString(),out isMapServer);
+    } 
+}
+<script type="text/javascript">
+    $(function() {
+        // 菜单切换
+        $("div[tag='menu']:first").next("ul").slideDown();
+        $("div[tag='menu']").click(function() {
+            $("div[tag='menu']").attr("class", "gzsw_LeftMenu_MainTitle_Off");
+            $("div[tag='menu']").next("ul").slideUp();
+            $(this).attr("class", "gzsw_LeftMenu_MainTitle_On");
+            $(this).next("ul").slideDown(function() {
+                resize();
+            }); 
+        });
+        // 主菜单事件绑定
+        $("#mainTab li:not('.gzsw_tab_left_btn')").click(function() {
+            $("#mainTab li").removeClass("sel");
+            $(this).addClass("sel");
+        });
+        // 菜单注册事件
+        $("#gzsw_LeftMenu").find("a[menuId]").click(function() {
+            var url = $(this).attr("url"); 
+            if (url != undefined && url != "" && url != "#") {
+                @if (isMapServer)
+                {
+                     <text> 
+                    tab.removeTabItem('@(topmenu != null ? "tree_"+topmenu.MENU_ID : "-99")');
+                    tab.addTabItem({
+                        tabid: '@(topmenu != null ? "tree_"+topmenu.MENU_ID : "-99")',
+                        text: '@(topmenu != null ? topmenu.MENU_NAM : "实时监控")',
+                        url: url.urlstamp(),
+                        callback: function (data) {
+                            resize();
+                        }
+                    });
+                   </text>
+                }
+                else
+                {
+                    <text>
+                        var menuId = $(this).attr("menuId");
+                        var txt = $(this).attr("txt");
+                        tab.addTabItem({
+                        tabid: menuId,
+                        text: txt,
+                        url: url.urlstamp(),
+                        callback: function () {
+                            resize();
+                            }
+                        });
+                   
+                    </text>
+                }
+                
+            } 
+        });
+    });
+</script>
+<div class="gzsw_LeftMenu">
+    <div class="gzsw_LeftMenu_Title">@(topmenu != null ? topmenu.MENU_NAM : "")</div>
+    @if (Model != null)
+    {
+        bool isfirst=true;
+        foreach (var menu in Model)
+        {
+            if (menu.children.Any()  )
+            {
+                if (isMapServer)
+                {
+                    <div  tag="menu" class="@(isfirst?"gzsw_LeftMenu_MainTitle_On":"gzsw_LeftMenu_MainTitle_Off")"><a url="@menu.url" menuid="@menu.id" txt="@menu.text" href="javascript:void(0);">@menu.text</a></div>
+     
+                }
+                else
+                {
+                      <div tag="menu" class="@(isfirst?"gzsw_LeftMenu_MainTitle_On":"gzsw_LeftMenu_MainTitle_Off")"><a href="javascript:void(0);">@menu.text</a></div>
+           
+                }
+               
+                <ul style="display:none;">
+                @foreach (var menuTree in menu.children)
+                {
+
+                    <li><a menuid="@menuTree.id" txt="@menuTree.text" url="@menuTree.url" href="javascript:void(0);">@menuTree.text</a></li>
+                    if (menuTree.children.Any())
+                    {
+                           foreach (var menuTreeNode in menuTree.children)
+                           {
+                                  <li><a url="@menuTreeNode.url" txt="@menuTreeNode.text" menuid="@menuTreeNode.id" href="javascript:void(0);">@menuTreeNode.text</a></li>
+                           }
+                    }
+                }
+
+               </ul>
+            }
+             else
+             {
+                <div  tag="menu" class="@(isfirst?"gzsw_LeftMenu_MainTitle_On":"gzsw_LeftMenu_MainTitle_Off")"><a url="@menu.url" menuid="@menu.id" txt="@menu.text" href="javascript:void(0);">@menu.text</a></div>
+             }
+
+             isfirst = false;
+        }
+    }
+
+</div>
+
+ 

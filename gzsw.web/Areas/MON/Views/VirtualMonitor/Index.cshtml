@@ -1,0 +1,300 @@
+﻿@{
+    ViewBag.Title = "实时监控";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+}
+@using gzsw.web
+@model gzsw.controller.MON.VirtualHall
+    
+<div>
+    
+    <div class="innerbox">
+        <div class="outbox">
+            <div>
+                <span class="showIcon"><img src="@Url.Content("~/Content/lib/hall/images/win_normal.png")" alt="" />在线</span>
+                <span class="showIcon"><img src="@Url.Content("~/Content/lib/hall/images/win_op.png")" alt="" />办理中</span>
+                <span class="showIcon"><img src="@Url.Content("~/Content/lib/hall/images/win_bussy.png")" alt="" />暂停</span>
+                <span class="showIcon"><img src="@Url.Content("~/Content/lib/hall/images/win_close.png")" alt="" />离线</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="position: relative; ">
+        <span id="txtTitle" class="title_span">@Model.HallName</span>
+    
+        <div id="thermometer" style="width: 220px; float: right;margin-top: 10px;">
+            <img id="faceImage" style="width: 25px; float: left; cursor: pointer;" src="@Url.Content("~/Content/lib/hall/images/smilingFace.gif")" alt="" />
+            <div style="float: left;margin-top: 5px;">
+                <div id="thermometer_icon" class="weather_green">
+                    <div style="width: 100%; display: block; height: 30px;">
+                        <div id="Temp" class="weather_glass" >
+                            <div style="background-color:#ffffff;height: 5.6px;width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span class="numN" style=""><span id="totalNumber" style="color: red;">0</span>人等待</span>
+        </div>
+        
+    </div>
+    
+    
+    <div class="web-hall" id="web-hall">
+        @if (Model != null)
+        {
+            <img class='web-hall-bg' id='hall_@Model.HallNo' src='@Model.ImageUrl' ondragstart='return false;' />
+
+            foreach (var item in Model.HallTabConfigs)
+            {
+                <span id="tab_@item.Id" class="hall-icon device" style="left:@item.X;top:@item.Y" d-type="device" d-open="0" d-state="0" d-Id="@item.Id" d-Hall="@item.HallNo" >
+                    <span class="hallNum">@item.Id</span>
+                    <img class="imgSize" src="@item.IconUrl" />
+                    <span d-type="name" class="userName"></span>
+                </span>
+            }
+            foreach (var item in Model.HallCameraConfigs)
+            {
+                <em id="camera_@item.Id" class="hall-icon device" style="left:@item.X;top:@item.Y" d-type="device" d-state="1" d-id="@item.Id" d-cameratype="@item.CameraType" d-hall="@item.HallNo">
+                    <img class="imgSize" src="@item.IconUrl" />
+                </em>
+            }
+        }
+    </div>
+</div>
+
+<div style="display: none;">
+    <div id="tip_panel"></div>
+</div>
+
+@section Head
+{
+    @Html.StyleSheet("lib/hall/hall.css")
+    @Html.JavaScript("lib/hall/icon.js")
+    
+}
+    
+<script type="text/javascript">
+    $(function() {
+        monitor.init();
+    });
+
+    var monitor = function() {
+        var _timeout = '@System.Configuration.ConfigurationManager.AppSettings["Heartbeat"]';
+        var _interval;
+
+        var _init = function () {
+            setPush();
+            $("span[d-type='device'] img").attr("src", windowIcon.none);
+
+            var timeStr = "1秒";
+            if (_timeout < 1000) {
+                _timeout = 1000;
+                timeStr = "1秒";
+            } else {
+                if (_timeout / 1000 > 60) {
+                    timeStr = (_timeout / 1000 / 60)+"分";
+                }else{
+                    timeStr = (_timeout / 1000)+"秒";
+                }
+            }
+            $("#timeingUpate").html(timeStr);
+
+            calculateWidth();
+            initPush();
+            initEvent();
+        };
+
+        //初始化事件
+        var initEvent = function() {
+            var $panel = $("#web-hall");
+
+            //点击窗口
+            $panel.delegate('span', 'mousedown', function(e) {
+                var $this = $(this);
+                if ($this.attr("d-open") == 0) {
+                    gzsw.dialog.alert('窗口已关闭.', 3);
+                    return false;
+                }
+                var item = $this.data("data");
+                gzsw.dialog.open({
+                    url: '@Url.Action("TabPanel", "VirtualMonitor")?staffId=' + item.STAFF_ID + '&hallNo=' + item.HALL_NO + "&counterId=" + item.COUNTER_ID + '&_=' + (new Date()).getTime(),
+                    title: '窗口信息',
+                    width: 420,
+                    height:200,
+                    isReload:false
+                });
+            });
+
+            //点击摄像头
+            $panel.delegate('em', 'mousedown', function (e) {
+                var $this = $(this);
+                var id = $this.attr("d-id");
+                var cameratype = $this.attr("d-cameratype");
+                var width = cameratype == 1 ? 685 : 500;
+
+                gzsw.dialog.open({
+                    url: '@Url.Action("PlayVideo", "VirtualMonitor")?seq=' + id + '&_=' +(new Date()).getTime() ,
+                    title: '摄像窗口',
+                    width: width,
+                    height: 368,
+                    isReload: false
+                });
+            });
+
+
+            $('#faceImage').on('mouseover', function () {
+                var $panel = $("#tip_panel");
+                var html = $panel.html();
+                if (html.length > 0) {
+                    layer.tips(html, this, {
+                        guide: 2,
+                        maxWidth: 240
+                    });
+                }
+            }).on("mouseout",function() {
+                layer.closeTips();
+            });
+
+            $(window).on("resize", function () {
+                calculateWidth();
+            });
+        };
+
+        //初始化推送
+        var initPush = function() {
+
+            _interval=window.setInterval(function () {
+                setPush();
+            }, _timeout);
+        };
+
+        var setPush = function () {
+            _interval && window.clearInterval(_interval);
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("PushMessage", "VirtualMonitor")",
+                data: { hallNo: '@Model.HallNo', "_": (new Date()).getTime() },
+                success: function(data) {
+                    updateDeviceState(data);
+                    updateNumber(data);
+                    initPush();
+                },
+                error: function() {
+                    initPush();
+                }
+            });
+        };
+
+        //更新设备的状态
+        var updateDeviceState = function(data) {
+            $.each(data.tabs, function(i, item) {
+                var $tab = $("#tab_" + item.COUNTER_ID);
+                var $img = $tab.find('img');
+                var $user = $("span[d-type='name']", $tab);
+
+                //修改是否使用状态
+                $tab.attr("d-open", item.LOGIN_STATE);
+                $tab.data("data", item);
+
+                if (item.LOGIN_STATE == 0) {
+                    $img.attr("src", windowIcon.none);
+                    $user.html("");
+                } else {
+                    $user.html(item.STAFF_NAM);
+                    $tab.attr("d-state", item.STATE);
+                    switch (item.STATE) {
+                    case 0:
+                    case 1:
+                    case 4:
+                        //在线
+                        $img.attr("src", windowIcon.online);
+                        break;
+                    case 2:
+                    case 3:
+                        //办理中
+                        $img.attr("src", windowIcon.working);
+                        break;
+                    case 5:
+                        //暂停
+                        $img.attr("src", windowIcon.suspended);
+                        break;
+                    default:
+                        $img.attr("src", windowIcon.online);
+                    }
+                }
+            });
+
+        };
+
+        //更新人数
+        var updateNumber = function (data) {
+            //data.total = 1000;
+            // 设置总人数
+
+            //设置笑脸
+            var cryingTotalNumber = '@System.Configuration.ConfigurationManager.AppSettings["CryingTotalNumber"]';
+            var cryingNumber = '@System.Configuration.ConfigurationManager.AppSettings["CryingNumber"]';
+            var cryingWarningNumber = '@System.Configuration.ConfigurationManager.AppSettings["CryingWarningNumber"]';
+            if (!cryingTotalNumber) {
+                cryingTotalNumber = 100;
+            }
+
+            $("#totalNumber").text(data.total);
+            //设置温度计
+            var defaultLeft = 24;
+            var defaultWidth = 84;
+            var proportion = 84 / Number(cryingTotalNumber);
+            var bar = 0;
+            var left = defaultLeft;
+            var width = 0;
+            if (data.total < cryingTotalNumber) {
+                bar = (data.total * proportion);
+                left = bar + defaultLeft;
+                width = defaultWidth - bar;
+            }
+            $("#Temp").css({ "margin-left": left, "width": width+1 });
+
+            if (data.total > Number(cryingNumber)) {
+                $("#thermometer_icon").removeClass().addClass("weather_red");
+                $("#faceImage").attr("src", faceInco.crying);
+            } else if (data.total > Number(cryingWarningNumber)) {
+                $("#thermometer_icon").removeClass().addClass("weather_yellow");
+            } else {
+                $("#thermometer_icon").removeClass().addClass("weather_green");
+                $("#faceImage").attr("src", faceInco.smiling);
+            }
+
+            //业务人数
+            var $panel = $("#tip_panel").empty();
+            var $table = $("<table></table>");
+            $table.append("<tr><th>等待人数</th><th>业务</th></tr>");
+            $.each(data.business, function(i, item) {
+                var $tr = $("<tr></tr>");
+                $tr.append("<td>" + item.NUMBER + "</td><td>" + item.Q_SERIALNAME + "</td>");
+                $table.append($tr);
+            });
+            $panel.append($table);
+        };
+
+        //计算宽度
+        var calculateWidth = function () {
+            setTimeout(function() {
+                var wWidth = $(window).width();
+                var left = 0;
+                var $webPanel = $("#web-hall");
+                var w = $("#hall_@Model.HallNo").width();
+                if (wWidth-60 > w) {
+                    left = (wWidth - w) / 2;
+                }
+                $webPanel.css("left", left);
+                $("#txtTitle").css({ "margin-left": left + 220 });
+                //$("#thermometer").css({ "margin-right": left });
+            },200);
+        }
+        return {
+            init:function() {
+                _init();
+            }
+        };
+    }();
+</script>
+

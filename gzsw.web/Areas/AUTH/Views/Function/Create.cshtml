@@ -1,0 +1,97 @@
+﻿@using gzsw.web;
+@model gzsw.model.SYS_FUNCTION
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = "增加权限";
+    var FUNCALL = TempData["FUNCALL"] as List<gzsw.model.SYS_FUNCTION>;
+    var PARFUN = TempData["PARFUN"] as gzsw.model.SYS_FUNCTION;
+}
+@using (Html.BeginForm())
+{
+        @Html.AntiForgeryToken()
+        <table class="formTable" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    权限名称：
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.FUNCTION_NAM)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.FUNCTION_NAM)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    权限编码：
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.FUNCTION_COD)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.FUNCTION_COD)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    上级权限：
+                </td>
+                <td>
+                    <ul id="treeParFunc" class="ztree"></ul>
+                    <input type="hidden" value="" id="PAR_FUNCTION_ID" name="PAR_FUNCTION_ID" />
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.PAR_FUNCTION_ID)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft"> &nbsp;  </td>
+                <td>
+                    <input type="submit" class="l-button" value="提交" onclick="getChecked()" /> 
+                </td>
+                <td> </td>
+            </tr>
+        </table>
+}
+@section Head{
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+    @Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
+    @Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+    @Html.JavaScript("lib/jqueryform/jquery.form.js")
+    @Html.JavaScript("lib/utility/ext.js?v1")
+    <script type="text/javascript">
+		<!--
+		var zNodes;
+		$(function () {
+		    InitAjaxForm();//异步提交
+		    $.ajax({
+		        async: false,
+		        cache: false,
+		        type: 'POST',
+		        dataType: 'json',
+		        url: "/AUTH/Function/GetFuncsTree?check=@Request.QueryString["pid"]",
+		        success: function (data) {
+		            zNodes = data;
+		        }
+		    });
+		});
+
+		$(document).ready(function(){
+		    radioTree("#treeParFunc", zNodes)
+		});
+		//-->
+    </script>
+    <script type="text/javascript">
+        function getChecked() {
+            var treeObj = $.fn.zTree.getZTreeObj("treeParFunc"),
+            nodes = treeObj.getCheckedNodes(true);
+            for (var i = 0; i < nodes.length; i++) {
+                $('#PAR_FUNCTION_ID').val(nodes[i].id);
+                break;
+            }
+            return true;
+        }
+    </script>
+}

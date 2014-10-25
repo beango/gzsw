@@ -1,0 +1,11 @@
+﻿
+<td class="tdLeft">
+    员工编码：
+</td>
+<td style="text-align:left;">
+    <input type="checkbox" onclick="$('input[name=STAFF_ID]').attr('checked', $(this).attr('checked') == 'checked')" />全选
+    @Html.CheckBoxList("STAFF_ID", @ViewBag.STAFFLIST as IEnumerable<SelectListItem>)
+</td>
+<td>
+    @Html.ValidationMessage("STAFF_ID")
+</td>

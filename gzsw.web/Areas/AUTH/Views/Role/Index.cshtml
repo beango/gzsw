@@ -1,0 +1,175 @@
+﻿@using gzsw.web;
+@model PetaPoco.Page<gzsw.model.SYS_ROLE>
+@{
+    ViewBag.Title = "角色管理";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div id="orgTreeContent" style="display: none; position: absolute; z-index: 999999;">
+    <ul id="treeOrg" class="ztree" style="background: #f0f9fd;"></ul>
+</div>
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:80px;">角色名称：</td>
+            <td style="width:170px;"><input type="text" name="txtROLENAM" id="txtROLENAM" value="@ViewBag.ROLENAM" /></td>
+            <td style="width:80px;"> 组织机构：</td>
+            <td style="width:170px;">
+                <input type="text" readonly name="txtORGNAM" id="txtORGNAM" value="@ViewBag.ORGNAM" onclick="showMenu(); return false;" />
+                <input type="hidden" name="hidORGID" id="hidORGID" value="@ViewBag.ORGID" />
+            </td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="toptoolbar"></div>
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th>序号</th>
+                <th>角色名称</th>
+                <th>组织机构</th>
+                <th></th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td><input name="cbId" type="checkbox" value="@item.ROLE_ID" /></td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ROLE_NAM)
+                </td>
+                <td>
+                    @(item.RoleORG == null ? "" : item.RoleORG.ORG_NAM)
+                </td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+@section Head{
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+    @Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
+    @Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
+    @Html.JavaScript("lib/utility/ext.js?v1")
+    <script lang="javascript">
+    $(function () {
+        // 注册事件
+        // 查询
+        $("#btnSearch").ligerButton(
+        {
+                text: " 查 询 ",
+                click: function () {
+                    var url = "?rolenam=" + $("#txtROLENAM").val()
+                        + "&orgid=" + $("#hidORGID").val()
+                        + "&orgnam=" + $("#txtORGNAM").val();
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+            // 顶部导航
+        var bar = $("#toptoolbar").ligerToolBar();
+        bar.addItem(@Html.AuthViewButton("AUTH_ROLE_VIW", Url.Action("Details", "Role")));
+        bar.addItem({ line: true });
+        bar.addItem(@Html.AuthAddButton("AUTH_ROLE_ADD", Url.Action("Create", "Role"))); 
+        bar.addItem({ line: true });
+        bar.addItem(@Html.AuthEditButton("AUTH_ROLE_EDT", Url.Action("Edit", "Role"))); 
+        bar.addItem({ line: true });
+        bar.addItem(@Html.AuthViewButton("AUTH_ROLE_EDT", Url.Action("RoleFunc", "Role"), "权限")); 
+        bar.addItem({ line: true });
+        bar.addItem(@Html.AuthDelButton("AUTH_ROLE_DEL", Url.Action("Delete", "Role"))); 
+
+    });
+    </script>
+    <script type="text/javascript">
+		<!--
+        var ztree_setting_org = {
+            async: {
+                enable: false
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pId",
+                    rootPId: 0
+                }
+            },
+            view: {
+                dblClickExpand: false,
+                showIcon: showIconForTree
+            },
+            callback: {
+                onClick: onClick
+            }
+        };
+
+		var zNodes;
+		$(function () {
+		    $.ajax({
+		        async: false,
+		        cache: false,
+		        type: 'POST',
+		        dataType: 'json',
+		        url: "/SYS/Org/GetOrgsTree?nRoot=1",
+		        success: function (data) {
+		            zNodes = data;
+		        }
+		    });
+		});
+
+		$(document).ready(function() {
+		    $.fn.zTree.init($("#treeOrg"), ztree_setting_org, zNodes);
+		});
+
+		function showMenu() {
+		    var orgObj = $("#txtORGNAM");
+		    var orgOffset = $("#txtORGNAM").offset();
+		    $("#orgTreeContent").css({ left: orgOffset.left + "px", top: orgOffset.top + orgObj.outerHeight() + "px" }).slideDown("fast");
+
+		    $("body").bind("mousedown", onBodyDown);
+		}
+		function hideMenu() {
+		    $("#orgTreeContent").fadeOut("fast");
+		    $("body").unbind("mousedown", onBodyDown);
+		}
+		function onBodyDown(event) {
+		    if (!(event.target.id == "orgTreeContent" || $(event.target).parents("#orgTreeContent").length > 0)) {
+		        hideMenu();
+		    }
+		}
+		function onClick(e, treeId, treeNode) {
+		    var zTree = $.fn.zTree.getZTreeObj("treeOrg"),
+			nodes = zTree.getSelectedNodes(),
+			v = "",id="";
+		    nodes.sort(function compare(a, b) { return a.id - b.id; });
+		    for (var i = 0, l = nodes.length; i < l; i++) {
+		        v += nodes[i].name + ",";
+		        id += nodes[i].id + ",";
+		    }
+		    if (v.length > 0) v = v.substring(0, v.length - 1);
+		    if (id.length > 0) id = id.substring(0, id.length - 1);
+		    var orgid = $("#txtORGNAM");
+		    orgid.attr("value", v);
+		    $("#hidORGID").val(id);
+		    hideMenu();
+		}
+		//-->
+    </script>
+}

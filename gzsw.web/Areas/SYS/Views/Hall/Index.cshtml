@@ -1,0 +1,158 @@
+﻿@using gzsw.web;
+@model PetaPoco.Page<gzsw.model.SYS_HALL>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:100px;">服务厅名称：</td>
+            <td style="width:170px;"><input type="text" name="txtHALLNAM" id="txtHALLNAM" value="@ViewBag.NAM" /></td>
+            <td style="width:80px;"> 组织机构：</td>
+            <td style="width:170px;">@Html.DropDownList("ddlORGID", ViewBag.UserORG as SelectList, "--请选择--")</td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+
+        </tr>
+    </table>
+</div>
+
+<div id="toptoolbar"></div>
+
+    <div class="tablePanel">
+        <table class="tablelist">
+            <thead>
+                <tr>
+                    <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                    <th>序号 </th>
+                    <th>
+                        服务厅编码
+                    </th>
+                    <th>
+                        服务厅名称
+                    </th>
+                    <th>
+                        组织机构
+                    </th>
+                    <th>
+                        经度
+                    </th>
+                    <th>
+                        纬度
+                    </th>
+                    <th>
+                        柜台数量
+                    </th>
+                    <th>
+                        负责人
+                    </th>
+                    <th>
+                        负责人电话
+                    </th>
+                </tr>
+            </thead>
+            @{
+                var i = 1;
+            }
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td><input name="cbId" type="checkbox" value="@item.HALL_NO" /></td>
+                    <td>
+                        @(i++)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HALL_NO)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HALL_NAM)
+                    </td>
+                    <td>
+                        @(item.HALLORG == null ? "" : item.HALLORG.ORG_NAM)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LONGITUDE)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DIMENSION)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.COUNTER_CNT)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HEAD)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HEAD_TEL)
+                    </td>
+                </tr>
+            }
+
+        </table>
+        @if (Model.Items.Count < 1)
+        {
+            <div class="l-panel-notDATA">
+                暂无数据
+            </div>
+        }
+        @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+    </div>
+
+@section Head{
+    @Html.JavaScript("lib/utility/ext.js")
+
+    <script type="text/javascript" lang="javascript">
+
+        $(function() {
+            // 注册事件
+            // 查询
+            $("#btnSearch").ligerButton(
+                    {
+                        text: " 查 询 ",
+                        click: function () {
+                            var url = "?NAM=" + $("#txtHALLNAM").val() + "&orgid=" + $("#ddlORGID").val();
+                            location.href = url.urlstamp();
+                        },
+                        icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+                    });
+
+            // 顶部导航
+            var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+            @if (Html.ChkAuth("SYS_HALLINFO_VIW"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "SYS_HALLINFO_VIW", 550, 520));
+                @:ligerToolBar.addItem({ line: true });
+            }
+            
+            @if (Html.ChkAuth("SYS_HALLINFO_ADD"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIAddButton(Url.Action("Create"), "增加", "SYS_HALLINFO_ADD", 550, 500));
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+            @if (Html.ChkAuth("SYS_HALLINFO_EDT"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "SYS_HALLINFO_EDT", 550, 500));
+                @:ligerToolBar.addItem({ line: true });
+            }
+            
+            @if (Html.ChkAuth("SYS_VIRTUALHALL_VIW"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIButton(@Url.Action("Edit", "VirtualHall"), "虚拟大厅", "SYS_VIRTUALHALL_VIW", null, 1, false, false, 0, 0, "hallNo","@:$('.tablelist').getSelValue()"));
+                @:ligerToolBar.addItem({ line: true });
+            }
+            
+            @if (Html.ChkAuth("SYS_HALLINFO_DEL"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIDeleteButton(Url.Action("Delete"), "删除", "SYS_HALLINFO_DEL"));
+            }
+
+           
+        });
+    </script>
+}

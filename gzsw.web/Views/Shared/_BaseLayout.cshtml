@@ -1,0 +1,27 @@
+﻿@using gzsw.web
+@{
+    Layout = null;
+} 
+<!DOCTYPE html> 
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="keywords" content="@ViewBag.Keywords" />
+    <meta name="description" content="@ViewBag.Description" />
+    @Html.JavaScript("lib/utility/core.js")
+    <!-- Jquery 包 -->
+    @Html.JavaScript("lib/jquery/jquery-1.7.1.min.js")
+    @Html.JavaScript("lib/utility/jqueryHelper.js")
+    <!--  弹出框插件 -->
+    @Html.JavaScript("lib/layer/layer.min.js")
+    @Html.JavaScript("lib/utility/gzsw.dialog.js") 
+    @Html.Raw(TempData["alert"]) 
+    @RenderSection("Head", false)
+   
+</head>
+<body>
+    @RenderBody()
+</body>
+</html>

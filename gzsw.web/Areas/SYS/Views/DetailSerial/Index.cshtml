@@ -1,0 +1,126 @@
+﻿@using gzsw.web;
+@model PetaPoco.Page<gzsw.model.SYS_DETAILSERIAL>
+@{
+    ViewBag.Title = "View1";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:80px;">业务名称：</td>
+            <td style="width:170px;"><input type="text" name="txtSNAME" id="txtSNAME" value="@ViewBag.SNAM" /></td>
+            <td style="width:100px;">所属排队队列：</td>
+            <td style="width:170px;">@Html.DropDownList("ddlQID", ViewData["QUSERIAL"] as SelectList, "--请选择--")</td>
+            <td style="width:100px;">所属大类业务：</td>
+            <td style="width:170px;">@Html.DropDownList("ddlDLID", ViewData["DLSERIAL"] as SelectList, "--请选择--")</td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th>
+                    事项编码
+                </th>
+                <th>
+                    业务名称
+                </th>
+                <th>
+                    所属排队队列
+                </th>
+                <th>
+                    所属大类业务
+                </th>
+                <th>
+                    办理超时时间
+                </th>
+                <th>
+                    至少办理该业务的时间
+                </th>
+                <th>
+                    提醒倒计时时间点
+                </th>
+                <th>
+                    默认业务量折合系数
+                </th>
+            </tr>
+        </thead>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td><input type="checkbox" value="@item.SERIALID" /></td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SERIALID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SERIALNAME)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SYS_QUEUESERIAL.Q_SERIALNAME)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SYS_DLSERIAL.DLS_SERIALNAME)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BLCSTIME)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MINBLTIME)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DJSTIME)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DEFAULTYWLXS)
+                </td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/utility/ext.js")
+    <script lang="javascript">
+        $(function () {
+            // 注册事件
+            // 查询
+            $("#btnSearch").ligerButton(
+            {
+                text: " 查 询 ",
+                click: function () {
+                    var url = "?SID="
+                        + "&SNAM=" + $("#txtSNAME").val()
+                        + "&QID=" + $("#ddlQID").val()
+                        + "&DLID=" + $("#ddlDLID").val();
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+            // 顶部导航
+            var bar = $("#toptoolbar").ligerToolBar();
+
+            bar.addItem(@Html.AuthViewButton("SYS_DETAILSERIAL_VIW", Url.Action("Details", "DetailSerial"),"查看",500,450));
+            bar.addItem({ line: true });
+            bar.addItem(@Html.AuthAddButton("SYS_DETAILSERIAL_ADD", Url.Action("Create", "DetailSerial"),"新增",500,400));
+            bar.addItem({ line: true });
+            bar.addItem(@Html.AuthEditButton("SYS_DETAILSERIAL_EDT", Url.Action("Edit", "DetailSerial"),500,400));
+            bar.addItem({ line: true });
+            bar.addItem(@Html.AuthDelButton("SYS_DETAILSERIAL_DEL", Url.Action("Delete", "DetailSerial")));
+        });
+    </script>
+}

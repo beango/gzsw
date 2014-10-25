@@ -1,0 +1,52 @@
+﻿@model gzsw.model.SYS_FUNCTION
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="formbody">
+    <ul class="forminfo">
+        <li>
+            <label>
+                权限名称：
+            </label>
+            <label>
+                @Html.DisplayFor(model => model.FUNCTION_NAM)
+            </label>
+        </li>
+
+        <li>
+            <label>
+                权限编码：
+            </label>
+            <label>
+                @Html.DisplayFor(model => model.FUNCTION_COD)
+            </label>
+        </li>
+
+        <li>
+            <label>
+                上级权限：
+            </label>
+            <label>
+                @string.Join("，", Model.Par_FuncList.Select(obj => obj.FUNCTION_NAM).ToArray())
+            </label>
+        </li>
+
+        <li>
+            <label>
+            </label>
+            <label>
+                <input type="button" class="cancel" value="关闭" onclick="parent.$.fn.colorbox.close(); return false;" />
+            </label>
+        </li>
+    </ul>
+</div>
+@section Head{
+    <style type="text/css">
+        body {
+            min-width: 100px;
+        }
+    </style>
+}

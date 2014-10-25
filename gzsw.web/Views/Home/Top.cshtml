@@ -1,0 +1,74 @@
+﻿@model IEnumerable<gzsw.model.SYS_MENU>
+@using gzsw.web
+@{
+    ViewBag.Title = "Top";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+}
+
+<div class="navbar">
+    <div class="navbarleft">
+        <span>@DateTime.Now.ToString("yyyy年MM月dd日") @DateTime.Now.DayOfWeek.ToWeekString()  &nbsp;&nbsp;&nbsp;&nbsp; 
+        欢迎您 [@ViewBag.UserName]</span>
+    </div>
+    <div class="navbarright">
+        <ul>
+            <li><span><img src="@Html.Url("Content/layout/images/help.png")" title="帮助" class="helpimg" /></span><a href="#">帮助</a></li>
+            <li><a href="#">关于</a></li>
+            <li><a href="#">修改密码</a></li>
+            <li><a href="@Url.Action("LogOff", "Account")" target="_parent">退出</a></li>
+        </ul>
+    </div>
+</div>
+<div>
+    <div class="topleft">
+        <a href="main.html" target="_parent"><img src="@Html.Url("Content/layout/images/logo.png")" title="系统首页" /></a>
+    </div>
+    <ul class="nav">
+        @if (Model != null)
+        {
+            foreach (var menu in Model)
+            {
+                <li><a href="/Home/Left?nid=@menu.MENU_ID" nid="@menu.MENU_ID" target="leftFrame"><img src="@Html.Url(menu.IMAGEURL)" title="@menu.MENU_NAM" /><h2>@menu.MENU_NAM</h2></a></li>
+            }
+        }
+    </ul>
+    <div class="topright">
+    </div>
+   
+</div>
+@section Head
+{
+    @Html.StyleSheet("layout/css/style.css")
+    <style type="text/css">
+        body {
+            background: url(@Html.Url("Content/layout/images/topbg.gif")) repeat-x;
+        }
+    </style>
+    <script language="javascript">
+        $(function () {
+            $(".nav li a").click(function () {
+                $(".nav li a.selected").removeClass("selected");
+                $(this).addClass("selected");
+                //ShowChildTree($(this).attr("nid"));
+                $(".lefttop").text($(this).text());
+                //return false;
+            });
+            $(".nav li:first a").click();
+            //$(".nav li:first a").attr("class", "selected");
+            //ShowChildTree($(".nav li:first a").attr("nid"));
+        });
+
+        function ShowChildTree(id) {
+            parent.$(".leftmenu").html("");
+            return;
+            $(".leftmenu").load("/Home/LoadMenu2/" + id, function (data) {
+                $(".menuson li").click(function () {
+                    $(".menuson li.active").removeClass("active");
+                    $(this).addClass("active");
+                    var link = $(this).find('a');
+                    addPanel(link.text(), link.attr('nid'));
+                });
+            }); $(".panel-title").text($("#topnav li:first a").text());
+        }
+    </script>
+}

@@ -1,0 +1,1861 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="gzswModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityType Name="CHK_COUNTER">
+          <Key>
+            <PropertyRef Name="HALL_NO" />
+            <PropertyRef Name="COUNTER_ID" />
+          </Key>
+          <Property Name="HALL_NO" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="COUNTER_ID" Type="int" Nullable="false" />
+          <Property Name="MODIFY_ID" Type="varchar" MaxLength="50" />
+          <Property Name="MODIFY_DTIME" Type="datetime" />
+          <Property Name="NOTE" Type="nvarchar" MaxLength="512" />
+          <Property Name="W1A_STAFF_ID" Type="varchar" MaxLength="50" />
+          <Property Name="W2A_STAFF_ID" Type="varchar" MaxLength="50" />
+          <Property Name="W3A_STAFF_ID" Type="varchar" MaxLength="50" />
+          <Property Name="W4A_STAFF_ID" Type="varchar" MaxLength="50" />
+          <Property Name="W5A_STAFF_ID" Type="varchar" MaxLength="50" />
+          <Property Name="W6A_STAFF_ID" Type="varchar" MaxLength="50" />
+          <Property Name="W7A_STAFF_ID" Type="varchar" MaxLength="50" />
+          <Property Name="W1P_STAFF_ID" Type="varchar" MaxLength="50" />
+          <Property Name="W2P_STAFF_ID" Type="varchar" MaxLength="50" />
+          <Property Name="W3P_STAFF_ID" Type="varchar" MaxLength="50" />
+          <Property Name="W4P_STAFF_ID" Type="varchar" MaxLength="50" />
+          <Property Name="W5P_STAFF_ID" Type="varchar" MaxLength="50" />
+          <Property Name="W6P_STAFF_ID" Type="varchar" MaxLength="50" />
+          <Property Name="W7P_STAFF_ID" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CHK_STAFFCHK_EVENT">
+          <Key>
+            <PropertyRef Name="SEQ" />
+          </Key>
+          <Property Name="SEQ" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HALL_NO" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="STAFF_ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PRE_COUNTER_ID" Type="int" Nullable="false" />
+          <Property Name="REA_COUNTER_ID" Type="int" Nullable="false" />
+          <Property Name="CHK_DATE" Type="date" />
+          <Property Name="LAT_CHK_IN_TIME" Type="datetime" />
+          <Property Name="EAR_CHK_OUT_TIME" Type="datetime" />
+          <Property Name="REA_CHK_IN_TIME" Type="datetime" />
+          <Property Name="REA_CHK_OUT_TIME" Type="datetime" />
+          <Property Name="PLAN_LEAVE_TYPE" Type="tinyint" />
+          <Property Name="REA_LEAVE_TYPE" Type="tinyint" />
+          <Property Name="CHK_TYP" Type="tinyint" />
+          <Property Name="STATE" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="CLI_CLIENTEVENT">
+          <Key>
+            <PropertyRef Name="CEVENT_ID" />
+          </Key>
+          <Property Name="CEVENT_ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CEVENT_TIME" Type="datetime" />
+          <Property Name="CEVENT_SYSNO" Type="nvarchar" MaxLength="100" />
+          <Property Name="CEVENT_SNO" Type="varchar" MaxLength="50" />
+          <Property Name="CEVENT_COUNTER" Type="int" />
+          <Property Name="CEVENT_KEYID" Type="nvarchar" MaxLength="120" />
+          <Property Name="CEVENT_TYPE" Type="int" />
+        </EntityType>
+        <EntityType Name="CLI_COUNTERSTATE">
+          <Key>
+            <PropertyRef Name="HALL_NO" />
+            <PropertyRef Name="COUNTER_ID" />
+          </Key>
+          <Property Name="HALL_NO" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="COUNTER_ID" Type="int" Nullable="false" />
+          <Property Name="LOGIN_STATE" Type="tinyint" />
+          <Property Name="LST_LOGIN_TIME" Type="datetime" />
+          <Property Name="LST_LOGOUT_TIME" Type="datetime" />
+          <Property Name="LST_OPT_TIME" Type="datetime" />
+          <Property Name="STATE" Type="tinyint" />
+          <Property Name="LST_QUEUE_TRANSCODEID" Type="nvarchar" MaxLength="100" />
+          <Property Name="LST_NSR_SBM" Type="nvarchar" MaxLength="50" />
+          <Property Name="NSR_NAME" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="STAT_DAYHYYWTJ">
+          <Key>
+            <PropertyRef Name="HYYWDDTJ_DAY" />
+            <PropertyRef Name="HYYWDDTJ_SYSNO" />
+            <PropertyRef Name="HYYWDDTJ_NAME" />
+          </Key>
+          <Property Name="HYYWDDTJ_DAY" Type="date" Nullable="false" />
+          <Property Name="HYYWDDTJ_SYSNO" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="HYYWDDTJ_NAME" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="HYYWDDTJ_PDNUM" Type="int" />
+          <Property Name="HYYWDDTJ_NUM" Type="int" />
+        </EntityType>
+        <EntityType Name="STAT_DAYQUEUETJ">
+          <Key>
+            <PropertyRef Name="QDDTJ_DAY" />
+            <PropertyRef Name="QDDTJ_SYSNO" />
+            <PropertyRef Name="QDDTJ_COUNTER" />
+            <PropertyRef Name="QDDTJ_SNO" />
+            <PropertyRef Name="QDDTJ_QSERIALID" />
+          </Key>
+          <Property Name="QDDTJ_DAY" Type="date" Nullable="false" />
+          <Property Name="QDDTJ_SYSNO" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="QDDTJ_COUNTER" Type="int" Nullable="false" />
+          <Property Name="QDDTJ_SNO" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="QDDTJ_QSERIALID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="QDDTJ_TICKETNUM" Type="int" />
+          <Property Name="QDDTJ_RLL" Type="int" />
+          <Property Name="QDDTJ_QHNUM" Type="int" />
+          <Property Name="QDDTJ_RLLWAIT0_5" Type="int" />
+          <Property Name="QDDTJ_RLLWAIT5_10" Type="int" />
+          <Property Name="QDDTJ_RLLWAIT10_15" Type="int" />
+          <Property Name="QDDTJ_RLLWAIT15_20" Type="int" />
+          <Property Name="QDDTJ_RLLWAIT20_25" Type="int" />
+          <Property Name="QDDTJ_RLLWAIT25_30" Type="int" />
+          <Property Name="QDDTJ_RLLWAIT30_35" Type="int" />
+          <Property Name="QDDTJ_RLLWAIT35_40" Type="int" />
+          <Property Name="QDDTJ_RLLWAIT40_45" Type="int" />
+          <Property Name="QDDTJ_RLLWAIT45_50" Type="int" />
+          <Property Name="QDDTJ_RLLWAIT50_55" Type="int" />
+          <Property Name="QDDTJ_RLLWAIT55_60" Type="int" />
+          <Property Name="QDDTJ_RLLWAITDY60" Type="int" />
+          <Property Name="QDDTJ_RLLWAITCS" Type="int" />
+          <Property Name="QDDTJ_TOTALWAITTIME" Type="bigint" />
+          <Property Name="QDDTJ_ONETICKETMULTIYW" Type="int" />
+          <Property Name="QDDTJ_CITYBLRLL" Type="int" />
+          <Property Name="QDDTJ_YYBLRLL" Type="int" />
+          <Property Name="QDDTJ_PJKEY0NUM" Type="int" />
+          <Property Name="QDDTJ_PJKEY1NUM" Type="int" />
+          <Property Name="QDDTJ_PJKEY2NUM" Type="int" />
+          <Property Name="QDDTJ_PJKEY3NUM" Type="int" />
+          <Property Name="QDDTJ_PJKEY4NUM" Type="int" />
+          <Property Name="QDDTJ_PJKEY5NUM" Type="int" />
+          <Property Name="QDDTJ_PJKEY6NUM" Type="int" />
+        </EntityType>
+        <EntityType Name="STAT_DAYYWTJ">
+          <Key>
+            <PropertyRef Name="YWDDTJ_DAY" />
+            <PropertyRef Name="YWDDTJ_SYSNO" />
+            <PropertyRef Name="YWDDTJ_COUNTER" />
+            <PropertyRef Name="YWDDTJ_SNO" />
+            <PropertyRef Name="YWDDTJ_SERIALID" />
+          </Key>
+          <Property Name="YWDDTJ_DAY" Type="date" Nullable="false" />
+          <Property Name="YWDDTJ_SYSNO" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="YWDDTJ_COUNTER" Type="int" Nullable="false" />
+          <Property Name="YWDDTJ_SNO" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="YWDDTJ_SERIALID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="YWDDTJ_NUM" Type="int" />
+          <Property Name="YWDDTJ_BLCSNUM" Type="int" />
+          <Property Name="YWDDTJ_XYMINBLTIMENUM" Type="int" />
+          <Property Name="YWDDTJ_TOTALBLTIME" Type="bigint" />
+          <Property Name="YWDDTJ_CITYBLNUM" Type="int" />
+        </EntityType>
+        <EntityType Name="SYS_COUNTER">
+          <Key>
+            <PropertyRef Name="HALL_NO" />
+            <PropertyRef Name="COUNTER_ID" />
+          </Key>
+          <Property Name="HALL_NO" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="COUNTER_ID" Type="int" Nullable="false" />
+          <Property Name="SPEC_FUN_IND" Type="bit" />
+          <Property Name="STATE" Type="tinyint" />
+          <Property Name="MAX_BUSI_CNT" Type="int" />
+          <Property Name="PRI1_BUSI_SER" Type="varchar" MaxLength="200" />
+          <Property Name="PRI2_BUSI_SER" Type="varchar" MaxLength="200" />
+          <Property Name="PRI3_BUSI_SER" Type="varchar" MaxLength="200" />
+          <Property Name="PRI4_BUSI_SER" Type="varchar" MaxLength="200" />
+          <Property Name="PRI5_BUSI_SER" Type="varchar" MaxLength="200" />
+          <Property Name="CREATE_ID" Type="varchar" MaxLength="50" />
+          <Property Name="CREATE_DTIME" Type="datetime" />
+          <Property Name="MODIFY_ID" Type="varchar" MaxLength="50" />
+          <Property Name="MODIFY_DTIME" Type="datetime" />
+          <Property Name="NOTE" Type="nvarchar" MaxLength="512" />
+        </EntityType>
+        <EntityType Name="SYS_CURRQUEUEHIST">
+          <Key>
+            <PropertyRef Name="CHQUEUE_TRANSCODEID" />
+          </Key>
+          <Property Name="CHQUEUE_TRANSCODEID" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="CHQUEUE_SYSNO" Type="nvarchar" MaxLength="50" />
+          <Property Name="CHQUEUE_NUMBER" Type="nvarchar" MaxLength="20" />
+          <Property Name="CHQUEUE_TICKETTIME" Type="datetime" />
+          <Property Name="CHQUEUE_QSERIALID" Type="nvarchar" MaxLength="10" />
+          <Property Name="CHQUEUE_COUNTER" Type="int" />
+          <Property Name="CHQUEUE_SNO" Type="nvarchar" MaxLength="50" />
+          <Property Name="CHQUEUE_CALLTIME" Type="datetime" />
+          <Property Name="CHQUEUE_WAITTIME" Type="int" />
+          <Property Name="CHQUEUE_STIME" Type="datetime" />
+          <Property Name="CHQUEUE_ETIME" Type="datetime" />
+          <Property Name="CHQUEUE_BLTIME" Type="int" />
+          <Property Name="CHQUEUE_PJRESULT" Type="int" />
+          <Property Name="CHQQUEUE_PJTIME" Type="datetime" />
+          <Property Name="CHQUEUE_YWBS" Type="int" />
+          <Property Name="CHQUEUE_NSRSBM" Type="nvarchar" MaxLength="50" />
+          <Property Name="CHQUEUE_NSRMC" Type="nvarchar" MaxLength="150" />
+          <Property Name="CHQUEUE _SWJGDM" Type="nvarchar" MaxLength="50" />
+          <Property Name="CHQUEUE_TICKETTYPE" Type="int" />
+          <Property Name="CHQUEUE_STATUS" Type="int" />
+          <Property Name="CHQUEUE_ISFINISHED" Type="bit" />
+        </EntityType>
+        <EntityType Name="SYS_CURRYWHIST">
+          <Key>
+            <PropertyRef Name="YW_TRANSCODEID" />
+          </Key>
+          <Property Name="YW_TRANSCODEID" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="YW_XH" Type="int" />
+          <Property Name="YW_QTRANSCODEID" Type="nvarchar" MaxLength="100" />
+          <Property Name="YW_SYSNO" Type="nvarchar" MaxLength="50" />
+          <Property Name="YW_NUMBER" Type="nvarchar" MaxLength="20" />
+          <Property Name="YW_QSERIALID" Type="nvarchar" MaxLength="10" />
+          <Property Name="YW_DLSERIALID" Type="nvarchar" MaxLength="50" />
+          <Property Name="YW_DETAILSERIALID" Type="nvarchar" MaxLength="50" />
+          <Property Name="YW_COUNTER" Type="int" />
+          <Property Name="YW_SNO" Type="varchar" MaxLength="50" />
+          <Property Name="YW_STIME" Type="datetime" />
+          <Property Name="YW_ETIME" Type="datetime" />
+          <Property Name="YW_BLTIME" Type="int" />
+          <Property Name="YW_NSRSBM" Type="nvarchar" MaxLength="50" />
+          <Property Name="YW_NSRMC" Type="nvarchar" MaxLength="150" />
+          <Property Name="YW_SWJGDM" Type="nvarchar" MaxLength="50" />
+          <Property Name="YW_ISFINISHED" Type="bit" />
+        </EntityType>
+        <EntityType Name="SYS_DETAILSERIAL">
+          <Key>
+            <PropertyRef Name="SERIALID" />
+          </Key>
+          <Property Name="SERIALID" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="SERIALNAME" Type="nvarchar" MaxLength="200" />
+          <Property Name="SSQUEUESERIALID" Type="varchar" MaxLength="3" />
+          <Property Name="SSDLSERIALID" Type="nvarchar" MaxLength="30" />
+          <Property Name="BLCSTIME" Type="float" />
+          <Property Name="MINBLTIME" Type="float" />
+          <Property Name="DJSTIME" Type="float" />
+          <Property Name="DEFAULTYWLXS" Type="float" />
+          <Property Name="SYS_LRTIME" Type="datetime" />
+          <Property Name="SYS_LRUSER" Type="varchar" MaxLength="50" />
+          <Property Name="SYS_LASTTIME" Type="datetime" />
+          <Property Name="SYS_LASTUSER" Type="varchar" MaxLength="50" />
+          <Property Name="SYS_BZ" Type="nvarchar" MaxLength="80" />
+        </EntityType>
+        <EntityType Name="SYS_DLSERIAL">
+          <Key>
+            <PropertyRef Name="DLS_SERIALID" />
+          </Key>
+          <Property Name="DLS_SERIALID" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="DLS_SERIALNAME" Type="nvarchar" MaxLength="200" />
+          <Property Name="SYS_LRTIME" Type="datetime" />
+          <Property Name="SYS_LRUSER" Type="varchar" MaxLength="50" />
+          <Property Name="SYS_LASTTIME" Type="datetime" />
+          <Property Name="SYS_LASTUSER" Type="varchar" MaxLength="50" />
+          <Property Name="SYS_BZ" Type="nvarchar" MaxLength="80" />
+        </EntityType>
+        <EntityType Name="SYS_FUNCTION">
+          <Key>
+            <PropertyRef Name="FUNCTION_ID" />
+          </Key>
+          <Property Name="FUNCTION_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FUNCTION_NAM" Type="nvarchar" MaxLength="128" />
+          <Property Name="PAR_FUNCTION_ID" Type="int" />
+          <Property Name="NOTE" Type="nvarchar" MaxLength="128" />
+          <Property Name="CREATE_ID" Type="varchar" MaxLength="50" />
+          <Property Name="CREATE_DTIME" Type="datetime" />
+          <Property Name="MODIFY_ID" Type="varchar" MaxLength="50" />
+          <Property Name="MODIFY_DTIME" Type="datetime" />
+          <Property Name="FUNCTION_COD" Type="varchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="SYS_HALL">
+          <Key>
+            <PropertyRef Name="HALL_NO" />
+          </Key>
+          <Property Name="HALL_NO" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="HALL_NAM" Type="nvarchar" MaxLength="256" />
+          <Property Name="ADDRESS" Type="nvarchar" MaxLength="256" />
+          <Property Name="LONGITUDE" Type="varchar" MaxLength="32" />
+          <Property Name="DIMENSION" Type="varchar" MaxLength="32" />
+          <Property Name="COUNTER_CNT" Type="int" />
+          <Property Name="AUTO_CALL_SEC" Type="int" />
+          <Property Name="AUTO_CALL_IND" Type="bit" />
+          <Property Name="AUTO_END_SEC" Type="int" />
+          <Property Name="AUTO_EVAL_SEC" Type="int" />
+          <Property Name="EVAL_STAY_SEC" Type="int" />
+          <Property Name="HAV_QUEUE_IND" Type="bit" />
+          <Property Name="CREATE_ID" Type="varchar" MaxLength="50" />
+          <Property Name="CREATE_DTIME" Type="datetime" />
+          <Property Name="MODIFY_ID" Type="varchar" MaxLength="50" />
+          <Property Name="MODIFY_DTIME" Type="datetime" />
+          <Property Name="HEAD" Type="nvarchar" MaxLength="32" />
+          <Property Name="HEAD_TEL" Type="varchar" MaxLength="24" />
+          <Property Name="NOTE" Type="nvarchar" MaxLength="512" />
+          <Property Name="ORG_ID" Type="nvarchar" MaxLength="80" />
+          <Property Name="HALL_PICT_URL" Type="nvarchar" MaxLength="256" />
+        </EntityType>
+        <EntityType Name="SYS_LOG">
+          <Key>
+            <PropertyRef Name="LOG_ID" />
+          </Key>
+          <Property Name="LOG_ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LOG_INFO" Type="nvarchar" MaxLength="1024" />
+          <Property Name="LOG_DTIME" Type="datetime" />
+          <Property Name="USER_ID" Type="varchar" MaxLength="50" />
+          <Property Name="MENU_NAM" Type="nvarchar" MaxLength="128" />
+        </EntityType>
+        <EntityType Name="SYS_LOGINLOG">
+          <Key>
+            <PropertyRef Name="SEQ" />
+          </Key>
+          <Property Name="SEQ" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OPER_DTIME" Type="datetime" />
+          <Property Name="USER_ID" Type="varchar" MaxLength="50" />
+          <Property Name="OPER_IP" Type="varchar" MaxLength="32" />
+          <Property Name="STATE" Type="tinyint" />
+          <Property Name="BROWSER" Type="varchar" MaxLength="50" />
+          <Property Name="LOGIN_FAIL_REASON" Type="nvarchar" MaxLength="512" />
+          <Property Name="NOTE" Type="nvarchar" MaxLength="512" />
+        </EntityType>
+        <EntityType Name="SYS_MENU">
+          <Key>
+            <PropertyRef Name="MENU_ID" />
+          </Key>
+          <Property Name="MENU_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MENU_NAM" Type="nvarchar" MaxLength="128" />
+          <Property Name="PAR_MENU_ID" Type="int" />
+          <Property Name="IMAGEURL" Type="nvarchar" MaxLength="256" />
+          <Property Name="NAVIGATEURL" Type="nvarchar" MaxLength="256" />
+          <Property Name="FUNCTION_ID" Type="int" />
+          <Property Name="MENU_ORD" Type="int" />
+        </EntityType>
+        <EntityType Name="SYS_NSRHY">
+          <Key>
+            <PropertyRef Name="HY_ID" />
+          </Key>
+          <Property Name="HY_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HY_NAME" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="SYS_NSRINFO">
+          <Key>
+            <PropertyRef Name="NSR_SBM" />
+          </Key>
+          <Property Name="NSR_SBM" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NSR_NAME" Type="nvarchar" MaxLength="150" />
+          <Property Name="NSR_SWJGDM" Type="nvarchar" MaxLength="50" />
+          <Property Name="NSR_HYNAME" Type="nvarchar" MaxLength="100" />
+          <Property Name="NSR_BSYPHONE" Type="nvarchar" MaxLength="50" />
+          <Property Name="NSR_FRPHONE" Type="nvarchar" MaxLength="50" />
+          <Property Name="NSR_LRRQ" Type="datetime" />
+          <Property Name="NSR_LRR" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SYS_ORGANIZE">
+          <Key>
+            <PropertyRef Name="ORG_ID" />
+          </Key>
+          <Property Name="ORG_ID" Type="nvarchar" MaxLength="80" Nullable="false" />
+          <Property Name="ORG_NAM" Type="nvarchar" MaxLength="128" />
+          <Property Name="PAR_ORG_ID" Type="nvarchar" MaxLength="80" />
+          <Property Name="HEAD" Type="nvarchar" MaxLength="32" />
+          <Property Name="HEAD_TEL" Type="varchar" MaxLength="24" />
+          <Property Name="CREATE_ID" Type="varchar" MaxLength="50" />
+          <Property Name="CREATE_DTIME" Type="datetime" />
+          <Property Name="MODIFY_ID" Type="varchar" MaxLength="50" />
+          <Property Name="MODIFY_DTIME" Type="datetime" />
+          <Property Name="ORG_LEVEL" Type="tinyint" />
+          <Property Name="LONGITUDE" Type="varchar" MaxLength="32" />
+          <Property Name="DIMENSION" Type="varchar" MaxLength="32" />
+          <Property Name="DUTY_TEL" Type="varchar" MaxLength="200" />
+          <Property Name="NOTE" Type="nvarchar" MaxLength="512" />
+        </EntityType>
+        <EntityType Name="SYS_QUEUEHIST">
+          <Key>
+            <PropertyRef Name="HQUEUE_ID" />
+          </Key>
+          <Property Name="HQUEUE_ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HQUEUE_TRANSCODEID" Type="nvarchar" MaxLength="100" />
+          <Property Name="HQUEUE_SYSNO" Type="nvarchar" MaxLength="50" />
+          <Property Name="HQUEUE_NUMBER" Type="varchar" MaxLength="20" />
+          <Property Name="HQUEUE_TICKETTIME" Type="datetime" />
+          <Property Name="HQUEUE_QSERIALID" Type="varchar" MaxLength="10" />
+          <Property Name="HQUEUE_COUNTER" Type="int" />
+          <Property Name="HQUEUE_SNO" Type="varchar" MaxLength="50" />
+          <Property Name="HQUEUE_CALLTIME" Type="datetime" />
+          <Property Name="HQUEUE_WAITTIME" Type="int" />
+          <Property Name="HQUEUE_STIME" Type="datetime" />
+          <Property Name="HQUEUE_ETIME" Type="datetime" />
+          <Property Name="HQUEUE_BLTIME" Type="int" />
+          <Property Name="HQUEUE_PJRESULT" Type="int" />
+          <Property Name="HQQUEUE_PJTIME" Type="datetime" />
+          <Property Name="HQUEUE_YWBS" Type="int" />
+          <Property Name="HQUEUE_NSRSBM" Type="nvarchar" MaxLength="50" />
+          <Property Name="HQUEUE_NSRMC" Type="nvarchar" MaxLength="150" />
+          <Property Name="HQUEUE_SWJGDM" Type="nvarchar" MaxLength="50" />
+          <Property Name="HQUEUE_TICKETTYPE" Type="int" />
+          <Property Name="HQUEUE_STATUS" Type="int" />
+          <Property Name="HQUEUE_ISFINISHED" Type="bit" />
+        </EntityType>
+        <EntityType Name="SYS_QUEUEING">
+          <Key>
+            <PropertyRef Name="QUEUE_TRANSCODEID" />
+          </Key>
+          <Property Name="QUEUE_TRANSCODEID" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="QUEUE_SYSNO" Type="varchar" MaxLength="50" />
+          <Property Name="QUEUE_NUMBER" Type="nvarchar" MaxLength="20" />
+          <Property Name="QUEUE_TICKETTIME" Type="datetime" />
+          <Property Name="QUEUE_QSERIALID" Type="nvarchar" MaxLength="10" />
+          <Property Name="QUEUE_TOCOUNTER" Type="int" />
+          <Property Name="QUEUE_ISWCSSMS" Type="bit" />
+          <Property Name="QUEUE_NSRSBM" Type="nvarchar" MaxLength="50" />
+          <Property Name="QUEUE_NSRMC" Type="nvarchar" MaxLength="150" />
+          <Property Name="QUEUE_ISYCTICKET" Type="bit" />
+          <Property Name="QUEUE_ISYYTICKET" Type="bit" />
+        </EntityType>
+        <EntityType Name="SYS_QUEUESERIAL">
+          <Key>
+            <PropertyRef Name="Q_SERIALID" />
+          </Key>
+          <Property Name="Q_SERIALID" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="Q_SERIALNAME" Type="nvarchar" MaxLength="200" />
+          <Property Name="SYS_LRTIME" Type="datetime" />
+          <Property Name="SYS_LRUSER" Type="varchar" MaxLength="50" />
+          <Property Name="SYS_LASTTIME" Type="datetime" />
+          <Property Name="SYS_LASTUSER" Type="varchar" MaxLength="50" />
+          <Property Name="SYS_BZ" Type="nvarchar" MaxLength="80" />
+        </EntityType>
+        <EntityType Name="SYS_ROLE">
+          <Key>
+            <PropertyRef Name="ROLE_ID" />
+          </Key>
+          <Property Name="ROLE_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ROLE_NAM" Type="nvarchar" MaxLength="128" />
+          <Property Name="ORG_ID" Type="nvarchar" MaxLength="80" />
+          <Property Name="CREATE_ID" Type="varchar" MaxLength="50" />
+          <Property Name="CREATE_DTIME" Type="datetime" />
+          <Property Name="MODIFY_ID" Type="varchar" MaxLength="50" />
+          <Property Name="MODIFY_DTIME" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SYS_ROLEFUNCTION">
+          <Key>
+            <PropertyRef Name="ROLEFUNCTION_ID" />
+          </Key>
+          <Property Name="ROLEFUNCTION_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FUNCTION_ID" Type="int" />
+          <Property Name="ROLE_ID" Type="int" />
+          <Property Name="NOTE" Type="nvarchar" MaxLength="128" />
+          <Property Name="CREATE_ID" Type="varchar" MaxLength="50" />
+          <Property Name="CREATE_DTIME" Type="datetime" />
+          <Property Name="MODIFY_ID" Type="varchar" MaxLength="50" />
+          <Property Name="MODIFY_DTIME" Type="datetime" />
+          <Property Name="FUNCTION_TYP" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="SYS_STAFF">
+          <Key>
+            <PropertyRef Name="STAFF_ID" />
+          </Key>
+          <Property Name="STAFF_ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="STAFF_NAM" Type="nvarchar" MaxLength="24" />
+          <Property Name="STAFF_PASSWORD" Type="varchar" MaxLength="64" />
+          <Property Name="STAR_LEVEL" Type="int" />
+          <Property Name="PHOTE_URL" Type="nvarchar" MaxLength="256" />
+          <Property Name="STAFF_TYP" Type="tinyint" />
+          <Property Name="STAR_EVAL_TYP" Type="tinyint" />
+          <Property Name="STAR_EVAL_NOTE" Type="nvarchar" MaxLength="128" />
+          <Property Name="NOTE" Type="nvarchar" MaxLength="128" />
+          <Property Name="CREATE_ID" Type="varchar" MaxLength="50" />
+          <Property Name="CREATE_DTIME" Type="datetime" />
+          <Property Name="MODIFY_ID" Type="varchar" MaxLength="50" />
+          <Property Name="MODIFY_DTIME" Type="datetime" />
+          <Property Name="ORG_ID" Type="nvarchar" MaxLength="80" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SYS_STAFFBUSI">
+          <Key>
+            <PropertyRef Name="STAFF_BUSI_ID" />
+          </Key>
+          <Property Name="STAFF_BUSI_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="STAFF_ID" Type="varchar" MaxLength="50" />
+          <Property Name="BUSI_CD" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SYS_TICKETQUEUESERIAL">
+          <Key>
+            <PropertyRef Name="Q_ID" />
+          </Key>
+          <Property Name="Q_ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Q_SYSNO" Type="varchar" MaxLength="128" />
+          <Property Name="Q_SERIALID" Type="nvarchar" MaxLength="20" />
+          <Property Name="Q_SERIALNAME" Type="nvarchar" MaxLength="200" />
+          <Property Name="Q_NUMBERQCHAR" Type="varchar" MaxLength="10" />
+          <Property Name="Q_WAITCSTIME" Type="float" />
+          <Property Name="Q_A1LIMITTICKETNUM" Type="int" />
+          <Property Name="Q_A2LIMITTICKETNUM" Type="int" />
+          <Property Name="Q_A3LIMITTICKETNUM" Type="int" />
+          <Property Name="Q_A4LIMITTICKETNUM" Type="int" />
+          <Property Name="Q_A5LIMITTICKETNUM" Type="int" />
+          <Property Name="Q_A6LIMITTICKETNUM" Type="int" />
+          <Property Name="Q_A7LIMITTICKETNUM" Type="int" />
+          <Property Name="Q_P1LIMITTICKETNUM" Type="int" />
+          <Property Name="Q_P2LIMITTICKETNUM" Type="int" />
+          <Property Name="Q_P3LIMITTICKETNUM" Type="int" />
+          <Property Name="Q_P4LIMITTICKETNUM" Type="int" />
+          <Property Name="Q_P5LIMITTICKETNUM" Type="int" />
+          <Property Name="Q_P6LIMITTICKETNUM" Type="int" />
+          <Property Name="Q_P7LIMITTICKETNUM" Type="int" />
+          <Property Name="Q_1ASTIME" Type="varchar" MaxLength="20" />
+          <Property Name="Q_2ASTIME" Type="varchar" MaxLength="20" />
+          <Property Name="Q_3ASTIME" Type="varchar" MaxLength="20" />
+          <Property Name="Q_4ASTIME" Type="varchar" MaxLength="20" />
+          <Property Name="Q_5ASTIME" Type="varchar" MaxLength="20" />
+          <Property Name="Q_6ASTIME" Type="varchar" MaxLength="20" />
+          <Property Name="Q_7ASTIME" Type="varchar" MaxLength="20" />
+          <Property Name="Q_1PSTIME" Type="varchar" MaxLength="20" />
+          <Property Name="Q_2PSTIME" Type="varchar" MaxLength="20" />
+          <Property Name="Q_3PSTIME" Type="varchar" MaxLength="20" />
+          <Property Name="Q_4PSTIME" Type="varchar" MaxLength="20" />
+          <Property Name="Q_5PSTIME" Type="varchar" MaxLength="20" />
+          <Property Name="Q_6PSTIME" Type="varchar" MaxLength="20" />
+          <Property Name="Q_7PSTIME" Type="varchar" MaxLength="20" />
+          <Property Name="Q_MINNUMBER" Type="varchar" MaxLength="50" />
+          <Property Name="Q_MAXNUMBER" Type="varchar" MaxLength="50" />
+          <Property Name="Q_CURRNUMBER" Type="int" />
+          <Property Name="Q_INPUTPWD" Type="bit" />
+          <Property Name="Q_BZ" Type="varchar" MaxLength="200" />
+          <Property Name="SYS_LRTIME" Type="datetime" />
+          <Property Name="SYS_LRUSER" Type="varchar" MaxLength="50" />
+          <Property Name="SYS_LASTTIME" Type="datetime" />
+          <Property Name="SYS_LASTUSER" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SYS_USER">
+          <Key>
+            <PropertyRef Name="USER_ID" />
+          </Key>
+          <Property Name="USER_ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="USER_NAM" Type="nvarchar" MaxLength="24" />
+          <Property Name="USER_PASSWORD" Type="varchar" MaxLength="200" />
+          <Property Name="TEL" Type="varchar" MaxLength="32" />
+          <Property Name="EMAIL" Type="varchar" MaxLength="100" />
+          <Property Name="NOTE" Type="nvarchar" MaxLength="200" />
+          <Property Name="CREATE_ID" Type="varchar" MaxLength="50" />
+          <Property Name="CREATE_DTIME" Type="datetime" />
+          <Property Name="MODIFY_ID" Type="varchar" MaxLength="50" />
+          <Property Name="MODIFY_DTIME" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SYS_USEROLE">
+          <Key>
+            <PropertyRef Name="USEROLE_ID" />
+          </Key>
+          <Property Name="USEROLE_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="USER_ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ROLE_ID" Type="int" Nullable="false" />
+          <Property Name="CREATE_ID" Type="varchar" MaxLength="50" />
+          <Property Name="CREATE_DTIME" Type="datetime" />
+          <Property Name="MODIFY_ID" Type="varchar" MaxLength="50" />
+          <Property Name="MODIFY_DTIME" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SYS_USERORGANIZE">
+          <Key>
+            <PropertyRef Name="USER_ORG_ID" />
+          </Key>
+          <Property Name="USER_ORG_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="USER_ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ORG_ID" Type="nvarchar" MaxLength="80" />
+          <Property Name="CREATE_ID" Type="varchar" MaxLength="50" />
+          <Property Name="CREATE_DTIME" Type="datetime" />
+          <Property Name="MODIFY_ID" Type="varchar" MaxLength="50" />
+          <Property Name="MODIFY_DTIME" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SYS_YWHIST">
+          <Key>
+            <PropertyRef Name="HYW_GUID" />
+          </Key>
+          <Property Name="HYW_GUID" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="HYW_TRANSCODEID" Type="nvarchar" MaxLength="100" />
+          <Property Name="HYW_XH" Type="int" />
+          <Property Name="HYW_QTRANSCODEID" Type="nvarchar" MaxLength="100" />
+          <Property Name="HYW_SYSNO" Type="nvarchar" MaxLength="50" />
+          <Property Name="HYW_NUMBER" Type="nvarchar" MaxLength="20" />
+          <Property Name="HYW_QSERIALID" Type="nvarchar" MaxLength="10" />
+          <Property Name="HYW_DLSERIALID" Type="nvarchar" MaxLength="50" />
+          <Property Name="HYW_DETAILSERIALID" Type="nvarchar" MaxLength="50" />
+          <Property Name="HYW_COUNTER" Type="int" />
+          <Property Name="HYW_SNO" Type="varchar" MaxLength="50" />
+          <Property Name="HYW_STIME" Type="datetime" />
+          <Property Name="HYW_ETIME" Type="datetime" />
+          <Property Name="HYW_BLTIME" Type="int" />
+          <Property Name="HYW_NSRSBM" Type="nvarchar" MaxLength="50" />
+          <Property Name="HYW_NSRMC" Type="nvarchar" MaxLength="150" />
+          <Property Name="HYW_SWJGDM" Type="nvarchar" MaxLength="50" />
+          <Property Name="HYW_ISFINISHED" Type="bit" />
+        </EntityType>
+        <EntityContainer Name="gzswModelStoreContainer">
+          <EntitySet Name="CHK_COUNTER" EntityType="Self.CHK_COUNTER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CHK_STAFFCHK_EVENT" EntityType="Self.CHK_STAFFCHK_EVENT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CLI_CLIENTEVENT" EntityType="Self.CLI_CLIENTEVENT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CLI_COUNTERSTATE" EntityType="Self.CLI_COUNTERSTATE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="STAT_DAYHYYWTJ" EntityType="Self.STAT_DAYHYYWTJ" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="STAT_DAYQUEUETJ" EntityType="Self.STAT_DAYQUEUETJ" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="STAT_DAYYWTJ" EntityType="Self.STAT_DAYYWTJ" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_COUNTER" EntityType="Self.SYS_COUNTER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_CURRQUEUEHIST" EntityType="Self.SYS_CURRQUEUEHIST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_CURRYWHIST" EntityType="Self.SYS_CURRYWHIST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_DETAILSERIAL" EntityType="Self.SYS_DETAILSERIAL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_DLSERIAL" EntityType="Self.SYS_DLSERIAL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_FUNCTION" EntityType="Self.SYS_FUNCTION" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_HALL" EntityType="Self.SYS_HALL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_LOG" EntityType="Self.SYS_LOG" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_LOGINLOG" EntityType="Self.SYS_LOGINLOG" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_MENU" EntityType="Self.SYS_MENU" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_NSRHY" EntityType="Self.SYS_NSRHY" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_NSRINFO" EntityType="Self.SYS_NSRINFO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_ORGANIZE" EntityType="Self.SYS_ORGANIZE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_QUEUEHIST" EntityType="Self.SYS_QUEUEHIST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_QUEUEING" EntityType="Self.SYS_QUEUEING" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_QUEUESERIAL" EntityType="Self.SYS_QUEUESERIAL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_ROLE" EntityType="Self.SYS_ROLE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_ROLEFUNCTION" EntityType="Self.SYS_ROLEFUNCTION" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_STAFF" EntityType="Self.SYS_STAFF" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_STAFFBUSI" EntityType="Self.SYS_STAFFBUSI" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_TICKETQUEUESERIAL" EntityType="Self.SYS_TICKETQUEUESERIAL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_USER" EntityType="Self.SYS_USER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_USEROLE" EntityType="Self.SYS_USEROLE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_USERORGANIZE" EntityType="Self.SYS_USERORGANIZE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_YWHIST" EntityType="Self.SYS_YWHIST" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="gzswModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="gzswEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="SYS_LOG" EntityType="gzswModel.SYS_LOG" />
+          <EntitySet Name="SYS_ROLEFUNCTION" EntityType="gzswModel.SYS_ROLEFUNCTION" />
+          <EntitySet Name="SYS_USER" EntityType="gzswModel.SYS_USER" />
+          <EntitySet Name="SYS_USEROLE" EntityType="gzswModel.SYS_USEROLE" />
+          <EntitySet Name="SYS_FUNCTION" EntityType="gzswModel.SYS_FUNCTION" />
+          <EntitySet Name="SYS_MENU" EntityType="gzswModel.SYS_MENU" />
+          <EntitySet Name="SYS_LOGINLOG" EntityType="gzswModel.SYS_LOGINLOG" />
+          <EntitySet Name="SYS_ORGANIZE" EntityType="gzswModel.SYS_ORGANIZE" />
+          <EntitySet Name="SYS_ROLE" EntityType="gzswModel.SYS_ROLE" />
+          <EntitySet Name="SYS_USERORGANIZE" EntityType="gzswModel.SYS_USERORGANIZE" />
+          <EntitySet Name="CHK_COUNTER" EntityType="gzswModel.CHK_COUNTER" />
+          <EntitySet Name="CHK_STAFFCHK_EVENT" EntityType="gzswModel.CHK_STAFFCHK_EVENT" />
+          <EntitySet Name="CLI_CLIENTEVENT" EntityType="gzswModel.CLI_CLIENTEVENT" />
+          <EntitySet Name="CLI_COUNTERSTATE" EntityType="gzswModel.CLI_COUNTERSTATE" />
+          <EntitySet Name="STAT_DAYHYYWTJ" EntityType="gzswModel.STAT_DAYHYYWTJ" />
+          <EntitySet Name="STAT_DAYQUEUETJ" EntityType="gzswModel.STAT_DAYQUEUETJ" />
+          <EntitySet Name="STAT_DAYYWTJ" EntityType="gzswModel.STAT_DAYYWTJ" />
+          <EntitySet Name="SYS_COUNTER" EntityType="gzswModel.SYS_COUNTER" />
+          <EntitySet Name="SYS_CURRQUEUEHIST" EntityType="gzswModel.SYS_CURRQUEUEHIST" />
+          <EntitySet Name="SYS_CURRYWHIST" EntityType="gzswModel.SYS_CURRYWHIST" />
+          <EntitySet Name="SYS_DETAILSERIAL" EntityType="gzswModel.SYS_DETAILSERIAL" />
+          <EntitySet Name="SYS_HALL" EntityType="gzswModel.SYS_HALL" />
+          <EntitySet Name="SYS_NSRHY" EntityType="gzswModel.SYS_NSRHY" />
+          <EntitySet Name="SYS_QUEUEHIST" EntityType="gzswModel.SYS_QUEUEHIST" />
+          <EntitySet Name="SYS_QUEUEING" EntityType="gzswModel.SYS_QUEUEING" />
+          <EntitySet Name="SYS_QUEUESERIAL" EntityType="gzswModel.SYS_QUEUESERIAL" />
+          <EntitySet Name="SYS_STAFF" EntityType="gzswModel.SYS_STAFF" />
+          <EntitySet Name="SYS_STAFFBUSI" EntityType="gzswModel.SYS_STAFFBUSI" />
+          <EntitySet Name="SYS_TICKETQUEUESERIAL" EntityType="gzswModel.SYS_TICKETQUEUESERIAL" />
+          <EntitySet Name="SYS_YWHIST" EntityType="gzswModel.SYS_YWHIST" />
+          <EntitySet Name="SYS_DLSERIAL" EntityType="gzswModel.SYS_DLSERIAL" />
+          <EntitySet Name="SYS_NSRINFO" EntityType="gzswModel.SYS_NSRINFO" />
+        </EntityContainer>
+        <EntityType Name="SYS_LOG">
+          <Key>
+            <PropertyRef Name="LOG_ID" />
+          </Key>
+          <Property Name="LOG_ID" Type="Int64" Nullable="false" />
+          <Property Name="LOG_INFO" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="LOG_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="USER_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MENU_NAM" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SYS_ROLEFUNCTION">
+          <Key>
+            <PropertyRef Name="ROLEFUNCTION_ID" />
+          </Key>
+          <Property Name="ROLEFUNCTION_ID" Type="Int32" Nullable="false" />
+          <Property Name="FUNCTION_ID" Type="Int32" />
+          <Property Name="ROLE_ID" Type="Int32" />
+          <Property Name="NOTE" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="CREATE_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="MODIFY_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MODIFY_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="FUNCTION_TYP" Type="Byte" />
+        </EntityType>
+        <EntityType Name="SYS_USER">
+          <Key>
+            <PropertyRef Name="USER_ID" />
+          </Key>
+          <Property Name="USER_ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="USER_NAM" Type="String" MaxLength="24" FixedLength="false" Unicode="true" />
+          <Property Name="USER_PASSWORD" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="TEL" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="EMAIL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="NOTE" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CREATE_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="MODIFY_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MODIFY_DTIME" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="SYS_USEROLE">
+          <Key>
+            <PropertyRef Name="USEROLE_ID" />
+          </Key>
+          <Property Name="USEROLE_ID" Type="Int32" Nullable="false" />
+          <Property Name="USER_ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ROLE_ID" Type="Int32" Nullable="false" />
+          <Property Name="CREATE_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="MODIFY_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MODIFY_DTIME" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="SYS_FUNCTION">
+          <Key>
+            <PropertyRef Name="FUNCTION_ID" />
+          </Key>
+          <Property Name="FUNCTION_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FUNCTION_NAM" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PAR_FUNCTION_ID" Type="Int32" />
+          <Property Name="NOTE" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="CREATE_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="MODIFY_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MODIFY_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="FUNCTION_COD" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="SYS_MENU">
+          <Key>
+            <PropertyRef Name="MENU_ID" />
+          </Key>
+          <Property Name="MENU_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MENU_NAM" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PAR_MENU_ID" Type="Int32" />
+          <Property Name="IMAGEURL" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="NAVIGATEURL" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="FUNCTION_ID" Type="Int32" />
+          <Property Name="MENU_ORD" Type="Int32" />
+        </EntityType>
+        <EntityType Name="SYS_LOGINLOG">
+          <Key>
+            <PropertyRef Name="SEQ" />
+          </Key>
+          <Property Name="SEQ" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OPER_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="USER_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OPER_IP" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="STATE" Type="Byte" />
+          <Property Name="BROWSER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LOGIN_FAIL_REASON" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="NOTE" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SYS_ORGANIZE">
+          <Key>
+            <PropertyRef Name="ORG_ID" />
+          </Key>
+          <Property Name="ORG_ID" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ORG_NAM" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PAR_ORG_ID" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="HEAD" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="HEAD_TEL" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="MODIFY_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MODIFY_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="ORG_LEVEL" Type="Byte" />
+          <Property Name="LONGITUDE" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="DIMENSION" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="DUTY_TEL" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="NOTE" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SYS_ROLE">
+          <Key>
+            <PropertyRef Name="ROLE_ID" />
+          </Key>
+          <Property Name="ROLE_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ROLE_NAM" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ORG_ID" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="CREATE_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="MODIFY_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MODIFY_DTIME" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="SYS_USERORGANIZE">
+          <Key>
+            <PropertyRef Name="USER_ORG_ID" />
+          </Key>
+          <Property Name="USER_ORG_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="USER_ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ORG_ID" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="CREATE_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="MODIFY_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MODIFY_DTIME" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="CHK_COUNTER">
+          <Key>
+            <PropertyRef Name="HALL_NO" />
+            <PropertyRef Name="COUNTER_ID" />
+          </Key>
+          <Property Name="HALL_NO" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="COUNTER_ID" Type="Int32" Nullable="false" />
+          <Property Name="MODIFY_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MODIFY_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="NOTE" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="W1A_STAFF_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="W2A_STAFF_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="W3A_STAFF_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="W4A_STAFF_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="W5A_STAFF_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="W6A_STAFF_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="W7A_STAFF_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="W1P_STAFF_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="W2P_STAFF_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="W3P_STAFF_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="W4P_STAFF_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="W5P_STAFF_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="W6P_STAFF_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="W7P_STAFF_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CHK_STAFFCHK_EVENT">
+          <Key>
+            <PropertyRef Name="SEQ" />
+          </Key>
+          <Property Name="SEQ" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HALL_NO" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="STAFF_ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PRE_COUNTER_ID" Type="Int32" Nullable="false" />
+          <Property Name="REA_COUNTER_ID" Type="Int32" Nullable="false" />
+          <Property Name="CHK_DATE" Type="DateTime" Precision="0" />
+          <Property Name="LAT_CHK_IN_TIME" Type="DateTime" Precision="3" />
+          <Property Name="EAR_CHK_OUT_TIME" Type="DateTime" Precision="3" />
+          <Property Name="REA_CHK_IN_TIME" Type="DateTime" Precision="3" />
+          <Property Name="REA_CHK_OUT_TIME" Type="DateTime" Precision="3" />
+          <Property Name="PLAN_LEAVE_TYPE" Type="Byte" />
+          <Property Name="REA_LEAVE_TYPE" Type="Byte" />
+          <Property Name="CHK_TYP" Type="Byte" />
+          <Property Name="STATE" Type="Byte" />
+        </EntityType>
+        <EntityType Name="CLI_CLIENTEVENT">
+          <Key>
+            <PropertyRef Name="CEVENT_ID" />
+          </Key>
+          <Property Name="CEVENT_ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CEVENT_TIME" Type="DateTime" Precision="3" />
+          <Property Name="CEVENT_SYSNO" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CEVENT_SNO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CEVENT_COUNTER" Type="Int32" />
+          <Property Name="CEVENT_KEYID" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
+          <Property Name="CEVENT_TYPE" Type="Int32" />
+        </EntityType>
+        <EntityType Name="CLI_COUNTERSTATE">
+          <Key>
+            <PropertyRef Name="HALL_NO" />
+            <PropertyRef Name="COUNTER_ID" />
+          </Key>
+          <Property Name="HALL_NO" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="COUNTER_ID" Type="Int32" Nullable="false" />
+          <Property Name="LOGIN_STATE" Type="Byte" />
+          <Property Name="LST_LOGIN_TIME" Type="DateTime" Precision="3" />
+          <Property Name="LST_LOGOUT_TIME" Type="DateTime" Precision="3" />
+          <Property Name="LST_OPT_TIME" Type="DateTime" Precision="3" />
+          <Property Name="STATE" Type="Byte" />
+          <Property Name="LST_QUEUE_TRANSCODEID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LST_NSR_SBM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NSR_NAME" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="STAT_DAYHYYWTJ">
+          <Key>
+            <PropertyRef Name="HYYWDDTJ_DAY" />
+            <PropertyRef Name="HYYWDDTJ_SYSNO" />
+            <PropertyRef Name="HYYWDDTJ_NAME" />
+          </Key>
+          <Property Name="HYYWDDTJ_DAY" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="HYYWDDTJ_SYSNO" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="HYYWDDTJ_NAME" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="HYYWDDTJ_PDNUM" Type="Int32" />
+          <Property Name="HYYWDDTJ_NUM" Type="Int32" />
+        </EntityType>
+        <EntityType Name="STAT_DAYQUEUETJ">
+          <Key>
+            <PropertyRef Name="QDDTJ_DAY" />
+            <PropertyRef Name="QDDTJ_SYSNO" />
+            <PropertyRef Name="QDDTJ_COUNTER" />
+            <PropertyRef Name="QDDTJ_SNO" />
+            <PropertyRef Name="QDDTJ_QSERIALID" />
+          </Key>
+          <Property Name="QDDTJ_DAY" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="QDDTJ_SYSNO" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="QDDTJ_COUNTER" Type="Int32" Nullable="false" />
+          <Property Name="QDDTJ_SNO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="QDDTJ_QSERIALID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="QDDTJ_TICKETNUM" Type="Int32" />
+          <Property Name="QDDTJ_RLL" Type="Int32" />
+          <Property Name="QDDTJ_QHNUM" Type="Int32" />
+          <Property Name="QDDTJ_RLLWAIT0_5" Type="Int32" />
+          <Property Name="QDDTJ_RLLWAIT5_10" Type="Int32" />
+          <Property Name="QDDTJ_RLLWAIT10_15" Type="Int32" />
+          <Property Name="QDDTJ_RLLWAIT15_20" Type="Int32" />
+          <Property Name="QDDTJ_RLLWAIT20_25" Type="Int32" />
+          <Property Name="QDDTJ_RLLWAIT25_30" Type="Int32" />
+          <Property Name="QDDTJ_RLLWAIT30_35" Type="Int32" />
+          <Property Name="QDDTJ_RLLWAIT35_40" Type="Int32" />
+          <Property Name="QDDTJ_RLLWAIT40_45" Type="Int32" />
+          <Property Name="QDDTJ_RLLWAIT45_50" Type="Int32" />
+          <Property Name="QDDTJ_RLLWAIT50_55" Type="Int32" />
+          <Property Name="QDDTJ_RLLWAIT55_60" Type="Int32" />
+          <Property Name="QDDTJ_RLLWAITDY60" Type="Int32" />
+          <Property Name="QDDTJ_RLLWAITCS" Type="Int32" />
+          <Property Name="QDDTJ_TOTALWAITTIME" Type="Int64" />
+          <Property Name="QDDTJ_ONETICKETMULTIYW" Type="Int32" />
+          <Property Name="QDDTJ_CITYBLRLL" Type="Int32" />
+          <Property Name="QDDTJ_YYBLRLL" Type="Int32" />
+          <Property Name="QDDTJ_PJKEY0NUM" Type="Int32" />
+          <Property Name="QDDTJ_PJKEY1NUM" Type="Int32" />
+          <Property Name="QDDTJ_PJKEY2NUM" Type="Int32" />
+          <Property Name="QDDTJ_PJKEY3NUM" Type="Int32" />
+          <Property Name="QDDTJ_PJKEY4NUM" Type="Int32" />
+          <Property Name="QDDTJ_PJKEY5NUM" Type="Int32" />
+          <Property Name="QDDTJ_PJKEY6NUM" Type="Int32" />
+        </EntityType>
+        <EntityType Name="STAT_DAYYWTJ">
+          <Key>
+            <PropertyRef Name="YWDDTJ_DAY" />
+            <PropertyRef Name="YWDDTJ_SYSNO" />
+            <PropertyRef Name="YWDDTJ_COUNTER" />
+            <PropertyRef Name="YWDDTJ_SNO" />
+            <PropertyRef Name="YWDDTJ_SERIALID" />
+          </Key>
+          <Property Name="YWDDTJ_DAY" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="YWDDTJ_SYSNO" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="YWDDTJ_COUNTER" Type="Int32" Nullable="false" />
+          <Property Name="YWDDTJ_SNO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="YWDDTJ_SERIALID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="YWDDTJ_NUM" Type="Int32" />
+          <Property Name="YWDDTJ_BLCSNUM" Type="Int32" />
+          <Property Name="YWDDTJ_XYMINBLTIMENUM" Type="Int32" />
+          <Property Name="YWDDTJ_TOTALBLTIME" Type="Int64" />
+          <Property Name="YWDDTJ_CITYBLNUM" Type="Int32" />
+        </EntityType>
+        <EntityType Name="SYS_COUNTER">
+          <Key>
+            <PropertyRef Name="HALL_NO" />
+            <PropertyRef Name="COUNTER_ID" />
+          </Key>
+          <Property Name="HALL_NO" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="COUNTER_ID" Type="Int32" Nullable="false" />
+          <Property Name="SPEC_FUN_IND" Type="Boolean" />
+          <Property Name="STATE" Type="Byte" />
+          <Property Name="MAX_BUSI_CNT" Type="Int32" />
+          <Property Name="PRI1_BUSI_SER" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="PRI2_BUSI_SER" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="PRI3_BUSI_SER" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="PRI4_BUSI_SER" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="PRI5_BUSI_SER" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="MODIFY_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MODIFY_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="NOTE" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SYS_CURRQUEUEHIST">
+          <Key>
+            <PropertyRef Name="CHQUEUE_TRANSCODEID" />
+          </Key>
+          <Property Name="CHQUEUE_TRANSCODEID" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CHQUEUE_SYSNO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CHQUEUE_NUMBER" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CHQUEUE_TICKETTIME" Type="DateTime" Precision="3" />
+          <Property Name="CHQUEUE_QSERIALID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CHQUEUE_COUNTER" Type="Int32" />
+          <Property Name="CHQUEUE_SNO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CHQUEUE_CALLTIME" Type="DateTime" Precision="3" />
+          <Property Name="CHQUEUE_WAITTIME" Type="Int32" />
+          <Property Name="CHQUEUE_STIME" Type="DateTime" Precision="3" />
+          <Property Name="CHQUEUE_ETIME" Type="DateTime" Precision="3" />
+          <Property Name="CHQUEUE_BLTIME" Type="Int32" />
+          <Property Name="CHQUEUE_PJRESULT" Type="Int32" />
+          <Property Name="CHQQUEUE_PJTIME" Type="DateTime" Precision="3" />
+          <Property Name="CHQUEUE_YWBS" Type="Int32" />
+          <Property Name="CHQUEUE_NSRSBM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CHQUEUE_NSRMC" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="CHQUEUE__SWJGDM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CHQUEUE_TICKETTYPE" Type="Int32" />
+          <Property Name="CHQUEUE_STATUS" Type="Int32" />
+          <Property Name="CHQUEUE_ISFINISHED" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SYS_CURRYWHIST">
+          <Key>
+            <PropertyRef Name="YW_TRANSCODEID" />
+          </Key>
+          <Property Name="YW_TRANSCODEID" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="YW_XH" Type="Int32" />
+          <Property Name="YW_QTRANSCODEID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="YW_SYSNO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="YW_NUMBER" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="YW_QSERIALID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="YW_DLSERIALID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="YW_DETAILSERIALID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="YW_COUNTER" Type="Int32" />
+          <Property Name="YW_SNO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="YW_STIME" Type="DateTime" Precision="3" />
+          <Property Name="YW_ETIME" Type="DateTime" Precision="3" />
+          <Property Name="YW_BLTIME" Type="Int32" />
+          <Property Name="YW_NSRSBM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="YW_NSRMC" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="YW_SWJGDM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="YW_ISFINISHED" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SYS_DETAILSERIAL">
+          <Key>
+            <PropertyRef Name="SERIALID" />
+          </Key>
+          <Property Name="SERIALID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="SERIALNAME" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SSQUEUESERIALID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="SSDLSERIALID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="BLCSTIME" Type="Double" />
+          <Property Name="MINBLTIME" Type="Double" />
+          <Property Name="DJSTIME" Type="Double" />
+          <Property Name="DEFAULTYWLXS" Type="Double" />
+          <Property Name="SYS_LRTIME" Type="DateTime" Precision="3" />
+          <Property Name="SYS_LRUSER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SYS_LASTTIME" Type="DateTime" Precision="3" />
+          <Property Name="SYS_LASTUSER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SYS_BZ" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SYS_HALL">
+          <Key>
+            <PropertyRef Name="HALL_NO" />
+          </Key>
+          <Property Name="HALL_NO" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="HALL_NAM" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="ADDRESS" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="LONGITUDE" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="DIMENSION" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="COUNTER_CNT" Type="Int32" />
+          <Property Name="AUTO_CALL_SEC" Type="Int32" />
+          <Property Name="AUTO_CALL_IND" Type="Boolean" />
+          <Property Name="AUTO_END_SEC" Type="Int32" />
+          <Property Name="AUTO_EVAL_SEC" Type="Int32" />
+          <Property Name="EVAL_STAY_SEC" Type="Int32" />
+          <Property Name="HAV_QUEUE_IND" Type="Boolean" />
+          <Property Name="CREATE_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="MODIFY_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MODIFY_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="HEAD" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="HEAD_TEL" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
+          <Property Name="NOTE" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="ORG_ID" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="HALL_PICT_URL" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SYS_NSRHY">
+          <Key>
+            <PropertyRef Name="HY_ID" />
+          </Key>
+          <Property Name="HY_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HY_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SYS_QUEUEHIST">
+          <Key>
+            <PropertyRef Name="HQUEUE_ID" />
+          </Key>
+          <Property Name="HQUEUE_ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HQUEUE_TRANSCODEID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="HQUEUE_SYSNO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HQUEUE_NUMBER" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="HQUEUE_TICKETTIME" Type="DateTime" Precision="3" />
+          <Property Name="HQUEUE_QSERIALID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="HQUEUE_COUNTER" Type="Int32" />
+          <Property Name="HQUEUE_SNO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="HQUEUE_CALLTIME" Type="DateTime" Precision="3" />
+          <Property Name="HQUEUE_WAITTIME" Type="Int32" />
+          <Property Name="HQUEUE_STIME" Type="DateTime" Precision="3" />
+          <Property Name="HQUEUE_ETIME" Type="DateTime" Precision="3" />
+          <Property Name="HQUEUE_BLTIME" Type="Int32" />
+          <Property Name="HQUEUE_PJRESULT" Type="Int32" />
+          <Property Name="HQQUEUE_PJTIME" Type="DateTime" Precision="3" />
+          <Property Name="HQUEUE_YWBS" Type="Int32" />
+          <Property Name="HQUEUE_NSRSBM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HQUEUE_NSRMC" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="HQUEUE_SWJGDM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HQUEUE_TICKETTYPE" Type="Int32" />
+          <Property Name="HQUEUE_STATUS" Type="Int32" />
+          <Property Name="HQUEUE_ISFINISHED" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SYS_QUEUEING">
+          <Key>
+            <PropertyRef Name="QUEUE_TRANSCODEID" />
+          </Key>
+          <Property Name="QUEUE_TRANSCODEID" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="QUEUE_SYSNO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="QUEUE_NUMBER" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="QUEUE_TICKETTIME" Type="DateTime" Precision="3" />
+          <Property Name="QUEUE_QSERIALID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="QUEUE_TOCOUNTER" Type="Int32" />
+          <Property Name="QUEUE_ISWCSSMS" Type="Boolean" />
+          <Property Name="QUEUE_NSRSBM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="QUEUE_NSRMC" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="QUEUE_ISYCTICKET" Type="Boolean" />
+          <Property Name="QUEUE_ISYYTICKET" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SYS_QUEUESERIAL">
+          <Key>
+            <PropertyRef Name="Q_SERIALID" />
+          </Key>
+          <Property Name="Q_SERIALID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="Q_SERIALNAME" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SYS_LRTIME" Type="DateTime" Precision="3" />
+          <Property Name="SYS_LRUSER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SYS_LASTTIME" Type="DateTime" Precision="3" />
+          <Property Name="SYS_LASTUSER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SYS_BZ" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SYS_STAFF">
+          <Key>
+            <PropertyRef Name="STAFF_ID" />
+          </Key>
+          <Property Name="STAFF_ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="STAFF_NAM" Type="String" MaxLength="24" FixedLength="false" Unicode="true" />
+          <Property Name="STAFF_PASSWORD" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="STAR_LEVEL" Type="Int32" />
+          <Property Name="PHOTE_URL" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="STAFF_TYP" Type="Byte" />
+          <Property Name="STAR_EVAL_TYP" Type="Byte" />
+          <Property Name="STAR_EVAL_NOTE" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="NOTE" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="CREATE_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="MODIFY_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MODIFY_DTIME" Type="DateTime" Precision="3" />
+          <Property Name="ORG_ID" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SYS_STAFFBUSI">
+          <Key>
+            <PropertyRef Name="STAFF_BUSI_ID" />
+          </Key>
+          <Property Name="STAFF_BUSI_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="STAFF_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BUSI_CD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="SYS_TICKETQUEUESERIAL">
+          <Key>
+            <PropertyRef Name="Q_ID" />
+          </Key>
+          <Property Name="Q_ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Q_SYSNO" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Q_SERIALID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Q_SERIALNAME" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Q_NUMBERQCHAR" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Q_WAITCSTIME" Type="Double" />
+          <Property Name="Q_A1LIMITTICKETNUM" Type="Int32" />
+          <Property Name="Q_A2LIMITTICKETNUM" Type="Int32" />
+          <Property Name="Q_A3LIMITTICKETNUM" Type="Int32" />
+          <Property Name="Q_A4LIMITTICKETNUM" Type="Int32" />
+          <Property Name="Q_A5LIMITTICKETNUM" Type="Int32" />
+          <Property Name="Q_A6LIMITTICKETNUM" Type="Int32" />
+          <Property Name="Q_A7LIMITTICKETNUM" Type="Int32" />
+          <Property Name="Q_P1LIMITTICKETNUM" Type="Int32" />
+          <Property Name="Q_P2LIMITTICKETNUM" Type="Int32" />
+          <Property Name="Q_P3LIMITTICKETNUM" Type="Int32" />
+          <Property Name="Q_P4LIMITTICKETNUM" Type="Int32" />
+          <Property Name="Q_P5LIMITTICKETNUM" Type="Int32" />
+          <Property Name="Q_P6LIMITTICKETNUM" Type="Int32" />
+          <Property Name="Q_P7LIMITTICKETNUM" Type="Int32" />
+          <Property Name="Q_1ASTIME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Q_2ASTIME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Q_3ASTIME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Q_4ASTIME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Q_5ASTIME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Q_6ASTIME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Q_7ASTIME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Q_1PSTIME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Q_2PSTIME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Q_3PSTIME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Q_4PSTIME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Q_5PSTIME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Q_6PSTIME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Q_7PSTIME" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Q_MINNUMBER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Q_MAXNUMBER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Q_CURRNUMBER" Type="Int32" />
+          <Property Name="Q_INPUTPWD" Type="Boolean" />
+          <Property Name="Q_BZ" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="SYS_LRTIME" Type="DateTime" Precision="3" />
+          <Property Name="SYS_LRUSER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SYS_LASTTIME" Type="DateTime" Precision="3" />
+          <Property Name="SYS_LASTUSER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="SYS_YWHIST">
+          <Key>
+            <PropertyRef Name="HYW_GUID" />
+          </Key>
+          <Property Name="HYW_GUID" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="HYW_TRANSCODEID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="HYW_XH" Type="Int32" />
+          <Property Name="HYW_QTRANSCODEID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="HYW_SYSNO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HYW_NUMBER" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="HYW_QSERIALID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="HYW_DLSERIALID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HYW_DETAILSERIALID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HYW_COUNTER" Type="Int32" />
+          <Property Name="HYW_SNO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="HYW_STIME" Type="DateTime" Precision="3" />
+          <Property Name="HYW_ETIME" Type="DateTime" Precision="3" />
+          <Property Name="HYW_BLTIME" Type="Int32" />
+          <Property Name="HYW_NSRSBM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HYW_NSRMC" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="HYW_SWJGDM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HYW_ISFINISHED" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SYS_DLSERIAL">
+          <Key>
+            <PropertyRef Name="DLS_SERIALID" />
+          </Key>
+          <Property Name="DLS_SERIALID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" >
+            <Documentation>
+              <Summary>大类事项编码</Summary>
+              <LongDescription>大类事项编码</LongDescription>
+            </Documentation>
+          </Property>
+          <Property Name="DLS_SERIALNAME" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SYS_LRTIME" Type="DateTime" Precision="3" />
+          <Property Name="SYS_LRUSER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SYS_LASTTIME" Type="DateTime" Precision="3" />
+          <Property Name="SYS_LASTUSER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SYS_BZ" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SYS_NSRINFO">
+          <Key>
+            <PropertyRef Name="NSR_SBM" />
+          </Key>
+          <Property Name="NSR_SBM" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NSR_NAME" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="NSR_SWJGDM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NSR_HYNAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NSR_BSYPHONE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NSR_FRPHONE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NSR_LRRQ" Type="DateTime" Precision="3" />
+          <Property Name="NSR_LRR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="gzswModelStoreContainer" CdmEntityContainer="gzswEntities">
+          <EntitySetMapping Name="SYS_LOG">
+            <EntityTypeMapping TypeName="gzswModel.SYS_LOG">
+              <MappingFragment StoreEntitySet="SYS_LOG">
+                <ScalarProperty Name="MENU_NAM" ColumnName="MENU_NAM" />
+                <ScalarProperty Name="USER_ID" ColumnName="USER_ID" />
+                <ScalarProperty Name="LOG_DTIME" ColumnName="LOG_DTIME" />
+                <ScalarProperty Name="LOG_INFO" ColumnName="LOG_INFO" />
+                <ScalarProperty Name="LOG_ID" ColumnName="LOG_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_ROLEFUNCTION">
+            <EntityTypeMapping TypeName="gzswModel.SYS_ROLEFUNCTION">
+              <MappingFragment StoreEntitySet="SYS_ROLEFUNCTION">
+                <ScalarProperty Name="FUNCTION_TYP" ColumnName="FUNCTION_TYP" />
+                <ScalarProperty Name="MODIFY_DTIME" ColumnName="MODIFY_DTIME" />
+                <ScalarProperty Name="MODIFY_ID" ColumnName="MODIFY_ID" />
+                <ScalarProperty Name="CREATE_DTIME" ColumnName="CREATE_DTIME" />
+                <ScalarProperty Name="CREATE_ID" ColumnName="CREATE_ID" />
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="ROLE_ID" ColumnName="ROLE_ID" />
+                <ScalarProperty Name="FUNCTION_ID" ColumnName="FUNCTION_ID" />
+                <ScalarProperty Name="ROLEFUNCTION_ID" ColumnName="ROLEFUNCTION_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_USER">
+            <EntityTypeMapping TypeName="gzswModel.SYS_USER">
+              <MappingFragment StoreEntitySet="SYS_USER">
+                <ScalarProperty Name="MODIFY_DTIME" ColumnName="MODIFY_DTIME" />
+                <ScalarProperty Name="MODIFY_ID" ColumnName="MODIFY_ID" />
+                <ScalarProperty Name="CREATE_DTIME" ColumnName="CREATE_DTIME" />
+                <ScalarProperty Name="CREATE_ID" ColumnName="CREATE_ID" />
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="TEL" ColumnName="TEL" />
+                <ScalarProperty Name="USER_PASSWORD" ColumnName="USER_PASSWORD" />
+                <ScalarProperty Name="USER_NAM" ColumnName="USER_NAM" />
+                <ScalarProperty Name="USER_ID" ColumnName="USER_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_USEROLE">
+            <EntityTypeMapping TypeName="gzswModel.SYS_USEROLE">
+              <MappingFragment StoreEntitySet="SYS_USEROLE">
+                <ScalarProperty Name="MODIFY_DTIME" ColumnName="MODIFY_DTIME" />
+                <ScalarProperty Name="MODIFY_ID" ColumnName="MODIFY_ID" />
+                <ScalarProperty Name="CREATE_DTIME" ColumnName="CREATE_DTIME" />
+                <ScalarProperty Name="CREATE_ID" ColumnName="CREATE_ID" />
+                <ScalarProperty Name="ROLE_ID" ColumnName="ROLE_ID" />
+                <ScalarProperty Name="USER_ID" ColumnName="USER_ID" />
+                <ScalarProperty Name="USEROLE_ID" ColumnName="USEROLE_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_FUNCTION">
+            <EntityTypeMapping TypeName="gzswModel.SYS_FUNCTION">
+              <MappingFragment StoreEntitySet="SYS_FUNCTION">
+                <ScalarProperty Name="FUNCTION_COD" ColumnName="FUNCTION_COD" />
+                <ScalarProperty Name="MODIFY_DTIME" ColumnName="MODIFY_DTIME" />
+                <ScalarProperty Name="MODIFY_ID" ColumnName="MODIFY_ID" />
+                <ScalarProperty Name="CREATE_DTIME" ColumnName="CREATE_DTIME" />
+                <ScalarProperty Name="CREATE_ID" ColumnName="CREATE_ID" />
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="PAR_FUNCTION_ID" ColumnName="PAR_FUNCTION_ID" />
+                <ScalarProperty Name="FUNCTION_NAM" ColumnName="FUNCTION_NAM" />
+                <ScalarProperty Name="FUNCTION_ID" ColumnName="FUNCTION_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_MENU">
+            <EntityTypeMapping TypeName="gzswModel.SYS_MENU">
+              <MappingFragment StoreEntitySet="SYS_MENU">
+                <ScalarProperty Name="MENU_ORD" ColumnName="MENU_ORD" />
+                <ScalarProperty Name="FUNCTION_ID" ColumnName="FUNCTION_ID" />
+                <ScalarProperty Name="NAVIGATEURL" ColumnName="NAVIGATEURL" />
+                <ScalarProperty Name="IMAGEURL" ColumnName="IMAGEURL" />
+                <ScalarProperty Name="PAR_MENU_ID" ColumnName="PAR_MENU_ID" />
+                <ScalarProperty Name="MENU_NAM" ColumnName="MENU_NAM" />
+                <ScalarProperty Name="MENU_ID" ColumnName="MENU_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_LOGINLOG">
+            <EntityTypeMapping TypeName="gzswModel.SYS_LOGINLOG">
+              <MappingFragment StoreEntitySet="SYS_LOGINLOG">
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="LOGIN_FAIL_REASON" ColumnName="LOGIN_FAIL_REASON" />
+                <ScalarProperty Name="BROWSER" ColumnName="BROWSER" />
+                <ScalarProperty Name="STATE" ColumnName="STATE" />
+                <ScalarProperty Name="OPER_IP" ColumnName="OPER_IP" />
+                <ScalarProperty Name="USER_ID" ColumnName="USER_ID" />
+                <ScalarProperty Name="OPER_DTIME" ColumnName="OPER_DTIME" />
+                <ScalarProperty Name="SEQ" ColumnName="SEQ" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_ORGANIZE">
+            <EntityTypeMapping TypeName="gzswModel.SYS_ORGANIZE">
+              <MappingFragment StoreEntitySet="SYS_ORGANIZE">
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="DUTY_TEL" ColumnName="DUTY_TEL" />
+                <ScalarProperty Name="DIMENSION" ColumnName="DIMENSION" />
+                <ScalarProperty Name="LONGITUDE" ColumnName="LONGITUDE" />
+                <ScalarProperty Name="ORG_LEVEL" ColumnName="ORG_LEVEL" />
+                <ScalarProperty Name="MODIFY_DTIME" ColumnName="MODIFY_DTIME" />
+                <ScalarProperty Name="MODIFY_ID" ColumnName="MODIFY_ID" />
+                <ScalarProperty Name="CREATE_DTIME" ColumnName="CREATE_DTIME" />
+                <ScalarProperty Name="CREATE_ID" ColumnName="CREATE_ID" />
+                <ScalarProperty Name="HEAD_TEL" ColumnName="HEAD_TEL" />
+                <ScalarProperty Name="HEAD" ColumnName="HEAD" />
+                <ScalarProperty Name="PAR_ORG_ID" ColumnName="PAR_ORG_ID" />
+                <ScalarProperty Name="ORG_NAM" ColumnName="ORG_NAM" />
+                <ScalarProperty Name="ORG_ID" ColumnName="ORG_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_ROLE">
+            <EntityTypeMapping TypeName="gzswModel.SYS_ROLE">
+              <MappingFragment StoreEntitySet="SYS_ROLE">
+                <ScalarProperty Name="MODIFY_DTIME" ColumnName="MODIFY_DTIME" />
+                <ScalarProperty Name="MODIFY_ID" ColumnName="MODIFY_ID" />
+                <ScalarProperty Name="CREATE_DTIME" ColumnName="CREATE_DTIME" />
+                <ScalarProperty Name="CREATE_ID" ColumnName="CREATE_ID" />
+                <ScalarProperty Name="ORG_ID" ColumnName="ORG_ID" />
+                <ScalarProperty Name="ROLE_NAM" ColumnName="ROLE_NAM" />
+                <ScalarProperty Name="ROLE_ID" ColumnName="ROLE_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_USERORGANIZE">
+            <EntityTypeMapping TypeName="gzswModel.SYS_USERORGANIZE">
+              <MappingFragment StoreEntitySet="SYS_USERORGANIZE">
+                <ScalarProperty Name="MODIFY_DTIME" ColumnName="MODIFY_DTIME" />
+                <ScalarProperty Name="MODIFY_ID" ColumnName="MODIFY_ID" />
+                <ScalarProperty Name="CREATE_DTIME" ColumnName="CREATE_DTIME" />
+                <ScalarProperty Name="CREATE_ID" ColumnName="CREATE_ID" />
+                <ScalarProperty Name="ORG_ID" ColumnName="ORG_ID" />
+                <ScalarProperty Name="USER_ID" ColumnName="USER_ID" />
+                <ScalarProperty Name="USER_ORG_ID" ColumnName="USER_ORG_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CHK_COUNTER">
+            <EntityTypeMapping TypeName="gzswModel.CHK_COUNTER">
+              <MappingFragment StoreEntitySet="CHK_COUNTER">
+                <ScalarProperty Name="W7P_STAFF_ID" ColumnName="W7P_STAFF_ID" />
+                <ScalarProperty Name="W6P_STAFF_ID" ColumnName="W6P_STAFF_ID" />
+                <ScalarProperty Name="W5P_STAFF_ID" ColumnName="W5P_STAFF_ID" />
+                <ScalarProperty Name="W4P_STAFF_ID" ColumnName="W4P_STAFF_ID" />
+                <ScalarProperty Name="W3P_STAFF_ID" ColumnName="W3P_STAFF_ID" />
+                <ScalarProperty Name="W2P_STAFF_ID" ColumnName="W2P_STAFF_ID" />
+                <ScalarProperty Name="W1P_STAFF_ID" ColumnName="W1P_STAFF_ID" />
+                <ScalarProperty Name="W7A_STAFF_ID" ColumnName="W7A_STAFF_ID" />
+                <ScalarProperty Name="W6A_STAFF_ID" ColumnName="W6A_STAFF_ID" />
+                <ScalarProperty Name="W5A_STAFF_ID" ColumnName="W5A_STAFF_ID" />
+                <ScalarProperty Name="W4A_STAFF_ID" ColumnName="W4A_STAFF_ID" />
+                <ScalarProperty Name="W3A_STAFF_ID" ColumnName="W3A_STAFF_ID" />
+                <ScalarProperty Name="W2A_STAFF_ID" ColumnName="W2A_STAFF_ID" />
+                <ScalarProperty Name="W1A_STAFF_ID" ColumnName="W1A_STAFF_ID" />
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="MODIFY_DTIME" ColumnName="MODIFY_DTIME" />
+                <ScalarProperty Name="MODIFY_ID" ColumnName="MODIFY_ID" />
+                <ScalarProperty Name="COUNTER_ID" ColumnName="COUNTER_ID" />
+                <ScalarProperty Name="HALL_NO" ColumnName="HALL_NO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CHK_STAFFCHK_EVENT">
+            <EntityTypeMapping TypeName="gzswModel.CHK_STAFFCHK_EVENT">
+              <MappingFragment StoreEntitySet="CHK_STAFFCHK_EVENT">
+                <ScalarProperty Name="STATE" ColumnName="STATE" />
+                <ScalarProperty Name="CHK_TYP" ColumnName="CHK_TYP" />
+                <ScalarProperty Name="REA_LEAVE_TYPE" ColumnName="REA_LEAVE_TYPE" />
+                <ScalarProperty Name="PLAN_LEAVE_TYPE" ColumnName="PLAN_LEAVE_TYPE" />
+                <ScalarProperty Name="REA_CHK_OUT_TIME" ColumnName="REA_CHK_OUT_TIME" />
+                <ScalarProperty Name="REA_CHK_IN_TIME" ColumnName="REA_CHK_IN_TIME" />
+                <ScalarProperty Name="EAR_CHK_OUT_TIME" ColumnName="EAR_CHK_OUT_TIME" />
+                <ScalarProperty Name="LAT_CHK_IN_TIME" ColumnName="LAT_CHK_IN_TIME" />
+                <ScalarProperty Name="CHK_DATE" ColumnName="CHK_DATE" />
+                <ScalarProperty Name="REA_COUNTER_ID" ColumnName="REA_COUNTER_ID" />
+                <ScalarProperty Name="PRE_COUNTER_ID" ColumnName="PRE_COUNTER_ID" />
+                <ScalarProperty Name="STAFF_ID" ColumnName="STAFF_ID" />
+                <ScalarProperty Name="HALL_NO" ColumnName="HALL_NO" />
+                <ScalarProperty Name="SEQ" ColumnName="SEQ" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CLI_CLIENTEVENT">
+            <EntityTypeMapping TypeName="gzswModel.CLI_CLIENTEVENT">
+              <MappingFragment StoreEntitySet="CLI_CLIENTEVENT">
+                <ScalarProperty Name="CEVENT_TYPE" ColumnName="CEVENT_TYPE" />
+                <ScalarProperty Name="CEVENT_KEYID" ColumnName="CEVENT_KEYID" />
+                <ScalarProperty Name="CEVENT_COUNTER" ColumnName="CEVENT_COUNTER" />
+                <ScalarProperty Name="CEVENT_SNO" ColumnName="CEVENT_SNO" />
+                <ScalarProperty Name="CEVENT_SYSNO" ColumnName="CEVENT_SYSNO" />
+                <ScalarProperty Name="CEVENT_TIME" ColumnName="CEVENT_TIME" />
+                <ScalarProperty Name="CEVENT_ID" ColumnName="CEVENT_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CLI_COUNTERSTATE">
+            <EntityTypeMapping TypeName="gzswModel.CLI_COUNTERSTATE">
+              <MappingFragment StoreEntitySet="CLI_COUNTERSTATE">
+                <ScalarProperty Name="NSR_NAME" ColumnName="NSR_NAME" />
+                <ScalarProperty Name="LST_NSR_SBM" ColumnName="LST_NSR_SBM" />
+                <ScalarProperty Name="LST_QUEUE_TRANSCODEID" ColumnName="LST_QUEUE_TRANSCODEID" />
+                <ScalarProperty Name="STATE" ColumnName="STATE" />
+                <ScalarProperty Name="LST_OPT_TIME" ColumnName="LST_OPT_TIME" />
+                <ScalarProperty Name="LST_LOGOUT_TIME" ColumnName="LST_LOGOUT_TIME" />
+                <ScalarProperty Name="LST_LOGIN_TIME" ColumnName="LST_LOGIN_TIME" />
+                <ScalarProperty Name="LOGIN_STATE" ColumnName="LOGIN_STATE" />
+                <ScalarProperty Name="COUNTER_ID" ColumnName="COUNTER_ID" />
+                <ScalarProperty Name="HALL_NO" ColumnName="HALL_NO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="STAT_DAYHYYWTJ">
+            <EntityTypeMapping TypeName="gzswModel.STAT_DAYHYYWTJ">
+              <MappingFragment StoreEntitySet="STAT_DAYHYYWTJ">
+                <ScalarProperty Name="HYYWDDTJ_NUM" ColumnName="HYYWDDTJ_NUM" />
+                <ScalarProperty Name="HYYWDDTJ_PDNUM" ColumnName="HYYWDDTJ_PDNUM" />
+                <ScalarProperty Name="HYYWDDTJ_NAME" ColumnName="HYYWDDTJ_NAME" />
+                <ScalarProperty Name="HYYWDDTJ_SYSNO" ColumnName="HYYWDDTJ_SYSNO" />
+                <ScalarProperty Name="HYYWDDTJ_DAY" ColumnName="HYYWDDTJ_DAY" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="STAT_DAYQUEUETJ">
+            <EntityTypeMapping TypeName="gzswModel.STAT_DAYQUEUETJ">
+              <MappingFragment StoreEntitySet="STAT_DAYQUEUETJ">
+                <ScalarProperty Name="QDDTJ_PJKEY6NUM" ColumnName="QDDTJ_PJKEY6NUM" />
+                <ScalarProperty Name="QDDTJ_PJKEY5NUM" ColumnName="QDDTJ_PJKEY5NUM" />
+                <ScalarProperty Name="QDDTJ_PJKEY4NUM" ColumnName="QDDTJ_PJKEY4NUM" />
+                <ScalarProperty Name="QDDTJ_PJKEY3NUM" ColumnName="QDDTJ_PJKEY3NUM" />
+                <ScalarProperty Name="QDDTJ_PJKEY2NUM" ColumnName="QDDTJ_PJKEY2NUM" />
+                <ScalarProperty Name="QDDTJ_PJKEY1NUM" ColumnName="QDDTJ_PJKEY1NUM" />
+                <ScalarProperty Name="QDDTJ_PJKEY0NUM" ColumnName="QDDTJ_PJKEY0NUM" />
+                <ScalarProperty Name="QDDTJ_YYBLRLL" ColumnName="QDDTJ_YYBLRLL" />
+                <ScalarProperty Name="QDDTJ_CITYBLRLL" ColumnName="QDDTJ_CITYBLRLL" />
+                <ScalarProperty Name="QDDTJ_ONETICKETMULTIYW" ColumnName="QDDTJ_ONETICKETMULTIYW" />
+                <ScalarProperty Name="QDDTJ_TOTALWAITTIME" ColumnName="QDDTJ_TOTALWAITTIME" />
+                <ScalarProperty Name="QDDTJ_RLLWAITCS" ColumnName="QDDTJ_RLLWAITCS" />
+                <ScalarProperty Name="QDDTJ_RLLWAITDY60" ColumnName="QDDTJ_RLLWAITDY60" />
+                <ScalarProperty Name="QDDTJ_RLLWAIT55_60" ColumnName="QDDTJ_RLLWAIT55_60" />
+                <ScalarProperty Name="QDDTJ_RLLWAIT50_55" ColumnName="QDDTJ_RLLWAIT50_55" />
+                <ScalarProperty Name="QDDTJ_RLLWAIT45_50" ColumnName="QDDTJ_RLLWAIT45_50" />
+                <ScalarProperty Name="QDDTJ_RLLWAIT40_45" ColumnName="QDDTJ_RLLWAIT40_45" />
+                <ScalarProperty Name="QDDTJ_RLLWAIT35_40" ColumnName="QDDTJ_RLLWAIT35_40" />
+                <ScalarProperty Name="QDDTJ_RLLWAIT30_35" ColumnName="QDDTJ_RLLWAIT30_35" />
+                <ScalarProperty Name="QDDTJ_RLLWAIT25_30" ColumnName="QDDTJ_RLLWAIT25_30" />
+                <ScalarProperty Name="QDDTJ_RLLWAIT20_25" ColumnName="QDDTJ_RLLWAIT20_25" />
+                <ScalarProperty Name="QDDTJ_RLLWAIT15_20" ColumnName="QDDTJ_RLLWAIT15_20" />
+                <ScalarProperty Name="QDDTJ_RLLWAIT10_15" ColumnName="QDDTJ_RLLWAIT10_15" />
+                <ScalarProperty Name="QDDTJ_RLLWAIT5_10" ColumnName="QDDTJ_RLLWAIT5_10" />
+                <ScalarProperty Name="QDDTJ_RLLWAIT0_5" ColumnName="QDDTJ_RLLWAIT0_5" />
+                <ScalarProperty Name="QDDTJ_QHNUM" ColumnName="QDDTJ_QHNUM" />
+                <ScalarProperty Name="QDDTJ_RLL" ColumnName="QDDTJ_RLL" />
+                <ScalarProperty Name="QDDTJ_TICKETNUM" ColumnName="QDDTJ_TICKETNUM" />
+                <ScalarProperty Name="QDDTJ_QSERIALID" ColumnName="QDDTJ_QSERIALID" />
+                <ScalarProperty Name="QDDTJ_SNO" ColumnName="QDDTJ_SNO" />
+                <ScalarProperty Name="QDDTJ_COUNTER" ColumnName="QDDTJ_COUNTER" />
+                <ScalarProperty Name="QDDTJ_SYSNO" ColumnName="QDDTJ_SYSNO" />
+                <ScalarProperty Name="QDDTJ_DAY" ColumnName="QDDTJ_DAY" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="STAT_DAYYWTJ">
+            <EntityTypeMapping TypeName="gzswModel.STAT_DAYYWTJ">
+              <MappingFragment StoreEntitySet="STAT_DAYYWTJ">
+                <ScalarProperty Name="YWDDTJ_CITYBLNUM" ColumnName="YWDDTJ_CITYBLNUM" />
+                <ScalarProperty Name="YWDDTJ_TOTALBLTIME" ColumnName="YWDDTJ_TOTALBLTIME" />
+                <ScalarProperty Name="YWDDTJ_XYMINBLTIMENUM" ColumnName="YWDDTJ_XYMINBLTIMENUM" />
+                <ScalarProperty Name="YWDDTJ_BLCSNUM" ColumnName="YWDDTJ_BLCSNUM" />
+                <ScalarProperty Name="YWDDTJ_NUM" ColumnName="YWDDTJ_NUM" />
+                <ScalarProperty Name="YWDDTJ_SERIALID" ColumnName="YWDDTJ_SERIALID" />
+                <ScalarProperty Name="YWDDTJ_SNO" ColumnName="YWDDTJ_SNO" />
+                <ScalarProperty Name="YWDDTJ_COUNTER" ColumnName="YWDDTJ_COUNTER" />
+                <ScalarProperty Name="YWDDTJ_SYSNO" ColumnName="YWDDTJ_SYSNO" />
+                <ScalarProperty Name="YWDDTJ_DAY" ColumnName="YWDDTJ_DAY" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_COUNTER">
+            <EntityTypeMapping TypeName="gzswModel.SYS_COUNTER">
+              <MappingFragment StoreEntitySet="SYS_COUNTER">
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="MODIFY_DTIME" ColumnName="MODIFY_DTIME" />
+                <ScalarProperty Name="MODIFY_ID" ColumnName="MODIFY_ID" />
+                <ScalarProperty Name="CREATE_DTIME" ColumnName="CREATE_DTIME" />
+                <ScalarProperty Name="CREATE_ID" ColumnName="CREATE_ID" />
+                <ScalarProperty Name="PRI5_BUSI_SER" ColumnName="PRI5_BUSI_SER" />
+                <ScalarProperty Name="PRI4_BUSI_SER" ColumnName="PRI4_BUSI_SER" />
+                <ScalarProperty Name="PRI3_BUSI_SER" ColumnName="PRI3_BUSI_SER" />
+                <ScalarProperty Name="PRI2_BUSI_SER" ColumnName="PRI2_BUSI_SER" />
+                <ScalarProperty Name="PRI1_BUSI_SER" ColumnName="PRI1_BUSI_SER" />
+                <ScalarProperty Name="MAX_BUSI_CNT" ColumnName="MAX_BUSI_CNT" />
+                <ScalarProperty Name="STATE" ColumnName="STATE" />
+                <ScalarProperty Name="SPEC_FUN_IND" ColumnName="SPEC_FUN_IND" />
+                <ScalarProperty Name="COUNTER_ID" ColumnName="COUNTER_ID" />
+                <ScalarProperty Name="HALL_NO" ColumnName="HALL_NO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_CURRQUEUEHIST">
+            <EntityTypeMapping TypeName="gzswModel.SYS_CURRQUEUEHIST">
+              <MappingFragment StoreEntitySet="SYS_CURRQUEUEHIST">
+                <ScalarProperty Name="CHQUEUE_ISFINISHED" ColumnName="CHQUEUE_ISFINISHED" />
+                <ScalarProperty Name="CHQUEUE_STATUS" ColumnName="CHQUEUE_STATUS" />
+                <ScalarProperty Name="CHQUEUE_TICKETTYPE" ColumnName="CHQUEUE_TICKETTYPE" />
+                <ScalarProperty Name="CHQUEUE__SWJGDM" ColumnName="CHQUEUE _SWJGDM" />
+                <ScalarProperty Name="CHQUEUE_NSRMC" ColumnName="CHQUEUE_NSRMC" />
+                <ScalarProperty Name="CHQUEUE_NSRSBM" ColumnName="CHQUEUE_NSRSBM" />
+                <ScalarProperty Name="CHQUEUE_YWBS" ColumnName="CHQUEUE_YWBS" />
+                <ScalarProperty Name="CHQQUEUE_PJTIME" ColumnName="CHQQUEUE_PJTIME" />
+                <ScalarProperty Name="CHQUEUE_PJRESULT" ColumnName="CHQUEUE_PJRESULT" />
+                <ScalarProperty Name="CHQUEUE_BLTIME" ColumnName="CHQUEUE_BLTIME" />
+                <ScalarProperty Name="CHQUEUE_ETIME" ColumnName="CHQUEUE_ETIME" />
+                <ScalarProperty Name="CHQUEUE_STIME" ColumnName="CHQUEUE_STIME" />
+                <ScalarProperty Name="CHQUEUE_WAITTIME" ColumnName="CHQUEUE_WAITTIME" />
+                <ScalarProperty Name="CHQUEUE_CALLTIME" ColumnName="CHQUEUE_CALLTIME" />
+                <ScalarProperty Name="CHQUEUE_SNO" ColumnName="CHQUEUE_SNO" />
+                <ScalarProperty Name="CHQUEUE_COUNTER" ColumnName="CHQUEUE_COUNTER" />
+                <ScalarProperty Name="CHQUEUE_QSERIALID" ColumnName="CHQUEUE_QSERIALID" />
+                <ScalarProperty Name="CHQUEUE_TICKETTIME" ColumnName="CHQUEUE_TICKETTIME" />
+                <ScalarProperty Name="CHQUEUE_NUMBER" ColumnName="CHQUEUE_NUMBER" />
+                <ScalarProperty Name="CHQUEUE_SYSNO" ColumnName="CHQUEUE_SYSNO" />
+                <ScalarProperty Name="CHQUEUE_TRANSCODEID" ColumnName="CHQUEUE_TRANSCODEID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_CURRYWHIST">
+            <EntityTypeMapping TypeName="gzswModel.SYS_CURRYWHIST">
+              <MappingFragment StoreEntitySet="SYS_CURRYWHIST">
+                <ScalarProperty Name="YW_ISFINISHED" ColumnName="YW_ISFINISHED" />
+                <ScalarProperty Name="YW_SWJGDM" ColumnName="YW_SWJGDM" />
+                <ScalarProperty Name="YW_NSRMC" ColumnName="YW_NSRMC" />
+                <ScalarProperty Name="YW_NSRSBM" ColumnName="YW_NSRSBM" />
+                <ScalarProperty Name="YW_BLTIME" ColumnName="YW_BLTIME" />
+                <ScalarProperty Name="YW_ETIME" ColumnName="YW_ETIME" />
+                <ScalarProperty Name="YW_STIME" ColumnName="YW_STIME" />
+                <ScalarProperty Name="YW_SNO" ColumnName="YW_SNO" />
+                <ScalarProperty Name="YW_COUNTER" ColumnName="YW_COUNTER" />
+                <ScalarProperty Name="YW_DETAILSERIALID" ColumnName="YW_DETAILSERIALID" />
+                <ScalarProperty Name="YW_DLSERIALID" ColumnName="YW_DLSERIALID" />
+                <ScalarProperty Name="YW_QSERIALID" ColumnName="YW_QSERIALID" />
+                <ScalarProperty Name="YW_NUMBER" ColumnName="YW_NUMBER" />
+                <ScalarProperty Name="YW_SYSNO" ColumnName="YW_SYSNO" />
+                <ScalarProperty Name="YW_QTRANSCODEID" ColumnName="YW_QTRANSCODEID" />
+                <ScalarProperty Name="YW_XH" ColumnName="YW_XH" />
+                <ScalarProperty Name="YW_TRANSCODEID" ColumnName="YW_TRANSCODEID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_DETAILSERIAL">
+            <EntityTypeMapping TypeName="gzswModel.SYS_DETAILSERIAL">
+              <MappingFragment StoreEntitySet="SYS_DETAILSERIAL">
+                <ScalarProperty Name="SYS_BZ" ColumnName="SYS_BZ" />
+                <ScalarProperty Name="SYS_LASTUSER" ColumnName="SYS_LASTUSER" />
+                <ScalarProperty Name="SYS_LASTTIME" ColumnName="SYS_LASTTIME" />
+                <ScalarProperty Name="SYS_LRUSER" ColumnName="SYS_LRUSER" />
+                <ScalarProperty Name="SYS_LRTIME" ColumnName="SYS_LRTIME" />
+                <ScalarProperty Name="DEFAULTYWLXS" ColumnName="DEFAULTYWLXS" />
+                <ScalarProperty Name="DJSTIME" ColumnName="DJSTIME" />
+                <ScalarProperty Name="MINBLTIME" ColumnName="MINBLTIME" />
+                <ScalarProperty Name="BLCSTIME" ColumnName="BLCSTIME" />
+                <ScalarProperty Name="SSDLSERIALID" ColumnName="SSDLSERIALID" />
+                <ScalarProperty Name="SSQUEUESERIALID" ColumnName="SSQUEUESERIALID" />
+                <ScalarProperty Name="SERIALNAME" ColumnName="SERIALNAME" />
+                <ScalarProperty Name="SERIALID" ColumnName="SERIALID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_HALL">
+            <EntityTypeMapping TypeName="gzswModel.SYS_HALL">
+              <MappingFragment StoreEntitySet="SYS_HALL">
+                <ScalarProperty Name="HALL_PICT_URL" ColumnName="HALL_PICT_URL" />
+                <ScalarProperty Name="ORG_ID" ColumnName="ORG_ID" />
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="HEAD_TEL" ColumnName="HEAD_TEL" />
+                <ScalarProperty Name="HEAD" ColumnName="HEAD" />
+                <ScalarProperty Name="MODIFY_DTIME" ColumnName="MODIFY_DTIME" />
+                <ScalarProperty Name="MODIFY_ID" ColumnName="MODIFY_ID" />
+                <ScalarProperty Name="CREATE_DTIME" ColumnName="CREATE_DTIME" />
+                <ScalarProperty Name="CREATE_ID" ColumnName="CREATE_ID" />
+                <ScalarProperty Name="HAV_QUEUE_IND" ColumnName="HAV_QUEUE_IND" />
+                <ScalarProperty Name="EVAL_STAY_SEC" ColumnName="EVAL_STAY_SEC" />
+                <ScalarProperty Name="AUTO_EVAL_SEC" ColumnName="AUTO_EVAL_SEC" />
+                <ScalarProperty Name="AUTO_END_SEC" ColumnName="AUTO_END_SEC" />
+                <ScalarProperty Name="AUTO_CALL_IND" ColumnName="AUTO_CALL_IND" />
+                <ScalarProperty Name="AUTO_CALL_SEC" ColumnName="AUTO_CALL_SEC" />
+                <ScalarProperty Name="COUNTER_CNT" ColumnName="COUNTER_CNT" />
+                <ScalarProperty Name="DIMENSION" ColumnName="DIMENSION" />
+                <ScalarProperty Name="LONGITUDE" ColumnName="LONGITUDE" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+                <ScalarProperty Name="HALL_NAM" ColumnName="HALL_NAM" />
+                <ScalarProperty Name="HALL_NO" ColumnName="HALL_NO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_NSRHY">
+            <EntityTypeMapping TypeName="gzswModel.SYS_NSRHY">
+              <MappingFragment StoreEntitySet="SYS_NSRHY">
+                <ScalarProperty Name="HY_NAME" ColumnName="HY_NAME" />
+                <ScalarProperty Name="HY_ID" ColumnName="HY_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_QUEUEHIST">
+            <EntityTypeMapping TypeName="gzswModel.SYS_QUEUEHIST">
+              <MappingFragment StoreEntitySet="SYS_QUEUEHIST">
+                <ScalarProperty Name="HQUEUE_ISFINISHED" ColumnName="HQUEUE_ISFINISHED" />
+                <ScalarProperty Name="HQUEUE_STATUS" ColumnName="HQUEUE_STATUS" />
+                <ScalarProperty Name="HQUEUE_TICKETTYPE" ColumnName="HQUEUE_TICKETTYPE" />
+                <ScalarProperty Name="HQUEUE_SWJGDM" ColumnName="HQUEUE_SWJGDM" />
+                <ScalarProperty Name="HQUEUE_NSRMC" ColumnName="HQUEUE_NSRMC" />
+                <ScalarProperty Name="HQUEUE_NSRSBM" ColumnName="HQUEUE_NSRSBM" />
+                <ScalarProperty Name="HQUEUE_YWBS" ColumnName="HQUEUE_YWBS" />
+                <ScalarProperty Name="HQQUEUE_PJTIME" ColumnName="HQQUEUE_PJTIME" />
+                <ScalarProperty Name="HQUEUE_PJRESULT" ColumnName="HQUEUE_PJRESULT" />
+                <ScalarProperty Name="HQUEUE_BLTIME" ColumnName="HQUEUE_BLTIME" />
+                <ScalarProperty Name="HQUEUE_ETIME" ColumnName="HQUEUE_ETIME" />
+                <ScalarProperty Name="HQUEUE_STIME" ColumnName="HQUEUE_STIME" />
+                <ScalarProperty Name="HQUEUE_WAITTIME" ColumnName="HQUEUE_WAITTIME" />
+                <ScalarProperty Name="HQUEUE_CALLTIME" ColumnName="HQUEUE_CALLTIME" />
+                <ScalarProperty Name="HQUEUE_SNO" ColumnName="HQUEUE_SNO" />
+                <ScalarProperty Name="HQUEUE_COUNTER" ColumnName="HQUEUE_COUNTER" />
+                <ScalarProperty Name="HQUEUE_QSERIALID" ColumnName="HQUEUE_QSERIALID" />
+                <ScalarProperty Name="HQUEUE_TICKETTIME" ColumnName="HQUEUE_TICKETTIME" />
+                <ScalarProperty Name="HQUEUE_NUMBER" ColumnName="HQUEUE_NUMBER" />
+                <ScalarProperty Name="HQUEUE_SYSNO" ColumnName="HQUEUE_SYSNO" />
+                <ScalarProperty Name="HQUEUE_TRANSCODEID" ColumnName="HQUEUE_TRANSCODEID" />
+                <ScalarProperty Name="HQUEUE_ID" ColumnName="HQUEUE_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_QUEUEING">
+            <EntityTypeMapping TypeName="gzswModel.SYS_QUEUEING">
+              <MappingFragment StoreEntitySet="SYS_QUEUEING">
+                <ScalarProperty Name="QUEUE_ISYYTICKET" ColumnName="QUEUE_ISYYTICKET" />
+                <ScalarProperty Name="QUEUE_ISYCTICKET" ColumnName="QUEUE_ISYCTICKET" />
+                <ScalarProperty Name="QUEUE_NSRMC" ColumnName="QUEUE_NSRMC" />
+                <ScalarProperty Name="QUEUE_NSRSBM" ColumnName="QUEUE_NSRSBM" />
+                <ScalarProperty Name="QUEUE_ISWCSSMS" ColumnName="QUEUE_ISWCSSMS" />
+                <ScalarProperty Name="QUEUE_TOCOUNTER" ColumnName="QUEUE_TOCOUNTER" />
+                <ScalarProperty Name="QUEUE_QSERIALID" ColumnName="QUEUE_QSERIALID" />
+                <ScalarProperty Name="QUEUE_TICKETTIME" ColumnName="QUEUE_TICKETTIME" />
+                <ScalarProperty Name="QUEUE_NUMBER" ColumnName="QUEUE_NUMBER" />
+                <ScalarProperty Name="QUEUE_SYSNO" ColumnName="QUEUE_SYSNO" />
+                <ScalarProperty Name="QUEUE_TRANSCODEID" ColumnName="QUEUE_TRANSCODEID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_QUEUESERIAL">
+            <EntityTypeMapping TypeName="gzswModel.SYS_QUEUESERIAL">
+              <MappingFragment StoreEntitySet="SYS_QUEUESERIAL">
+                <ScalarProperty Name="SYS_BZ" ColumnName="SYS_BZ" />
+                <ScalarProperty Name="SYS_LASTUSER" ColumnName="SYS_LASTUSER" />
+                <ScalarProperty Name="SYS_LASTTIME" ColumnName="SYS_LASTTIME" />
+                <ScalarProperty Name="SYS_LRUSER" ColumnName="SYS_LRUSER" />
+                <ScalarProperty Name="SYS_LRTIME" ColumnName="SYS_LRTIME" />
+                <ScalarProperty Name="Q_SERIALNAME" ColumnName="Q_SERIALNAME" />
+                <ScalarProperty Name="Q_SERIALID" ColumnName="Q_SERIALID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_STAFF">
+            <EntityTypeMapping TypeName="gzswModel.SYS_STAFF">
+              <MappingFragment StoreEntitySet="SYS_STAFF">
+                <ScalarProperty Name="ORG_ID" ColumnName="ORG_ID" />
+                <ScalarProperty Name="MODIFY_DTIME" ColumnName="MODIFY_DTIME" />
+                <ScalarProperty Name="MODIFY_ID" ColumnName="MODIFY_ID" />
+                <ScalarProperty Name="CREATE_DTIME" ColumnName="CREATE_DTIME" />
+                <ScalarProperty Name="CREATE_ID" ColumnName="CREATE_ID" />
+                <ScalarProperty Name="NOTE" ColumnName="NOTE" />
+                <ScalarProperty Name="STAR_EVAL_NOTE" ColumnName="STAR_EVAL_NOTE" />
+                <ScalarProperty Name="STAR_EVAL_TYP" ColumnName="STAR_EVAL_TYP" />
+                <ScalarProperty Name="STAFF_TYP" ColumnName="STAFF_TYP" />
+                <ScalarProperty Name="PHOTE_URL" ColumnName="PHOTE_URL" />
+                <ScalarProperty Name="STAR_LEVEL" ColumnName="STAR_LEVEL" />
+                <ScalarProperty Name="STAFF_PASSWORD" ColumnName="STAFF_PASSWORD" />
+                <ScalarProperty Name="STAFF_NAM" ColumnName="STAFF_NAM" />
+                <ScalarProperty Name="STAFF_ID" ColumnName="STAFF_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_STAFFBUSI">
+            <EntityTypeMapping TypeName="gzswModel.SYS_STAFFBUSI">
+              <MappingFragment StoreEntitySet="SYS_STAFFBUSI">
+                <ScalarProperty Name="BUSI_CD" ColumnName="BUSI_CD" />
+                <ScalarProperty Name="STAFF_ID" ColumnName="STAFF_ID" />
+                <ScalarProperty Name="STAFF_BUSI_ID" ColumnName="STAFF_BUSI_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_TICKETQUEUESERIAL">
+            <EntityTypeMapping TypeName="gzswModel.SYS_TICKETQUEUESERIAL">
+              <MappingFragment StoreEntitySet="SYS_TICKETQUEUESERIAL">
+                <ScalarProperty Name="SYS_LASTUSER" ColumnName="SYS_LASTUSER" />
+                <ScalarProperty Name="SYS_LASTTIME" ColumnName="SYS_LASTTIME" />
+                <ScalarProperty Name="SYS_LRUSER" ColumnName="SYS_LRUSER" />
+                <ScalarProperty Name="SYS_LRTIME" ColumnName="SYS_LRTIME" />
+                <ScalarProperty Name="Q_BZ" ColumnName="Q_BZ" />
+                <ScalarProperty Name="Q_INPUTPWD" ColumnName="Q_INPUTPWD" />
+                <ScalarProperty Name="Q_CURRNUMBER" ColumnName="Q_CURRNUMBER" />
+                <ScalarProperty Name="Q_MAXNUMBER" ColumnName="Q_MAXNUMBER" />
+                <ScalarProperty Name="Q_MINNUMBER" ColumnName="Q_MINNUMBER" />
+                <ScalarProperty Name="Q_7PSTIME" ColumnName="Q_7PSTIME" />
+                <ScalarProperty Name="Q_6PSTIME" ColumnName="Q_6PSTIME" />
+                <ScalarProperty Name="Q_5PSTIME" ColumnName="Q_5PSTIME" />
+                <ScalarProperty Name="Q_4PSTIME" ColumnName="Q_4PSTIME" />
+                <ScalarProperty Name="Q_3PSTIME" ColumnName="Q_3PSTIME" />
+                <ScalarProperty Name="Q_2PSTIME" ColumnName="Q_2PSTIME" />
+                <ScalarProperty Name="Q_1PSTIME" ColumnName="Q_1PSTIME" />
+                <ScalarProperty Name="Q_7ASTIME" ColumnName="Q_7ASTIME" />
+                <ScalarProperty Name="Q_6ASTIME" ColumnName="Q_6ASTIME" />
+                <ScalarProperty Name="Q_5ASTIME" ColumnName="Q_5ASTIME" />
+                <ScalarProperty Name="Q_4ASTIME" ColumnName="Q_4ASTIME" />
+                <ScalarProperty Name="Q_3ASTIME" ColumnName="Q_3ASTIME" />
+                <ScalarProperty Name="Q_2ASTIME" ColumnName="Q_2ASTIME" />
+                <ScalarProperty Name="Q_1ASTIME" ColumnName="Q_1ASTIME" />
+                <ScalarProperty Name="Q_P7LIMITTICKETNUM" ColumnName="Q_P7LIMITTICKETNUM" />
+                <ScalarProperty Name="Q_P6LIMITTICKETNUM" ColumnName="Q_P6LIMITTICKETNUM" />
+                <ScalarProperty Name="Q_P5LIMITTICKETNUM" ColumnName="Q_P5LIMITTICKETNUM" />
+                <ScalarProperty Name="Q_P4LIMITTICKETNUM" ColumnName="Q_P4LIMITTICKETNUM" />
+                <ScalarProperty Name="Q_P3LIMITTICKETNUM" ColumnName="Q_P3LIMITTICKETNUM" />
+                <ScalarProperty Name="Q_P2LIMITTICKETNUM" ColumnName="Q_P2LIMITTICKETNUM" />
+                <ScalarProperty Name="Q_P1LIMITTICKETNUM" ColumnName="Q_P1LIMITTICKETNUM" />
+                <ScalarProperty Name="Q_A7LIMITTICKETNUM" ColumnName="Q_A7LIMITTICKETNUM" />
+                <ScalarProperty Name="Q_A6LIMITTICKETNUM" ColumnName="Q_A6LIMITTICKETNUM" />
+                <ScalarProperty Name="Q_A5LIMITTICKETNUM" ColumnName="Q_A5LIMITTICKETNUM" />
+                <ScalarProperty Name="Q_A4LIMITTICKETNUM" ColumnName="Q_A4LIMITTICKETNUM" />
+                <ScalarProperty Name="Q_A3LIMITTICKETNUM" ColumnName="Q_A3LIMITTICKETNUM" />
+                <ScalarProperty Name="Q_A2LIMITTICKETNUM" ColumnName="Q_A2LIMITTICKETNUM" />
+                <ScalarProperty Name="Q_A1LIMITTICKETNUM" ColumnName="Q_A1LIMITTICKETNUM" />
+                <ScalarProperty Name="Q_WAITCSTIME" ColumnName="Q_WAITCSTIME" />
+                <ScalarProperty Name="Q_NUMBERQCHAR" ColumnName="Q_NUMBERQCHAR" />
+                <ScalarProperty Name="Q_SERIALNAME" ColumnName="Q_SERIALNAME" />
+                <ScalarProperty Name="Q_SERIALID" ColumnName="Q_SERIALID" />
+                <ScalarProperty Name="Q_SYSNO" ColumnName="Q_SYSNO" />
+                <ScalarProperty Name="Q_ID" ColumnName="Q_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_YWHIST">
+            <EntityTypeMapping TypeName="gzswModel.SYS_YWHIST">
+              <MappingFragment StoreEntitySet="SYS_YWHIST">
+                <ScalarProperty Name="HYW_ISFINISHED" ColumnName="HYW_ISFINISHED" />
+                <ScalarProperty Name="HYW_SWJGDM" ColumnName="HYW_SWJGDM" />
+                <ScalarProperty Name="HYW_NSRMC" ColumnName="HYW_NSRMC" />
+                <ScalarProperty Name="HYW_NSRSBM" ColumnName="HYW_NSRSBM" />
+                <ScalarProperty Name="HYW_BLTIME" ColumnName="HYW_BLTIME" />
+                <ScalarProperty Name="HYW_ETIME" ColumnName="HYW_ETIME" />
+                <ScalarProperty Name="HYW_STIME" ColumnName="HYW_STIME" />
+                <ScalarProperty Name="HYW_SNO" ColumnName="HYW_SNO" />
+                <ScalarProperty Name="HYW_COUNTER" ColumnName="HYW_COUNTER" />
+                <ScalarProperty Name="HYW_DETAILSERIALID" ColumnName="HYW_DETAILSERIALID" />
+                <ScalarProperty Name="HYW_DLSERIALID" ColumnName="HYW_DLSERIALID" />
+                <ScalarProperty Name="HYW_QSERIALID" ColumnName="HYW_QSERIALID" />
+                <ScalarProperty Name="HYW_NUMBER" ColumnName="HYW_NUMBER" />
+                <ScalarProperty Name="HYW_SYSNO" ColumnName="HYW_SYSNO" />
+                <ScalarProperty Name="HYW_QTRANSCODEID" ColumnName="HYW_QTRANSCODEID" />
+                <ScalarProperty Name="HYW_XH" ColumnName="HYW_XH" />
+                <ScalarProperty Name="HYW_TRANSCODEID" ColumnName="HYW_TRANSCODEID" />
+                <ScalarProperty Name="HYW_GUID" ColumnName="HYW_GUID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_DLSERIAL">
+            <EntityTypeMapping TypeName="gzswModel.SYS_DLSERIAL">
+              <MappingFragment StoreEntitySet="SYS_DLSERIAL">
+                <ScalarProperty Name="SYS_BZ" ColumnName="SYS_BZ" />
+                <ScalarProperty Name="SYS_LASTUSER" ColumnName="SYS_LASTUSER" />
+                <ScalarProperty Name="SYS_LASTTIME" ColumnName="SYS_LASTTIME" />
+                <ScalarProperty Name="SYS_LRUSER" ColumnName="SYS_LRUSER" />
+                <ScalarProperty Name="SYS_LRTIME" ColumnName="SYS_LRTIME" />
+                <ScalarProperty Name="DLS_SERIALNAME" ColumnName="DLS_SERIALNAME" />
+                <ScalarProperty Name="DLS_SERIALID" ColumnName="DLS_SERIALID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_NSRINFO">
+            <EntityTypeMapping TypeName="gzswModel.SYS_NSRINFO">
+              <MappingFragment StoreEntitySet="SYS_NSRINFO">
+                <ScalarProperty Name="NSR_LRR" ColumnName="NSR_LRR" />
+                <ScalarProperty Name="NSR_LRRQ" ColumnName="NSR_LRRQ" />
+                <ScalarProperty Name="NSR_FRPHONE" ColumnName="NSR_FRPHONE" />
+                <ScalarProperty Name="NSR_BSYPHONE" ColumnName="NSR_BSYPHONE" />
+                <ScalarProperty Name="NSR_HYNAME" ColumnName="NSR_HYNAME" />
+                <ScalarProperty Name="NSR_SWJGDM" ColumnName="NSR_SWJGDM" />
+                <ScalarProperty Name="NSR_NAME" ColumnName="NSR_NAME" />
+                <ScalarProperty Name="NSR_SBM" ColumnName="NSR_SBM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

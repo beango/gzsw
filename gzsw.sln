@@ -1,0 +1,109 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gzsw.model", "gzsw.model\gzsw.model.csproj", "{F4663DC8-A7E8-40BA-8D44-5ECC3BE73371}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gzsw.controller", "gzsw.controller\gzsw.controller.csproj", "{5CEA3B32-7B3F-4266-96E2-2398A902E5A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gzsw.dal", "gzsw.dal\gzsw.dal.csproj", "{EBF310DD-3502-495D-A2F3-3D1E84E9E678}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gzsw.test", "gzsw.test\gzsw.test.csproj", "{17A4CD58-CB20-4ADA-B4E6-67E81E8C8943}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D96A255B-3441-4F61-BF7E-E3A0A58DA6F1}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gzsw.web", "gzsw.web\gzsw.web.csproj", "{E9D1DDF3-ADE8-4B88-842B-76B96AC9BDBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gzsw.util", "gzsw.util\gzsw.util.csproj", "{3CC371CD-CC3A-40E5-9845-5205BEC5014A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{2BB8C2F5-55C1-48DF-A69C-7B7CC0E7B24A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gzsw.winservice", "gzsw.winservice\gzsw.winservice.csproj", "{EE13823B-9581-4AE5-9A98-83FAEB10BFA8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{F2AD39E3-41F2-47F2-86AA-E5FFE6109674}"
+	ProjectSection(SolutionItems) = preProject
+		lib\C5.dll = lib\C5.dll
+		lib\Common.Logging.dll = lib\Common.Logging.dll
+		lib\Common.Logging.Log4Net1211.dll = lib\Common.Logging.Log4Net1211.dll
+		lib\log4net.dll = lib\log4net.dll
+		lib\Quartz.dll = lib\Quartz.dll
+		lib\Quartz.pdb = lib\Quartz.pdb
+		lib\Quartz.xml = lib\Quartz.xml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 8
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://gzsw.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = gzsw.model\\gzsw.model.csproj
+		SccProjectName1 = gzsw.model
+		SccLocalPath1 = gzsw.model
+		SccProjectUniqueName2 = gzsw.controller\\gzsw.controller.csproj
+		SccProjectName2 = gzsw.controller
+		SccLocalPath2 = gzsw.controller
+		SccProjectUniqueName3 = gzsw.dal\\gzsw.dal.csproj
+		SccProjectName3 = gzsw.dal
+		SccLocalPath3 = gzsw.dal
+		SccProjectUniqueName4 = gzsw.test\\gzsw.test.csproj
+		SccProjectName4 = gzsw.test
+		SccLocalPath4 = gzsw.test
+		SccProjectUniqueName5 = gzsw.web\\gzsw.web.csproj
+		SccProjectName5 = gzsw.web
+		SccLocalPath5 = gzsw.web
+		SccProjectUniqueName6 = gzsw.util\\gzsw.util.csproj
+		SccProjectName6 = gzsw.util
+		SccLocalPath6 = gzsw.util
+		SccProjectUniqueName7 = gzsw.winservice\\gzsw.winservice.csproj
+		SccProjectTopLevelParentUniqueName7 = gzsw.sln
+		SccProjectName7 = gzsw.winservice
+		SccLocalPath7 = gzsw.winservice
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F4663DC8-A7E8-40BA-8D44-5ECC3BE73371}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4663DC8-A7E8-40BA-8D44-5ECC3BE73371}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4663DC8-A7E8-40BA-8D44-5ECC3BE73371}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4663DC8-A7E8-40BA-8D44-5ECC3BE73371}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CEA3B32-7B3F-4266-96E2-2398A902E5A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CEA3B32-7B3F-4266-96E2-2398A902E5A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CEA3B32-7B3F-4266-96E2-2398A902E5A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CEA3B32-7B3F-4266-96E2-2398A902E5A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBF310DD-3502-495D-A2F3-3D1E84E9E678}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBF310DD-3502-495D-A2F3-3D1E84E9E678}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBF310DD-3502-495D-A2F3-3D1E84E9E678}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBF310DD-3502-495D-A2F3-3D1E84E9E678}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17A4CD58-CB20-4ADA-B4E6-67E81E8C8943}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17A4CD58-CB20-4ADA-B4E6-67E81E8C8943}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17A4CD58-CB20-4ADA-B4E6-67E81E8C8943}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17A4CD58-CB20-4ADA-B4E6-67E81E8C8943}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9D1DDF3-ADE8-4B88-842B-76B96AC9BDBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9D1DDF3-ADE8-4B88-842B-76B96AC9BDBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9D1DDF3-ADE8-4B88-842B-76B96AC9BDBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9D1DDF3-ADE8-4B88-842B-76B96AC9BDBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CC371CD-CC3A-40E5-9845-5205BEC5014A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CC371CD-CC3A-40E5-9845-5205BEC5014A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CC371CD-CC3A-40E5-9845-5205BEC5014A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CC371CD-CC3A-40E5-9845-5205BEC5014A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE13823B-9581-4AE5-9A98-83FAEB10BFA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE13823B-9581-4AE5-9A98-83FAEB10BFA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE13823B-9581-4AE5-9A98-83FAEB10BFA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE13823B-9581-4AE5-9A98-83FAEB10BFA8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EE13823B-9581-4AE5-9A98-83FAEB10BFA8} = {2BB8C2F5-55C1-48DF-A69C-7B7CC0E7B24A}
+	EndGlobalSection
+EndGlobal

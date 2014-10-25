@@ -1,0 +1,181 @@
+﻿@using gzsw.web;
+@model gzsw.model.SYS_COUNTER
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+     @Html.AntiForgeryToken()
+     @Html.ValidationSummary(true)
+    
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="tdLeft">服务厅：</td>
+            <td>
+                @*@Html.DropDownList("HALL_NO", @ViewBag.HallList as IEnumerable<SelectListItem>)*@
+                @Html.DisplayFor(item=>item.Hall.HALL_NAM)
+                @Html.HiddenFor(item => item.HALL_NO)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.HALL_NO)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">窗口ID：</td>
+            <td>
+                @Html.HiddenFor(model => model.COUNTER_ID)
+                @Html.DisplayFor(model => model.COUNTER_ID)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.COUNTER_ID)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">特呼功能启用：</td>
+            <td>
+                @Html.EditorFor(model => model.SPEC_FUN_IND)<i style="color:#ccc">（勾选启用）</i>
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.SPEC_FUN_IND)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">状态：</td>
+            <td colspan="2">
+                @Html.DropDownList("STATE", @ViewBag.statelist as IEnumerable<SelectListItem>)
+                @Html.ValidationMessageFor(model => model.STATE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">最大的业务笔数：</td>
+            <td colspan="2">
+                @Html.EditorFor(model => model.MAX_BUSI_CNT)
+                @Html.ValidationMessageFor(model => model.MAX_BUSI_CNT)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">业务组1排队队列：</td>
+            <td>
+                @Html.CheckBoxList("PRI1_BUSI_SER", @ViewBag.QueueSerial as IEnumerable<SelectListItem>, Model.PRI1_BUSI_SER.Split('-'))
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.PRI1_BUSI_SER)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">业务组2排队队列：</td>
+            <td>
+                @Html.CheckBoxList("PRI2_BUSI_SER", @ViewBag.QueueSerial as IEnumerable<SelectListItem>, Model.PRI2_BUSI_SER.Split('-'))
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.PRI2_BUSI_SER)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">业务组3排队队列：</td>
+            <td>
+                @Html.CheckBoxList("PRI3_BUSI_SER", @ViewBag.QueueSerial as IEnumerable<SelectListItem>, Model.PRI3_BUSI_SER.Split('-'))
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.PRI3_BUSI_SER)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">业务组4排队队列：</td>
+            <td>
+                @Html.CheckBoxList("PRI4_BUSI_SER", @ViewBag.QueueSerial as IEnumerable<SelectListItem>, Model.PRI4_BUSI_SER.Split('-'))
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.PRI4_BUSI_SER)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">业务组5排队队列：</td>
+            <td>
+                @Html.CheckBoxList("PRI5_BUSI_SER", @ViewBag.QueueSerial as IEnumerable<SelectListItem>, Model.PRI5_BUSI_SER.Split('-'))
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.PRI5_BUSI_SER)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">备注：</td>
+            <td>
+                @Html.TextAreaFor(model => model.NOTE, new { @style = "height:50px;width:360px;" })
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.NOTE)
+            </td>
+        </tr>
+        <tr>
+            <td  colspan="3" style="text-align: center;">
+
+                <input type="submit" class="l-button" value="提交" />
+            </td>
+        </tr>
+    </table>
+}
+
+@section Head{
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+    @Html.JavaScript("lib/jqueryform/jquery.form.js")
+    @Html.JavaScript("lib/utility/ext.js?v1")
+    <style type="text/css">
+    .checkboxlist {
+        display: block;
+    }
+
+        .checkboxlist .list {
+            float: left;
+            margin-right: 10px;
+        }
+    </style>
+    <script type="text/javascript">
+		<!--
+        $(function () {
+            InitAjaxForm();//异步提交
+            $('.checkboxlist input').click(function () {
+                var curval = $(this).val();
+                var curnam = $(this).attr('name');
+                var curchk = $(this).attr('checked');
+                $('.checkboxlist input').each(function () {
+                    var thisval = $(this).val();
+                    var thisnam = $(this).attr('name');
+                    if (thisnam != curnam && thisval == curval) {
+                        if (curchk || curchk=="checked")
+                            $(this).attr('disabled', true);
+                        else {
+                            $(this).attr('disabled', false);
+                        }
+                    }
+                });
+            });
+            $('.checkboxlist input').each(function () {
+                var curval = $(this).val();
+                var curnam = $(this).attr('name');
+                var curchk = $(this).attr('checked');
+                if (curchk == "checked")
+                {
+                    $('.checkboxlist input').each(function () {
+                        var thisval = $(this).val();
+                        var thisnam = $(this).attr('name');
+                        if (thisnam != curnam && thisval == curval) {
+                            //if (curchk == "checked")
+                            //    $(this).attr('disabled', true);
+                            //else {
+                                $(this).attr('disabled', true);
+                            //}
+                        }
+                    });
+                }
+            });
+        });
+		//-->
+    </script>
+}
+

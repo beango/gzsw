@@ -1,0 +1,149 @@
+﻿@using gzsw.web;
+@model PetaPoco.Page<gzsw.model.SYS_TICKETQUEUESERIAL>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:100px;">队列名称：</td>
+            <td style="width:170px;"><input type="text" name="txtSNAM" id="txtSNAM" value="@ViewBag.SNAM" /></td>
+            <td style="width:80px;"> 组织机构：</td>
+            <td style="width:170px;">@Html.DropDownList("ddlORGID", ViewBag.UserORG as SelectList, "--请选择--")</td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+
+        </tr>
+    </table>
+</div>
+<div id="toptoolbar"></div>
+<div class="rightinfo">
+    <div class="tablePanel">
+        <table class="tablelist">
+            <thead>
+                <tr>
+                    <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                    <th>序号 </th>
+                    <th>
+                        组织机构
+                    </th>
+                    <th>
+                        服务厅
+                    </th>
+                    <th>
+                        排队业务名称
+                    </th>
+                    <th>
+                        等候超时时间（分）
+                    </th>
+                    <th>
+                        该业务生成排队号码的前缀
+                    </th>
+                    <th>
+                        该业务开始号
+                    </th>
+                    <th>
+                        该业务结束号
+                    </th>
+                    <th>
+                        当前取号号码
+                    </th>
+                </tr>
+            </thead>
+            @{
+                var i = 1;
+            }
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td><input name="cbId" type="checkbox" value="@item.Q_ID" /></td>
+                    <td>
+                        @(i++)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Org.ORG_NAM)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Hall.HALL_NAM)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Q_SERIALNAME)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Q_WAITCSTIME)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Q_NUMBERQCHAR)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Q_MINNUMBER)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Q_MAXNUMBER)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Q_CURRNUMBER)
+                    </td>
+                </tr>
+            }
+
+        </table>
+        @if (Model.Items.Count < 1)
+        {
+            <div class="l-panel-notDATA">
+                暂无数据
+            </div>
+        }
+        @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+    </div>
+    </div>
+
+@section Head{
+    @Html.JavaScript("lib/utility/ext.js")
+    <script lang="javascript">
+        $(function () {
+            // 查询
+            $("#btnSearch").ligerButton(
+                    {
+                        text: " 查 询 ",
+                        click: function () {
+                            var url = "?SNAM=" + $("#txtSNAM").val() + "&orgid=" + $("#ddlORGID").val()
+                                + "&ORGNAM=" + $("#txtORGNAM").val();
+                            location.href = url.urlstamp();
+                        },
+                        icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+                    });
+
+            // 顶部导航
+            var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+            @if (Html.ChkAuth("SYS_TICKETQUEUESERIAL_VIW"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "SYS_TICKETQUEUESERIAL_VIW", 850, 420));
+                @:ligerToolBar.addItem({ line: true });
+            }
+            
+            @if (Html.ChkAuth("SYS_TICKETQUEUESERIAL_ADD"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIAddButton(Url.Action("Create"), "增加", "SYS_TICKETQUEUESERIAL_ADD", 950, 500));
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+            @if (Html.ChkAuth("SYS_TICKETQUEUESERIAL_EDT"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "SYS_TICKETQUEUESERIAL_EDT", 950, 500));
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+            @if (Html.ChkAuth("SYS_TICKETQUEUESERIAL_DEL"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIDeleteButton(Url.Action("Delete"), "删除", "SYS_TICKETQUEUESERIAL_DEL"));
+            }
+
+        });
+    </script>
+}

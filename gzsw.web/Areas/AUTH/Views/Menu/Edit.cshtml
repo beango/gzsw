@@ -1,0 +1,164 @@
+﻿@using gzsw.web;
+@using gzsw.model
+@model gzsw.model.SYS_MENU
+
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = "修改菜单";
+    var MENUALL = TempData["MENUALL"] as List<SYS_MENU>;
+    var FUNCALL = TempData["FUNCALL"] as List<SYS_FUNCTION>;
+}
+
+@using (Html.BeginForm())
+{
+        @Html.AntiForgeryToken()
+
+        <table class="formTable" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    菜单名称：
+                </td>
+                <td>
+                    @Html.HiddenFor(model => model.MENU_ID)
+                    @Html.EditorFor(model => model.MENU_NAM)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.MENU_NAM)
+                </td>
+            </tr>
+
+            <tr>
+                <td class="tdLeft">
+                    父菜单：
+                </td>
+                <td>
+                    <ul id="treeParMenu" class="ztree"></ul>
+                    <input type="hidden" value="" id="PAR_MENU_ID" name="PAR_MENU_ID" />
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.PAR_MENU_ID)
+                </td>
+            </tr>
+
+            <tr>
+                <td class="tdLeft">
+                    菜单图标：
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.IMAGEURL)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.IMAGEURL)
+                </td>
+            </tr>
+
+            <tr>
+                <td class="tdLeft">
+                    菜单链接：
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.NAVIGATEURL)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.NAVIGATEURL)
+                </td>
+            </tr>
+
+            <tr>
+                <td class="tdLeft">
+                    排序：
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.MENU_ORD)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.MENU_ORD)
+                </td>
+            </tr>
+
+            <tr>
+                <td class="tdLeft">
+                    权限：
+                </td>
+                <td>
+                    <ul id="treeParFunc" class="ztree"></ul>
+                    <input type="hidden" value="" id="FUNCTION_ID" name="FUNCTION_ID" />
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.FUNCTION_ID)
+                </td>
+            </tr>
+
+            <tr>
+                <td class="tdLeft"> &nbsp;  </td>
+                <td>
+                    <input type="submit" class="l-button" value="提交" onclick="getChecked()" /> 
+                </td>
+                <td> </td>
+            </tr>
+        </table>
+}
+@section Head{
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+    @Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
+    @Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+    @Html.JavaScript("lib/jqueryform/jquery.form.js")
+    @Html.JavaScript("lib/utility/ext.js?v2")
+
+    <script type="text/javascript">
+		<!--
+		var zNodes;
+		$(function () {
+		    InitAjaxForm();//异步提交
+		    $.ajax({
+		        async: false,
+		        cache: false,
+		        type: 'POST',
+		        dataType: 'json',
+		        url: "/AUTH/Menu/GetMenusTree?check=@Model.PAR_MENU_ID&disabled=@Model.MENU_ID",
+		        success: function (data) {
+		            zNodes = data;
+		        }
+		    });
+		});
+
+		var zNodes2;
+		$(function () {
+		    $.ajax({
+		        async: false,
+		        cache: false,
+		        type: 'POST',
+		        dataType: 'json',
+		        url: "/AUTH/Function/GetFuncsTree?check=@Model.FUNCTION_ID",
+		        success: function (data) {
+		            zNodes2 = data;
+		        }
+		    });
+		});
+
+		$(document).ready(function() {
+		    radioTree("#treeParMenu", zNodes);
+		    radioTree("#treeParFunc", zNodes2);
+		});
+		//-->
+    </script>
+    <script type="text/javascript">
+        function getChecked() {
+            var treeObj = $.fn.zTree.getZTreeObj("treeParMenu"),
+            nodes = treeObj.getCheckedNodes(true);
+            for (var i = 0; i < nodes.length; i++) {
+                $('#PAR_MENU_ID').val(nodes[i].id);
+                break;
+            }
+            var treeObj2 = $.fn.zTree.getZTreeObj("treeParFunc"),
+            nodes2 = treeObj2.getCheckedNodes(true);
+            for (var i = 0; i < nodes2.length; i++) {
+                $('#FUNCTION_ID').val(nodes2[i].id);
+                break;
+            }
+            return true;
+        }
+    </script>
+}

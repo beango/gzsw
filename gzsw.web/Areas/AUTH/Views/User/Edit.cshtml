@@ -1,0 +1,79 @@
+﻿@using gzsw.web;
+@model gzsw.model.SYS_USER
+@{
+    ViewBag.Title = "修改用户";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="width:100px;" class="tdLeft">
+                用户账号：
+            </td>
+            <td>
+                @Html.HiddenFor(model => model.USER_ID)
+                @Model.USER_ID
+                @Html.ValidationMessageFor(model => model.USER_ID)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">
+                用户名：
+            </td>
+            <td>
+                @Html.EditorFor(model => model.USER_NAM)
+                @Html.ValidationMessageFor(model => model.USER_NAM)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">
+                用户密码：
+            </td>
+            <td>
+                <input type="password" value="" name="USER_PASSWORD" id="USER_PASSWORD" /><i>（不填写时不会修改密码）</i>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">
+                电话号码：
+            </td>
+            <td>
+                @Html.EditorFor(model => model.TEL)
+                @Html.ValidationMessageFor(model => model.TEL)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">
+                电子邮箱：
+            </td>
+            <td>
+                @Html.EditorFor(model => model.EMAIL)
+                @Html.ValidationMessageFor(model => model.EMAIL)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">
+                备注：
+            </td>
+            <td>
+                @Html.EditorFor(model => model.NOTE)
+                @Html.HiddenFor(model => model.CREATE_ID)
+                @Html.HiddenFor(model => model.CREATE_DTIME)
+                @Html.ValidationMessageFor(model => model.NOTE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft"> &nbsp;  </td>
+            <td>
+                <input type="submit" class="l-button" value="提交" />
+            </td>
+        </tr>
+    </table>
+}
+
+@section Head{
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+}

@@ -1,0 +1,110 @@
+﻿@using gzsw.model
+@using gzsw.web
+@model gzsw.model.SYS_DETAILSERIAL
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <table class="formTable" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width:110px;" class="tdLeft">
+                    事项编码：
+                </td>
+                <td>@Html.EditorFor(model => model.SERIALID)</td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.SERIALID)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    业务名称：
+                </td>
+                <td>@Html.EditorFor(model => model.SERIALNAME)</td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.SERIALNAME)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    所属排队队列：
+                </td>
+                <td>@Html.DropDownList("SSQUEUESERIALID", ViewData["QUSERIAL"] as SelectList)</td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.SSQUEUESERIALID)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    所属大类业务：
+                </td>
+                <td>@Html.DropDownList("SSDLSERIALID", ViewData["DLSERIAL"] as SelectList)</td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.SSDLSERIALID)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    办理超时时间：
+                </td>
+                <td>@Html.EditorFor(model => model.BLCSTIME)</td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.BLCSTIME)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    业务至少办理时间：
+                </td>
+                <td>@Html.EditorFor(model => model.MINBLTIME)</td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.MINBLTIME)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    提醒倒计时时间点：
+                </td>
+                <td>@Html.EditorFor(model => model.DJSTIME)</td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.DJSTIME)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    默认折合系数：
+                </td>
+                <td>@Html.EditorFor(model => model.DEFAULTYWLXS)</td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.DEFAULTYWLXS)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    备注：
+                </td>
+                <td>@Html.EditorFor(model => model.SYS_BZ)</td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.SYS_BZ)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft"> &nbsp;  </td>
+                <td>
+                    <input type="submit" class="l-button" value="提交" /> 
+                </td>
+                <td> </td>
+            </tr>
+        </table>
+}
+
+@section Head{
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+}

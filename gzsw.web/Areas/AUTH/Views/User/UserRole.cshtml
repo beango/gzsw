@@ -1,0 +1,52 @@
+﻿@using gzsw.web;
+@using gzsw.model
+@model IList<gzsw.model.SYS_USEROLE>
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = "用户角色设置";
+    var roles = TempData["roles"] as List<SYS_ROLE>;
+    var user = TempData["user"] as SYS_USER;
+}
+
+@using (Html.BeginForm())
+{
+        @Html.ValidationSummary(true)
+        @Html.Hidden("userid", user.USER_ID)
+        <table class="formTable" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    用户账号：
+                </td>
+                <td>
+                    @user.USER_NAM
+                </td>
+            </tr>
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    角色：
+                </td>
+                <td>
+            @if (roles != null)
+            {
+                foreach (var item in roles)
+                {
+                    @Html.CheckBox("chkChecked" + item.ROLE_ID, Model != null && Model.Any(obj => obj.ROLE_ID == item.ROLE_ID), new { groupname = "RoleID" })
+                    @Html.DisplayFor(modelItem => item.ROLE_NAM)
+                    <br />
+                }
+            }
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft"> &nbsp;  </td>
+                <td>
+                    <input type="submit" class="l-button" value="提交" /> 
+                </td>
+                <td> </td>
+            </tr>
+    </table>
+}
+@section Head{
+    @Html.JavaScript("lib/jqueryform/jquery.form.js")
+    @Html.JavaScript("lib/utility/ext.js?v3")
+}

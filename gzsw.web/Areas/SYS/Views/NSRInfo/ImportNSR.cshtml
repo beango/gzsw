@@ -1,0 +1,42 @@
+﻿@using gzsw.web
+@using System.IO
+@{
+    ViewBag.Title = "ImportNSR";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div class="formbody">
+    <div id="fileQueue"></div>
+    <div style="width:100%;text-align:center;margin-top:20%;"><input type="file" name="uploadify" id="uploadify" /></div>
+</div>
+
+@section Head{
+    @Html.StyleSheet("lib/jquery.uploadify/uploadify.css")
+    @Html.JavaScript("lib/jquery.uploadify/swfobject.js")
+    @Html.JavaScript("lib/jquery.uploadify/jquery.uploadify-debug.js")
+    @Html.JavaScript("lib/json/json.min.js")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var auth = "@(Request.Cookies[FormsAuthentication.FormsCookieName] == null ? string.Empty : Request.Cookies[FormsAuthentication.FormsCookieName].Value)";
+            var sessionid = "@(Session.SessionID)";
+
+            $("#uploadify").uploadify({
+                'debug': true,
+                'method': 'post',
+                'uploader': '/Content/lib/jquery.uploadify/uploadify.swf',
+                'script': '/SYS/NSRInfo/ImportNSRSubmit',
+                'cancelImg': '/Content/lib/jquery.uploadify/cancel.png',
+                'folder': 'UploadFile',
+                'queueID': 'fileQueue',
+                'auto': true,
+                'buttonImg': "/Content/lib/jquery.uploadify/btn.png",
+                scriptData: { 'ASPSESSID': sessionid, 'AUTHID': auth },
+                //'buttonText':'选择文件',
+                'onComplete': function (event, queueId, fileObj, response, data) {
+                    var rest = JSON.parse(response);
+                    parent.layer.closeAll();
+                }
+            });
+        });
+    </script>
+}

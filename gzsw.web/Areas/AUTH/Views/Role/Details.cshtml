@@ -1,0 +1,26 @@
+﻿@model gzsw.model.SYS_ROLE
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="width:100px;" class="tdLeft">
+                角色名称：
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.ROLE_NAM)
+            </td>
+        </tr>
+
+        <tr>
+            <td class="tdLeft">
+                组织机构：
+            </td>
+            <td>
+                @(Model.RoleORG == null ? "" : Model.RoleORG.ORG_NAM)
+            </td>
+        </tr>
+    </table>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="49c11272a29848b2985541e9a5f72ea6" Name="Diagram1" ZoomLevel="97">
+        <EntityTypeShape EntityType="gzswModel.SYS_LOG" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_ROLEFUNCTION" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_USER" Width="1.5" PointX="7.75" PointY="4.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_USEROLE" Width="1.5" PointX="7.75" PointY="8.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_FUNCTION" Width="1.5" PointX="10.375" PointY="4.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_MENU" Width="1.5" PointX="10.375" PointY="8.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_LOGINLOG" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_ORGANIZE" Width="1.5" PointX="12.375" PointY="0.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_ROLE" Width="1.5" PointX="3.375" PointY="3.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_USERORGANIZE" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="gzswModel.CHK_COUNTER" Width="1.5" PointX="3.75" PointY="7.75" />
+        <EntityTypeShape EntityType="gzswModel.CHK_STAFFCHK_EVENT" Width="1.5" PointX="0.75" PointY="8.75" />
+        <EntityTypeShape EntityType="gzswModel.CLI_CLIENTEVENT" Width="1.5" PointX="12.75" PointY="5.75" />
+        <EntityTypeShape EntityType="gzswModel.CLI_COUNTERSTATE" Width="1.5" PointX="5.75" PointY="12.75" />
+        <EntityTypeShape EntityType="gzswModel.STAT_DAYHYYWTJ" Width="1.5" PointX="7.75" PointY="12.75" />
+        <EntityTypeShape EntityType="gzswModel.STAT_DAYQUEUETJ" Width="1.5" PointX="12.75" PointY="9.75" />
+        <EntityTypeShape EntityType="gzswModel.STAT_DAYYWTJ" Width="1.5" PointX="9.75" PointY="12.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_COUNTER" Width="1.5" PointX="0.75" PointY="13.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_CURRQUEUEHIST" Width="1.5" PointX="2.75" PointY="13.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_CURRYWHIST" Width="1.5" PointX="14.75" PointY="0.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_DETAILSERIAL" Width="1.5" PointX="14.75" PointY="6.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_HALL" Width="1.5" PointX="14.75" PointY="15.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_NSRHY" Width="1.5" PointX="16.75" PointY="0.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_QUEUEHIST" Width="1.5" PointX="4.75" PointY="16.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_QUEUEING" Width="1.5" PointX="6.75" PointY="16.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_QUEUESERIAL" Width="1.5" PointX="16.75" PointY="7.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_STAFF" Width="1.5" PointX="8.75" PointY="16.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_STAFFBUSI" Width="1.5" PointX="16.75" PointY="11.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_TICKETQUEUESERIAL" Width="1.5" PointX="16.75" PointY="14.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_YWHIST" Width="1.5" PointX="18.75" PointY="0.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_DLSERIAL" Width="1.5" PointX="11.375" PointY="18.75" />
+        <EntityTypeShape EntityType="gzswModel.SYS_NSRINFO" Width="1.5" PointX="0.75" PointY="19.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

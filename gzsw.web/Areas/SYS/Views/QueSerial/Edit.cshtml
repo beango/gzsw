@@ -1,0 +1,57 @@
+﻿@using gzsw.web;
+@model gzsw.model.SYS_QUEUESERIAL
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <table class="formTable" cellpadding="0" cellspacing="0">
+
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    队列编码：
+                </td>
+                <td>@Html.DisplayFor(model => model.Q_SERIALID)</td>
+            </tr>
+
+            <tr>
+                <td class="tdLeft">
+                    @Html.HiddenFor(model => model.Q_SERIALID)
+                    队列名称：
+                </td>
+                <td>@Html.EditorFor(model => model.Q_SERIALNAME)</td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.Q_SERIALNAME)
+                </td>
+            </tr>
+
+            <tr>
+                <td class="tdLeft">
+                    备注：
+                </td>
+                <td>@Html.EditorFor(model => model.SYS_BZ)</td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.SYS_BZ)
+                </td>
+            </tr>
+
+            <tr>
+                <td class="tdLeft"> &nbsp;  </td>
+                <td>
+                    <input type="submit" class="l-button" value="提交" /> 
+                </td>
+                <td> </td>
+            </tr>
+        </table>
+}
+
+@section Head{
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+}

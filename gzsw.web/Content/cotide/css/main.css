@@ -1,0 +1,106 @@
+
+body {
+    background: #bfd4ff !important;
+    margin: 0px;
+    padding: 0px;
+}
+ 
+/*index.html*/
+/*Navbar*/
+.navbar {
+	margin: 0px 0px 0px 0px !important;
+	padding: 0px;
+}
+.navbar .brand {
+    text-shadow: none;
+}
+.navbar .nav > li > a {
+    color: #fff;
+    text-shadow: none;
+}
+.navbar .nav > li:hover {
+    background-color: #444;
+}
+.navbar .nav > li > a:hover {
+    color: #fff;
+}
+.navbar .navbar-inner {
+    background: #555555;
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #444444), color-stop(1, #555555));
+    background: -ms-linear-gradient(bottom, #444444, #555555);
+    background: -moz-linear-gradient(center bottom, #444444 0%, #555555 100%);
+    background: -o-linear-gradient(bottom, #444444, #555555);
+    filter: none;
+    filter: progid:dximagetransform.microsoft.gradient(startColorStr='#444444', EndColorStr='#555555');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#555555',EndColorStr='#444444')";
+    margin: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 0px;
+    border-bottom: 1px solid #222;
+    -webkit-box-shadow: 0px 1px 0px #f0f0f0;
+    -moz-box-shadow: 0px 1px 0px #f0f0f0;
+    box-shadow: 0px 1px 0px #f0f0f0;
+}
+.navbar .nav li.dropdown.open > .dropdown-toggle {
+    background-color: #444;
+    color: #fff;
+}
+/*Navigation*/
+.sidebar-nav {
+    width: 228px;
+   /* position: absolute;*/
+    float: left;
+    border-top: none;
+    border-left: none;
+    margin: 0em;
+}
+ 
+/*content*/
+.content {
+    min-width: 400px;
+/*    position: relative;*/
+    min-height: 800px; 
+    margin-left: 232px; 
+}
+/*footer*/
+.footer {
+    margin: 0px;
+    padding: 2px; 
+    color: #666;
+    font-size: 12px;
+    line-height: 10px;
+    background-color: #5b93f2;
+    text-align: center;
+    color: #fff;
+}
+/*crud.html*/
+/*header*/
+.header {
+    background: #ffffff;
+    background: #ffffff;
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #e6e6e6), color-stop(1, #ffffff));
+    background: -ms-linear-gradient(bottom, #e6e6e6, #ffffff);
+    background: -moz-linear-gradient(center bottom, #e6e6e6 0%, #ffffff 100%);
+    background: -o-linear-gradient(bottom, #e6e6e6, #ffffff);
+    filter: progid:dximagetransform.microsoft.gradient(startColorStr='#4d5b76', EndColorStr='#6c7a95');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff',EndColorStr='#e6e6e6')";
+    border-bottom: 1px solid #cccccc;
+    border-top: 1px solid #ffffff;
+    border-left: 1px solid #ffffff;
+    padding: 0em 1.25em;
+    margin-bottom: 20px;
+}
+.header h1 {
+    margin: 1em 0em;
+    padding: 0em;
+    line-height: 1em;
+    font-size: 1.5em;
+    color: #eee;
+    color: #333;
+}
+ 

@@ -1,0 +1,235 @@
+﻿@using gzsw.web;
+@model PetaPoco.Page<gzsw.model.SYS_ORGANIZE>
+@{
+    ViewBag.Title = "组织机构管理";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:100px;">组织机构名称：</td>
+            <td style="width:170px;"><input type="text" name="txtORGNAM" id="txtORGNAM" value="@ViewBag.ORGNAM" /></td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="tablepanel">
+    <div style="width: 30%; float: left;"><ul id="treeORG" class="ztree"></ul></div>
+    <div style="width: 70%; height:100%; overflow:hidden; float: left;">
+        <iframe id="hallFrame" style="width:100%;height:82%;" frameborder="0" scrolling="auto" src=""></iframe>
+    </div>
+</div>
+@section Head{
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+    @Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
+    @Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
+    @Html.JavaScript("lib/ztree/jquery.ztree.exedit-3.5.min.js")
+    @Html.JavaScript("lib/utility/ext.js")
+    <style type="text/css">
+        .ztree li span.button.add {
+            margin-left: 2px;
+            margin-right: -1px;
+            background-position: -144px 0;
+            vertical-align: top;
+            *vertical-align: middle;
+        }
+    </style>
+    <script lang="javascript">
+        $(function () {
+            // 注册事件
+            // 查询
+            $("#btnSearch").ligerButton(
+            {
+                text: " 查 询 ",
+                click: function () {
+                    var url = "?ORGNAM=" + $("#txtORGNAM").val();
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+        });
+    </script>
+    <script type="text/javascript">
+		<!--
+        var ztree_setting_menus = {
+            edit: {
+                @if (Html.ChkAuth("SYS_ORG_EDT"))
+                {
+                @:enable: true,
+                }
+                editNameSelectAll: true,
+                showRemoveBtn: showRemoveBtn,
+                showRenameBtn: showRenameBtn,
+                renameTitle: "修改组织机构",
+                removeTitle: "删除组织机构"
+            },
+            async: {
+                enable: true,
+                url: "/SYS/Org/GetOrgsManagerTree",
+                autoParam: ["id", "name=n", "level=lv"]
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pId",
+                    rootPId: ""
+                }
+            },
+            view: {
+                fontCss: getFontCss,
+                showIcon: showIconForTree,
+                @if (Html.ChkAuth("SYS_ORG_ADD"))
+                {
+                @:addHoverDom: addHoverDom,
+                }
+                @if (Html.ChkAuth("SYS_ORG_DEL"))
+                {
+                @:removeHoverDom: removeHoverDom,
+                }
+
+                selectedMulti: false,
+                showTitle:false
+            },
+            callback: {
+                beforeEditName: beforeEditName,
+                beforeRemove: zTreeBeforeRemove,
+                onClick: zTreeOnClick
+            }
+        };
+
+		var zNodes;
+		$(function () {
+		    $.ajax({
+		        async: false,
+		        cache: false,
+		        type: 'POST',
+		        dataType: 'json',
+		        url: "/SYS/Org/GetOrgsManagerTree?searchNam=@Request.QueryString["ORGNAM"]",
+		        success: function (data) {
+		            zNodes = data;
+		        }
+		    });
+		});
+        function getFontCss(treeId, treeNode) {
+            if (!!treeNode.highlight)
+                return { color: "red", "font-weight": "bold" }
+        }
+		function showRemoveBtn(treeId, treeNode) {
+		    if (treeNode.id == "")
+		        return false;
+		    return true;
+		}
+		function showRenameBtn(treeId, treeNode) {
+		    if (treeNode.id == "")
+		        return false;
+		    return true;
+		}
+		var newCount = 1;
+		function addHoverDom(treeId, treeNode) {
+		    if (treeNode.Org_LV==4)//为4时修改服务厅
+		    {
+		        return false;
+		        var sObj = $("#" + treeNode.tId + "_span");
+		        if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
+		        var addStr = "<span class='button edit' id='addBtn_" + treeNode.tId
+                    + "' title='修改办税服务厅' onfocus='this.blur();'></span>";
+		        sObj.after(addStr);
+		        var btn = $("#addBtn_" + treeNode.tId);
+		        if (btn) btn.bind("click", function () {
+		            $("#hallFrame").attr("src", "/SYS/Hall/Edit?FromOrg=1&orgid=" + treeNode.id);
+		            return false;
+		        });
+		    }
+		    else//增加
+		    {
+		        var sObj = $("#" + treeNode.tId + "_span");
+		        if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
+		        var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+                    + "' title='新增下级组织机构' onfocus='this.blur();'></span>";
+		        sObj.after(addStr);
+		        var btn = $("#addBtn_" + treeNode.tId);
+		        if (btn) btn.bind("click", function () {
+		            var url = "@Html.Url("/SYS/Org/Create?pid=")" + treeNode.id+"&orglev="+(treeNode.level+1);
+		            gzsw.dialog.open({
+		                url: url.urlstamp(),
+		                title: "新增机构",
+		                width: 500,
+		                height: 480,
+		                isReload: false,
+		                closeFun: function (data) {
+		                    var treeObj = $.fn.zTree.getZTreeObj("treeORG");
+		                    if (!treeNode.isParent)
+		                        treeNode.isParent = true;
+		                    treeObj.reAsyncChildNodes(treeNode, "refresh");
+		                    return false;
+		                }
+		            });
+		            return false;
+		        });
+		    }
+		};
+		function removeHoverDom(treeId, treeNode) {
+		    $("#addBtn_" + treeNode.tId).unbind().remove();
+		};
+		function beforeEditName(treeId, treeNode) {
+		    var url = "@Html.Url("/SYS/Org/Edit?id=")" + treeNode.id + "&pid=" + treeNode.id;
+		    gzsw.dialog.open({
+		        url: url.urlstamp(),
+		        title: "修改机构",
+		        width: 500,
+		        height: 480,
+		        isReload: false,
+		        closeFun: function () {
+		            var treeObj = $.fn.zTree.getZTreeObj("treeORG");
+		            treeObj.reAsyncChildNodes(treeNode.getParentNode(), "refresh",true);
+		            return false;
+		        }
+		    });
+
+		    return false;
+		}
+        function zTreeBeforeRemove(treeId, treeNode) {
+            if (treeNode.Org_LV == 4)
+            {
+                if (!confirm("删除该营业厅将会同时会删除办税服务厅，确定要删除该营业厅吗？")) {
+                    return false;
+                }
+            }
+            else
+            if (!confirm("确定要删除该机构吗？")) {
+                return false;
+            }
+		    var rst = false;
+		    $.ajax({
+		        async: false,
+		        cache: false,
+		        type: 'POST',
+		        dataType: 'json',
+		        url: "/SYS/Org/Delete/" + treeNode.id,
+		        success: function (data) {
+		            rst = data.result;
+		            if(!rst)
+		            {
+		                alert(data.desc);
+		            }
+		        }
+		    });
+		    return rst;
+		}
+        function zTreeOnClick(event, treeId, treeNode) {
+            if (treeNode.Org_LV == 4)
+                $("#hallFrame").attr("src", "/SYS/Hall/Details?FromOrg=1&orgid=" + treeNode.id);
+            else
+                $("#hallFrame").attr("src", "");
+        };
+		$(document).ready(function(){
+		    $.fn.zTree.init($("#treeORG"), ztree_setting_menus, zNodes);
+		});
+		//-->
+    </script>
+}

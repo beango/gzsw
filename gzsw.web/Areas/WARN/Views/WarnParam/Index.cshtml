@@ -1,0 +1,126 @@
+﻿@using gzsw.web;
+@model PetaPoco.Page<gzsw.model.WARN_PARAM>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:100px;">组织机构名称：</td>
+            <td style="width:170px;"><input type="text" name="txtORGNAM" id="txtORGNAM" value="@ViewBag.ORGNAM" /></td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="toptoolbar"></div>
+<div class="rightinfo">
+    <div class="tablePanel">
+        <table class="tablelist" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                    <th>序号</th>
+                    <th>
+                        预警名称
+                    </th>
+                    <th>
+                        临界值
+                    </th>
+                    <th>
+                        预警级别
+                    </th>
+                    <th>
+                        预警类型
+                    </th>
+                    <th>
+                        预警范围
+                    </th>
+                    <th>
+                        组织机构
+                    </th>
+                    <th>
+                        信息发送模版
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            @{
+                var i = 1;
+            }
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>
+                        <input name="cbId" value="@item.WARN_PARAM_ID" type='checkbox' />
+                    </td>
+                    <td>
+                        @(i++)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WARN_PARAM_NAM)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CRITICAL_VALUE)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WARN_LEVEL)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WARN_TYP)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WARN_SCOPE)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ORG_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WARN_INFO_MODEL)
+                    </td>
+                </tr>
+            }
+
+        </table>
+        @if (Model.Items.Count < 1)
+        {
+            <div class="l-panel-notDATA">
+                暂无数据
+            </div>
+        }
+        @Html.Pager("page", Model.ItemsPerPage, Model.TotalItems)
+    </div>
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/utility/ext.js")
+    <script lang="javascript">
+        $(function () {
+            // 注册事件
+            // 查询
+            $("#btnSearch").ligerButton(
+            {
+                text: " 查 询 ",
+                click: function () {
+                    var url = "?ORGNAM=" + $("#txtORGNAM").val();
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+            // 顶部导航
+            var bar = $("#toptoolbar").ligerToolBar();
+
+            bar.addItem(@Html.AuthViewButton("WARN_PARAM_VIW", Url.Action("Details", "DLSerial")));
+            bar.addItem({ line: true });
+            bar.addItem(@Html.AuthAddButton("WARN_PARAM_ADD", Url.Action("Create", "DLSerial")));
+            bar.addItem({ line: true });
+            bar.addItem(@Html.AuthEditButton("WARN_PARAM_EDT", Url.Action("Edit", "DLSerial")));
+            bar.addItem({ line: true });
+            bar.addItem(@Html.AuthDelButton("WARN_PARAM_DEL", Url.Action("Delete", "DLSerial")));
+        });
+    </script>
+}

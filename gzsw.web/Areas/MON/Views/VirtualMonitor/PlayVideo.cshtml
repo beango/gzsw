@@ -1,0 +1,333 @@
+﻿@using gzsw.web
+@using NPOI.SS.Formula.Functions
+@{
+    ViewBag.Title = "播放视频";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@model gzsw.model.MON_HALL_CAMERA_DEF
+
+<div class="video-main">
+    <div class="video-left">
+        <!--视频插件-->
+        <div id="divPlugin" class="plugin"></div>
+
+        <div class="handle">
+            <div class="realPlay">
+                <input type="button" id="startRealPlay" class="startRealPlay hid" />
+                <input type="button" id="stopRealPlay" class="stopRealPlay" />
+            </div>
+            <div class="sound">
+                <input type="button" id="openSound" class="openSound" />
+                <input type="button" id="closeSound" class="closeSound hid" />
+                
+                <span class="Verticalslider" id="sliderSound">
+                    <div class="Vertical-slider-range" id="divSliderSoundRange" style="width: 100%;">
+                    </div>
+                </span>
+            </div>
+            <input type="button" id="fullScreen" class="fullScreen"  />
+        </div>
+    </div>
+    <div class="video-right" style="display: @(Model.CAMERA_TYP != 1 ? "none" : "block");">
+        <div style="margin-left: 8px;">
+            <div class="directionControl">
+                <table>
+                    <tr>
+                        <td>
+                            <input type="button" id="leftUpperControl" class="leftUpperControl" />
+                        </td>
+                        <td class="center">
+                            <input type="button" id="upControl" class="upControl" />
+                        </td>
+                        <td class="right">
+                            <input type="button" id="rightUpperControl" class="rightUpperControl" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="button" id="leftControl" class="leftControl" />
+                        </td>
+                        <td class="center">
+                            <input type="button" id="autoControl" class="autoControl" />
+                        </td>
+                        <td class="right">
+                            <input type="button" id="rightControl" class="rightControl" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="button" id="leftDownControl" class="leftDownControl" />
+                        </td>
+                        <td class="center">
+                            <input type="button" id="downControl" class="downControl" />
+                        </td>
+                        <td class="right">
+                            <input type="button" id="rightDownControl" class="rightDownControl" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br />
+            <div class="directionControl">
+                <table>
+                    <tr>
+                        <td><input type="button" id="addZoom" class="plusSign" /></td>
+                        <td class="center">焦距</td>
+                        <td class="right"><input type="button" id="reduceZoom" class="minusSign" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="button" id="addFoucus" class="plusSign" /></td>
+                        <td class="center">焦点</td>
+                        <td class="right"><input type="button" id="reduceFoucus" class="minusSign" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="button" id="addIris" class="plusSign" /> </td>
+                        <td class="center">光圈</td>
+                        <td class="right"><input type="button" id="reduceIris" class="minusSign" /></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.HiddenFor(m=>m.CAMERA_TYP)
+@Html.HiddenFor(m => m.CGI_PROTOCOL)
+@Html.HiddenFor(m => m.CHANNEL_ID)
+@Html.HiddenFor(m => m.HTTP_PROTOCOL)
+@Html.HiddenFor(m => m.IPORT)
+@Html.HiddenFor(m => m.IP_ADDRESS)
+@Html.HiddenFor(m => m.RTSP_PORT)
+@Html.HiddenFor(m => m.STRING_TYP)
+@Html.HiddenFor(m => m.USER_NAME)
+@Html.HiddenFor(m => m.USER_PASSWORD)
+@Html.HiddenFor(m => m.ZERO_CHANNEL_IND)
+
+@section Head
+{
+    @Html.StyleSheet("lib/hall/hall.css")
+    @Html.JavaScript("lib/codebase/webVideoCtrl.js")
+    @Html.JavaScript("lib/jquery.ui/jquery.ui.core.js")
+    @Html.JavaScript("lib/jquery.ui/jquery.ui.widget.js")
+    @Html.JavaScript("lib/jquery.ui/jquery.ui.mouse.js")
+    @Html.JavaScript("lib/jquery.ui/jquery.ui.slider.js")
+    @Html.JavaScript("lib/codebase/playVideo.js")
+    
+    <style type="text/css">
+        body {
+            background: #dcdedd;
+        }
+    </style>
+}
+<script type="text/javascript">
+    $(function () {
+        var playVideo = function () {
+
+            var _init = function() {
+                var bZeroChannel = false;
+                @if (Model.ZERO_CHANNEL_IND == true)
+                    {
+                        @:bZeroChannel = true;
+                    }
+
+                video.init();
+                video.login({
+                    szIP: $("#IP_ADDRESS").val(),
+                    iPrototocol: $("#HTTP_PROTOCOL").val(),
+                    iPort: $("#IPORT").val(),
+                    szUserName: $("#USER_NAME").val(),
+                    szPassword: $("#USER_PASSWORD").val()
+                });
+
+                video.startRealPlay({
+                    iWndIndex: 0,
+                    iStreamType: Number($("#STRING_TYP").val()),
+                    iChannelID: Number($("#CHANNEL_ID").val()),
+                    bZeroChannel: bZeroChannel
+                });
+
+                //恢复播放
+                $("#startRealPlay").click(function() {
+                    $("#stopRealPlay").show();
+                    $(this).hide();
+
+                    video.startRealPlay({
+                        iWndIndex: 0,
+                        iStreamType: Number($("#STRING_TYP").val()),
+                        iChannelID: Number($("#CHANNEL_ID").val()),
+                        bZeroChannel: bZeroChannel
+                    });
+                });
+
+                //停止
+                $("#stopRealPlay").click(function() {
+                    $("#startRealPlay").show();
+                    $(this).hide();
+                    video.stopRealPlay();
+                });
+                //开声音
+                $("#openSound").click(function() {
+                    $(this).hide();
+                    $("#closeSound").show();
+                    video.openSound();
+                });
+                //关声音
+                $("#closeSound").click(function() {
+                    $(this).hide();
+                    $("#openSound").show();
+                    video.closeSound();
+                });
+                //全屏
+                $("#fullScreen").click(function() {
+                    video.fullScreen();
+                });
+
+                //左上
+                $("#leftUpperControl").on("mousedown", function () {
+                    $(this).addClass("leftUpperControlSel").removeClass("leftUpperControl");
+                    video.setBeginPTZControl(5);
+                }).on("mouseup", function () {
+                    $(this).addClass("leftUpperControl").removeClass("leftUpperControlSel");
+                    video.setEndPTZControl();
+                });
+                //上
+                $("#upControl").on("mousedown", function () {
+                    $(this).addClass("upControlSel").removeClass("upControl");
+                    video.setBeginPTZControl(1);
+                }).on("mouseup", function () {
+                    $(this).addClass("upControl").removeClass("upControlSel");
+                    video.setEndPTZControl();
+                });
+                //右上
+                $("#rightUpperControl").on("mousedown", function () {
+                    $(this).addClass("rightUpperControlSel").removeClass("rightUpperControl");
+                    video.setBeginPTZControl(7);
+                }).on("mouseup", function () {
+                    $(this).addClass("rightUpperControl").removeClass("rightUpperControlSel");
+                    video.setEndPTZControl();
+                });
+                //左
+                $("#leftControl").on("mousedown", function () {
+                    $(this).addClass("leftControlSel").removeClass("leftControl");
+                    video.setBeginPTZControl(3);
+                }).on("mouseup", function () {
+                    $(this).addClass("leftControl").removeClass("leftControlSel");
+                    video.setEndPTZControl();
+                });
+                //自动
+                $("#autoControl").on("mousedown", function () {
+                    $(this).addClass("autoControlSel").removeClass("autoControl");
+                    video.setBeginPTZControl(9);
+                }).on("mouseup", function () {
+                    $(this).addClass("autoControl").removeClass("autoControlSel");
+                    video.setEndPTZControl();
+                });
+                //右
+                $("#rightControl").on("mousedown", function () {
+                    $(this).addClass("rightControlSel").removeClass("rightControl");
+                    video.setBeginPTZControl(4);
+                }).on("mouseup", function () {
+                    $(this).addClass("rightControl").removeClass("rightControlSel");
+                    video.setEndPTZControl();
+                });
+                //左
+                $("#leftDownControl").on("mousedown", function () {
+                    $(this).addClass("leftDownControlSel").removeClass("leftDownControl");
+                    video.setBeginPTZControl(6);
+                }).on("mouseup", function () {
+                    $(this).addClass("leftDownControl").removeClass("leftDownControlSel");
+                    video.setEndPTZControl();
+                });
+                //下
+                $("#downControl").on("mousedown", function () {
+                    $(this).addClass("downControlSel").removeClass("downControl");
+                    video.setBeginPTZControl(2);
+                }).on("mouseup", function () {
+                    $(this).addClass("downControl").removeClass("downControlSel");
+                    video.setEndPTZControl();
+                });
+                //右
+                $("#rightDownControl").on("mousedown", function () {
+                    $(this).addClass("rightDownControlSel").removeClass("rightDownControl");
+                    video.setBeginPTZControl(8);
+                }).on("mouseup", function () {
+                    $(this).addClass("rightDownControl").removeClass("rightDownControlSel");
+                    video.setEndPTZControl();
+                });
+
+                //+焦距
+                $("#addZoom").on("mousedown", function () {
+                    $(this).addClass("plusSignSel").removeClass("plusSign");
+                    video.setPTZZoomIn();
+                }).on("mouseup", function () {
+                    $(this).addClass("plusSign").removeClass("plusSignSel");
+                    video.setPTZZoomStop();
+                });
+                //-焦距
+                $("#reduceZoom").on("mousedown", function () {
+                    $(this).addClass("autoControlSel").removeClass("autoControl");
+                    video.setPTZZoomOut();
+                }).on("mouseup", function () {
+                    $(this).addClass("autoControlSel").removeClass("autoControl");
+                    video.setPTZZoomStop();
+                });
+                // +焦点
+                $("#addFoucus").on("mousedown", function () {
+                    $(this).addClass("plusSignSel").removeClass("plusSign");
+                    video.setPTZFoucusIn();
+                }).on("mouseup", function () {
+                    $(this).addClass("plusSign").removeClass("plusSignSel");
+                    video.setPTZFoucusStop();
+                });
+                //-焦点
+                $("#reduceFoucus").on("mousedown", function () {
+                    $(this).addClass("minusSignSel").removeClass("minusSign");
+                    video.setPTZFoucusOut();
+                }).on("mouseup", function () {
+                    $(this).addClass("minusSign").removeClass("minusSignSel");
+                    video.setPTZFoucusStop();
+                });
+                // + 光圈
+                $("#addIris").on("mousedown", function () {
+                    $(this).addClass("plusSignSel").removeClass("plusSign");
+                    video.setPTZIrisIn();
+                }).on("mouseup", function () {
+                    $(this).addClass("plusSign").removeClass("plusSignSel");
+                    video.setPTZIrisStop();
+                });
+                //-光圈
+                $("#reduceIris").on("mousedown", function () {
+                    $(this).addClass("minusSignSel").removeClass("minusSign");
+                    video.setPTZIrisOut();
+                }).on("mouseup", function () {
+                    $(this).addClass("minusSign").removeClass("minusSignSel");
+                    video.setPTZIrisStop();
+                });
+            };
+
+            var _setVolume = function () {
+
+                $("#sliderSound").slider({
+                    value: 100,
+                    min: 0,
+                    max: 100,
+                    slide: function (event, ui) {
+                        $("#divSliderSoundRange").css("width", ui.value + "%");
+                        video.setVolume(Number(ui.value));
+                    }
+                });
+
+
+            };
+
+            return {
+                init:function() {
+                    _init();
+                    _setVolume();
+                }
+            }
+        }();
+
+        playVideo.init();
+    });
+</script>

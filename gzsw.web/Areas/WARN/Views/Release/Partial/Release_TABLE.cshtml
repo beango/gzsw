@@ -1,0 +1,8 @@
+﻿
+    <td class="tdLeft">
+        所要发布的看板：
+    </td><td>
+    @Html.CheckBoxList("TABLE_CD", @ViewBag.TABLELIST as IEnumerable<SelectListItem>)</td>
+    <td>
+        @Html.ValidationMessage("TABLE_CD")
+    </td>

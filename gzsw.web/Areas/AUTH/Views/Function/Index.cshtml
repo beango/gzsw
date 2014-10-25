@@ -1,0 +1,202 @@
+﻿@using gzsw.web;
+@model PetaPoco.Page<gzsw.model.SYS_FUNCTION>
+@{
+    ViewBag.Title = "权限管理";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:80px;">权限名称：</td>
+            <td style="width:170px;"><input type="text" name="txtFUNNAM" id="txtFUNNAM" value="@ViewBag.FUNNAM" /></td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="tablePanel">
+    <ul id="treeFuncs" class="ztree"></ul>
+</div>
+
+@section Head{
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+    @Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
+    @Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
+    @Html.JavaScript("lib/ztree/jquery.ztree.exedit-3.5.min.js")
+    @Html.JavaScript("lib/utility/ext.js")
+    <style type="text/css">
+        .ztree li span.button.add {
+            margin-left: 2px;
+            margin-right: -1px;
+            background-position: -144px 0;
+            vertical-align: top;
+            *vertical-align: middle;
+        }
+    </style>
+    <script lang="javascript">
+        $(function () {
+            // 注册事件
+            // 查询
+            $("#btnSearch").ligerButton(
+            {
+                text: " 查 询 ",
+                click: function () {
+                    var url = "?FUNNAM=" + $("#txtFUNNAM").val();
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+        });
+    </script>
+    <script type="text/javascript">
+		<!--
+        var ztree_setting_funcs = {
+            edit: {
+                @if (Html.ChkAuth("AUTH_FUNCTION_EDT"))
+                {
+                @:enable: true,
+                }
+                editNameSelectAll: true,
+                showRemoveBtn: showRemoveBtn,
+                showRenameBtn: showRenameBtn,
+                renameTitle: "修改权限",
+                removeTitle: "删除权限"
+            },
+            async: {
+                enable: true,
+                url: "/AUTH/Function/GetFuncsTree",
+                autoParam: ["id", "name=n", "level=lv"]
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pId",
+                    rootPId: ""
+                }
+            },
+            view: {
+                fontCss: getFontCss,
+                showIcon: showIconForTree,
+                @if (Html.ChkAuth("AUTH_FUNCTION_ADD"))
+                {
+                @:addHoverDom: addHoverDom,
+                }
+                @if (Html.ChkAuth("AUTH_FUNCTION_DEL"))
+                {
+                @:removeHoverDom: removeHoverDom,
+                }
+                selectedMulti: false
+            },
+            callback: {
+                beforeEditName: beforeEditName,
+                beforeRemove: zTreeBeforeRemove
+            }
+        };
+
+		var zNodes;
+		$(function () {
+		    $.ajax({
+		        async: false,
+		        cache: false,
+		        type: 'POST',
+		        dataType: 'json',
+		        url: "/AUTH/Function/GetFuncsTree?searchNam=@Request.QueryString["FUNNAM"]",
+		        success: function (data) {
+		            zNodes = data;
+		        }
+		    });
+		});
+        function getFontCss(treeId, treeNode) {
+            if (!!treeNode.highlight)
+                return { color: "red", "font-weight": "bold" }
+        }
+		function showRemoveBtn(treeId, treeNode) {
+		    if (treeNode.id == "")
+		        return false;
+		    return true;
+		}
+		function showRenameBtn(treeId, treeNode) {
+		    if (treeNode.id == "")
+		        return false;
+		    return true;
+		}
+		var newCount = 1;
+		function addHoverDom(treeId, treeNode) {
+		    var sObj = $("#" + treeNode.tId + "_span");
+		    if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
+		    var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+				+ "' title='新增下级权限' onfocus='this.blur();'></span>";
+		    sObj.after(addStr);
+		    var btn = $("#addBtn_" + treeNode.tId);
+		    if (btn) btn.bind("click", function () {
+		        var url = "@Html.Url("/AUTH/Function/Create?pid=")" + treeNode.id;
+		        gzsw.dialog.open({
+		            url: url.urlstamp(),
+		            title: "新增权限",
+		            width: 450,
+		            height: 300,
+		            isReload: false,
+		            closeFun: function () {
+		                var treeObj = $.fn.zTree.getZTreeObj("treeFuncs");
+		                if (!treeNode.isParent)
+		                    treeNode.isParent = true;
+		                treeObj.reAsyncChildNodes(treeNode, "refresh");
+		                return false;
+		            }
+		        });
+		        return false;
+		    });
+		};
+		function removeHoverDom(treeId, treeNode) {
+		    $("#addBtn_" + treeNode.tId).unbind().remove();
+		};
+		function beforeEditName(treeId, treeNode) {
+		    var url = "@Html.Url("/AUTH/Function/Edit?id=")" + treeNode.id;
+		    gzsw.dialog.open({
+		        // 页面地址
+		        url: url.urlstamp(),
+		        // 标题
+		        title: "修改权限",
+		        // 左面板ID
+		        width: 450,
+		        // 内容面板ID
+		        height: 300,
+		        // 关闭是否刷新页面
+		        isReload: false,
+		        // 关闭事件
+		        closeFun: function () {
+		            var treeObj = $.fn.zTree.getZTreeObj("treeFuncs");
+		            treeObj.reAsyncChildNodes(treeNode.getParentNode(), "refresh");
+		            return false;
+		        }
+		    });
+		    return false;
+		}
+        function zTreeBeforeRemove(treeId, treeNode) {
+            if (!confirm("确定要删除该权限吗？")) {
+                return false;
+            }
+		    var rst = false;
+		    $.ajax({
+		        async: false,
+		        cache: false,
+		        type: 'POST',
+		        dataType: 'json',
+		        url: "/AUTH/Function/Delete/" + treeNode.id,
+		        success: function (data) {
+		            rst = data.result;
+		        }
+		    });
+		    return rst;
+		}
+
+		$(document).ready(function(){
+		    $.fn.zTree.init($("#treeFuncs"), ztree_setting_funcs, zNodes);
+		});
+		//-->
+    </script>
+}

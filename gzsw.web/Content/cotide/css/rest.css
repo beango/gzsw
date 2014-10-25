@@ -1,0 +1,188 @@
+﻿a:focus {
+    outline: none;
+}
+
+a:hover,
+a:focus {
+    text-decoration: none;
+}
+
+.gzsw_Head { 
+height: 100px;
+margin: 3px;
+background: url('../img/gzsw_head_bg.jpg') repeat-x;
+border-radius: 10px;
+}
+
+/* logo面板 */
+
+.logo_txt {
+    position: absolute;
+    width: 500px;
+    height: 87px;
+    background: url('../img/sys_logo_text.png') repeat-x;
+}
+
+
+.gzsw_TopMenu {
+    height: 30px;
+    text-align: right;
+}
+
+    .gzsw_TopMenu ul {
+        float: right;
+        width: 460px;
+        height: 24px;
+        background: url('../img/gzsw_topMenu.png') repeat-x;
+    }
+
+        .gzsw_TopMenu ul li {
+            list-style: none;
+            float: right;
+            padding: 2px 5px 2px 5px;
+            font-size: 12px;
+            background: url(../img/line.gif) no-repeat right;
+        }
+
+            .gzsw_TopMenu ul li:last-child {
+                background: none;
+            }
+
+            .gzsw_TopMenu ul li:first-child {
+                background: none;
+            }
+
+
+/* 主菜单 */
+.gzsw_MainMenu {
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+
+    .gzsw_MainMenu ul li {
+        background: url('../img/gzsw_main_btn.png') repeat-x;
+        list-style: none;
+        float: left;
+        padding: 5px 5px 4px 5px;
+        width: 98px;
+        margin-right: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .gzsw_MainMenu ul .sel {
+     
+        background: url('../img/gzsw_main_btn_hover.png') repeat-x;
+    }
+   #mainNavPanel .sel a{ 
+       color:#005580;
+       font-weight:600;
+    }
+    
+
+    .gzsw_MainMenu ul li:hover {
+        background: url('../img/gzsw_main_btn_hover.png') repeat-x;
+    }
+
+
+
+    /* 左菜单 */
+ 
+    .gzsw_LeftMenu {
+    width: 225px;  
+    border-radius: 10px;
+    padding-bottom: 5px;
+    background-color: #fff;
+        min-height: 300px;
+}
+
+    .gzsw_LeftMenu .gzsw_LeftMenu_Title {
+        background: url('../img/gzsw_LeftMenu_Title.png') repeat-x;
+        height: 22px;
+        line-height: 25px;
+        width: 215px;
+        background-color: #bfd4ff;
+        letter-spacing: 10px;
+        padding: 3px 5px 5px 5px;
+        text-align: center;
+        font-size: 16px; 
+    }
+
+
+    .gzsw_LeftMenu .gzsw_LeftMenu_MainTitle_On {
+        background: url('../img/gzsw_LeftMenu_MainTitle_On.png') repeat-x;
+        height: 28px;
+        width: 196px;
+        margin: 12px;
+        cursor: pointer;
+        padding: 2px;
+        text-align: center;
+        font-size: 14px; 
+        line-height: 21px;
+
+    }
+
+    .gzsw_LeftMenu .gzsw_LeftMenu_MainTitle_On  a,.gzsw_LeftMenu .gzsw_LeftMenu_MainTitle_Off{
+        color: #063f60;
+         
+    }
+
+    .gzsw_LeftMenu .gzsw_LeftMenu_MainTitle_Off {
+        background: url('../img/gzsw_LeftMenu_MainTitle_Off.png') repeat-x;
+        height: 28px;
+        width: 196px;
+        margin: 12px;
+        cursor: pointer;
+        padding: 2px;
+        text-align: center;
+        font-size: 14px; 
+        line-height: 21px;
+    }
+     .gzsw_LeftMenu ul {
+         padding: 0px 40px 0px 30px; 
+     }
+    .gzsw_LeftMenu ul li {
+        list-style: none;
+        padding: 5px;
+        font-size: 14px;
+        text-align: left;
+        border-bottom: 1px solid #0b5882;
+        letter-spacing: 2px;
+
+    }
+
+    /* 左菜单 */
+    #gzsw_LeftMenu {
+        padding-left: 2px;
+    }
+
+   /* 重置 */
+   .content {
+       padding-right: 2px;
+       min-height: 600px;
+       border: 1px solid #87cef5;
+   }
+
+   #mainNavPanel a {
+       color: #fff;
+   }
+   #mainNavPanel li:hover{
+       color:#005580;
+       font-weight: bold;
+   }
+    #mainNavPanel a:hover{
+       color:#005580;
+       font-weight: bold;
+   }
+
+   
+
+    
+/* 透明背景 */
+.filterBg {
+    filter: alpha(opacity=80); /*IE滤镜，透明度50%*/
+    -moz-opacity: 0.8; /*Firefox私有，透明度50%*/
+    opacity: 0.8; /*其他，透明度50%*/
+}

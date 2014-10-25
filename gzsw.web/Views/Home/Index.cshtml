@@ -1,0 +1,61 @@
+﻿@using gzsw.web
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+    </ul>
+</div>
+
+<div class="mainindex">
+
+
+    <div class="welinfo">
+        <span><img src="@Html.Url("content/layout/images/sun.png")" alt="天气" /></span>
+        <b>Admin早上好，欢迎使用办税服务厅综合管理系统</b>  
+    </div>
+
+    <div class="welinfo">
+        <span><img src="@Html.Url("content/layout/images/time.png")" alt="时间" /></span>
+        <i>您上次登录的时间：2013-10-09 15:22</i>  
+    </div>
+
+    <div class="xline"></div>
+
+    <ul class="iconlist">
+
+        <li><img src="@Html.Url("content/layout/images/ico01.png")" /><p><a href="#">管理设置</a></p></li>
+        <li><img src="@Html.Url("content/layout/images/ico02.png")" /><p><a href="#">发布文章</a></p></li>
+        <li><img src="@Html.Url("content/layout/images/ico03.png")" /><p><a href="#">数据统计</a></p></li>
+        <li><img src="@Html.Url("content/layout/images/ico04.png")" /><p><a href="#">文件上传</a></p></li>
+        <li><img src="@Html.Url("content/layout/images/ico05.png")" /><p><a href="#">目录管理</a></p></li>
+        <li><img src="@Html.Url("content/layout/images/ico06.png")" /><p><a href="#">查询</a></p></li> 
+    </ul>
+     
+    <div class="xline"></div>
+    <div class="box"></div>
+
+    <div class="welinfo">
+        <span><img src="@Html.Url("content/layout/images/dp.png")" alt="提醒" /></span>
+        <b>你有以下需要办理事项:</b>
+    </div>
+
+    <ul class="infolist">
+        <li><span>1.审批税单</span><a class="ibtn">处理</a></li>
+        <li><span>2.处理错误税单问题</span><a class="ibtn">处理</a></li> 
+    </ul> 
+    <div class="xline"></div> 
+    <div class="uimakerinfo"><b> 审批流程</b></div> 
+    <ul class="umlist">
+        <li><a href="#">发布税单</a></li>
+        <li><a href="#">处理税单</a></li>
+        <li><a href="#">税单审核</a></li>
+        <li><a href="#">税单复审</a></li>
+        <li><a href="#">关闭税单</a></li>
+    </ul> 
+</div>
+

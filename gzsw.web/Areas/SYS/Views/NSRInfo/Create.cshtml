@@ -1,0 +1,94 @@
+﻿@using gzsw.web
+@model gzsw.model.SYS_NSRINFO
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="width:100px;" class="tdLeft">
+                识别码：
+            </td>
+            <td>
+                @Html.EditorFor(model => model.NSR_SBM)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.NSR_SBM)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">
+                纳税人名称：
+            </td>
+            <td>
+                @Html.EditorFor(model => model.NSR_NAME)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.NSR_NAME)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">
+                税务机关代码：
+            </td>
+            <td>
+                @Html.EditorFor(model => model.NSR_SWJGDM)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.NSR_SWJGDM)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">
+                行业大类：
+            </td>
+            <td>
+                @Html.DropDownList("NSR_HYNAME", ViewData["NSR_HYNAME"] as SelectList)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.NSR_HYNAME)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">
+                联系人电话：
+            </td>
+            <td>
+                @Html.EditorFor(model => model.NSR_BSYPHONE)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.NSR_BSYPHONE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">
+                法人联系电话：
+            </td>
+            <td>
+                @Html.EditorFor(model => model.NSR_FRPHONE)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.NSR_FRPHONE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft"> &nbsp;  </td>
+            <td>
+                <input type="submit" class="l-button" value="提交" />
+            </td>
+            <td> </td>
+        </tr>
+    </table>
+}
+
+@section Head{
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+}

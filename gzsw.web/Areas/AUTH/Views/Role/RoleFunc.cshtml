@@ -1,0 +1,91 @@
+﻿@using gzsw.web;
+@using gzsw.model
+@model IList<gzsw.model.SYS_ROLEFUNCTION>
+@{
+    ViewBag.Title = "角色权限管理";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var role = TempData["role"] as SYS_ROLE;
+    var funs = TempData["SYS_FUNCTION"] as List<SYS_FUNCTION>;
+}
+@using (Html.BeginForm("RoleFuncSubmit", "Role", null, FormMethod.Post))
+{
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        @Html.Hidden("roleid", role.ROLE_ID)
+        <table class="formTable" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    角色：
+                </td>
+                <td>
+                    @Html.Raw(role.ROLE_NAM)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    权限：
+                </td>
+                <td>
+                    <ul id="treeRoleFunc" class="ztree"></ul>
+                </td>
+                <td>
+                    <input type="hidden" value="" id="hidRoleFunc" name="hidRoleFunc" />
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft"> &nbsp;  </td>
+                <td>
+                    <input type="submit" class="l-button" value="提交" onclick="getChecked()" /> 
+                </td>
+                <td> </td>
+            </tr>
+        </table>
+}
+@section Head{
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+    @Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
+    @Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
+    @Html.JavaScript("lib/jqueryform/jquery.form.js")
+    @Html.JavaScript("lib/utility/ext.js?v1")
+    <style type="text/css">
+        body {
+            min-width: 100px;
+        }
+    </style>
+    <script type="text/javascript">
+		<!--
+		var zNodes;
+		$(function () {
+		    InitAjaxForm();//异步提交
+		    $.ajax({
+		        async: false,
+		        cache: false,
+		        type: 'POST',
+		        dataType: 'json',
+		        url: "/AUTH/Function/GetRoleFuncsTree?roleid=@Request.QueryString["id"]&searchNam=@Request.QueryString["FUNNAM"]",
+		        success: function (data) {
+		            zNodes = data;
+		        }
+		    });
+		});
+
+        $(document).ready(function () {
+            checkboxTreeYN2("#treeRoleFunc", zNodes);
+		});
+		//-->
+    </script>
+    <script type="text/javascript">
+        function getChecked() {
+            var treeObj = $.fn.zTree.getZTreeObj("treeRoleFunc"),
+            nodes = treeObj.getCheckedNodes(true);
+            var c = '';
+            for (var i = 0; i < nodes.length; i++) {
+                c += nodes[i].id+",";
+            }
+            if (c.length > 0) c = c.substring(0, c.length - 1);
+            $('#hidRoleFunc').val(c);
+            return true;
+        }
+    </script>
+}
+

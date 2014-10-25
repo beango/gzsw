@@ -1,0 +1,95 @@
+﻿@using gzsw.web;
+@model PetaPoco.Page<gzsw.model.SYS_QUEUESERIAL>
+@{
+    ViewBag.Title = "排队业务管理";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:80px;">队列ID：</td>
+            <td style="width:170px;"><input type="text" name="txtQID" id="txtQID" value="@ViewBag.QID" /></td>
+            <td style="width:80px;">队列名称：</td>
+            <td style="width:170px;"><input type="text" name="txtQName" id="txtQName" value="@ViewBag.QNAM" /></td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="toptoolbar"></div>
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th>序号 </th>
+                <th>
+                    排队机队列编码ID
+                </th>
+                <th>
+                    排队机队列名称
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.Q_SERIALID" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Q_SERIALID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Q_SERIALNAME)
+                </td>
+                <td></td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/utility/ext.js")
+    <script lang="javascript">
+        $(function () {
+            // 注册事件
+            // 查询
+            $("#btnSearch").ligerButton(
+            {
+                text: " 查 询 ",
+                click: function () {
+                    var url = "?QNAM=" + $("#txtQName").val() + "&QID=" + $("#txtQID").val();
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+            // 顶部导航
+            var bar = $("#toptoolbar").ligerToolBar();
+
+            bar.addItem(@Html.AuthViewButton("SYS_QUEUESERIAL_VIW", Url.Action("Details", "QueSerial")));
+            bar.addItem({ line: true });
+            bar.addItem(@Html.AuthAddButton("SYS_QUEUESERIAL_ADD", Url.Action("Create", "QueSerial")));
+            bar.addItem({ line: true });
+            bar.addItem(@Html.AuthEditButton("SYS_QUEUESERIAL_EDT", Url.Action("Edit", "QueSerial")));
+            bar.addItem({ line: true });
+            bar.addItem(@Html.AuthDelButton("SYS_QUEUESERIAL_DEL", Url.Action("Delete", "QueSerial")));
+        });
+    </script>
+}

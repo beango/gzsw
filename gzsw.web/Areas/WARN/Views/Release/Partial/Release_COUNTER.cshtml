@@ -1,0 +1,8 @@
+﻿
+    <td class="tdLeft">
+        所要发布的窗口：
+    </td><td>
+    @Html.CheckBoxList("COUNTER_ID", @ViewBag.COUNTERLIST as IEnumerable<SelectListItem>)</td>
+    <td>
+        @Html.ValidationMessage("COUNTER_ID")
+    </td>

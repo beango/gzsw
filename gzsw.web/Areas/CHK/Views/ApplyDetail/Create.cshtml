@@ -1,0 +1,158 @@
+﻿@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.model
+@using gzsw.util
+@using gzsw.web
+@model gzsw.controller.CHK.ApplyDetailModel
+
+@{
+    var selectStaff = new List<SelectListItem>()
+                      {
+                          new SelectListItem()
+                          {
+                              Text="--请选择--",
+                              Value = "",
+                              Selected=true
+                          }
+                      };
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="tdLeft">组织：</td>
+            <td>
+                @Html.DropDownList("ORG_ID", ViewBag.UserORG as SelectList, "--请选择--",new{@style="width: 150px;"})
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m=>m.ORG_ID)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">员工名称:</td>
+            <td>
+                @Html.DropDownList("CHK_STAFF_ID", selectStaff, new {  @style = "width:150px;" })
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m=>m.CHK_STAFF_ID)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">开始时间:</td>
+            <td>
+                @Html.TextBoxFor(m=>m.BeginTime,new{ @class="text-box", @onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" })
+                <select id="BeginTimeHours" name="BeginTimeHours">
+                    <option value="8">8</option>
+                    <option value="12">12</option>
+                    <option value="17">17</option>
+                </select>
+                时
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m=>m.BeginTime)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">结束时间:</td>
+            <td>
+                @Html.TextBoxFor(m => m.EndTime, new { @class = "text-box", @onclick = "WdatePicker({ dateFmt: 'yyyy-MM-dd' })" })
+                
+                <select id="EndTimeHours" name="EndTimeHours">
+                    <option value="8">8</option>
+                    <option value="12">12</option>
+                    <option value="17">17</option>
+                </select>
+                时
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.EndTime)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">假期类型:</td>
+            <td>
+                @Html.DropDownList("HOLLI_TYP", EnumHelper.GetCategorySelectList(typeof(CHK_STAFF_APPLYDETAIL.HOLLI_TYPE_ENUM)),new{@style="width: 150px;"})
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.HOLLI_TYP)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">请假原因:</td>
+            <td>
+                @Html.TextAreaFor(m => m.APPLY_REASON,new{@style="width: 150px;"})
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: center">
+                <input id="btnSubmit" type="submit" class="l-button" value="提交" />
+            </td>
+        </tr>
+    </table>
+}
+@section Head
+{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+@Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+@Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+}
+<script type="text/javascript">
+    $(function() {
+
+        $("#ORG_ID").on("change", function () {
+            var id = $(this).val();
+            //获取员工信息
+            $.ajax({
+                cache: false,
+                type: 'GET',
+                dataType: 'json',
+                url: '@Url.Action("GetStaffs", "Counter")?hallNo=' + id + "&_=" + (new Date()).getTime(),
+                success: function (data) {
+                    //W1A_STAFF_NAME
+                    var $selectA = $("#CHK_STAFF_ID");
+                        $("option:gt(0)", $selectA).remove();
+
+                        if (data && data.length > 0) {
+                            $.each(data, function (n, item) {
+                                $selectA.append("<option value='" + item.Value + "'>" + item.Text + "</option>");
+                            });
+                        }
+                }
+            });
+        });
+
+        $("#btnSubmit").on("click", function() {
+
+            var beginTime = $("#BeginTime").val();
+            var endTime = $("#EndTime").val();
+
+            var beingTimeHours = $("#BeginTimeHours").val();
+            var endTimeHours = $("#EndTimeHours").val();
+            if (beginTime.length > 0 && endTime.length>0){
+                var begin = new Date(Date.parse(beginTime.replace(/-/g, "/")));
+                var end = new Date(Date.parse(endTime.replace(/-/g, "/")));
+                if (begin.getTime() > end.getTime()) {
+                    var $span = $("span[data-valmsg-for='EndTime']").show().addClass("field-validation-error");
+                    $span.empty();
+                    $span.append('<span for="HOLLI_TYP" generated="true" class="">结束时间要大于开始时间.</span>');
+
+                    return false;
+                } else if (begin.getTime() == end.getTime()) {
+                    if (Number(beingTimeHours) >= Number(endTimeHours)) {
+                        var $span = $("span[data-valmsg-for='EndTime']").show().addClass("field-validation-error");
+                        $span.empty();
+                        $span.append('<span for="HOLLI_TYP" generated="true" class="">结束时间要大于开始时间.</span>');
+
+                        return false;
+                    }
+                }
+            }
+        });
+
+    });
+</script>

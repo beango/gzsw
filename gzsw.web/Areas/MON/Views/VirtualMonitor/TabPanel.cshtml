@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "TabPanel";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.model
+@model gzsw.model.SYS_STAFF
+
+<div style="margin-top: 10px;">
+    <div style="float: left;width: 140px;">
+        <img style="width:120px;margin-left: 10px; " src="@(string.IsNullOrEmpty(Model.PHOTE_URL)?Url.Content("~/Content/lib/hall/images/defaultPortrait.png"):Model.PHOTE_URL)" alt="@Model.STAFF_NAM"  />
+    </div>
+    <div style="float: left;">
+        <table class="tab-info">
+            <tr>
+                <th>姓名:</th>
+                <td>@Model.STAFF_NAM</td>
+            </tr>
+
+            <tr>
+                <th>工号:</th>
+                <td>@Model.STAFF_ID</td>
+            </tr>
+            <tr>
+                <th>排队人数:</th>
+                <td>@ViewBag.Number</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span style="color: #FF1111">
+                        @if (ViewBag.CounterState != null)
+                        {
+                            var counter = (CLI_COUNTERSTATE)ViewBag.CounterState;
+                            var message = counter.Q_SERIALNAME;
+                            message = string.IsNullOrEmpty(message) ? counter.SERIALNAME : (string.IsNullOrEmpty(counter.SERIALNAME) ? message : message + ":" + counter.SERIALNAME);
+                            switch (counter.STATE)
+                            {
+                                case 0:
+                                case 1:
+                                case 2:
+                                case 3:
+                                case 4:
+                                    @message
+                                    break;
+                                case 5:
+                                @:暂停服务
+                                break;
+                                default:
+                                @message
+                                break;
+                            }
+                        }
+                    </span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <img id="openVideo" d-id="@ViewBag.CameraId" d-type="@ViewBag.CameraType" style="position: absolute; right: 10px; width: 30px; cursor: pointer; " src="@Url.Content("~/Content/lib/hall/images/camera-web.png")" />
+</div>
+
+@section Head
+{
+    <style type="text/css">
+        .tab-info {
+            width: 100%;
+        }
+        .tab-info tr {
+            margin-top: 10px;
+            line-height: 30px;
+        }
+        .tab-info th {width: 80px;text-align: left; }
+    </style>
+}
+<script type="text/javascript">
+    $(function () {
+
+        $("#openVideo").on("click", function() {
+            var $this = $(this);
+            var id = $this.attr("d-id");
+            var type = $this.attr("d-type");
+            if (id < 1) {
+                gzsw.dialog.alert('找不到配置的摄像.', 3);
+                return false;
+            }
+
+            var width = type == 1 ? 685 : 500;
+
+            parent.gzsw.dialog.open({
+                url: '@Url.Action("PlayVideo", "VirtualMonitor")?seq=' + id + '&_=' + (new Date()).getTime(),
+                title: '摄像窗口',
+                width: width,
+                height: 368,
+                isReload: false
+            });
+
+        });
+    });
+</script>

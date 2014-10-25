@@ -1,0 +1,82 @@
+﻿@using gzsw.web;
+@using gzsw.model
+@model IList<gzsw.model.SYS_USERORGANIZE>
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = "用户组织机构设置";
+    var user = TempData["user"] as SYS_USER;
+}
+
+@using (Html.BeginForm())
+{
+        @Html.ValidationSummary(true)
+
+        <table class="formTable" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    用户名称：
+                </td>
+                <td>
+                @user.USER_NAM
+                @Html.Hidden("userid", user.USER_ID)
+                </td>
+            </tr>
+
+            <tr>
+                <td class="tdLeft">
+                    组织机构：
+                </td>
+                <td>
+                    <ul id="treeOrg" class="ztree"></ul>
+                    <input type="hidden" value="" id="hidOrg" name="hidOrg" />
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft"> &nbsp;  </td>
+                <td>
+                    <input type="submit" class="l-button" value="提交" onclick="getChecked()" /> 
+                </td>
+                <td> </td>
+            </tr>
+        </table>
+}
+@section Head{
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+    @Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
+    @Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
+    @Html.JavaScript("lib/utility/ext.js")
+
+    <script type="text/javascript">
+		<!--
+		var zNodes;
+		$(function () {
+		    $.ajax({
+		        async: false,
+		        cache: false,
+		        type: 'POST',
+		        dataType: 'json',
+		        url: "/AUTH/User/UserOrgTree?userid=@user.USER_ID",
+		        success: function (data) {
+		            zNodes = data;
+		        }
+		    });
+		});
+
+        $(document).ready(function () {
+            checkboxTreeYN2("#treeOrg", zNodes);
+        });
+		//-->
+    </script>
+    <script type="text/javascript">
+        function getChecked() {
+            var treeObj = $.fn.zTree.getZTreeObj("treeOrg"),
+            nodes = treeObj.getCheckedNodes(true),
+            v = "";
+            for (var i = 0; i < nodes.length; i++) {
+                v += nodes[i].id + ",";
+            }
+            $('#hidOrg').val(v);
+            return true;
+        }
+    </script>
+}

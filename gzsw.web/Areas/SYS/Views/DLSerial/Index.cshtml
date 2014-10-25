@@ -1,0 +1,94 @@
+﻿@using gzsw.web;
+@model PetaPoco.Page<gzsw.model.SYS_DLSERIAL>
+@{
+    ViewBag.Title = "业务大类管理";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:100px;">大类事项编码：</td>
+            <td style="width:170px;"><input type="text" name="txtDLID" id="txtDLID" value="@ViewBag.DLID" /></td>
+            <td style="width:100px;">大类事项名称：</td>
+            <td style="width:170px;"><input type="text" name="txtDLNAM" id="txtDLNAM" value="@ViewBag.DLNAM" /></td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="toptoolbar"></div>
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th>序号</th>
+                <th>
+                    大类事项编码
+                </th>
+                <th>
+                    大类事项名称
+                </th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.DLS_SERIALID" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DLS_SERIALID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DLS_SERIALNAME)
+                </td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/utility/ext.js")
+    <script lang="javascript">
+        $(function () {
+            // 注册事件
+            // 查询
+            $("#btnSearch").ligerButton(
+            {
+                text: " 查 询 ",
+                click: function () {
+                    var url = "?dlid=" + $("#txtDLID").val()
+                        + "&dlnam=" + $("#txtDLNAM").val();
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+            // 顶部导航
+            var bar = $("#toptoolbar").ligerToolBar();
+
+            bar.addItem(@Html.AuthViewButton("SYS_DLSERIAL_VIW", Url.Action("Details", "DLSerial")));
+            bar.addItem({ line: true });
+            bar.addItem(@Html.AuthAddButton("SYS_DLSERIAL_ADD", Url.Action("Create", "DLSerial")));
+            bar.addItem({ line: true });
+            bar.addItem(@Html.AuthEditButton("SYS_DLSERIAL_EDT", Url.Action("Edit", "DLSerial")));
+            bar.addItem({ line: true });
+            bar.addItem(@Html.AuthDelButton("SYS_DLSERIAL_DEL", Url.Action("Delete", "DLSerial")));
+        });
+    </script>
+}

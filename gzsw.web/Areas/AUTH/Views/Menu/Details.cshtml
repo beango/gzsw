@@ -1,0 +1,78 @@
+﻿@model gzsw.model.SYS_MENU
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div class="formbody">
+    <ul class="forminfo">
+        <li>
+            <label>
+                菜单名称：
+            </label>
+            <label>
+                @Html.DisplayFor(model => model.MENU_NAM)
+            </label>
+        </li>
+
+        <li>
+            <label>
+                父菜单：
+            </label>
+            <label>
+                @string.Join("，", Model.Par_MenuList.Select(obj => obj.MENU_NAM).ToArray())
+            </label>
+        </li>
+
+        <li>
+            <label>
+                菜单图标：
+            </label>
+            <label>
+                @Html.DisplayFor(model => model.IMAGEURL)
+            </label>
+        </li>
+
+        <li>
+            <label>
+                菜单链接：
+            </label>
+            <label>
+                @Html.DisplayFor(model => model.NAVIGATEURL)
+            </label>
+        </li>
+
+        <li>
+            <label>
+                排序：
+            </label>
+            <label>
+                @Html.DisplayFor(model => model.MENU_ORD)
+            </label>
+        </li>
+
+        <li>
+            <label>
+                权限：
+            </label>
+            <label>
+                @(Model.Func == null ? "" : Model.Func.FUNCTION_NAM)
+            </label>
+        </li>
+
+        <li>
+            <label>
+            </label>
+            <label>
+                <input type="button" class="cancel" value="关闭" onclick="parent.$.fn.colorbox.close(); return false;" />
+            </label>
+        </li>
+    </ul>
+</div>
+@section Head{
+    <style type="text/css">
+        body {
+            min-width: 100px;
+        }
+    </style>
+}

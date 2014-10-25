@@ -1,0 +1,224 @@
+﻿
+body {
+    font-family: '微软雅黑';
+    margin: 0 auto;
+    background-color: #bfd4ff;
+}
+a:focus{outline:none;}
+a {
+    color: #0b5882;
+    text-decoration: none;
+    border: none'0';
+} 
+    a:hover,
+    a:focus {
+        text-decoration: none;
+        color: #444444; 
+    }
+
+.gzsw_Head {
+    margin: 6px;
+    height: 100px;
+    background-color: #0026ff;
+    background: url('../images/gzsw_head_bg.jpg') repeat-x;
+}
+
+.navbar-brand {
+    padding: 10px 15px;
+}
+
+.gzsw_TopMenu {
+    height: 30px;
+    text-align: right;
+}
+
+    .gzsw_TopMenu ul {
+        float: right;
+        width: 460px;
+        padding-right: 50px;
+        height: 24px;
+        background: url('../images/gzsw_topMenu.png') repeat-x;
+    }
+
+        .gzsw_TopMenu ul li {
+            list-style: none;
+            float: right;
+            padding: 2px 5px 2px 5px;
+            font-size: 12px;
+            background: url(../images/line.gif) no-repeat right;
+        }
+
+            .gzsw_TopMenu ul li:last-child {
+                background: none;
+            }
+
+            .gzsw_TopMenu ul li:first-child {
+                background: none;
+            }
+/* 主菜单 */
+.gzsw_MainMenu {
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+
+    .gzsw_MainMenu ul li {
+        background: url('../images/gzsw_main_btn.png') repeat-x;
+        list-style: none;
+        float: left;
+        padding: 4px 2px 3px 28px;
+        width: 108px;
+        margin-right: 2px;
+       font-size: 14px;
+    }
+
+    .gzsw_MainMenu ul .sel {
+        background: url('../images/gzsw_main_btn_hover.png') repeat-x;
+    }
+
+    .gzsw_MainMenu ul li:hover {
+        background: url('../images/gzsw_main_btn_hover.png') repeat-x;
+    }
+
+/* 左菜单 */
+.gzsw_LeftMenu {
+    width: 225px;
+   /* min-height: 500px;*/
+    background-color: #fff; 
+    border-radius: 10px;
+    padding-bottom: 5px;
+}
+
+    .gzsw_LeftMenu .gzsw_LeftMenu_Title {
+        background: url('../images/gzsw_LeftMenu_Title.png') repeat-x;
+        height: 30px;
+        width: 225px;
+        background-color: #bfd4ff;
+        letter-spacing: 10px;
+        padding: 3px 5px 5px 5px;
+        text-align: center;
+        font-size: 18px;
+    }
+
+
+    .gzsw_LeftMenu .gzsw_LeftMenu_MainTitle_On {
+        background: url('../images/gzsw_LeftMenu_MainTitle_On.png') repeat-x;
+        height: 28px;
+        width: 200px;
+        margin: 12px;
+        cursor: pointer;
+        padding: 2px;
+        text-align: center;
+        font-size: 17px;
+        letter-spacing: 8px;
+
+    }
+
+    .gzsw_LeftMenu .gzsw_LeftMenu_MainTitle_Off {
+        background: url('../images/gzsw_LeftMenu_MainTitle_Off.png') repeat-x;
+        height: 28px;
+        width: 200px;
+        margin: 12px;
+        cursor: pointer;
+        padding: 2px;
+        text-align: center;
+        font-size: 17px;
+        letter-spacing: 8px;
+    }
+     .gzsw_LeftMenu ul {
+         padding: 0px 40px 0px 30px; 
+     }
+    .gzsw_LeftMenu ul li {
+        list-style: none;
+        padding: 5px;
+        font-size: 14px;
+        text-align: center;
+        border-bottom: 1px solid #0b5882;
+        letter-spacing: 2px;
+
+    }
+
+/*    .gzsw_LeftMenu_Bottom {
+      -webkit-border-radius: 10px;
+    border-radius: 10px;
+        height: 30px;
+width: 225px;
+    }*/
+.l-tab {
+    border: 1px solid #BED5F3;
+}
+
+ #gzsw_Content {
+     margin: 0 auto;
+} 
+
+/* logo面板 */
+.logo {
+    padding-top: 8px;
+}
+
+.logo_txt {
+    position: absolute;
+    margin-top: 20px;
+    margin-left: 100px;
+    width: 400px;
+    height: 60px;
+    background: url('../images/logo_text.png') repeat-x;
+}
+/* tab 控件 */
+#mainTab  ul li{
+    width: 136px;
+    height: 25px;
+    background: url('../images/gzsw_tab.png') repeat-x;
+    cursor: pointer;
+    float: left;
+    padding: 5px 5px 5px 20px;
+    font-size: 12px;
+    list-style: none;
+    
+}
+#mainTab  ul li  a{
+    float: right;
+padding-right: 24px;
+}
+#mainTab   .sel{ 
+    background: url('../images/gzsw_tab_sel.png') repeat-x;
+}
+#mainTab ul .gzsw_tab_left_btn {
+    float: left;
+    width: 16px;
+    height: 25px;
+    background: url('../images/gzsw_tab_left_btn.png') repeat-x;
+    cursor: pointer;
+    padding: 0px;
+ }
+#mainTab ul .gzsw_tab_right_btn {
+    float: left;
+    width: 16px;
+    height: 25px;
+    background: url('../images/gzsw_tab_right_btn.png') repeat-x;
+    cursor: pointer;
+    padding: 0px;
+ }
+
+/* 底部 */
+#foot {
+        width: 100%;
+      background-color:#72a6ff;
+    height: 25px;
+    text-align: center;
+    font-size: 16px;
+    border:1px solid #5b93f2
+      /*  position: fixed;
+        _position: absolute;
+        bottom: 0px;
+        _bottom: 0px;
+        _margin-top: expression(this.style.pixelHeight+document.documentElement.scrollTop);
+        height: 25px; line-height:25px; text-align: center;*/
+    
+}
+/* 扩展 */
+.noBg {
+    background: none;
+}
+

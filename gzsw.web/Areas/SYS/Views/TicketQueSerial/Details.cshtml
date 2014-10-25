@@ -1,0 +1,224 @@
+﻿@model gzsw.model.SYS_TICKETQUEUESERIAL
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<table class="formTable" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="width:120px;" class="tdLeft"> 服务厅机构：</td>
+        <td style="width: 30%;" >@Html.DisplayFor(model => model.Hall.HALL_NAM)</td>
+        <td style="width:120px;" class="tdLeft"> 排队业务：</td>
+        <td>@Html.DisplayFor(model => model.Q_SERIALNAME)</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 号码前缀：</td>
+        <td>@Html.DisplayFor(model => model.Q_NUMBERQCHAR)</td>
+        <td class="tdLeft">  等候超时时间（分）：</td>
+        <td>@Html.DisplayFor(model => model.Q_WAITCSTIME)</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 该业务开始号：</td>
+        <td>@Html.DisplayFor(model => model.Q_MINNUMBER)</td>
+        <td class="tdLeft">  该业务结束号：</td>
+        <td>@Html.DisplayFor(model => model.Q_MAXNUMBER)</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 当前取号号码：</td>
+        <td>@Html.DisplayFor(model => model.Q_CURRNUMBER)</td>
+        <td class="tdLeft">  是否密码取号：</td>
+        <td>@(Model.Q_INPUTPWD ? "是" : "否")</td>
+    </tr>
+    <tr>
+        <td class="tdLeft">  备注：</td>
+        <td colspan="3">@Html.DisplayFor(model => model.Q_BZ)</td>
+    </tr>
+</table>
+<div class="tablePanel">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th></th>
+                <th>
+                    上午能取的号
+                </th>
+                <th>
+                    上午取号时间段
+                </th>
+                <th>
+                    下午能取的号
+                </th>
+                <th>
+                    下午取号时间段
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>周一</td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_A1LIMITTICKETNUM)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_1ASTIME)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_P1LIMITTICKETNUM)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_1PSTIME)
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>周二</td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_A2LIMITTICKETNUM)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_2ASTIME)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_P2LIMITTICKETNUM)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_2PSTIME)
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>周三</td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_A3LIMITTICKETNUM)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_3ASTIME)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_P3LIMITTICKETNUM)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_3PSTIME)
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>周四</td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_A4LIMITTICKETNUM)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_4ASTIME)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_P4LIMITTICKETNUM)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_4PSTIME)
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>周五</td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_A5LIMITTICKETNUM)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_5ASTIME)
+                        @Html.ValidationMessageFor(model => model.Q_5ASTIME)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_P5LIMITTICKETNUM)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_5PSTIME)
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>周六</td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_A6LIMITTICKETNUM)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_6ASTIME)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_P6LIMITTICKETNUM)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_6PSTIME)
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>周日</td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_A7LIMITTICKETNUM)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_7ASTIME)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_P7LIMITTICKETNUM)
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        @Html.DisplayFor(model => model.Q_7PSTIME)
+                    </label>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+@section Head{
+}

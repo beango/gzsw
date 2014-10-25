@@ -1,0 +1,52 @@
+﻿@model gzsw.model.SYS_STAFF
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<table class="formTable" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="width:120px;" class="tdLeft"> 员工编码：</td>
+        <td>@Html.DisplayFor(model => model.STAFF_ID)</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 员工姓名：</td>
+        <td>@Html.DisplayFor(model => model.STAFF_NAM)</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 组织机构：</td>
+        <td>@(null != Model.ORG ? Model.ORG.ORG_NAM : "")</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 星级：</td>
+        <td>@(gzsw.util.EnumHelper.ConvertToE<gzsw.model.SYS_STAFF.STAR_LEVEL_ENUM>(Model.STAR_LEVEL.ToString()))</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 照片：</td>
+        <td>
+            @if (!string.IsNullOrEmpty(Model.PHOTE_URL))
+            {
+                <img src="@Model.PHOTE_URL" style="width:64px;height:64px;" />
+            }
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 员工类型：</td>
+        <td>@(gzsw.util.EnumHelper.ConvertToE<gzsw.model.SYS_STAFF.STAFF_TYP_ENUM>(Model.STAFF_TYP.ToString()))</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 是否参与星级评定：</td>
+        <td>@(Model.STAR_EVAL_TYP == 1 ? "是" : "否")</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 星级评定备注：</td>
+        <td>@Html.DisplayFor(model => model.STAR_EVAL_NOTE)</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 备注：</td>
+        <td>@Html.DisplayFor(model => model.NOTE)</td>
+    </tr>
+</table>
+
+@section Head{
+}

@@ -1,0 +1,105 @@
+﻿@using gzsw.model
+@using gzsw.web;
+@model List<SYS_STAFFBUSI>
+
+@{
+    ViewBag.Title = "StaffBusi";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div class="formbody">
+    <div class="tablePanel">
+        <table class="tablelist">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" onclick="chkAll(this)" value="" /></th>
+                    <th>
+                        事项编码
+                    </th>
+                    <th>
+                        业务名称
+                    </th>
+                    <th></th>
+                    <th>
+                        事项编码
+                    </th>
+                    <th>
+                        业务名称
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @{
+                        int index = 0;
+                        foreach (var item in @ViewBag.DetailSerialList as List<SYS_DETAILSERIAL>)
+                        {
+                            if (index > 0 && index % 2 == 0)
+                            {
+                                @Html.Raw(@"                </tr>
+                <tr>");
+                            }
+                            <td><input type="checkbox" value="@item.SERIALID" @(Model.Any(obj => obj.BUSI_CD == item.SERIALID) ? "checked='checked'" : "") /></td>
+                            <td>
+                                @Html.DisplayFor(mitem => item.SERIALID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(mitem => item.SERIALNAME)
+                            </td>
+                            index++;
+                        }
+                        if (index % 2 == 1)
+                        {
+                            @Html.Raw("<td></td><td></td><td></td></tr>")
+                        }
+                    }
+                </tr>
+            </tbody>
+        </table><br />
+        <div style="text-align: center;">
+            <input type="submit" class="l-button" value="提交" onclick="getChecked()" />
+        </div>
+        <br />
+    </div>
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/utility/ext.js")
+    @Html.JavaScript("lib/json/json.min.js")
+    <style type="text/css">
+        body {
+            min-width: 100px;
+        }
+    </style>
+
+    <script lang="javascript">
+        function getChecked() {
+            var s = "";
+            $(".tablelist input").each(function () {
+                if ($(this)[0].checked) {
+                    s += $(this).val() + ",";
+                }
+            });
+            if ("" != s) {
+                s = s.substr(0, s.length - 1);
+            }
+            $.post("/SYS/Staff/StaffBusiSubmit", {
+                STAFF_ID: '@ViewBag.StaffID',
+                SerID: s
+            }, function (data) {
+                data = JSON.parse(data);
+                if (data.result) {
+                    parent.location.reload();
+                } else {
+                    alert(data.desc);
+                }
+            });
+        }
+        function chkAll(obj) {
+            var chklist = $(".tablelist tbody tr input");
+            if ($(obj).attr("checked") == "checked")
+                chklist.attr("checked", true);
+            else
+                chklist.attr("checked", false);
+        }
+    </script>
+}

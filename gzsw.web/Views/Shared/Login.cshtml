@@ -1,0 +1,118 @@
+﻿@using gzsw.web
+@model gzsw.model.LoginModel
+@{
+    ViewBag.Title = "用户登录";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+}
+@section Head{
+    @Html.StyleSheet("cotide/css/login.css")
+
+    <style type="text/css">
+        body {
+            background: #6ca1ee;
+        }
+    </style>
+}
+<div class="newLogin">
+    <div class="nLContent">
+        <ul>
+            <li>
+                <img src="@Url.Content("~/Content/layout/images/login2.png")" />
+            </li>
+        </ul>
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post, new {@returnUrl = this.ViewBag.ReturnUrl,@autocomplete="off" }))
+    {
+            @Html.AntiForgeryToken()
+        <div class="nLpostion">
+            <div class="wid980">
+                <div style="height: 800px;">
+                    <div class="guang">
+                    </div>
+                    <div class="logo">
+                    </div>
+                    <div style="width: 400px; position: relative; top: 245px; left: 400px;">
+                        <div class="logo_txt"></div>
+                        <div class="login_box">
+                            <div style="height: 10px;"></div>
+                            <table class="login_table">
+                                <tr>
+                                    <td class="txtRight"><i class="username"></i> 用户名</td>
+                                    <td>
+                                        @*<input class="txtLong" type="text" value=""/>*@
+                                        @Html.TextBoxFor(x => x.UserID, new
+                                                                        {
+                                                                            @class = "txtLong",
+                                                                            @onclick = "javascript:this.value=''",
+                                                                            @tabIndex="1"
+                                                                        })
+
+                                    </td>
+                                    <td rowspan="2">
+                                        <!--登录-->
+                                        <a class="btnlogin" id="btnLogin" tabIndex="4" href="javascript:void(0);"></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="txtRight"><i class="password"></i> 密&nbsp;&nbsp;码</td>
+                                    <td>
+                                        @*<input class="txtLong" type="text" />*@
+                                        @Html.PasswordFor(x => x.Password, new
+                                                                           {
+                                                                               @class = "txtLong",
+                                                                               @onclick = "JavaScript:this.value=''",
+                                                                               @tabIndex="2"
+                                                                           })
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="txtRight">验证码</td>
+                                    <td>
+                                        @*<input class="txtshort" type="text" />*@
+                                        @Html.TextBoxFor(x => x.Code, new
+                                                                      {
+                                                                          @class = "txtshort",
+                                                                          @onclick = "JavaScript:this.value=''",
+                                                                          @tabIndex = "3"
+                                                                      })
+                                        <span style="padding-top: 5px; display: inline-block;line-height: 30px;position: relative;top:3px;">
+                                            <img id="imgCode" class="logincode_Img" src="#" />
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div>
+                                @*错误信息*@
+                            </div>
+                        </div>
+                        <div class="login_footer">
+                            Copyright  广州艾科森信息技术有限公司  版权所有
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="submit" value="提交"/>
+}
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $("#imgCode").click(function () {
+            var url = "@Url.Action("GetCode", "Utility")";
+            $("#imgCode").attr("src", url.urlstamp());
+        });
+        var url = "@Url.Action("GetCode", "Utility")";
+        $("#imgCode").attr("src", url.urlstamp());
+
+        $("#UserID").focus();
+
+        $("#btnLogin").on("click", function() {
+            $("form").submit();
+        });
+       
+        if (self != top)
+            window.parent.frames.location.href = location.href;
+    });
+</script>

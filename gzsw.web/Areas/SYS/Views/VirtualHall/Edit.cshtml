@@ -1,0 +1,94 @@
+﻿@using gzsw.web
+@{
+    ViewBag.Title = "虚拟大厅配置";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@model gzsw.model.SYS_HALL
+
+<div class="rightinfo">
+    <div class="tools" style="margin-left: 15px;position: absolute;">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="file" name="upload" id="upload" />
+        <input type="button" id="save" style="position: absolute;left:150px;top:1px;" class="l-button" value="保存" />
+        <input type="button" id="back" style="position: absolute;left:250px;top:1px;" class="l-button" value="返回" onclick="location.href='/SYS/Hall'" />
+    </div>
+    <div >
+        <div class="innerbox">
+            <div class="setting">
+                <span d-event="event" d-type="tab" title="窗口">
+                    <span class="tab"><img t-src="online" src="@Url.Content("~/Content/lib/hall/images/win_normal.gif")" /></span>
+                </span>
+                <span d-event="event" d-type="camera" d-cameratype="2" title="半球">
+                    <span class=" tab"><img t-src="hemisphere" src="@Url.Content("~/Content/lib/hall/images/hemisphere.gif")" /></span>
+                </span>
+                <span d-event="event" d-type="camera" d-cameratype="1" title="云台">
+                    <span class=" tab"><img t-src="yuntai" src="@Url.Content("~/Content/lib/hall/images/yuntai.gif")" /></span>
+                </span>
+            </div>
+        </div>
+        <div style="float: left;">
+            <div class="web-hall" id="web-hall">
+                @*<img class='web-hall-bg' id='hall_test' />
+                <span class="hall-icon"><img src="@Url.Content("~/Content/lib/hall/images/win_normal.png")" /></span>*@
+            </div>
+        </div>
+        <div style="float: left;margin-left: 810px;">
+            <div>
+                <ul id="Device_Attribute">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Head
+{
+    <link href="@Url.Content("~/Content/lib/hall/hall.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/lib/jquery.uploadify/uploadify.css")" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="@Url.Content("~/Content/lib/jquery.uploadify/jquery.uploadify.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/lib/json/json.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/lib/hall/hallEdit.js")"></script>
+}
+<script type="text/javascript">
+    $(function () {
+
+        var sitePath = '@Url.Content("~/")';
+        var auth = "@(Request.Cookies[FormsAuthentication.FormsCookieName] == null ? string.Empty : Request.Cookies[FormsAuthentication.FormsCookieName].Value)";
+        var sessionid = "@(Session.SessionID)";
+
+        virtualConfig.init({
+            sitePath:sitePath,
+            webHallId: "web-hall",
+            hallNo: '@Model.HALL_NO',
+            image: '@Model.HALL_PICT_URL',
+            configUrl: '@Url.Action("GetHallConfig","VirtualHall")',
+            saveUrl: '@Url.Action("Save", "VirtualHall")',
+            ValidateCounterUrl:'@Url.Action("ValidateCounterId", "VirtualHall")'
+        });
+
+
+        $('#upload').uploadify({
+            uploader: sitePath + "Content/lib/jquery.uploadify/uploadify.swf",
+            script: "@Url.Action("Upload", "File", new { area = "" })?hallNo=@Model.HALL_NO", //后台逻辑方法
+            cancelImg: sitePath+"Content/lib/jquery.uploadify/cancel.png",
+            //folder: 'test',
+            //queueID: 'fileQueue',进度条
+            sizeLimit: 40 * 1024 * 1024,
+            auto: true,
+            scriptData: { 'ASPSESSID': sessionid, 'AUTHID': auth },
+            buttonImg: sitePath + "Content/lib/jquery.uploadify/upload_new.png",
+            fileExt: '*.jpg;*.png',
+            fileDesc: '*.jpg;*.png',
+            multi: false,
+            width: 82,
+            height:25,
+            onComplete: function (event, queueID, fileObj, response, data) {
+                var obj = eval('(' + response + ')');
+
+                if (obj.success == 0) {
+                    virtualConfig.setHallImg(obj.fileName);
+                }
+            }
+        });
+    });
+</script>

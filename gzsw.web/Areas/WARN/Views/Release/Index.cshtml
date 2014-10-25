@@ -1,0 +1,105 @@
+﻿@using gzsw.web;
+@model PetaPoco.Page<dynamic>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:100px;">标题：</td>
+            <td style="width:170px;"><input type="text" name="txtTITLE" id="txtTITLE" value="@ViewBag.TITL" /></td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th>序号</th>
+                <th>
+                    标题
+                </th>
+                <th>
+                    接收对象
+                </th>
+                <th>
+                    开始有效时间
+                </th>
+                <th>
+                    结束有效时间
+                </th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@(item.STAFF_DETAIL_ID)-@(item.MT)" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @item.TITLE
+                </td>
+                <td>
+                    @item.ObjNam
+                    @Html.Raw((item.MT == 1 ? (item.CLI_READ_IND != null && item.CLI_READ_IND ? "（已读）" : "<font color='red'>（未读）</font>") : ""))
+                </td>
+                <td>
+                    @item.BEGIN_TIME.ToString("yyyy-MM-dd HH:mm:ss")
+                </td>
+                <td>
+                    @item.END_TIME.ToString("yyyy-MM-dd HH:mm:ss")
+                </td>
+            </tr>
+        }
+
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/utility/ext.js")
+    <script lang="javascript">
+        $(function () {
+            // 注册事件
+            // 查询
+            $("#btnSearch").ligerButton(
+            {
+                text: " 查 询 ",
+                click: function () {
+                    var url = "?titl=" + $("#txtTITLE").val();
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+            // 顶部导航
+            var bar = $("#toptoolbar").ligerToolBar();
+
+            bar.addItem(@Html.AuthViewButton("WARN_RELEASE_VIW", Url.Action("Details", "Release"),"查看",500,400));
+            bar.addItem({ line: true });
+            bar.addItem(@Html.AuthAddButton("WARN_RELEASE_ADD", Url.Action("Create", "Release"), "新增", 500, 400));
+            bar.addItem({ line: true });
+            bar.addItem(@Html.AuthDelButton("WARN_RELEASE_DEL", Url.Action("Delete", "Release")));
+        });
+    </script>
+}

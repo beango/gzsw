@@ -1,0 +1,136 @@
+﻿@using gzsw.web;
+@model PetaPoco.Page<gzsw.model.SYS_NSRINFO>
+
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:120px;">身份证或识别码：</td>
+            <td style="width:170px;"><input type="text" name="txtSBM" id="txtSBM" value="@ViewBag.SBM" /></td>
+            <td style="width:100px;">纳税人名称：</td>
+            <td style="width:170px;"><input type="text" name="txtNAM" id="txtNAM" value="@ViewBag.NAM" /></td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th>序号 </th>
+                <th>
+                    纳税人身份证号码或者企业识别码
+                </th>
+                <th>
+                    纳税人名称
+                </th>
+                <th>
+                    纳税人所属税务机关代码
+                </th>
+                <th>
+                    纳税人所属行业大类
+                </th>
+                <th>
+                    企业纳税联系人电话
+                </th>
+                <th>
+                    企业法人联系电话
+                </th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.NSR_SBM" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NSR_SBM)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NSR_NAME)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NSR_SWJGDM)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NSR_HYNAME)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NSR_BSYPHONE)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NSR_FRPHONE)
+                </td>
+            </tr>
+        }
+
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/utility/ext.js")
+    <script lang="javascript">
+    $(function () {
+        // 注册事件
+        // 查询
+        $("#btnSearch").ligerButton(
+        {
+            text: " 查 询 ",
+            click: function () {
+                var url = "?SBM=" + $("#txtSBM").val() + "&NAM=" + $("#txtNAM").val();
+                location.href = url.urlstamp();
+            },
+            icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+        });
+        // 顶部导航
+        var bar = $("#toptoolbar").ligerToolBar();
+
+        bar.addItem(@Html.AuthViewButton("SYS_NSRINFO_VIW", Url.Action("Details", "NSRInfo")));
+        bar.addItem({ line: true });
+        bar.addItem(@Html.AuthAddButton("SYS_NSRINFO_ADD", Url.Action("Create", "NSRInfo")));
+        bar.addItem({ line: true });
+        bar.addItem(@Html.AuthEditButton("SYS_NSRINFO_EDT", Url.Action("Edit", "NSRInfo")));
+        bar.addItem({ line: true });
+        @if (Html.ChkAuth("SYS_STAFFBUSI_VIW"))
+        {
+        @:bar.addItem({
+        @:                text: '导入',
+        @:                click: function (item) {
+        @:                    gzsw.dialog.open({
+        @:                        url: '/SYS/NSRInfo/ImportNSR',
+        @:                        width: 350,
+        @:                        height: 260,
+        @:                        isReload: true
+        @:                    });
+        @:                },
+        @:                icon: 'up'
+        @:            });
+        @:bar.addItem({ line: true });
+        }
+        bar.addItem(@Html.AuthDelButton("SYS_NSRINFO_DEL", Url.Action("Delete", "NSRInfo")));
+    });
+    </script>
+}

@@ -1,0 +1,50 @@
+﻿@model gzsw.model.SYS_NSRINFO
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="width:100px;" class="tdLeft">
+                识别码：
+            </td><td>
+                @Html.DisplayFor(model => model.NSR_SBM)</td>
+        </tr>
+
+        <tr>
+            <td class="tdLeft">
+                纳税人名称：
+            </td><td>
+                @Html.DisplayFor(model => model.NSR_NAME)</td>
+        </tr>
+
+        <tr>
+            <td class="tdLeft">
+                税务机关代码：
+            </td><td>
+                @Html.DisplayFor(model => model.NSR_SWJGDM)</td>
+        </tr>
+
+        <tr>
+            <td class="tdLeft">
+                行业大类：
+            </td><td>
+                @Html.DisplayFor(model => model.SysNsrhy.HY_NAME)</td>
+        </tr>
+
+        <tr>
+            <td class="tdLeft">
+                联系人电话：
+            </td><td>
+                @Html.DisplayFor(model => model.NSR_BSYPHONE)</td>
+        </tr>
+
+        <tr>
+            <td class="tdLeft">
+                法人联系电话：
+            </td><td>
+                @Html.DisplayFor(model => model.NSR_FRPHONE)</td>
+        </tr>
+    </table>

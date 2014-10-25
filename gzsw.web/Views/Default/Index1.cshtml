@@ -1,0 +1,178 @@
+﻿@using gzsw.web
+@{
+    ViewBag.Title = "首页";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model IEnumerable<gzsw.model.SYS_MENU>
+@section Head{  
+    @Html.StyleSheet("cotide/css/main.css")  
+    @Html.StyleSheet("cotide/css/bootstrap.min.css")
+    @Html.StyleSheet("cotide/css/rest.css") 
+    @Html.StyleSheet("lib/ligerUI/skins/Aqua/css/ligerui-all.css")
+    @Html.StyleSheet("lib/ligerUI/skins/ligerui-icons.css")
+    @Html.JavaScript("lib/ligerUI/js/ligerui.all.js") 
+    <script type="text/javascript">
+        // Tab初始化
+        var tabItems = [];
+        var tab = null;
+        // 动态高度
+        function resize() {
+            var height = $("#gzsw_LeftMenu").height();
+            // 控制高度
+            var value = $(window).height() - $(".navbar").height() - 28;
+            if (value > height) {
+                height = value;
+            }
+            $(".content").css("height", height-5);
+            $(".content").css("min-height", height-5);
+            $("#welcomeImg").css("height", height - 35);
+            $("iframe").css("height", height - 35);
+            $("#middlePanel").css("height", height-5);
+            $("#middlePanel img").css("padding-top", (height / 2));
+            $("#gzsw_LeftMenu").css("height", height-13);
+            $(".gzsw_LeftMenu").css("min-height", height - 13);
+            $("#treePanel").css("min-height", height - 45);
+        }
+
+        $(function() {
+            // 主菜单注册
+            $("#mainNavPanel").find("li").click(function() {
+                $("#mainNavPanel").find("li").attr("class", "");
+                $(this).attr("class", "sel");
+                // 加载左菜单
+                var url = "@Url.Action("LeftMenu", "Default")?nid=" + $(this).attr("menuid");
+                layer.load('菜单中加载...');
+                $.ajax({
+                    url: url.urlstamp(),
+                    success: function(result) {
+                        $("#gzsw_LeftMenu").html(result);
+                        SetMiddlePanelState(true);
+                        resize();
+                        layer.closeAll();
+                    },
+                    error: function () {
+                        gzsw.dialog.alert("加载菜单失败，请联系管理员!");
+                        layer.closeAll();
+                    }
+                });
+              
+            });
+
+            
+            $("#framecenter").ligerTab({
+                showSwitchInTab: false,
+                showSwitch: true,
+                onAfterAddTabItem: function(tabdata) {
+                    tabItems.push(tabdata);
+                    /*  saveTabStatus();*/
+                },
+                onAfterRemoveTabItem: function(tabid) {
+                    for (var i = 0; i < tabItems.length; i++) {
+                        var o = tabItems[i];
+                        if (o.tabid == tabid) {
+                            tabItems.splice(i, 1);
+                            /* saveTabStatus();*/
+                            break;
+                        }
+                    }
+                },
+                onReload: function(tabdata) {
+
+                }
+            });
+            tab = liger.get("framecenter");
+
+ 
+
+            $(window).resize(function() {
+                resize();
+            });
+            resize();
+
+            // 设置收缩栏状态
+            function SetMiddlePanelState(isShow) {
+                if (isShow == undefined) {
+                    isShow = true;
+                }
+                if (isShow) {
+                    $("#leftMenu").show();
+                    $(this).attr("src", "@Html.Url("Content/lib/ligerUI/skins/images/index_48.gif")");
+                    $(".content").css("margin-left", "232px");
+                } else {
+                    $("#leftMenu").hide();
+                    $(this).attr("src", "@Html.Url("Content/lib/ligerUI/skins/images/index_2_48.gif")");
+                    $(".content").css("margin-left", "5px");
+                }
+            }
+
+            // 中间栏控制
+            $("#middlePanel img").click(function() {
+                if ($("#leftMenu").is(":hidden")) {
+                    SetMiddlePanelState(true);
+                } else {
+                    SetMiddlePanelState(false);
+                }
+            });
+            SetMiddlePanelState(false);
+        });
+    </script>
+}
+ 
+<!-- 上 -->
+<div    class="navbar">
+    <div class="gzsw_Head">
+        <!-- logo -->
+        <div style="float: left; padding: 3px 0px 0px 15px;  "> 
+            <div class="logo_txt">
+                &nbsp;
+            </div>
+        </div>
+        <!-- 主导航 -->
+        <div style="float: right; padding-right: 20px; ">
+            <div class="row gzsw_TopMenu">
+                <ul>
+                    <li style=" padding-right: 40px; "><a href="@Url.Action("LogOff", "Account")">退出</a></li> 
+                    <li><a href="javascript:void(0);">修改密码</a></li>
+                    <li> 欢迎您 <span style="color: #131cd1; "> 欢迎您 [@ViewBag.UserName]</span></li>
+                    <li >@DateTime.Now.ToString("yyyy年MM月dd日") @DateTime.Now.DayOfWeek.ToWeekString()   </li>
+                </ul>
+            </div>
+            <div class="row gzsw_MainMenu">
+                <div class="col-md-12" style="padding-left:0px; padding-right:0px;height:50px;">
+                    <ul  id="mainNavPanel" style="padding-top:23px;  float:right; ">
+                        @if (Model != null)
+                            {
+                                foreach (var menu in Model)
+                                {
+                                    // class="sel"
+                                    <li menuid="@menu.MENU_ID"><a href="javascript:void(0);">@menu.MENU_NAM</a></li>
+                                }
+                            } 
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 左 -->
+<div id="leftMenu" class="sidebar-nav">
+    <div id="gzsw_LeftMenu" style="width:225px; /*background-color:#fff;*/"  >
+        &nbsp; 
+    </div>
+</div> 
+<div id="middlePanel" style="width: 5px; float: left; background-color: #92BBD7; ">
+    <img style="cursor:pointer;" src="@Html.Url("Content/lib/ligerUI/skins/images/index_48.gif")" /> 
+</div>
+<div class="content">
+    <!-- tab菜单 -->
+    <div position="center" id="framecenter">
+        <div tabid="home" title="我的主页" >
+            <div id="demo1" name="home" id="home" style="text-align:center;background-color:#fff;"> 
+                <img style="width:100%;" id="welcomeImg" src="@Html.Url("Content/bootstrap/images/gzsw_main_bg.png")" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <p>  Copyright  广州艾科森信息技术有限公司  版权所有 </p>
+</div>

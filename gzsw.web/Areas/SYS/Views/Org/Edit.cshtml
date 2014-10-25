@@ -1,0 +1,174 @@
+﻿@using gzsw.web;
+@model gzsw.model.SYS_ORGANIZE
+@{
+    ViewBag.Title = "修改组织机构";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using (Html.BeginForm())
+{
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <table class="formTable" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    组织机构编码：
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.ORG_ID)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    组织机构名称：
+                </td>
+                <td>
+                    @Html.HiddenFor(model => model.ORG_ID)
+                    @Html.EditorFor(model => model.ORG_NAM)
+                </td>   
+                <td>
+                    @Html.ValidationMessageFor(model => model.ORG_NAM)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    上级组织机构：
+                </td>
+                <td>
+                    <ul id="treeParOrg" class="ztree"></ul>
+                    <input type="hidden" value="" id="PAR_ORG_ID" name="PAR_ORG_ID" />
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.PAR_ORG_ID)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    负责人：
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.HEAD)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.HEAD)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    负责人电话：
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.HEAD_TEL)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.HEAD_TEL)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    组织机构级别：
+                </td>
+                <td>
+                    @Html.DropDownList("ORG_LEVEL", @ViewBag.ORG_LEVELLIST as IEnumerable<SelectListItem>)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.ORG_LEVEL)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    经度：
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.LONGITUDE)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.LONGITUDE)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    纬度：
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.DIMENSION)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.DIMENSION)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    值班领导手机：
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.DUTY_TEL)
+                </td>   
+                <td>
+                    @Html.ValidationMessageFor(model => model.DUTY_TEL)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">
+                    备注：
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.NOTE)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.NOTE)
+                    @Html.HiddenFor(model => model.CREATE_ID)
+                    @Html.HiddenFor(model => model.CREATE_DTIME)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft"> &nbsp;  </td>
+                <td>
+                    <input type="submit" class="l-button" value="提交" onclick="getChecked()" /> 
+                </td>
+                <td> </td>
+            </tr>
+        </table>
+}
+@section Head{
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+    @Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
+    @Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+    @Html.JavaScript("lib/jqueryform/jquery.form.js")
+    @Html.JavaScript("lib/utility/ext.js")
+   
+    <script type="text/javascript">
+		<!--
+		var zNodes;
+		$(function () {
+		    InitAjaxForm();//异步提交
+		    $.ajax({
+		        async: false,
+		        cache: false,
+		        type: 'POST',
+		        dataType: 'json',
+		        url: "/SYS/Org/GetOrgsTree?check=@Model.PAR_ORG_ID&disabled=@Model.ORG_ID",
+		        success: function (data) {
+		            zNodes = data;
+		        }
+		    });
+		});
+
+		$(document).ready(function() {
+		    radioTree("#treeParOrg", zNodes);
+		});
+		//-->
+    </script>
+    <script type="text/javascript">
+        function getChecked() {
+            var treeObj = $.fn.zTree.getZTreeObj("treeParOrg"),
+            nodes = treeObj.getCheckedNodes(true);
+            for (var i = 0; i < nodes.length; i++) {
+                $('#PAR_ORG_ID').val(nodes[i].id);
+                break;
+            }
+            return true;
+        }
+    </script>
+}

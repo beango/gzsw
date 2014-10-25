@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains job definitions in schema version 2.0 format -->
+
+<job-scheduling-data xmlns="http://quartznet.sourceforge.net/JobSchedulingData" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+
+  <processing-directives>
+    <overwrite-existing-data>true</overwrite-existing-data>
+  </processing-directives>
+
+  <schedule>
+    <job>
+      <name>TEST_JOB1</name>
+      <group>TEST_JOBGroup1</group>
+      <description>TEST_JOB1</description>
+      <job-type>gzsw.winservice.TestJob1, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <job>
+      <name>TEST_JOB2</name>
+      <group>TEST_JOBGroup2</group>
+      <description>TEST_JOB2</description>
+      <job-type>gzsw.winservice.TestJob2, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <job>
+      <name>PRO_WARN_MON_JOB</name>
+      <group>PRO_WARN_MON_JOBGroup</group>
+      <description>PRO_WARN_MON_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_WARN_MON_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <job>
+      <name>PRO_STAT_STAFF_CHKSTAT_M_JOB</name>
+      <group>PRO_STAT_STAFF_CHKSTAT_M_JOBGroup</group>
+      <description>PRO_STAT_STAFF_CHKSTAT_M_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_STAT_STAFF_CHKSTAT_M_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <job>
+      <name>PRO_CHK_STAFFCHK_EVENT_D_JOB</name>
+      <group>PRO_CHK_STAFFCHK_EVENT_D_JOBGroup</group>
+      <description>PRO_CHK_STAFFCHK_EVENT_D_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_CHK_STAFFCHK_EVENT_D_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <job>
+      <name>PRO_INIT_QUEUEDEAL_D_JOB</name>
+      <group>PRO_INIT_QUEUEDEAL_D_JOBGroup</group>
+      <description>PRO_INIT_QUEUEDEAL_D_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_INIT_QUEUEDEAL_D_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <job>
+      <name>PRO_REPORT_STAT_D_JOB</name>
+      <group>PRO_REPORT_STAT_D_JOBGroup</group>
+      <description>PRO_REPORT_STAT_D_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_REPORT_STAT_D_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>PRO_WARN_MON_JOBTrigger</name>
+        <group>PRO_WARN_MON_JOBTriggerGroup</group>
+        <description>PRO_WARN_MON_JOB; 每5分钟执行一次</description>
+        <job-name>PRO_WARN_MON_JOB</job-name>
+        <job-group>PRO_WARN_MON_JOBGroup</job-group>
+        <cron-expression>0 0/5 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <trigger>
+      <cron>
+        <name>PRO_STAT_STAFF_CHKSTAT_M_JOBTrigger</name>
+        <group>PRO_STAT_STAFF_CHKSTAT_M_JOBTriggerGroup</group>
+        <description>PRO_STAT_STAFF_CHKSTAT_M_JOB; 每月执行一次</description>
+        <job-name>PRO_STAT_STAFF_CHKSTAT_M_JOB</job-name>
+        <job-group>PRO_STAT_STAFF_CHKSTAT_M_JOBGroup</job-group>
+        <cron-expression>0 0 0 1 * ?</cron-expression><!--0 0 0 1 * ?-->
+      </cron>
+    </trigger>
+    <trigger>
+      <cron>
+        <name>PRO_CHK_STAFFCHK_EVENT_D_JOBTrigger</name>
+        <group>PRO_CHK_STAFFCHK_EVENT_D_JOBTriggerGroup</group>
+        <description>PRO_CHK_STAFFCHK_EVENT_D; 每天执行一次</description>
+        <job-name>PRO_CHK_STAFFCHK_EVENT_D_JOB</job-name>
+        <job-group>PRO_CHK_STAFFCHK_EVENT_D_JOBGroup</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <trigger>
+      <cron>
+        <name>PRO_INIT_QUEUEDEAL_D_JOBTrigger</name>
+        <group>PRO_INIT_QUEUEDEAL_D_JOBTriggerGroup</group>
+        <description>PRO_INIT_QUEUEDEAL_D; 每天执行一次</description>
+        <job-name>PRO_INIT_QUEUEDEAL_D_JOB</job-name>
+        <job-group>PRO_INIT_QUEUEDEAL_D_JOBGroup</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <trigger>
+      <cron>
+        <name>PRO_REPORT_STAT_D_JOBTrigger</name>
+        <group>PRO_REPORT_STAT_D_JOBTriggerGroup</group>
+        <description>PRO_REPORT_STAT_D; 每天执行一次</description>
+        <job-name>PRO_REPORT_STAT_D_JOB</job-name>
+        <job-group>PRO_REPORT_STAT_D_JOBGroup</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>
+    
+    <!--<trigger>
+      <cron>
+        <name>TEST_JOBTrigger1</name>
+        <group>TEST_JOBTriggerGroup1</group>
+        <description>TEST_JOB; 每天执行一次</description>
+        <job-name>TEST_JOB1</job-name>
+        <job-group>TEST_JOBGroup1</job-group>
+        <cron-expression>0/10 * * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <trigger>
+      <cron>
+        <name>TEST_JOBTrigger2</name>
+        <group>TEST_JOBTriggerGroup2</group>
+        <description>TEST_JOB2; 每天执行一次</description>
+        <job-name>TEST_JOB2</job-name>
+        <job-group>TEST_JOBGroup2</job-group>
+        <cron-expression>0/15 * * * * ?</cron-expression>
+      </cron>
+    </trigger>-->
+  </schedule>
+</job-scheduling-data>

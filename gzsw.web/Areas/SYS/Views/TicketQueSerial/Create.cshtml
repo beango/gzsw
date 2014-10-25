@@ -1,0 +1,288 @@
+﻿@using gzsw.web
+@model gzsw.model.SYS_TICKETQUEUESERIAL
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+    
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="tdLeft" style="width:100px;">服务厅：</td>
+            <td>@Html.DropDownList("Q_SYSNO", ViewData["Q_SYSNOLIST"] as SelectList)
+            @Html.ValidationMessageFor(model => model.Q_SYSNO)</td>
+            
+            <td class="tdLeft" style="width: 100px;">排队业务：</td>
+            <td>@Html.DropDownList("Q_SERIALID", ViewData["QUSERIAL"] as SelectList)
+            @Html.ValidationMessageFor(model => model.Q_SERIALID)</td>
+        </tr>
+        <tr>
+            <td class="tdLeft">号码前缀：</td>
+            <td>@Html.EditorFor(model => model.Q_NUMBERQCHAR)
+            @Html.ValidationMessageFor(model => model.Q_NUMBERQCHAR)</td>
+
+            <td class="tdLeft">等候超时（分）：</td>
+            <td>@Html.EditorFor(model => model.Q_WAITCSTIME)
+            @Html.ValidationMessageFor(model => model.Q_WAITCSTIME)</td>
+        </tr>
+        <tr>
+            <td class="tdLeft">该业务开始号：</td>
+            <td>@Html.EditorFor(model => model.Q_MINNUMBER)
+            @Html.ValidationMessageFor(model => model.Q_MINNUMBER)</td>
+
+            <td class="tdLeft">该业务结束号：</td>
+            <td>@Html.EditorFor(model => model.Q_MAXNUMBER)
+            @Html.ValidationMessageFor(model => model.Q_MAXNUMBER)</td>
+        </tr>
+        <tr>
+            <td class="tdLeft">是否密码取号：</td>
+            <td>
+                @Html.RadioButtonFor(model => model.Q_INPUTPWD, true) 是
+                @Html.RadioButtonFor(model => model.Q_INPUTPWD, false) 否
+                @Html.ValidationMessageFor(model => model.Q_INPUTPWD)
+            </td>
+            <td class="tdLeft">备注：</td>
+            <td>
+                @Html.TextAreaFor(model => model.Q_BZ, new { @style = "height:50px;width:260px;" })
+                @Html.ValidationMessageFor(model => model.Q_BZ)</td>
+        </tr>
+    </table>
+    
+    <div class="tablePanel">
+        <table class="tableform">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>
+                        上午能取的号
+                    </th>
+                    <th>
+                        上午取号时间段
+                    </th>
+                    <th>
+                        下午能取的号
+                    </th>
+                    <th>
+                        下午取号时间段
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>周一</td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_A1LIMITTICKETNUM)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_A1LIMITTICKETNUM)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_1ASTIME)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_1ASTIME)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_P1LIMITTICKETNUM)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_P1LIMITTICKETNUM)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_1PSTIME)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_1PSTIME)
+                        </i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>周二</td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_A2LIMITTICKETNUM)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_A2LIMITTICKETNUM)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_2ASTIME)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_2ASTIME)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_P2LIMITTICKETNUM)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_P2LIMITTICKETNUM)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_2PSTIME)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_2PSTIME)
+                        </i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>周三</td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_A3LIMITTICKETNUM)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_A3LIMITTICKETNUM)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_3ASTIME)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_3ASTIME)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_P3LIMITTICKETNUM)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_P3LIMITTICKETNUM)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_3PSTIME)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_3PSTIME)
+                        </i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>周四</td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_A4LIMITTICKETNUM)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_A4LIMITTICKETNUM)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_4ASTIME)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_4ASTIME)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_P4LIMITTICKETNUM)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_P4LIMITTICKETNUM)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_4PSTIME)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_4PSTIME)
+                        </i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>周五</td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_A5LIMITTICKETNUM)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_A5LIMITTICKETNUM)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_5ASTIME)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_5ASTIME)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_P5LIMITTICKETNUM)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_P5LIMITTICKETNUM)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_5PSTIME)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_5PSTIME)
+                        </i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>周六</td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_A6LIMITTICKETNUM)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_A6LIMITTICKETNUM)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_6ASTIME)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_6ASTIME)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_P6LIMITTICKETNUM)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_P6LIMITTICKETNUM)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_6PSTIME)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_6PSTIME)
+                        </i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>周日</td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_A7LIMITTICKETNUM)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_A7LIMITTICKETNUM)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_7ASTIME)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_7ASTIME)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_P7LIMITTICKETNUM)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_P7LIMITTICKETNUM)
+                        </i>
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Q_7PSTIME)
+                        <i>
+                            @Html.ValidationMessageFor(model => model.Q_7PSTIME)
+                        </i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        
+        <div style="text-align: center;margin-top: 20px;">
+            <input type="submit" class="l-button" value="提交" />
+
+            <input type="hidden" name="isCopy" id="isCopy" value="false" />
+            <input type="submit" class="l-button" style="width: 100px;" value="保存并继续" onclick="$('#isCopy').val('true')" />
+        </div>
+    </div>
+}
+
+@section Head{
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+    <style type="text/css">
+        .tableform i {
+            display:block;
+        }
+    </style>
+}
+
+

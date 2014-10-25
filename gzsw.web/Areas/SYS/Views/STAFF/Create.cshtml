@@ -1,0 +1,160 @@
+﻿@using gzsw.web
+@model gzsw.model.SYS_STAFF
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="tdLeft" style="width:100px;">员工编码：</td>
+            <td>
+                @Html.EditorFor(model => model.STAFF_ID)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.STAFF_ID)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">员工姓名：</td>
+            <td>
+                @Html.EditorFor(model => model.STAFF_NAM)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.STAFF_NAM)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">密码：</td>
+            <td>
+                @Html.EditorFor(model => model.STAFF_PASSWORD)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.STAFF_PASSWORD)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">组织机构：</td>
+            <td>
+                @Html.DropDownList("ORG_ID", ViewBag.UserORG as SelectList, "--请选择--")
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.ORG_ID)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">星级：</td>
+            <td>
+                @Html.DropDownList("STAR_LEVEL", @ViewBag.STAR_LEVELLIST as IEnumerable<SelectListItem>)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.STAR_LEVEL)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">照片：</td>
+            <td>
+                <label id="uploadphoto" style="width:110px;text-align:left;">
+                    <div id="fileQueue"></div>
+                    <input type="file" name="uploadify" id="uploadify" />
+                </label>
+            </td>
+            <td>
+                @Html.HiddenFor(model => model.PHOTE_URL)
+                @Html.ValidationMessageFor(model => model.STAR_LEVEL)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">员工类型：</td>
+            <td>
+                @Html.DropDownList("STAFF_TYP", @ViewBag.STAFF_TYPLIST as IEnumerable<SelectListItem>)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.STAFF_TYP)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">参与星级评定：</td>
+            <td>
+                @Html.RadioButtonFor(model => model.STAR_EVAL_TYP, 1) 是
+                @Html.RadioButtonFor(model => model.STAR_EVAL_TYP, 0) 否
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.STAR_EVAL_TYP)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">星级评定备注：</td>
+            <td>
+                @Html.EditorFor(model => model.STAR_EVAL_NOTE)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.STAR_EVAL_NOTE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">备注：</td>
+            <td>
+                @Html.EditorFor(model => model.NOTE)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.NOTE)
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center;" colspan="3">
+                <input type="submit" class="l-button" value="提交" />
+            </td>
+        </tr>
+    </table>
+
+}
+
+@section Head{
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+    @Html.JavaScript("lib/jqueryform/jquery.form.js")
+    @Html.StyleSheet("lib/jquery.uploadify/uploadify.css")
+    @Html.JavaScript("lib/jquery.uploadify/swfobject.js")
+    @Html.JavaScript("lib/jquery.uploadify/jquery.uploadify.js")
+    @Html.JavaScript("lib/utility/ext.js?v1")
+    <script type="text/javascript">
+		$(function () {
+		    InitAjaxForm();//异步提交
+		});
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var auth = "@(Request.Cookies[FormsAuthentication.FormsCookieName] == null ? string.Empty : Request.Cookies[FormsAuthentication.FormsCookieName].Value)";
+            var sessionid = "@(Session.SessionID)";
+
+        $("#uploadify").uploadify({
+            'uploader': '/Content/lib/jquery.uploadify/uploadify.swf',
+            'script': '/SYS/Staff/ImportStaffPHOTE',
+            'cancelImg': '/Content/lib/jquery.uploadify/cancel.png',
+            'folder': 'UploadFile',
+            'queueID': 'fileQueue',
+            'auto': true,
+            scriptData: { 'ASPSESSID': sessionid, 'AUTHID': auth },
+            //'buttonText':'选择文件',
+            fileExt: '*.jpg',
+            'buttonImg': "/Content/lib/jquery.uploadify/btn.png",
+            'fileDesc':'请选择jpg图片',
+            'onComplete': function (event, queueId, fileObj, response, data) {
+                var rest = JSON.parse(response);
+                if(rest.result)
+                {
+                    $("#uploadphoto").html("<img style='width:64px;height:64px;' src='" + rest.desc + "' />");
+                    $("#PHOTE_URL").val(rest.desc);
+                }
+            }
+        });
+    });
+    </script>
+}
+
+

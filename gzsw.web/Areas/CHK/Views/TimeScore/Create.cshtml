@@ -1,0 +1,188 @@
+﻿@using gzsw.web
+@{
+    ViewBag.Title = "增加考勤参数";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@model gzsw.controller.CHK.TimeScoreCreateModel
+
+@using (Html.BeginForm())
+{
+    <div class="formbody">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <table class="formTable" cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="tdLeft">组织：</td>
+                <td colspan="4">
+                    @Html.HiddenFor(m => m.ORG_ID)
+                    @Html.TextBoxFor(m => m.ORG_NAM, new { @class = "text-box", @style = "width:325px;", @readonly = "readonly" })
+                    
+                    <div id="orgTreeContent" style="display: none;min-width: 340px; position: absolute; background-color: #FFF; border: 1px solid #ccc;">
+                        <ul id="treeOrg" class="ztree" style="clear:both;"></ul>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.ORG_ID)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">上午上班时间：</td>
+                <td>
+                    @Html.HiddenFor(m=>m.A_BEGIN_TIME)
+                    <input type="text" name="A_BEGIN_TIME_SHOW" id="A_BEGIN_TIME_SHOW" dtype="time" style="width:100px;" readonly="readonly" />
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(m => m.A_BEGIN_TIME)
+                </td>
+                <td class="tdLeft">上午下班时间：</td>
+                <td>
+                    @Html.HiddenFor(m => m.A_END_TIME)
+                    <input type="text" name="A_END_TIME_SHOW" id="A_END_TIME_SHOW" dtype="time" style="width:100px;" readonly="readonly" />
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(m => m.A_END_TIME)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">下午上班时间：</td>
+                <td>
+                    @Html.HiddenFor(m => m.P_BEGIN_TIME)
+                    <input type="text" name="P_BEGIN_TIME_SHOW" id="P_BEGIN_TIME_SHOW" dtype="time" style="width:100px;" readonly="readonly" />
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(m => m.P_BEGIN_TIME)
+                </td>
+                <td class="tdLeft">下午下班时间：</td>
+                <td>
+                    @Html.HiddenFor(m => m.P_END_TIME)
+                    <input type="text" name="P_END_TIME_SHOW" id="P_END_TIME_SHOW" dtype="time" style="width:100px;" readonly="readonly" />
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(m => m.P_END_TIME)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">迟到后置分钟：</td>
+                <td>
+                    @Html.TextBoxFor(m => m.LAT_LAST_MIN, new { @class = "text-box", @style = "width:100px;" })
+                  
+                </td>
+                <td class="tdLeft">
+                    @Html.ValidationMessageFor(m => m.LAT_LAST_MIN)
+                </td>
+                <td class="tdLeft">早退前置分钟：</td>
+                <td>
+                    @Html.TextBoxFor(m => m.EAR_LAST_MIN, new { @class = "text-box", @style = "width:100px;" })
+                   
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(m => m.EAR_LAST_MIN)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">早退扣分：</td>
+                <td>
+                    @Html.TextBoxFor(m => m.EAR_SCORE, new { @class = "text-box", @style = "width:100px;" })
+                    
+                </td>
+                <td class="tdLeft">
+                    @Html.ValidationMessageFor(m => m.EAR_SCORE)
+                </td>
+                <td class="tdLeft">旷工扣分：</td>
+                <td>
+                    @Html.TextBoxFor(m => m.NEG_SCORE, new { @class = "text-box", @style = "width:100px;" })
+                   
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(m => m.NEG_SCORE)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">病假扣分：</td>
+                <td>
+                    @Html.TextBoxFor(m => m.ILL_SCORE, new { @class = "text-box", @style = "width:100px;" })
+                   
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(m => m.ILL_SCORE)
+                </td>
+                <td class="tdLeft">事假扣分：</td>
+                <td>
+                    @Html.TextBoxFor(m => m.ABS_SCORE, new { @class = "text-box", @style = "width:100px;" })
+                   
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(m => m.ABS_SCORE)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">迟到扣分：</td>
+                <td>
+                    @Html.TextBoxFor(m => m.LAT_SCORE, new { @class = "text-box", @style = "width:100px;" })
+                    
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(m => m.LAT_SCORE)
+                </td>
+                <td class="tdLeft">未签退扣分：</td>
+                <td>
+                    @Html.TextBoxFor(m => m.NONSIGN_SCORE, new { @class = "text-box", @style = "width:100px;" })
+                    
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(m => m.NONSIGN_SCORE)
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft" colspan="6" style="text-align: center;">
+
+                    <input type="submit" class="l-button" value="提交" />
+                </td>
+            </tr>
+        </table>
+        
+    </div>
+}
+@section Head{
+    @Html.JavaScript("lib/jqueryform/jquery.form.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+    @Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
+    @Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
+    @*@Html.JavaScript("lib/utility/ext.js")*@
+    @Html.JavaScript("lib/counter/orgTree.js")
+    @Html.JavaScript("lib/jquery.timeselect/jquery.timeselect.js")
+    <style type="text/css">
+        body {
+            min-width: 100px;
+        }
+
+        table td {
+            min-height: 20px;
+            padding: 5px 0 5px 16px;
+            vertical-align: top;
+        }
+    </style>
+    <script lang="javascript">
+        $(function () {
+
+            $("input[dType='time']").timeSelect();
+
+            //选择
+            var onSelect = function (treeId, treeNode) {
+                $("#ORG_ID").val(treeNode.id);
+                $("#ORG_NAM").val(treeNode.name);
+            };
+
+            //初始化树
+            orgTree.init({
+                documentId: "ORG_NAM",
+                hidValueId: "ORG_ID",
+                panelID: 'orgTreeContent',
+                treeULId: 'treeOrg',
+                loadDataUrl: '@Url.Action("GetHallTree", "VirtualHall", new {area = "SYS"})',
+                onSelect: onSelect
+            });
+        });
+    </script>
+}

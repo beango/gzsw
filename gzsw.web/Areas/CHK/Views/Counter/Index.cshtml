@@ -1,0 +1,134 @@
+﻿@using gzsw.web
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@model PetaPoco.Page<gzsw.model.CounterFuncs>
+           
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:100px;">服务厅编号：</td>
+            <td style="width:170px;"><input type="text" name="txtHallNo" id="txtHallNo" value="@ViewBag.HallNo" /> </td>
+            <td style="width: 100px;"> 服务厅名称：</td>
+            <td style="width:120px;"><input type="text" name="txtHallName" id="txtHallName" value="@ViewBag.HallName" /></td>
+            
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+
+        </tr>
+    </table>
+
+</div>
+<div id="toptoolbar"></div>
+
+
+
+    <div class="tablePanel">
+        <table class="tablelist">
+            <thead>
+                <tr>
+                    <th style="width:30px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                    <th style="width:38px;">序号 </th>
+                    <th>服务厅编号</th>
+                    <th>服务厅名</th>
+                    <th>窗口号</th>
+                    <th>备注</th>
+                    <th>最后修改人</th>
+                    <th>最后修改时间</th>
+                </tr>
+            </thead>
+            @{
+                var i = 1;
+            }
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>
+                        <input name="cbId" value="@item.COUNTER_ID" d-hallNo="@item.HALL_NO" type='checkbox' />
+                    </td>
+                    <td>
+                        @(i++)
+                    </td>
+                    <td>
+                        @item.HALL_NO
+                    </td>
+                    <td>
+                        @item.HALL_NAM
+                    </td>
+                    <td>
+                        @item.COUNTER_ID
+                    </td>
+                    <td>
+                        @item.NOTE
+                    </td>
+                    <td>
+                        @item.MODIFY_ID
+                    </td>
+                    <td>
+                        @(item.MODIFY_DTIME != null ? item.MODIFY_DTIME.GetValueOrDefault().ToString("yyyy-MM-dd hh:mm:ss") : "")
+                    </td>
+                </tr>
+            }
+        </table>
+        @if (Model.Items.Count < 1)
+        {
+            <div class="l-panel-notDATA">
+                暂无数据
+            </div>
+        }
+        @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+    </div>
+
+@section Head{
+    @Html.StyleSheet("lib/colorbox/colorbox.css")
+    @Html.JavaScript("lib/colorbox/jquery.colorbox.js")
+    @Html.JavaScript("lib/utility/ext.js")
+    <script lang="javascript">
+
+        $(function() {
+            // 查询
+            $("#btnSearch").ligerButton(
+            {
+                text: " 查 询 ",
+                click: function() {
+                    var url = "?hallNo=" + encodeURI($("#txtHallNo").val())
+                        + "&hallName=" + encodeURI($("#txtHallName").val());
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+
+            // 顶部导航
+            var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+            @if (Html.ChkAuth("CHK_COUNTER_VIW"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Detail"), "查看", "CHK_COUNTER_VIW", 450, 400, "hallNo", "@:$('table.tablelist').getSelAttr('d-hallNo')"));
+                @:ligerToolBar.addItem({ line: true });
+            }
+            
+            @if (Html.ChkAuth("CHK_COUNTER_ADD"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIAddButton(Url.Action("Create"), "增加", "CHK_COUNTER_ADD", 600, 500));
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+            @if (Html.ChkAuth("CHK_COUNTER_EDT"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "CHK_COUNTER_EDT", 600, 500, "hallNo", "@:$('table.tablelist').getSelAttr('d-hallNo')"));
+                @:ligerToolBar.addItem({ line: true });
+            }
+            
+            
+            @if (Html.ChkAuth("CHK_COUNTER_DEL"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIDeleteButton(Url.Action("Delete"), "删除", "CHK_COUNTER_DEL", "hallNo", "@:$('table.tablelist').getSelAttr('d-hallNo')"));
+            }
+
+
+        });
+    </script>
+}

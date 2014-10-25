@@ -1,0 +1,53 @@
+﻿ 
+@{
+    var topmenu = TempData["topMenu"] as gzsw.model.SYS_MENU;
+    var treeData = TempData["treeData"] as string;
+}
+<style type="text/css">
+    .gzsw_LeftMenu ul li {
+        border-bottom: 0px;
+        font-size: 12px;
+        padding: 0px;
+    }
+        .gzsw_LeftMenu ul {
+            padding: 0px;
+        }
+        .gzsw_LeftMenu ul li {
+            letter-spacing: 0px;
+        }
+</style>
+<script type="text/javascript">
+    $(function ()
+    { 
+       var dataObj =   @(Html.Raw(treeData));
+        $("#tree1").ligerTree({
+            checkbox: false,
+            onClick:function(result) {
+                if (result != undefined && result.data != undefined) {
+                    tab.removeTabItem('@(topmenu != null ? "tree_"+topmenu.MENU_ID : "-99")');
+                    tab.addTabItem({
+                        tabid:'@(topmenu != null ? "tree_"+topmenu.MENU_ID : "-99")',
+                        text:'@(topmenu != null ? topmenu.MENU_NAM : "实时监控")',
+                        url:  result.data.url.urlstamp(),
+                        callback: function (data) {
+                            resize();
+                        }
+                    });
+                }
+            },
+            data:dataObj  
+        });
+    });
+</script>
+
+ 
+
+<div class="gzsw_LeftMenu">
+    <div class="gzsw_LeftMenu_Title">@(topmenu != null ? topmenu.MENU_NAM : "")</div>
+       
+    <div id="treePanel" style="width: 214px; height: 400px; margin: 5px; float: left; border: 1px solid #ccc;
+        overflow: auto;">
+        <ul id="tree1"></ul>
+    </div>
+
+</div>

@@ -1,0 +1,84 @@
+﻿@using gzsw.model.dto
+@using gzsw.web
+@{
+    ViewBag.Title = "Chart";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+}
+@section Head{ 
+    <!--  图表插件 -->
+    @Html.JavaScript("lib/highcharts/js/highcharts.js")
+    @Html.JavaScript("lib/highcharts/js/modules/exporting.src.js")
+
+    <!-- Tab插件 -->
+    @Html.StyleSheet("lib/wdScrollTab/css/TabPanel.css") 
+    @Html.JavaScript("lib/wdScrollTab/src/Plugins/Fader.js")
+    @Html.JavaScript("lib/wdScrollTab/src/Plugins/TabPanel.js") 
+    @Html.JavaScript("lib/wdScrollTab/src/Plugins/Math.uuid.js")   
+} 
+<script type="text/javascript">
+    
+    // 加载等待人数图表
+    $(function () {
+
+        @if (ViewData["organizeX"] != null && ViewData["waitPersonY"] != null)
+        {
+            <text>
+        $('#waitPersonsContent').highcharts({
+            chart: {
+                type: 'column',
+                margin: [50, 50, 100, 80]
+            },
+            title: {
+                text: '(当前办税排队人数)'
+            },
+            xAxis: {
+                categories: [ @Html.Raw(ViewData["organizeX"])],
+                labels: {
+                    rotation: -45,
+                    align: 'right',
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '排队人数'
+                },
+                allowDecimals: false
+            },
+            legend: {
+                enabled: false
+            },
+            tooltip: {
+                pointFormat: '当前排队人数: <b>{point.y} 位</b>',
+            },
+            series: [{
+                name: 'Population',
+                data: [ @Html.Raw(ViewData["waitPersonY"])],
+                dataLabels: {
+                    enabled: true,
+                    rotation: -90,
+                    color: '#FFFFFF',
+                    align: 'right',
+                    x: 4,
+                    y: 10,
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif',
+                        textShadow: '0 0 3px black'
+                    }
+                }
+            }]
+        });
+    </text>
+
+
+
+        }
+    });
+</script>
+
+<div id="waitPersonsContent" style="width:300px;height:200px"></div>

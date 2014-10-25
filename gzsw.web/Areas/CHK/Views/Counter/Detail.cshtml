@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@model gzsw.controller.CHK.CunterViewModel
+
+<table class="formTable" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="width:120px;" class="tdLeft"> 服务厅：</td>
+        <td>@Html.DisplayFor(model => model.HallName)</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 窗口：</td>
+        <td>@Html.DisplayFor(model => model.CounterId)</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 备注：</td>
+        <td>@Html.DisplayFor(model => model.Note)</td>
+    </tr>
+</table>
+
+<div class="tablePanel">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th><span style="margin-top: 10px;font-weight:bold">排班管理</span></th>
+                <th>
+                    上午值班员工
+                </th>
+                <th>
+                    下午值班员工
+                </th>
+            </tr>
+        </thead>
+        <tr>
+            <td>周一</td>
+            <td>@Html.DisplayFor(model => model.W1A_STAFF_NAME)</td>
+            <td>@Html.DisplayFor(model => model.W1P_STAFF_NAME)</td>
+        </tr>
+        <tr>
+            <td>周二</td>
+            <td>@Html.DisplayFor(model => model.W2A_STAFF_NAME)</td>
+            <td>@Html.DisplayFor(model => model.W2P_STAFF_NAME)</td>
+        </tr>
+        <tr>
+            <td>周三</td>
+            <td>@Html.DisplayFor(model => model.W3A_STAFF_NAME)</td>
+            <td>@Html.DisplayFor(model => model.W3P_STAFF_NAME)</td>
+        </tr>
+        <tr>
+            <td>周四</td>
+            <td>@Html.DisplayFor(model => model.W4A_STAFF_NAME)</td>
+            <td>@Html.DisplayFor(model => model.W4P_STAFF_NAME)</td>
+        </tr>
+        <tr>
+            <td>周五</td>
+            <td>@Html.DisplayFor(model => model.W5A_STAFF_NAME)</td>
+            <td>@Html.DisplayFor(model => model.W5P_STAFF_NAME)</td>
+        </tr>
+        <tr>
+            <td>周六</td>
+            <td>@Html.DisplayFor(model => model.W6A_STAFF_NAME)</td>
+            <td>@Html.DisplayFor(model => model.W6P_STAFF_NAME)</td>
+        </tr>
+        <tr>
+            <td>周日</td>
+            <td>@Html.DisplayFor(model => model.W7A_STAFF_NAME)</td>
+            <td>@Html.DisplayFor(model => model.W7P_STAFF_NAME)</td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,109 @@
+﻿@using gzsw.web
+@{
+    ViewBag.Title = "虚拟大厅管理";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@Html.TitleBaner("系统管理,服务厅管理,虚拟大厅管理")
+<div class="rightinfo">
+    <div class="tools">
+        <ul class="toolbar">
+            <li>
+                大厅名称：<input type="text" name="txtHallName" id="txtHallName"  />
+            </li>
+            <li class="click" id="btnSearch"><span></span>查询</li>
+        </ul>
+    </div>
+    
+    <div class="tblpanel">
+        <ul id="treeHall" class="ztree"></ul>
+        
+    </div>
+
+</div>
+
+@section Head
+{
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+@Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
+@Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
+@Html.JavaScript("lib/ztree/jquery.ztree.exedit-3.5.min.js")
+
+}
+
+<script type="text/javascript">
+
+    var IDMark_A = "_a";
+
+    function addHoverDom(treeId, treeNode) {
+        if (treeNode.parentNode && treeNode.parentNode.id != 1) return;
+        var aObj = $("#" + treeNode.tId + IDMark_A);
+        if (treeNode.enable) {
+            if ($("#diyBtn_" + treeNode.id).length > 0) return;
+            var editStr = "<span class='button edit' id='diyBtn_" + treeNode.id + "' title='" + treeNode.name + "' onfocus='this.blur();'></span>";
+            aObj.append(editStr);
+            var btn = $("#diyBtn_" + treeNode.id);
+            if (btn)
+                btn.bind("click", function() {
+                    window.location = "@Url.Action("Edit", "VirtualHall")?hallNo=" + treeNode.id+"&_"+(new Date()).getTime();
+            });
+        }
+    }
+
+    function removeHoverDom(treeId, treeNode) {
+        if (treeNode.parentNode && treeNode.parentNode.id != 1) return;
+        if (treeNode.enable) {
+            $("#diyBtn_" + treeNode.id).unbind().remove();
+        }
+    }
+
+    function getFontCss(treeId, treeNode) {
+        if (!!treeNode.highlight)
+            return { color: "red", "font-weight": "bold" }
+    }
+
+    $(function() {
+
+        var setting = {
+            async: {
+                enable: false,
+                autoParam: ["id", "name=n"]
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pId",
+                    rootPId: 0
+                }
+            },
+            view: {
+                fontCss: getFontCss,
+                showIcon: false,
+                selectedMulti: false,
+                addHoverDom: addHoverDom,
+                removeHoverDom: removeHoverDom
+            }
+        };
+
+        var loadData = function(name) {
+            $.ajax({
+                async: false,
+                cache: false,
+                type: 'POST',
+                dataType: 'json',
+                data: {hallName:name},
+                url: "@Url.Action("GetHallTree")",
+                success: function (data) {
+                    $.fn.zTree.init($("#treeHall"), setting, data);
+                }
+            });
+        };
+
+
+        loadData();
+
+        $("#btnSearch").on("click", function() {
+            loadData($("#txtHallName").val());
+        });
+    });
+</script>

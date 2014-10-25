@@ -1,0 +1,15 @@
+﻿@model gzsw.model.SYS_NSRHY
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<table class="formTable" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="width:100px;" class="tdLeft">
+            行业名称：
+        </td><td>
+            @Html.DisplayFor(model => model.HY_NAME)</td>
+    </tr>
+</table>

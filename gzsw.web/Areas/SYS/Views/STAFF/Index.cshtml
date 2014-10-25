@@ -1,0 +1,180 @@
+﻿@using gzsw.web;
+@using Microsoft.Ajax.Utilities
+@model PetaPoco.Page<gzsw.model.SYS_STAFF>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:80px;">员工姓名：</td>
+            <td style="width:170px;"><input type="text" name="txtHALLNAM" id="txtHALLNAM" value="@ViewBag.NAM" /> </td>
+            <td style="width:80px;"> 组织机构：</td>
+            <td style="width:120px;">@Html.DropDownList("ddlORGID", ViewBag.UserORG as SelectList, "--请选择--")</td>
+            <td style="width:80px;"> 员工类型：</td>
+            <td style="width:170px;">@Html.DropDownList("ddlSTAFFTYP", @ViewBag.STAFF_TYPLIST as IEnumerable<SelectListItem>)</td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+
+        </tr>
+    </table>
+
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th>序号 </th>
+                <th>
+                    员工编码
+                </th>
+                <th>
+                    员工姓名
+                </th>
+                <th>
+                    组织机构
+                </th>
+                <th>
+                    星级
+                </th>
+                <th>
+                    员工类型
+                </th>
+                <th>
+                    是否参与星级评定
+                </th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.STAFF_ID" type='checkbox' />
+                    <input name="STAR_EVAL_TYP" type="hidden" value="@item.STAR_EVAL_TYP" />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.STAFF_ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.STAFF_NAM)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ORG.ORG_NAM)
+                </td>
+                <td>
+                    @(gzsw.util.EnumHelper.ConvertToE<gzsw.model.SYS_STAFF.STAR_LEVEL_ENUM>(item.STAR_LEVEL.ToString()))
+                </td>
+                <td>
+                    @(gzsw.util.EnumHelper.ConvertToE<gzsw.model.SYS_STAFF.STAFF_TYP_ENUM>(item.STAFF_TYP.ToString()))
+                </td>
+                <td>
+                    @(item.STAR_EVAL_TYP == 1 ? "是" : "否")
+                </td>
+            </tr>
+        }
+
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+
+
+
+
+@section Head{
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+    @Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
+    @Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
+    @Html.JavaScript("lib/utility/ext.js")
+
+    <script type="text/javascript" lang="javascript">
+
+        $(function() {
+            // 注册事件
+            // 查询
+            $("#btnSearch").ligerButton(
+            {
+                text: " 查 询 ",
+                click: function() {
+                    var url = "?nam=" + $("#txtHALLNAM").val() + "&orgid=" + $("#ddlORGID").val()
+                        + "&ORGNAM=" + $("#txtORGNAM").val() + "&stafftype=" + $("#ddlSTAFFTYP").val();
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+
+            var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+            @if (Html.ChkAuth("SYS_STAFF_VIW"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "SYS_STAFF_VIW",450,450));
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+            @if (Html.ChkAuth("SYS_STAFF_ADD"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIAddButton(Url.Action("Create"), "增加", "SYS_STAFF_ADD", 500, 500));
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+            @if (Html.ChkAuth("SYS_STAFF_EDT"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "SYS_STAFF_EDT", 500, 500));
+                @:ligerToolBar.addItem({ line: true });
+            }
+            
+            @if (Html.ChkAuth("SYS_STAFFBUSI_VIW"))
+            {
+                @:ligerToolBar.addItem({
+                @:        text: '业务明细',
+                @:        click: function () {
+                @:            if ($(".tablelist").getSelCount() != 1) {
+                @:                gzsw.dialog.alert("请选择需要操作的单个选项!");return false;
+                @:            }
+                @:            var $Id=$(".tablelist").find("input[type='checkbox']:checked"),$name=$Id.parent().find("input[name='STAR_EVAL_TYP']");
+                @:            if ($name.length < 1 || $name.val() != Number(@((int)gzsw.model.SYS_STAFF.STAFF_TYP_ENUM.前台员工))) {
+                @:                gzsw.dialog.alert("该类型员工没有业务明细!"); return false;
+                @:            }
+                @:            var url = '@Url.Action("StaffBusi")?id=' + $(".tablelist").getSelValue();
+                @:            gzsw.dialog.open({
+                @:                    url: url.urlstamp(),
+                @:                    width: 550,
+                @:                    height: 450,
+                @:                    isReload: false
+                @:             });
+                @:        },
+                @:        icon: 'myaccount'
+                    @:});
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+            @if (Html.ChkAuth("SYS_STAFF_DEL"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIDeleteButton(Url.Action("Delete"), "删除", "SYS_STAFF_DEL"));
+            }
+
+
+        });
+
+    </script>
+}

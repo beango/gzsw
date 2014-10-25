@@ -1,0 +1,25 @@
+﻿@{
+    Layout = null;
+} 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>信息管理系统界面</title>
+</head>
+<frameset rows="88,*,30" cols="*" frameborder="no" border="0" framespacing="0">
+    <frame src="@Url.Action("Top","Home")" name="topFrame" scrolling="No" noresize="noresize" id="topFrame" title="topFrame" />
+    <frameset id="oa_frame" cols="187,5,*" frameborder="no" border="0" framespacing="0">
+        <frame src="@Url.Action("Left","Home")" name="leftFrame" scrolling="No" noresize="noresize" id="leftFrame" title="leftFrame" />
+        <frame src="@Url.Action("Middle", "Home")" name="middleFrame" scrolling="No" noresize="noresize" id="middleFrame" title="middleFrame">
+        </frame>
+        <frame src="@Url.Action("Index","Home")" name="rightFrame" id="rightFrame" title="rightFrame" />
+    </frameset>
+    <frame src="@Url.Action("Bottom","Home")" name="topFrame" scrolling="No" noresize="noresize" id="topFrame" title="topFrame" /> 
+</frameset>
+    <noframes>
+        <body>
+        </body>
+    </noframes>
+
+</html>

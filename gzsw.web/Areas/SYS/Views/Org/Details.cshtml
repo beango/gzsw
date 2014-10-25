@@ -1,0 +1,86 @@
+﻿@model gzsw.model.SYS_ORGANIZE
+
+@{
+    ViewBag.Title = "组织机构";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div class="formbody">
+    <ul class="forminfo">
+        <li>
+            <label>
+                组织机构编码：
+            </label>
+                @Html.DisplayFor(model => model.ORG_ID)
+        </li>
+
+        <li>
+            <label>
+                组织机构名称：
+            </label>
+                @Html.DisplayFor(model => model.ORG_NAM)
+        </li>
+
+        <li>
+            <label>
+                上级组织机构：
+            </label>
+                @string.Join("，", Model.Par_OrgList.Select(obj => obj.ORG_NAM).ToArray())
+        </li>
+
+        <li>
+            <label>
+                负责人：
+            </label>
+                @Html.DisplayFor(model => model.HEAD)
+        </li>
+
+        <li>
+            <label>
+                负责人电话：
+            </label>
+                @Html.DisplayFor(model => model.HEAD_TEL)
+        </li>
+
+        <li>
+            <label>
+                组织机构级别：
+            </label>
+                @Html.DisplayFor(model => model.ORG_LEVEL)
+        </li>
+
+        <li>
+            <label>
+                经度：
+            </label>
+                @Html.DisplayFor(model => model.LONGITUDE)
+        </li>
+
+        <li>
+            <label>
+                纬度：
+            </label>
+                @Html.DisplayFor(model => model.DIMENSION)
+        </li>
+
+        <li>
+            <label>
+                值班领导手机：
+            </label>
+                @Html.DisplayFor(model => model.DUTY_TEL)
+        </li>
+
+        <li>
+            <label>
+                备注：
+            </label>
+                @Html.DisplayFor(model => model.NOTE)
+        </li>
+    </ul>
+</div>
+@section Head{
+    <style type="text/css">
+        body {
+            min-width: 100px;
+        }
+    </style>
+}

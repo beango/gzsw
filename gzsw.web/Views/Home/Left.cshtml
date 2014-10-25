@@ -1,0 +1,92 @@
+﻿@model IEnumerable<gzsw.controller.HomeController.MenuTree>
+@using gzsw.web
+@{
+    ViewBag.Title = "Left";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+    var topmenu = TempData["topMenu"] as gzsw.model.SYS_MENU;
+}
+@section Head{
+    @Html.StyleSheet("layout/css/style.css")
+    <script type="text/javascript">
+        $(function() {
+            //导航切换
+            $(".menuson li").click(function() {
+                $(".menuson li.active").removeClass("active");
+                $(this).addClass("active");
+            });
+
+            $('.title').click(function() {
+                var $ul = $(this).next('ul');
+                $('dd').find('ul').slideUp();
+                if ($ul.is(':visible')) {
+                    $(this).next('ul').slideUp();
+                } else {
+                    $(this).next('ul').slideDown();
+                }
+            });
+            $(".mainNav").click(function () {
+                $(".menuson").find("dt").hide();
+                $(this).next("dt").show();
+            });
+            $(".menuson").find("dt:first").show();
+        })
+    </script>
+    <style type="text/css">
+        body {
+            background: #f0f9fd;
+        }
+    </style>
+} 
+<div style="width: 188px; "   > 
+    
+    <div class="lefttop" style="width:188px;"><span></span>@(topmenu != null ? topmenu.MENU_NAM : "")</div>
+    <dl class="leftmenu">
+        <dd>
+            <ul class="menuson">
+                @if (Model != null)
+                {
+                    foreach (var menu in Model)
+                    {
+                        <li class="mainNav"><cite style="background:none;" ></cite><a style="font-weight: bold;" href="@(menu.url=="#"?"javascript:void(0);return false;":menu.url)" target="rightFrame">@menu.text</a></li>
+                        <dt style="display: none;"> 
+    @foreach (var menuTree in menu.children)
+    {
+        <li style="padding-left: 20px; ">
+            <cite></cite>
+            <a href="@menuTree.url" target="rightFrame">@menuTree.text</a>
+            <i></i>
+        </li>
+        if (menuTree.children != null)
+        {
+            foreach (var menuTree2 in menuTree.children)
+            {
+                <li style="padding-left: 30px;">
+                    <cite></cite>
+                    <a href="@menuTree2.url" target="rightFrame">@menuTree2.text</a>
+                    <i></i>
+                </li>
+                if (menuTree2.children != null)
+                {
+                    foreach (var menuTree3 in menuTree2.children)
+                    {
+                        <li style="padding-left: 45px;">
+                            <cite></cite>
+                            <a href="@menuTree3.url" target="rightFrame">@menuTree3.text</a>
+                            <i></i>
+                        </li>
+
+                    }
+                }
+            }
+        }
+    }
+
+  
+</dt>  
+                    }
+                }
+                
+            </ul>
+        </dd>
+    </dl> 
+</div>

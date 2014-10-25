@@ -1,0 +1,19 @@
+﻿@using gzsw.web
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+}
+@section Head{  
+    @Html.StyleSheet("lib/ligerUI/skins/Aqua/css/ligerui-all.css")
+    @Html.StyleSheet("lib/ligerUI/skins/ligerui-icons.css")
+    @Html.StyleSheet("lib/ligerUI/skins/gzsw-reset.css")
+    @Html.JavaScript("lib/ligerUI/js/ligerui.all.js")
+    @Html.JavaScript("lib/ligerUI/js/plugins/ligerTab.js") 
+    @RenderSection("Head", false)
+    <script type="text/javascript">
+        $(function () {
+            // 初始化 权限/取消复选框
+            $("#chkAll").selInit();
+        }); 
+    </script>
+} 
+@RenderBody()

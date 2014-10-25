@@ -1,0 +1,53 @@
+﻿@using gzsw.model
+@using gzsw.util
+@model gzsw.model.SYS_COUNTER
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<table class="formTable" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="width:120px;" class="tdLeft"> 窗口ID：</td>
+        <td>@Html.DisplayFor(model => model.COUNTER_ID)</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 服务厅：</td>
+        <td>@(Model.Hall != null ? Model.Hall.HALL_NAM : "")</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 启用特呼功能：</td>
+        <td>@(Model.SPEC_FUN_IND ? "是" : "否")</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 状态：</td>
+        <td>@(EnumHelper.ConvertToE<SYS_COUNTER.STATE_ENUM>(Model.STATE.ToString()))</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 最大的业务笔数：</td>
+        <td>@Html.DisplayFor(model => model.MAX_BUSI_CNT)</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 业务组1排队队列：</td>
+        <td>@Html.DisplayFor(model => model.PRI1_BUSI_SER_NAM)</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 业务组2排队队列：</td>
+        <td>@Html.DisplayFor(model => model.PRI2_BUSI_SER_NAM)</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 业务组3排队队列：</td>
+        <td>@Html.DisplayFor(model => model.PRI3_BUSI_SER_NAM)</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 业务组4排队队列：</td>
+        <td>@Html.DisplayFor(model => model.PRI4_BUSI_SER_NAM)</td>
+    </tr>
+    <tr>
+        <td class="tdLeft"> 业务组5排队队列：</td>
+        <td>@Html.DisplayFor(model => model.PRI5_BUSI_SER_NAM)</td>
+    </tr>
+    </table>
+
+    @section Head{
+    }

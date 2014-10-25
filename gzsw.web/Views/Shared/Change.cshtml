@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "修改密码";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.web
+@model gzsw.model.LocalPasswordModel
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <table class="formTable" cellpadding="0" cellspacing="0" style="margin-top: 10px;">
+        <tr>
+            <td style="width:100px;" class="tdLeft">
+                当前密码：
+            </td>
+            <td>
+                @Html.PasswordFor(m => m.OldPassword, new { @style = "padding-left: 1px;" })
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.OldPassword)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">
+                新密码：
+            </td>
+            <td>
+                @Html.PasswordFor(m => m.NewPassword, new { @style = "padding-left: 1px;" })
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.NewPassword)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">
+                确认新密码：
+            </td>
+            <td>
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @style = "padding-left: 1px;" })
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.ConfirmPassword)
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center" colspan="3">
+                <input type="submit" class="l-button" value="确定" />
+            </td>
+        </tr>
+    </table>
+
+}
+
+@section Head
+{
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+}
