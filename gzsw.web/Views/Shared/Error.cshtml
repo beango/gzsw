@@ -5,5 +5,15 @@
     ViewBag.Title = "错误";
 }
 
-    <h1 class="error">错误。</h1>
-    <h2 class="error">处理你的请求时出错。</h2>
+@if (Model != null)
+{
+    gzsw.util.LogHelper.ErrorLog("HandleError", Model.Exception);
+    <p>
+        @Model.Exception.GetType().Name<br />
+        Controller: @Model.ControllerName<br />
+        Action: @Model.ActionName
+</p>
+    <p>Error Details:</p>
+    <p>@Model.Exception.Message</p>
+    <p>@Model.Exception.StackTrace</p>
+}

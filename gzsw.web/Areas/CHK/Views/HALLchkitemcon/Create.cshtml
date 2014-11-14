@@ -1,0 +1,73 @@
+﻿@using gzsw.web
+@model gzsw.controller.CHK.Models.CHK_HALL_CHKITEM_CON_VIEW
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="width:150px;" class="tdLeft">
+                服务厅考核指标编码：
+            </td>
+            <td>
+                @Html.EditorFor(model => model.HALL_CHKITEM_CD)
+                @Html.ValidationMessageFor(model => model.HALL_CHKITEM_CD)
+            </td> 
+           
+        </tr>   
+         <tr>
+            <td style="width:100px;" class="tdLeft">
+                服务厅考核指标名称：
+            </td>
+            <td>
+                @Html.EditorFor(model => model.HALL_CHKITEM_NAM)
+                @Html.ValidationMessageFor(model => model.HALL_CHKITEM_NAM)
+            </td> 
+           
+         </tr> 
+          <tr>
+            <td style="width:100px;" class="tdLeft">
+                服务厅考核指标类型：
+            </td>
+            <td>
+                     @Html.DropDownList("CHKITEM_TYP", ViewBag.CHKITEM_TYP as SelectList, new { @style = "width: 150px;" })
+                @Html.ValidationMessageFor(model => model.CHKITEM_TYP)
+            </td> 
+           
+        </tr> 
+        <tr>
+            <td class="tdLeft"> &nbsp;  </td>
+            <td>
+                <input type="submit" class="l-button" value="提交" />
+            </td>
+            <td> </td>
+        </tr>
+    </table>
+     
+            @Html.Hidden("MODIFY_DTIME",Model.MODIFY_DTIME)
+            @Html.Hidden("MODIFY_ID",Model.MODIFY_ID) 
+}
+
+@section Head{
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+    @Html.JavaScript("lib/jqueryform/jquery.form.js")
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    @Html.JavaScript("lib/utility/ext.js")
+    <style type="text/css">
+        .radiobuttonlist .item {
+            float: left;
+            margin-right: 10px;
+        }
+    </style> 
+    
+}
+
+

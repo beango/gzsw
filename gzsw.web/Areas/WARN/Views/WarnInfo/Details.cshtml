@@ -1,0 +1,116 @@
+﻿@using gzsw.web;
+@model gzsw.model.WARN_INFO_DETAIL
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<table class="formTable" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="width:100px;" class="tdLeft">
+            服务厅：
+        </td>
+        <td>
+            @Model.HALL_NAM
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">
+            预警类型：
+        </td>
+        <td>
+            @Model.WARN_TYP_NAM
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">
+            预警级别：
+        </td>
+        <td>
+            @Model.WARN_LVL_NAM
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">
+            预警原因：
+        </td>
+        <td>
+            @Model.WARN_REASON
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">
+            实际值：
+        </td>
+        <td>
+            @Model.REAL_VALUE
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">
+            处理状态：
+        </td>
+        <td>
+            @Model.STATE_NAM
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">
+            处理人：
+        </td>
+        <td>
+            @Model.HANDLE_USER
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">
+            处理时间：
+        </td>
+        <td>
+            @Model.HANDLE_TIME
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">
+            预警处理：
+        </td>
+        <td>
+            @Model.WARN_METHOD
+        </td>
+    </tr>
+    @if (Model.WARN_TYP == 1)
+    {
+        <tr>
+            <td class="tdLeft">
+                纳税人或识别码：
+            </td>
+            <td>
+                @Model.NSR_SBM
+            </td>
+        </tr>
+    }
+
+    @if (Model.WARN_TYP == 9)
+    {
+        <tr>
+            <td class="tdLeft">
+                员工编码：
+            </td>
+            <td>
+                @Model.STAFF_NAM
+            </td>
+        </tr>
+    }
+    @if (Model.WARN_TYP == 1)
+    {
+        <tr>
+            <td class="tdLeft">
+                交易业务流水号：
+            </td>
+            <td>
+                @Model.CHQUEUE_TRANSCODEID
+            </td>
+        </tr>
+    }
+
+</table>

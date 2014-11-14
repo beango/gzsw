@@ -1,0 +1,149 @@
+﻿@{
+    ViewBag.Title = "考勤数据修正";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model PetaPoco.Page<gzsw.model.Subclasses.STAT_STAFF_CHKSTAT_M_SUB>
+@{
+    var Day = int.Parse(DateTime.Now.AddMonths(-1).ToString("yyyyMM"));
+}
+
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:100px;">服务厅：</td>
+            <td style="width:170px;">
+                @Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)
+            </td>
+            <td style="width: 100px;"> 月份：</td>
+            <td style="width:120px;">
+                <input type="text" name="txtStatMo" id="txtStatMo" value="@ViewBag.StatMo" onclick="WdatePicker({ dateFmt: 'yyyy-MM' })" />
+            </td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+
+        </tr>
+    </table>
+
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:30px;">
+                    <input id="chkAll" name="chkAll" type="checkbox" />
+                </th>
+                <th style="width:38px;">序号 </th>
+                <th>员工编码</th>
+                <th>员工名称</th>
+                <th title="上班天数">上班</th>
+                <th title="迟到天数">迟到</th>
+                <th title="早退天数">早退</th>
+                <th title="未签退次数">未签退</th>
+                <th title="事假天数">事假</th>
+                <th title="病假天数">病假</th>
+                <th title="丧假天数">丧假</th>
+                <th title="婚假天数">婚假</th>
+                <th title="年休假天数">年休假</th>
+                <th title="工伤假天数">工伤假</th>
+                <th title="加班补休天数">加班补休</th>
+                <th title="陪产假天数">陪产假</th>
+                <th title="产假天数">产假</th>
+                <th title="公差天数">公差</th>
+                <th title="会议天数">会议</th>
+                <th title="学习天数">学习</th>
+                <th title="旷工天数">旷工</th>
+                <th title="其他天数">其他</th>
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.STAT_MO" d-staffid="@item.STAFF_ID" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>@item.STAFF_ID</td>
+                <td>@item.STAFF_NAM</td>
+                <td>@item.COR_WORK_DAY_CNT</td>
+                <td>@item.COR_LAT_DAY_CNT</td>
+                <td>@item.COR_EAR_DAY_CNT</td>
+                <td>@item.COR_NONSIGN_OUT_CNT</td>
+                <td>@item.COR_HOLLI_TYP1_CNT</td>
+                <td>@item.COR_HOLLI_TYP2_CNT</td>
+                <td>@item.COR_HOLLI_TYP3_CNT</td>
+                <td>@item.COR_HOLLI_TYP4_CNT</td>
+                <td>@item.COR_HOLLI_TYP5_CNT</td>
+                <td>@item.COR_HOLLI_TYP6_CNT</td>
+                <td>@item.COR_HOLLI_TYP7_CNT</td>
+                <td>@item.COR_HOLLI_TYP8_CNT</td>
+                <td>@item.COR_HOLLI_TYP9_CNT</td>
+                <td>@item.COR_HOLLI_TYP10_CNT</td>
+                <td>@item.COR_HOLLI_TYP11_CNT</td>
+                <td>@item.COR_HOLLI_TYP12_CNT</td>
+                <td>@item.COR_ABSENT_DAY_CNT</td>
+                <td>@item.COR_HOLLI_TYP13_CNT</td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head
+{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+}
+
+<script type="text/javascript">
+    $(function() {
+        // 查询
+        $("#btnSearch").ligerButton(
+                {
+                    text: " 查 询 ",
+                    click: function() {
+                        var url = "?statMo=" + encodeURI($("#txtStatMo").val())
+                            + "&orgId=" + encodeURI($("#ddlORGID").val());
+                        location.href = url.urlstamp();
+                    },
+                    icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+                });
+
+            // 顶部导航
+            var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+            @if (Html.ChkAuth("CHK_STAT_STAFF_CHKSTAT_M_VIW"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "CHK_STAT_STAFF_CHKSTAT_M_VIW", 650, 520, "staffId", "@:$('table.tablelist').getSelAttr('d-staffId')"));
+                @:ligerToolBar.addItem({ line: true });
+            }
+            
+            
+            @if (Html.ChkAuth("CHK_STAT_STAFF_CHKSTAT_M_EDT") && ViewBag.Stat <= Day)
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "CHK_STAT_STAFF_CHKSTAT_M_EDT", 650, 500, "staffId", "@:$('table.tablelist').getSelAttr('d-staffId')"));
+            }
+        
+            
+
+    });
+</script>

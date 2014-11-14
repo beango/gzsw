@@ -29,14 +29,15 @@ namespace gzsw.controller.SYS
             ViewBag.SNAM = snam;
             ViewBag.ORGID = orgid;
             ViewBag.ORGNAM = orgnam;
-            ViewBag.UserORG = new SelectList(UserState.UserOrgs.Where(obj => obj.ORG_LEVEL == 4)
+            var orgall = new SYS_USER_DAL().GetUserORG(UserState.UserID);
+            if (string.IsNullOrEmpty(orgid) && orgall != null)
+                orgid = orgall.FirstOrDefault(obj => obj.ORG_LEVEL == 4).ORG_ID;
+
+            ViewBag.UserORG = new SelectList(orgall.Where(obj => obj.ORG_LEVEL == 4)
                 , "ORG_ID", "ORG_NAM", orgid);
 
-            var orgs = UserState.UserOrgs.Select(obj => obj.ORG_ID);
-            if (UserState.UserID == "admin")
-            {
-                orgs = DaoOrganize.FindList().Select(obj => obj.ORG_ID);
-            }
+            var orgs = orgall.Select(obj => obj.ORG_ID);
+           
             if (!string.IsNullOrEmpty(orgid))
             {
                 orgs = orgs.Where(obj => obj == orgid);

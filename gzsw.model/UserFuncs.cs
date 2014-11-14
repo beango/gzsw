@@ -17,15 +17,4 @@ namespace gzsw.model
 
         public byte FUNCTION_TYP { get; set; }
     }
-
-    public class UserOrgs
-    {
-        public string ORG_ID { get; set; }
-
-        public string ORG_NAM { get; set; }
-
-        public string PAR_ORG_ID { get; set; }
-
-        public int ORG_LEVEL { get; set; }
-    }
 }

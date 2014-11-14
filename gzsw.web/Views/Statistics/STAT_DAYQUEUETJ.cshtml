@@ -25,45 +25,56 @@
     @Html.JavaScript("lib/highcharts/js/highcharts.js")
     @Html.JavaScript("lib/highcharts/js/modules/exporting.src.js")
     @Html.JavaScript("lib/highcharts/js/highcharts-3d.js")
-   <!-- 图表排序脚本 --> 
+    <!-- 图表排序脚本 --> 
     @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.js")
     @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.widgets.min.js") 
-      <!-- 图表排序 -->
-@Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.pager.js")
+    <!-- 图表排序 -->
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.pager.js")
     <style type="text/css">
-        .ztree{z-index:9999;}
+        .ztree { z-index: 9999; }
+    </style> 
+@if (Model == null || Model.Count() <= 0)
+{
+    <style type="text/css">
+        .tablelist th {
+            background-image: none;
+            font-weight: normal;
+        }
     </style>
+}
     <script type="text/javascript">
-        $(function () {
-            // 表格数据排序 
-            $("#datatable").tablesorter()
-                    .tablesorterPager({container: $("#pager")}); 
-            //初始化树
-            orgTree.init({
-                documentId: "txtORG_NAM", 
-                loadDataUrl: '@Url.Action("GetHallTree", "VirtualHall", new {area = "SYS"})',
+    $(function() {
+        // 表格数据排序
+        $("#datatable").tablesorter({}).tablesorterPager({ container: $("#pager") });
+        //初始化树
+        orgTree.init({
+            documentId: "txtORG_NAM",
+            loadDataUrl: '@Url.Action("GetHallTree", "VirtualHall", new { area = "SYS", @level =4})',
                 onSelect: onSelect
             });
 
             // 组织结构选择
-            function onSelect(treeId, treeNode) { 
+            function onSelect(treeId, treeNode) {
                 if (treeNode != undefined) {
                     $("#txtORG_NAM").val(treeNode.name);
                     $("#hdORG_NAM").val(treeNode.id);
-                } 
+                }
             }
+
             // 查询
-            $("#btnSearch").click(function () { 
-                var url = location.href;                 url =  url.getUrl({
+            $("#btnSearch").click(function() {
+                var url = location.href;
+                url = url.getUrl({
                     _t: Date.parse(new Date()),
                     txtBeginTime: $("#txtBeginTime").val(),
                     txtEndTime: $("#txtEndTime").val(),
                     hdORG_NAM: $("#hdORG_NAM").val(),
-                    txtORG_NAM:$("#txtORG_NAM").val()
-                });                location.href = url; 
+                    txtORG_NAM: $("#txtORG_NAM").val()
+                });
+                location.href = url;
             });
             // 根据Table 生成图表
-            $(function () {
+            $(function() {
                 var saturationOption = {
                     chart: {
                         type: 'column',
@@ -71,175 +82,267 @@
                         options3d: {
                             enabled: true,
                             alpha: 0,
-                            beta:0,
+                            beta: 0,
                             depth: 12,
                             viewDistance: 25
                         }
-                      /*  ,margin: [50, 50, 100, 80]*/
+                        /*  ,margin: [50, 50, 100, 80]*/
                     },
-                    title: { text: '个人业务量分布图   <br/><span style=\"font-size:12px;\">(@(ViewData["organizeName"]))</span>' },
+                    title: { text: '个人业务量分布图   <br/><span style=\"font-size:12px;\">(@(ViewData["beginTime"]) ~ @(ViewData["txtEndTime"]))</span>' },
                     xAxis: {
-                        categories:  @Html.Raw(ViewData["x"]) 
+                        categories: @Html.Raw(ViewData["x"])
                     },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: '业务量'
-                        }
-                        /*  ,
-                           allowDecimals: true */
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: '业务量'
+                    }
+                    /*  ,
+                       allowDecimals: true */
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y} </b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [
+                    {
+                        name: '呼叫量',
+                        data: @Html.Raw(ViewData["y1"]),
+                        color: "#52ab46"
                     },
-                    tooltip: {
-                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                            '<td style="padding:0"><b>{point.y} </b></td></tr>',
-                        footerFormat: '</table>', 
-                        shared: true,
-                        useHTML: true
+                    {
+                        name: '办理量',
+                        data: @Html.Raw(ViewData["y2"]),
+                        color: "#ccd451"
                     },
-                    legend: {
-                        enabled: false
-                    }, 
-                    series: [
-                     { 
-                          name: '呼叫量',
-                          data: @Html.Raw(ViewData["y1"]),
-                              color: "#52ab46"
-                          },
-                          { 
-                              name: '办理量',
-                              data: @Html.Raw(ViewData["y2"]),
-                              color: "#ccd451"
-                              },
-                          { 
-                              name: '弃号量',
-                              data: @Html.Raw(ViewData["y3"]),
-                              color: "#ff9e9e"
-                          }
-                    ]
-                };
-                var saturationChart =  new Highcharts.Chart(saturationOption);
-
+                    {
+                        name: '弃号量',
+                        data: @Html.Raw(ViewData["y3"]),
+                        color: "#ff9e9e"
+                    }
+                ]
+            };
+            var saturationChart = new Highcharts.Chart(saturationOption);
+        });
+        // 打印报表
+        $("#btnOutPut").click(function() {
+            gzsw.dialog.confirm({
+                msg: '是否导出该报表？',
+                yesFun: function (index) {
+                    layer.close(index);
+                    // 导出报表
+                    var url = '@Url.Action("STAT_DAYQUEUETJ_OutPut", "Statistics")';
+                    url= url.getUrl({
+                        _t: Date.parse(new Date()),
+                        txtBeginTime: $("#txtBeginTime").val(),
+                        txtEndTime: $("#txtEndTime").val(),
+                        hdORG_NAM: $("#hdORG_NAM").val(),
+                        txtORG_NAM: $("#txtORG_NAM").val()
+                    }); 
+                    location.href = url;
+                }
             });
         });
-    </script>
-}
- 
-<!-- 查询条件 -->
-<div class="l-panel-search">
-    <table class="tabSearchList">
-        <tbody>
-            <tr>
-                <td style="width:85px;">开始时间：</td>
-                <td style="width:170px;"><input type="text" readonly="readonly" onclick="WdatePicker()" value="@(ViewData["beginTime"])" name="txtBeginTime" id="txtBeginTime"></td>
-                <td style="width: 85px;"> 结束时间：</td>
-                <td style="width:170px;"><input type="text" readonly="readonly" onclick="WdatePicker()" value="@(ViewData["txtEndTime"])" name="txtEndTime" id="txtEndTime"></td>
-                <td style="width: 100px;"> 组织机构名称：</td>
-                <td style="width:170px;">
-                    <input type="text" name="txtORG_NAM" value="@(ViewData["organizeName"])" readonly="readonly" id="txtORG_NAM">
-                    <div id="orgTreeContent" style="display: none; position: absolute; background-color: #FFF; border: 1px solid #ccc;">
-                        <ul id="treeOrg" class="ztree" style="clear:both;"></ul>
-                    </div>
-                    <input type="hidden" value="@(ViewData["organizeId"])" id="hdORG_NAM" name="hdORG_NAM" />
-                </td>
-                <td>
-                    <div id="btnSearch" class="l-button l-button-hasicon" ligeruiid="btnSearch" style="width: 60px; margin-left: 10px;">
-                        <div class="l-button-l"></div>
-                        <div class="l-button-r"></div>
-                        <span> 查 询 </span>
-                        <img src="/Content/lib/ligerUI/skins/icons/search.png">
-                    </div>
-                </td>
-            </tr>
 
-        </tbody>
-    </table>
-</div>
-<!-- 内容 -->
-<div class="tablePanel" style="padding-top:5px;">
-    <table id="datatable" class="tablelist tablesorter tablesorter-default" cellpadding="0" cellspacing="0">
-        <thead>
-            <tr>
-                <th style="text-align: center; background-image: none;  " colspan="2">  </th>
-                <th style="text-align: center; background-image: none;  " colspan="2"> 呼叫  </th>
-                <th style="text-align: center; background-image: none;  " colspan="2"> 办理 </th>
-                <th style="text-align: center; background-image: none;  " colspan="2"> 弃号 </th>
-            </tr>
-            <tr>
-                <th style="background-image: none; " >序号</th>
-                <th style="background-image: none; ">员工名称</th>
-                <th style="background-image: none; ">呼叫量</th>
-                <th style="background-image: none; ">呼叫量占比</th>
-                <th style="background-image: none; ">办理量</th>
-                <th style="background-image: none; ">办理量占比</th>
-                <th style="background-image: none; ">弃号量</th>
-                <th style="background-image: none; ">弃号量占比</th>
-            </tr>
-        </thead>
-        @if (Model != null && Model.Count() > 0)
-        {
-            foreach (var item in Model)
-            {
-                <tr>
-                    <td>@(++index)</td>
-                    <td>@item.STAFF_NAM</td>
-                    <td>@item.STAFF_QDDTJ_TICKETNUM</td>
-                    <td>@item.DoAllBFB %</td>
-                    <td>@item.STAFF_QDDTJ_RLL</td>
-                    <td>@item.NoDoBFB %</td>
-                    <td>@item.STAFF_QDDTJ_QHNUM</td>
-                    <td>@item.NoDoCountBFB %</td>
-                </tr>
+        // 查看员工详细信息
+        $("#datatable").click(function(e) {
+            var obj = $(e.target);
+            if (obj.hasClass('tablesorter-header-inner')) {
+                $("#datatable").find("span[tag='show']").html("+");
             }
 
-            <tfoot>
+            if (obj.attr("tag") == "show") {
+                // 当前选中行对象
+                var nowSelObj = $(obj).parent().parent();
+                // 下级面板对象
+                var nowSelObjMore = nowSelObj.next();
+                //var nodePanelIsShow =
+                if (nowSelObjMore.attr("tag") == "rowMore") {
+                    // 已经加载个人数据
+                    //$("#datatable").find("tr[tag='rowMore']").hide();
+                    if (nowSelObj.attr('issel') == "true") {
+                        nowSelObjMore.toggle();
+                    } else {
+                        $("#datatable").find("tr[tag='rowMore']").hide();
+                        nowSelObjMore.show();
+                        $("#datatable").find("tr[no]").attr("issel", "false");
+                        nowSelObj.attr("issel", "true");
+                    }
+                } else {
+                    $("#datatable").find("tr[tag='rowMore']").hide();
+                    // 没有加载个人数据
+                    var newRow = $(" <tr isSel='true' tag='rowMore'> <td colspan=\"9\"  style=\"text-align:center\" > 数据加载中...</td> </tr>");
+                    nowSelObj.after(newRow);
+                    // 加载数据
+                    var url = '@Url.Action("Person_STAT_DAYQUEUETJ", "Statistics")?orgId=' + $("#hdORG_NAM").val() + '&personNo=' + $(nowSelObj).attr("no");
+                    url = url.urlstamp();
+                    $.ajax({
+                        url: url,
+                        success: function(resultHtml) {
+                            newRow.find("td").html(resultHtml);
+                        },
+                        error: function() {
+                            newRow.find("td").html("数据库查询繁忙，请稍后再试");
+                        }
+                    });
+                    $("#datatable").find("tr[no]").attr("issel", "false");
+                    nowSelObj.attr("issel", "true");
+                }
+
+                if ($(obj).html() == "-") {
+
+                    $(obj).html("+");
+                } else {
+                    $("#datatable").find("span[tag='show']").html("+");
+                    $(obj).html("-");
+                }
+            }
+        });
+    });
+    </script>
+} 
+    <!-- 查询条件 -->
+    <div class="l-panel-search"  >
+        <table class="tabSearchList">
+            <tbody>
                 <tr>
-                    <td colspan="2" style="text-align: center; font-weight: bold; font-size: 14px;">合计</td>
-                    <td>@value1</td>
-                    <td>@((value1 / valueCount).ToPercent())</td>
-                    <td>@value2</td>
-                    <td>@((value2 / valueCount).ToPercent())</td>
-                    <td>@value3</td>
-                    <td>@((value3 / valueCount).ToPercent())</td>
-                </tr>
-            </tfoot>
-        }
+                    <td style="width: 85px;">开始时间：</td>
+                    <td style="width: 140px;"><input type="text" readonly="readonly" onclick=" WdatePicker() " value="@(ViewData["beginTime"])" style="width:100px;" name="txtBeginTime" id="txtBeginTime"></td>
+                    <td style="width: 85px;"> 结束时间：</td>
+                    <td style="width: 140px;"><input type="text" readonly="readonly" onclick=" WdatePicker() " value="@(ViewData["txtEndTime"])" style="width: 100px;" name="txtEndTime" id="txtEndTime"></td>
+                    <td style="width: 85px;"> 组织机构：</td>
+                    <td style="width: 170px;">
+                        <input type="text" style="width:140px;" name="txtORG_NAM" value="@(ViewData["organizeName"])" readonly="readonly" id="txtORG_NAM">
+                        <div id="orgTreeContent" style="display: none; position: absolute; background-color: #FFF; border: 1px solid #ccc;">
+                            <ul id="treeOrg" class="ztree" style="clear: both;"></ul>
+                        </div>
+                        <input type="hidden" value="@(ViewData["organizeId"])" id="hdORG_NAM" name="hdORG_NAM" />
+                    </td>
+                    <td style="width:90px;">
+                        <div id="btnSearch" class="l-button l-button-hasicon" ligeruiid="btnSearch" style="width: 60px;">
+                            <div class="l-button-l"></div>
+                            <div class="l-button-r"></div>
+                            <span> 查 询 </span>
+                            <img src="@Html.Url("Content/lib/ligerUI/skins/icons/search.png")">
+                        </div> 
+                    </td>
+                    <td> 
+                        <div id="btnOutPut" class="l-button l-button-hasicon" ligeruiid="btnSearch" style="width: 80px; ">
+                            <div class="l-button-l"></div>
+                            <div class="l-button-r"></div>
+                            <span>  &nbsp;导出excel </span>
+                            <img src="@Html.Url("Content/lib/ligerUI/skins/icons/view.gif")">
+                        </div>
+                    </td>
+                </tr> 
+            </tbody>
+        </table>
+    </div>
 
-    </table>
-
-    @if (Model == null || Model.Count <= 0)
+    @if (Model == null || Model.Count() <= 0)
     {
-        <div class="l-panel-notDATA">
-            暂无数据
-        </div>
+        <style type="text/css">
+            .tablelist th {
+                background-image: none;
+
+            }
+        </style>
     }
-    else
-    {
+    <!-- 内容 -->
+    <div class="tablePanel" style="padding-top: 5px;">
+        <table id="datatable" class="tablelist tablesorter tablesorter-default" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr> 
+                    <th style="text-align: center; background-image: none;" colspan="3">  </th>
+                    <th style="text-align: center;" colspan="2"> 呼叫  </th>
+                    <th style="text-align: center;" colspan="2"> 办理 </th>
+                    <th style="text-align: center;" colspan="2"> 弃号 </th>
+                </tr>
+                <tr>
+                    <th style="text-align: center; background-image: none;width:15px;"></th>
+                    <th>序号</th>
+                    <th>员工名称</th>
+                    <th>呼叫量</th>
+                    <th>呼叫量占比</th>
+                    <th>办理量</th>
+                    <th>办理量占比</th>
+                    <th>弃号量</th>
+                    <th>弃号量占比</th>
+                </tr>
+            </thead>
+            @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    <tr no ="@item.QDDTJ_SNO">
+                        <td><span style="font-size: 16px;" tag="show">+</span></td>
+                        <td>@(++index)</td>
+                        <td>@item.STAFF_NAM</td>
+                        <td>@item.STAFF_QDDTJ_TICKETNUM</td>
+                        <td>@item.DoAllBFB %</td>
+                        <td>@item.STAFF_QDDTJ_RLL</td>
+                        <td>@item.NoDoBFB %</td>
+                        <td>@item.STAFF_QDDTJ_QHNUM</td>
+                        <td>@item.NoDoCountBFB %</td>
+                    </tr>
+
+                }
+
+                <tfoot>
+                    <tr>
+                        <td colspan="3" style="text-align: center; font-weight: bold; font-size: 14px;">合计</td>
+                        <td>@value1</td>
+                        <td>@((value1/valueCount).ToPercent())</td>
+                        <td>@value2</td>
+                        <td>@((value2/valueCount).ToPercent())</td>
+                        <td>@value3</td>
+                        <td>@((value3/valueCount).ToPercent())</td>
+                    </tr>
+                </tfoot>
+            }
+
+        </table>
+
+        @if (Model == null || Model.Count <= 0)
+        {
+            <div class="l-panel-notDATA">
+                暂无数据
+            </div>
+        }
+        else
+        {
             <div id="pager" class="l-panel-bar">
-        <div class="l-panel-bbar-inner">
-            <div class="l-bar-group  l-bar-message">
-                @*<span class="l-bar-text">当前第1页/共1页 (共:18条记录/每页显示:20)</span>*@
-            </div><div class="l-bar-group">
-                <select class="pagesize">
-                    <option selected="selected" value="10">10</option>
-                    <option value="30">30</option>
-                    <option value="40">40</option>
-                    <option value="50">50</option>
-                </select>
-            </div>
-            <div class="l-bar-separator"></div>
-            <div class="l-bar-group">
-                <div class="l-bar-button l-bar-btnfirst">
-                    <span title="首页" class="first"></span>
-                </div>
-                <div class="l-bar-button l-bar-btnprev">
-                    <span title="上一页" class="prev"></span>
-                </div>
-            </div>
-            <div class="l-bar-separator"></div>
-             <div class="l-bar-group">
-            <span class="pcontrol">
-                <input type="text" style="width:30px;height:14px;" readonly="readonly" class="pagedisplay" /> 
+                <div class="l-panel-bbar-inner">
+                    <div class="l-bar-group  l-bar-message">
+                        @*<span class="l-bar-text">当前第1页/共1页 (共:18条记录/每页显示:20)</span>*@
+                    </div><div class="l-bar-group">
+                              <select class="pagesize">
+                                  <option selected="selected" value="10">10</option>
+                                  <option value="30">30</option>
+                                  <option value="40">40</option>
+                                  <option value="50">50</option>
+                              </select>
+                          </div>
+                    <div class="l-bar-separator"></div>
+                    <div class="l-bar-group">
+                        <div class="l-bar-button l-bar-btnfirst">
+                            <span title="首页" class="first"></span>
+                        </div>
+                        <div class="l-bar-button l-bar-btnprev">
+                            <span title="上一页" class="prev"></span>
+                        </div>
+                    </div>
+                    <div class="l-bar-separator"></div>
+                    <div class="l-bar-group">
+                        <span class="pcontrol">
+                            <input type="text" style="width: 30px; height: 14px;" readonly="readonly" class="pagedisplay" /> 
             </span>
                 </div>  
             <div class="l-bar-separator"></div>

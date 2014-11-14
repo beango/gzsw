@@ -1,4 +1,5 @@
-﻿using PetaPoco;
+﻿using gzsw.model;
+using PetaPoco;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace gzsw.dal.dao
     {
         public void IMPORT_NSR(Guid batchid)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
             db.Execute("exec IMPORT_NSR @0", batchid);
         }
     }

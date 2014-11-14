@@ -1,0 +1,80 @@
+﻿@using gzsw.web
+@model gzsw.model.CHK_HALL_ITEM_MARK
+ 
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="width: 160px;" class="tdLeft">服务厅:</td>
+            <td>
+                     
+             @Html.DropDownList("HALL_NO", ViewBag.UserORG as SelectList, new { @style = "width: 150px;" })
+                @Html.ValidationMessageFor(m => m.HALL_NO)
+                @Html.Hidden("MODIFY_ID",Model.MODIFY_ID)
+                @Html.Hidden("MARK_TIME",Model.MARK_TIME)
+                @Html.Hidden("SEQ",Model.SEQ)
+                @Html.Hidden("MODIFY_DTIME",Model.MODIFY_DTIME)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">服务厅考核指标类型:</td>
+            <td>
+                
+                @Html.DropDownList("CHKITEM_TYP", ViewBag.CHKITEM_TYP as SelectList, new { @style = "width: 150px;" })
+                 @Html.ValidationMessageFor(m => m.CHKITEM_TYP)
+            </td>
+        </tr>
+        <tr>
+            <td  class="tdLeft">服务厅考核指标:</td>
+            <td>
+                @Html.DropDownList("HALL_CHKITEM_CD", ViewBag.HALL_CHKITEM_CD as SelectList, new { @style = "width: 150px;" })
+                 @Html.ValidationMessageFor(m => m.HALL_CHKITEM_CD)
+            </td>
+            <td> 
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">扣分:</td>
+            <td>
+                @Html.TextBoxFor(m => m.DEDUCT)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.DEDUCT)
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="tdLeft">原因:</td>
+            <td> 
+                      @Html.TextAreaFor(m => m.REASON, new { @style = "width: 150px;" })
+                     @Html.ValidationMessageFor(m => m.REASON)
+            </td>
+            <td> 
+
+            </td>
+        </tr> 
+        <tr>
+            <td colspan="3" style="text-align: center">
+                <input id="btnSubmit" type="submit" class="l-button" value="提交" />
+            </td>
+        </tr>
+    </table>
+}
+@section Head
+{
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+
+     <script type="text/javascript">
+         $(function () {
+             var orgid = '@ViewBag.orgId';
+            $("#HALL_NO").val(orgid);
+        });
+    </script>
+}

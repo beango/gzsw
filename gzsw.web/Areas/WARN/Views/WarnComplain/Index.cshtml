@@ -1,0 +1,107 @@
+﻿@using gzsw.web;
+@model PetaPoco.Page<gzsw.model.WARN_COMPLAIN_TYP_CON>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width: 100px;">投诉类型名称：</td>
+            <td style="width: 170px;"> 
+                 @Html.DropDownList("dll_COMPLAIN_NAM", ViewBag.WarnComplainlist as SelectList, "----请选择----", new { @style = "width: 145px;" })
+            </td>
+             <td style="width:60px;">服务厅:</td>
+            
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width: 40px;">
+                    <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th>序号</th>
+                <th>投诉类型名称
+                </th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@(item.COMPLAIN_TYP_ID)" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @item.COMPLAIN_NAM
+                </td>
+            </tr>
+        }
+
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/utility/ext.js")
+    <script lang="javascript">
+        $(function () {
+            // 注册事件
+            var tem = '@ViewBag.TITL';
+            $("#dll_COMPLAIN_NAM").val(tem);
+            // 查询
+            $("#btnSearch").ligerButton(
+            {
+                text: " 查 询 ",
+                click: function () {
+                    var url = "?titl=" + $("#txtTITLE").val();
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+            // 顶部导航
+            var bar = $("#toptoolbar").ligerToolBar();
+
+              @if (Html.ChkAuth("WARN_COMPLAIN_TYP_CON_EDL"))
+              {
+                            @:bar.addItem(@Html.AuthAddButton("WARN_COMPLAIN_TYP_CON_ADD", Url.Action("Create", "WarnComplain"), "新增", 500, 400));
+                                                    @:bar.addItem({ line: true });
+                                    }
+
+                        @if (Html.ChkAuth("WARN_COMPLAIN_TYP_CON_EDL"))
+                        {
+                            @:bar.addItem(@Html.LigerUIEditButton(Url.Action("Edit", "WarnComplain"), "修改", "WARN_COMPLAIN_TYP_CON_EDL", 600, 400));
+
+                            @:bar.addItem({ line: true });
+                        }
+
+            
+                      
+              @if (Html.ChkAuth("WARN_COMPLAIN_TYP_CON_EDL"))
+              {
+                  @:bar.addItem(@Html.AuthDelButton("WARN_COMPLAIN_TYP_CON_DEL", Url.Action("Delete", "WarnComplain")));
+            
+              }
+        });
+    </script>
+}

@@ -16,6 +16,7 @@ var video = function () {
     *   默认初始化参数
     */
     var _defaultInit = {
+        downloadUrl:"",
         screen: "divPlugin", //要播放的DIV的Id，
         width: 500,
         height: 300,
@@ -53,7 +54,11 @@ var video = function () {
 
         // 检查插件是否已经安装过
         if (-1 == WebVideoCtrl.I_CheckPluginInstall()) {
-            alert("您还未安装过插件，双击开发包目录里的WebComponents.exe安装！");
+            var ret = confirm("您还未安装过插件,是否下载安装?");
+            if (ret) {
+                window.open(_defaultInit.downloadUrl);
+            }
+            //alert("您还未安装过插件，双击开发包目录里的WebComponents.exe安装！");
             return;
         }
 
@@ -261,13 +266,81 @@ var video = function () {
     };
 
 
+    /*
+    *   回放
+    **/
+    var startPlayback = function(iChannelID, szStartTime, szEndTime) {
+        var oWndInfo = WebVideoCtrl.I_GetWindowStatus(iWndIndex);
+        if (oWndInfo != null) { // 已经在播放了，先停止
+            WebVideoCtrl.I_Stop();
+        }
 
+        var date = new Date();
+        if (!szStartTime) {
+            szStartTime = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " 00:00:00";
+        }
+        if (!szEndTime) {
+            szEndTime = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " 23:59:59";
+        }
+
+        WebVideoCtrl.I_StartPlayback(_defaultLogin.szIP, {
+            iChannelID: iChannelID,
+            szStartTime: szStartTime,
+            szEndTime: szEndTime
+        });
+    };
+    //倒放
+    var reversePlayback = function (iChannelID, szStartTime, szEndTime) {
+        var oWndInfo = WebVideoCtrl.I_GetWindowStatus(iWndIndex);
+        if (oWndInfo != null) {// 已经在播放了，先停止
+            WebVideoCtrl.I_Stop();
+        }
+
+        WebVideoCtrl.I_ReversePlayback(szIP, {
+            iChannelID: iChannelID,
+            szStartTime: szStartTime,
+            szEndTime: szEndTime
+        });
+    };
+
+    //暂停
+    var pausePlay = function() {
+        var oWndInfo = WebVideoCtrl.I_GetWindowStatus(iWndIndex);
+        if (oWndInfo != null) { // 已经在播放了，先停止
+            WebVideoCtrl.I_Pause();
+        }
+    };
+    
+    //慢放
+    var playSlow = function() {
+        var oWndInfo = WebVideoCtrl.I_GetWindowStatus(iWndIndex);
+        if (oWndInfo != null) {
+            WebVideoCtrl.I_PlaySlow();
+        }
+    };
+
+    //快放
+    var playFast = function () {
+        var oWndInfo = WebVideoCtrl.I_GetWindowStatus(iWndIndex);
+        if (oWndInfo != null) {
+            WebVideoCtrl.I_PlayFast();
+        }
+    };
+    //是否播放
+    var isInPlay = function() {
+        var oWndInfo = WebVideoCtrl.I_GetWindowStatus(iWndIndex);
+        return oWndInfo != null;
+    };
     return {
         init: function (options) {
             _init(options);
         },
         login: function (options) {
             _login(options);
+        },
+        //是否播放
+        isInPlay: function() {
+            return isInPlay();
         },
         startRealPlay: function (options) {
             setTimeout(function() {
@@ -330,6 +403,24 @@ var video = function () {
         },
         setPTZIrisStop: function () {
             _setPTZZoomFoucusIris(14, true);
+        },
+        /*
+        *   回放
+        */
+        startPlayback: function (iChannelID, szStartTime, szEndTime) {
+            startPlayback(iChannelID, szStartTime, szEndTime);
+        },
+        reversePlayback: function (iChannelID, szStartTime, szEndTime) {
+            reversePlayback(iChannelID, szStartTime, szEndTime);
+        },
+        pausePlay: function() {
+            pausePlay();
+        },
+        playSlow: function() {
+            playSlow();
+        },
+        playFast: function() {
+            playFast();
         }
     };
 }();

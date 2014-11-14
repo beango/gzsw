@@ -17,5 +17,8 @@ gzsw.web/Uploads/
 gzsw.web/Upload/
 gzsw.winservice/bin/
 gzsw.winservice/obj/
+gzsw.winservicetest/bin/
+gzsw.winservicetest/obj/
 .suo
 TestResults
+gzsw.v12.suo

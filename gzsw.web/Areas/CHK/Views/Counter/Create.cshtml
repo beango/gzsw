@@ -24,12 +24,7 @@
         <tr>
             <td class="tdLeft">服务厅：</td>
             <td>
-                @Html.HiddenFor(m => m.HallNo)
-                @Html.TextBoxFor(m => m.HallName, new { @class = "text-box", @readonly = "readonly",@style = "width:250px;"})
-
-                <div id="orgTreeContent" style="display: none; min-width: 265px; position: absolute; background-color: #FFF; border: 1px solid #ccc;">
-                    <ul id="treeOrg" class="ztree" style="clear:both;"></ul>
-                </div>
+                @Html.DropDownListFor(m => m.HallNo, ViewBag.Orgs as SelectList, "-- 请选择 --")
             </td>
             <td>
                 @Html.ValidationMessageFor(m => m.HallNo)
@@ -47,7 +42,7 @@
         <tr>
             <td class="tdLeft">备注：</td>
             <td>
-                @Html.TextBoxFor(m => m.Note, new { @class = "text-box", @style = "width:250px;" })
+                @Html.TextAreaFor(m => m.Note, new { @class = "text-box", @style = "width:250px;" })
             </td>
             <td>
                 @Html.ValidationMessageFor(m => m.Note)
@@ -188,59 +183,63 @@
         body {
             min-width: 100px;
         }
+        table tbody tr { height: 30px; }
     </style>
     <script lang="javascript">
-        $(function () {
+        $(function() {
+
+            $("#HallNo").on("change", onSelect);
 
             //选择
-            var onSelect = function(treeId, treeNode) {
-                if (treeNode.enable) {
-                    //获取窗口
-                    $.ajax({
-                        cache: false,
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '@Url.Action("GetTabs")?hallNo=' + treeNode.id + "&_=" + (new Date()).getTime(),
-                        success: function(data) {
-                            var $conter = $("#CounterId");
-                            var list = $("option:gt(0)", $conter).length;
-                            $("option:gt(0)", $conter).remove();
+            function onSelect() {
+                var id = $(this).val();
+                //if (id && id.length>0) {
+                //获取窗口
+                $.ajax({
+                    cache: false,
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '@Url.Action("GetTabs")?hallNo=' + id + "&_=" + (new Date()).getTime(),
+                    success: function(data) {
+                        var $conter = $("#CounterId");
+                        var list = $("option:gt(0)", $conter).length;
+                        $("option:gt(0)", $conter).remove();
+
+                        if (data && data.length > 0) {
+                            $.each(data, function(i, item) {
+                                $conter.append("<option value='" + item.Value + "'>" + item.Text + "</option>");
+                            });
+                        }
+                    }
+                });
+
+                //获取员工信息
+                $.ajax({
+                    cache: false,
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '@Url.Action("GetStaffs")?hallNo=' + id + "&_=" + (new Date()).getTime(),
+                    success: function(data) {
+                        //W1A_STAFF_NAME
+                        for (var i = 1; i <= 7; i++) {
+                            //
+                            var $selectA = $("#W" + i + "A_STAFF_NAME");
+                            $("option:gt(0)", $selectA).remove();
+
+                            var $selectP = $("#W" + i + "P_STAFF_NAME");
+                            $("option:gt(0)", $selectP).remove();
 
                             if (data && data.length > 0) {
-                                $.each(data, function(i, item) {
-                                    $conter.append("<option value='" + item.Value + "'>" + item.Text + "</option>");
+                                $.each(data, function(n, item) {
+                                    $selectA.append("<option value='" + item.Value + "'>" + item.Text + "</option>");
+
+                                    $selectP.append("<option value='" + item.Value + "'>" + item.Text + "</option>");
                                 });
                             }
                         }
-                    });
-
-                    //获取员工信息
-                    $.ajax({
-                        cache: false,
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '@Url.Action("GetStaffs")?hallNo=' + treeNode.id + "&_=" + (new Date()).getTime(),
-                        success: function(data) {
-                            //W1A_STAFF_NAME
-                            for (var i = 1; i <= 7; i++) {
-                                //
-                                var $selectA = $("#W" + i + "A_STAFF_NAME");
-                                $("option:gt(0)", $selectA).remove();
-
-                                var $selectP = $("#W" + i + "P_STAFF_NAME");
-                                $("option:gt(0)", $selectP).remove();
-
-                                if (data && data.length > 0) {
-                                    $.each(data, function(n, item) {
-                                        $selectA.append("<option value='" + item.Value + "'>" + item.Text + "</option>");
-
-                                        $selectP.append("<option value='" + item.Value + "'>" + item.Text + "</option>");
-                                    });
-                                }
-                            }
-                        }
-                    });
-                }
+                    }
+                });
+                //}
             };
 
             $("select[dType='select']").on("change", function() {
@@ -249,16 +248,7 @@
                 $hidObj.val(that.val());
             });
 
-            //初始化树
-            orgTree.init({
-                documentId: "HallName",
-                hidValueId: "HallNo",
-                panelID: 'orgTreeContent',
-                treeULId: 'treeOrg',
-                enableHide:false,
-                loadDataUrl: '@Url.Action("GetHallTree", "VirtualHall", new {area = "SYS"})',
-                onSelect: onSelect
-            });
+
         });
     </script>
 }

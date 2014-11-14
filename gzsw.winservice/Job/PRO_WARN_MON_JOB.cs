@@ -20,7 +20,7 @@ namespace gzsw.winservice.Job
             try
             {
                 LogHelper.WriteLog("PRO_WARN_MON_JOB");
-                var db = new Database();
+                var db = gzswDB.GetInstance();
 
                 model.SVR_TIM_EVENT e = db.SingleOrDefault<model.SVR_TIM_EVENT>("From SVR_TIM_EVENT where PROGRAM_METHOD='PRO_WARN_MON'");
                 if (null != e)

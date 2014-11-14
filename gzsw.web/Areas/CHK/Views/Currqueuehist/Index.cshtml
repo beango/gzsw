@@ -1,0 +1,120 @@
+﻿@{
+    ViewBag.Title = "纳税人评价修正";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model PetaPoco.Page<gzsw.model.Subclasses.SYS_CURRQUEUEHIST_SUB>
+
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:80px;">服务厅：</td>
+            <td style="width:150px;">
+                @Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)
+            </td>
+            
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+
+        </tr>
+    </table>
+
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:30px;">
+                    <input id="chkAll" name="chkAll" type="checkbox" />
+                </th>
+                <th style="width:38px;">序号 </th>
+                <th>服务厅</th>
+                <th>窗口</th>
+                <th>业务</th>
+                <th>操作员工</th>
+                <th>纳税人识别码</th>
+                <th>纳税人名称</th>
+                <th>评价结果值</th>
+                <th>评价时间</th>
+                
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.CHQUEUE_TRANSCODEID"  type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>@item.HALL_NAM</td>
+                <td>@item.CHQUEUE_COUNTER</td>
+                <td>@item.Q_SERIALNAME</td>
+                <td>@item.STAFF_NAM</td>
+                <td>@item.CHQUEUE_NSRSBM</td>
+                <td>@item.CHQUEUE_NSRMC</td>
+                <td>@(((PJRESULTENUM)item.CHQUEUE_PJRESULT).GetDescription())</td>
+                <td>@(item.CHQUEUE_ETIME!=null?item.CHQUEUE_ETIME.GetValueOrDefault().ToString("yyyy-MM-dd HH:mm:ss"):""  )</td>
+                
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head
+{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+}
+
+<script type="text/javascript">
+    $(function () {
+        // 查询
+        $("#btnSearch").ligerButton(
+                {
+                    text: " 查 询 ",
+                    click: function () {
+                        var url = "?orgId=" + encodeURI($("#ddlORGID").val());
+                        location.href = url.urlstamp();
+                    },
+                    icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+                });
+
+        // 顶部导航
+        var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+        @if (Html.ChkAuth("CHK_SYS_CURRQUEUEHIST_VIW"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "CHK_SYS_CURRQUEUEHIST_VIW", 450, 350));
+                @:ligerToolBar.addItem({ line: true });
+             }
+
+
+        @if (Html.ChkAuth("CHK_SYS_CURRQUEUEHIST_EDT"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "CHK_SYS_CURRQUEUEHIST_EDT", 650, 420));
+            }
+
+
+
+    });
+</script>

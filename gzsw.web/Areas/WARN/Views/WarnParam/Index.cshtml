@@ -1,6 +1,4 @@
 ﻿@using gzsw.web;
-@model PetaPoco.Page<gzsw.model.WARN_PARAM>
-
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
@@ -9,95 +7,51 @@
 <div class="l-panel-search">
     <table class="tabSearchList">
         <tr>
-            <td style="width:100px;">组织机构名称：</td>
-            <td style="width:170px;"><input type="text" name="txtORGNAM" id="txtORGNAM" value="@ViewBag.ORGNAM" /></td>
+            <td style="width:100px;">服务厅名称：</td>
+            <td style="width:170px;"><input type="text" name="txtHALLNAM" id="txtHALLNAM" value="@Request.QueryString["HALLNAM"]" /></td>
             <td>
                 <div id="btnSearch"></div>
             </td>
         </tr>
     </table>
 </div>
-<div id="toptoolbar"></div>
-<div class="rightinfo">
-    <div class="tablePanel">
-        <table class="tablelist" cellpadding="0" cellspacing="0">
-            <thead>
-                <tr>
-                    <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
-                    <th>序号</th>
-                    <th>
-                        预警名称
-                    </th>
-                    <th>
-                        临界值
-                    </th>
-                    <th>
-                        预警级别
-                    </th>
-                    <th>
-                        预警类型
-                    </th>
-                    <th>
-                        预警范围
-                    </th>
-                    <th>
-                        组织机构
-                    </th>
-                    <th>
-                        信息发送模版
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            @{
-                var i = 1;
-            }
-            @foreach (var item in Model.Items)
-            {
-                <tr>
-                    <td>
-                        <input name="cbId" value="@item.WARN_PARAM_ID" type='checkbox' />
-                    </td>
-                    <td>
-                        @(i++)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.WARN_PARAM_NAM)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CRITICAL_VALUE)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.WARN_LEVEL)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.WARN_TYP)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.WARN_SCOPE)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ORG_ID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.WARN_INFO_MODEL)
-                    </td>
-                </tr>
-            }
-
-        </table>
-        @if (Model.Items.Count < 1)
-        {
-            <div class="l-panel-notDATA">
-                暂无数据
-            </div>
-        }
-        @Html.Pager("page", Model.ItemsPerPage, Model.TotalItems)
+<div class="tablepanel">
+    <div class="cleft"><ul id="treeORG" class="ztree"></ul></div>
+    <div class="ccontent">
+        <iframe id="hallFrame" style="width:100%;height:99%;" frameborder="0" scrolling="auto" src=""></iframe>
     </div>
 </div>
-
 @section Head{
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+    @Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
+    @Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
+    @Html.JavaScript("lib/ztree/jquery.ztree.exedit-3.5.min.js")
     @Html.JavaScript("lib/utility/ext.js")
+    <style type="text/css">
+        .ztree li span.button.add {
+            margin-left: 2px;
+            margin-right: -1px;
+            background-position: -144px 0;
+            vertical-align: top;
+            *vertical-align: middle;
+        }
+        .cleft {
+            position: absolute;
+            left: 0;
+            top: 33px;
+            padding: 0;
+            width: 250px;
+            height: 80%; /* works only if parent container is assigned a height value */
+            color: #333;
+        }
+        .ccontent {
+            position: absolute;
+            margin-left: 250px;
+            width: 75%;
+            height: 92%;
+            overflow: hidden;
+        } 
+    </style>
     <script lang="javascript">
         $(function () {
             // 注册事件
@@ -106,21 +60,66 @@
             {
                 text: " 查 询 ",
                 click: function () {
-                    var url = "?ORGNAM=" + $("#txtORGNAM").val();
+                    var url = "?HALLNAM=" + $("#txtHALLNAM").val();
                     location.href = url.urlstamp();
                 },
                 icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
             });
-            // 顶部导航
-            var bar = $("#toptoolbar").ligerToolBar();
-
-            bar.addItem(@Html.AuthViewButton("WARN_PARAM_VIW", Url.Action("Details", "DLSerial")));
-            bar.addItem({ line: true });
-            bar.addItem(@Html.AuthAddButton("WARN_PARAM_ADD", Url.Action("Create", "DLSerial")));
-            bar.addItem({ line: true });
-            bar.addItem(@Html.AuthEditButton("WARN_PARAM_EDT", Url.Action("Edit", "DLSerial")));
-            bar.addItem({ line: true });
-            bar.addItem(@Html.AuthDelButton("WARN_PARAM_DEL", Url.Action("Delete", "DLSerial")));
         });
+    </script>
+    <script type="text/javascript">
+		<!--
+        var ztree_setting_menus = {
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pId",
+                    rootPId: ""
+                }
+            },
+            view: {
+                fontCss: getFontCss,
+                showIcon: showIconForTree
+            },
+            callback: {
+                onClick: zTreeOnClick
+            }
+        };
+
+		var zNodes;
+		$(function () {
+		    $.ajax({
+		        async: false,
+		        cache: false,
+		        type: 'POST',
+		        dataType: 'json',
+		        url: "/SYS/Org/GetOrgs2Tree?searchNam=@Request.QueryString["HALLNAM"]",
+		        success: function (data) {
+		            zNodes = data;
+		        }
+		    });
+		});
+        function getFontCss(treeId, treeNode) {
+            if (!!treeNode.highlight)
+                return { color: "red", "font-weight": "bold" }
+        }
+        function zTreeOnClick(event, treeId, treeNode) {
+            if (treeNode.Org_LV == 5)
+            {
+                $("#hallFrame").attr("src", "/WARN/WarnParam/Details?hallno=" + treeNode.id);
+                $("#toptoolbar").show();
+            }
+            else
+            {
+                $("#hallFrame").attr("src", "");
+                $("#toptoolbar").hide();
+            }
+                
+        };
+		$(document).ready(function(){
+		    $.fn.zTree.init($("#treeORG"), ztree_setting_menus, zNodes);
+		});
+		//-->
     </script>
 }

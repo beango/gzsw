@@ -11,6 +11,6 @@ namespace gzsw.controller.MyAuth
         public string UserID { get; set; }
         public string UserName { get; set; }
         public List<UserFuncs> UserFuncs { get; set; }
-        public List<UserOrgs> UserOrgs { get; set; }
+        public List<SYS_ORGANIZE> UserOrgs { get; set; }
     }
 }

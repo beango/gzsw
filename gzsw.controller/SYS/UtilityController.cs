@@ -18,8 +18,8 @@ namespace gzsw.controller.SYS
     /// </remark>
     public class UtilityController : BaseController
     {
-
         [HttpGet]
+        [AllowAnonymous]
         public ImageActionResult GetCode()
         {
             #region///资源访问事件

@@ -1,0 +1,129 @@
+﻿@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+} 
+
+@using gzsw.web
+@model gzsw.model.CHK_STAFF_QUALITY_MARK
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="width:100px;" class="tdLeft">服务厅：</td>
+            <td style="width:150px;">
+                @Html.DropDownList("Hall", ViewBag.Hall as SelectList, "--请选择--", new
+                {
+                    @style = "width:130px"
+                })
+
+            </td>
+            <td> </td>
+        </tr>
+        <tr>
+            <td style="width:100px;" class="tdLeft">员工编码：</td>
+            <td style="width:150px;">
+                @Html.DropDownListFor(x => x.STAFF_ID, new List<SelectListItem>()
+                {
+                    new SelectListItem{
+                        Selected =true,
+                        Text ="--请选择--",
+                        Value = ""
+                    }
+                })
+                 
+            </td>
+            <td>@Html.ValidationMessageFor(model => model.STAFF_ID)</td>
+        </tr>
+        <tr>
+            <td class="tdLeft">事项大类：</td>
+            <td>
+                @Html.DropDownList("Dlserial", ViewBag.Dlserial as SelectList, "--请选择--", new
+                {
+                    @style = "width:130px"
+                })  
+            </td>
+            <td>
+              
+            </td> 
+        </tr>
+        <tr>
+            <td class="tdLeft"> 事项子类编码：</td>
+            <td>
+                @Html.DropDownListFor(x => x.SERIALID, new List<SelectListItem>()
+                {
+                    new SelectListItem{
+                        Selected =true,
+                        Text ="--请选择--",
+                        Value = ""
+                    }
+                }) 
+            </td>
+            <td>@Html.ValidationMessageFor(model => model.SERIALID)</td>
+        </tr>
+         
+        <tr>
+            <td class="tdLeft">质量类型编码：</td>
+            <td> 
+                @Html.DropDownListFor(m => m.QUALITY_CD, ViewBag.QUALITY_CD as SelectList, "--请选择--" )
+            </td>
+            <td>@Html.ValidationMessageFor(model => model.QUALITY_CD)</td>
+        </tr>
+        <tr>
+            <td class="tdLeft">数量：</td>
+            <td>@Html.EditorFor(model => model.AMOUNT)</td>
+            <td>@Html.ValidationMessageFor(model => model.AMOUNT)</td>
+        </tr>
+        <tr>
+            <td class="tdLeft">差错发生日期：</td>
+            <td>@Html.TextBoxFor(model => model.OCCUR_DT, new { @onClick = "WdatePicker()" })</td>
+            <td>@Html.ValidationMessageFor(model => model.OCCUR_DT)</td>
+        </tr>
+        <tr>
+            <td class="tdLeft"> &nbsp;  </td>
+            <td>
+                <input type="submit" class="l-button" value="提交" />
+            </td>
+            <td> </td>
+        </tr>
+    </table>
+}
+@section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+    <script type="text/javascript">
+        $(function () {
+            // 加载营业厅->员工
+            $("#Hall").change(function () {
+                var value = $(this).val();
+                if (value == undefined || value == "") {
+                    $("#STAFF_ID").html("<option selected=\"selected\" value=\"\">--请选择--</option>");
+                } else {
+                    var url = "@Url.Action("GetDropDownListForStaff", "PerformanceEval")?hallId=" + value; 
+                    $.ajax({
+                        url: url.urlstamp(), success: function (result) {
+                            $("#STAFF_ID").html(result);
+                        }
+                    }); 
+                }
+            });
+            // 加载事项
+            $("#Dlserial").change(function () {
+                var value = $(this).val();
+                if (value == undefined || value == "") {
+                    $("#SERIALID").html("<option selected=\"selected\" value=\"\">--请选择--</option>");
+                } else {
+                    var url = "@Url.Action("GetDropDownListForSerialid", "PerformanceEval")?ssdlserialidId=" + value; 
+                    $.ajax({
+                        url: url.urlstamp(), success: function (result) {
+                            $("#SERIALID").html(result);
+                        }
+                    }); 
+                }
+            });
+            
+        });
+    </script> 
+}

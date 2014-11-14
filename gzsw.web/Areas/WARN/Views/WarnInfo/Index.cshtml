@@ -1,5 +1,166 @@
-﻿@{
+﻿@using gzsw.web;
+@model PetaPoco.Page<gzsw.model.WARN_INFO_DETAIL>
+@{
     ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<h2>Index</h2>
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:80px;">预警类型：</td>
+            <td style="width:170px;text-align:left;">@Html.DropDownList("WARNTYPQ", @ViewBag.WARN_TYP_SELECTLIST as IEnumerable<SelectListItem>)</td>
+            <td style="width: 80px;">预警级别：</td>
+            <td style="width:170px;">@Html.DropDownList("WARNLVLQ", @ViewBag.WARN_LVL_SELECTLIST as IEnumerable<SelectListItem>)</td>
+            <td style="width:80px;"> 组织机构：</td>
+            <td style="width:170px;">@Html.DropDownList("ddlORGID", ViewBag.UserORG as SelectList, "--请选择--")</td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th>序号</th>
+                <th>
+                    服务厅
+                </th>
+                <th>
+                    预警类型
+                </th>
+                <th>
+                    预警级别
+                </th>
+                <th>
+                    预警原因
+                </th>
+                <th>
+                    实际值
+                </th>
+                <th>
+                    预警时间
+                </th>
+                <th>
+                    处理状态
+                </th>
+                <th>
+                    处理人
+                </th>
+                <th>
+                    处理时间
+                </th>
+                <th>
+                    预警处理
+                </th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@(item.WARN_INFO_DETAIL_ID)" type='checkbox' />
+                    @Html.Hidden("HID_STATE",item.STATE)
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @item.HALL_NAM
+                </td>
+                <td>
+                    @item.WARN_TYP_NAM
+                </td>
+                <td>
+                    @item.WARN_LVL_NAM
+                </td>
+                <td>
+                    @item.WARN_REASON
+                </td>
+                <td>
+                    @item.REAL_VALUE
+                </td>
+                <td>
+                    @item.CREATE_DTIME
+                </td>
+                <td>
+                    @item.STATE_NAM
+                </td>
+                <td>
+                    @item.HANDLE_USER
+                </td>
+                <td>
+                    @item.HANDLE_TIME
+                </td>
+                <td>
+                    @item.WARN_METHOD
+                </td>
+            </tr>
+        }
+
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/utility/ext.js")
+    <script lang="javascript">
+        $(function () {
+            // 注册事件
+            // 查询
+            $("#btnSearch").ligerButton(
+            {
+                text: " 查 询 ",
+                click: function () {
+                    var url = "?typeq=" + $("#WARNTYPQ").val() + "&lvlq=" + $("#WARNLVLQ").val() + "&orgid=" + $("#ddlORGID").val();
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+            // 顶部导航
+            var bar = $("#toptoolbar").ligerToolBar();
+
+            bar.addItem(@Html.AuthViewButton("WARN_INFO_VIW", Url.Action("Details", "WarnInfo"), "查看", 500, 400));
+            bar.addItem({ line: true });
+            bar.addItem(@Html.AuthViewButton("WARN_INFO_VIW", Url.Action("SendDetails", "WarnInfo"), "信息发送明细", 800, 400));
+            bar.addItem({ line: true });
+            bar.addItem(@Html.AuthEditButton("WARN_INFO_EDT", Url.Action("Edit", "WarnInfo"), "处理", 500, 400));
+
+            $(".tablelist input[type='checkbox']").not("#chkAll").live("click", function () {
+                var itemhandler = $("div[toolbarid='item-3']");
+                var chklist = $(".tablelist input[type='checkbox']:checked").not("#chkAll");
+
+                if (chklist.length != 1) {
+                    itemhandler.prev().show();
+                    itemhandler.show();
+                    return;
+                }
+                var state = $(chklist[0]).next().val();
+                if (state == "2" && $(chklist[0]).is(":checked")) {
+                    itemhandler.prev().hide();
+                    itemhandler.hide();
+                }
+                else
+                {
+                    itemhandler.prev().show();
+                    itemhandler.show();
+                }
+            });
+        });
+    </script>
+}

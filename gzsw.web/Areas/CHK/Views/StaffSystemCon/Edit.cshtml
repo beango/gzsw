@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "添加考核体系";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.web
+@model gzsw.controller.CHK.Models.StaffSystemConModel
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="tdLeft">组织结构：</td>
+            <td>
+                @Html.HiddenFor(m=>m.ORG_ID)
+                @Html.DisplayFor(m=>m.ORG_NAM)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.ORG_ID)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">综合考核标准设置类型：</td>
+            <td colspan="2">
+                @Html.RadioButtonFor(model => model.COMPRE_SAN_TYP, 1) 综合评议额外奖罚与投诉分在１００分之外计入总分
+                <br />
+                @Html.RadioButtonFor(model => model.COMPRE_SAN_TYP, 2) 综合评议额外奖罚与投诉分在１００分之内计入总分，并设置额外分上限
+            </td>
+        </tr>
+        <tr id="trCOMPRETYPE" style="@(Model.COMPRE_SAN_TYP == 2 ? "" : "display: none;")">
+            <td class="tdLeft">当综合考核设置为100分之内加的上限分数：</td>
+            <td>
+                @Html.TextBoxFor(m => m.COMPRE_SAN_100_MAX_SCORE)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.COMPRE_SAN_100_MAX_SCORE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">评价所占考核比：</td>
+            <td>
+                @Html.TextBoxFor(m => m.EVAL_CHK_RT)%
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.EVAL_CHK_RT)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">业务表现占考核比：</td>
+            <td>
+                @Html.TextBoxFor(m => m.SVR_CHK_RT)%
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.SVR_CHK_RT)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">质量表现占考核比：</td>
+            <td>
+                @Html.TextBoxFor(m => m.QUALITY_CHK_RT)%
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.QUALITY_CHK_RT)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">效率表现占考核比：</td>
+            <td>
+                @Html.TextBoxFor(m => m.EFFIC_CHK_RT)%
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.EFFIC_CHK_RT)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">效率计算100分免计算比率：</td>
+            <td>
+                @Html.TextBoxFor(m => m.EFFIC_AVOID_RT)%
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.EFFIC_AVOID_RT)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">效率免计算比率外每超过1%的扣分：</td>
+            <td>
+                @Html.TextBoxFor(m => m.EFFIC_AVOID_EXC_DEDUCT)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.EFFIC_AVOID_EXC_DEDUCT)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">考勤占考核比：</td>
+            <td>
+                @Html.TextBoxFor(m => m.ATTEND_CHK_RT)%
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.ATTEND_CHK_RT)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">日常行为表现占考核比：</td>
+            <td>
+                @Html.TextBoxFor(m => m.USU_ACT_CHK_RT)%
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.USU_ACT_CHK_RT)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: center">
+                <input id="btnSubmit" type="submit" class="l-button" value="提交" />
+            </td>
+        </tr>
+    </table>
+}
+
+@section Head
+{
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("input[name='COMPRE_SAN_TYP']").click(function () {
+            var type = $(this).val();
+            if (Number(type)==2) {
+                $("#trCOMPRETYPE").show();
+            } else {
+                $("#trCOMPRETYPE").hide();
+            }
+        });
+
+
+    });
+</script>

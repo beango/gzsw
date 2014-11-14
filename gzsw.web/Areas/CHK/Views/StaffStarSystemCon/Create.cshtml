@@ -1,0 +1,155 @@
+﻿@{
+    ViewBag.Title = "添加个人星级评定体系";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model.Enums
+@using gzsw.util
+@using gzsw.web
+@model gzsw.controller.CHK.Models.StaffStarSystemConAddModel
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="tdLeft">组织结构：</td>
+            <td>
+                @Html.DropDownListFor(m => m.ORG_ID, ViewBag.Orgs as SelectList, "--请选择--")
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.ORG_ID)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">星级评定时间类型：</td>
+            <td>
+                @Html.DropDownListFor(m => m.TIME_DUR_TYP, EnumHelper.GetCategorySelectList(typeof(EvaluationTimeTypeEunm), false))
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.TIME_DUR_TYP)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">5星级评定分数：</td>
+            <td>
+                下限 @Html.TextBoxFor(m => m.STAR_5_MIN_SCORE)
+            </td>
+            <td >
+                @Html.ValidationMessageFor(m => m.STAR_5_MIN_SCORE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">4星级评定分数：</td>
+            <td colspan="2">
+                上限 @Html.TextBoxFor(m => m.STAR_4_MAX_SCORE,new { @style="width:40px" }) @Html.ValidationMessageFor(m => m.STAR_4_MAX_SCORE)
+                下限 @Html.TextBoxFor(m => m.STAR_4_MIN_SCORE, new { @style = "width:40px" }) @Html.ValidationMessageFor(m => m.STAR_4_MIN_SCORE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">3星级评定分数：</td>
+            <td colspan="2">
+                上限 @Html.TextBoxFor(m => m.STAR_3_MAX_SCORE, new { @style = "width:40px" }) @Html.ValidationMessageFor(m => m.STAR_3_MAX_SCORE)
+                下限 @Html.TextBoxFor(m => m.STAR_3_MIN_SCORE, new { @style = "width:40px" }) @Html.ValidationMessageFor(m => m.STAR_3_MIN_SCORE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">2星级评定分数：</td>
+            <td colspan="2">
+                上限 @Html.TextBoxFor(m => m.STAR_2_MAX_SCORE, new { @style = "width:40px" }) @Html.ValidationMessageFor(m => m.STAR_2_MAX_SCORE)
+                下限 @Html.TextBoxFor(m => m.STAR_2_MIN_SCORE, new { @style = "width:40px" }) @Html.ValidationMessageFor(m => m.STAR_2_MIN_SCORE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">1星级评定分数：</td>
+            <td colspan="2">
+                上限 @Html.TextBoxFor(m => m.STAR_1_MAX_SCORE, new { @style = "width:40px" }) @Html.ValidationMessageFor(m => m.STAR_1_MAX_SCORE)
+                下限 @Html.TextBoxFor(m => m.STAR_1_MIN_SCORE, new { @style = "width:40px" }) @Html.ValidationMessageFor(m => m.STAR_1_MIN_SCORE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">评价最低分：</td>
+            <td >
+                @Html.TextBoxFor(m => m.EVAL_MIN_SCORE)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.EVAL_MIN_SCORE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">业务表现最低分：</td>
+            <td>
+                @Html.TextBoxFor(m => m.SVR_MIN_SCORE)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.SVR_MIN_SCORE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">业务质量最低分：</td>
+            <td>
+                @Html.TextBoxFor(m => m.QUALITY_MIN_SCORE)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.QUALITY_MIN_SCORE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">业务效率最低分：</td>
+            <td>
+                @Html.TextBoxFor(m => m.EFFIC_MIN_SCORE)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.EFFIC_MIN_SCORE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">考勤得分最低分：</td>
+            <td>
+                @Html.TextBoxFor(m => m.ATTEND_MIN_SCORE)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.ATTEND_MIN_SCORE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">日常表现最低分：</td>
+            <td>
+                @Html.TextBoxFor(m => m.USU_ACT_MIN_SCORE)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.USU_ACT_MIN_SCORE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">投诉次数上限：</td>
+            <td>
+                @Html.TextBoxFor(m => m.COMPLAIN_MAX_CNT)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.COMPLAIN_MAX_CNT)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">不满足评定的默认星级：</td>
+            <td>
+                @Html.DropDownListFor(m => m.DEFAULT_STAR, EnumHelper.GetCategorySelectList(typeof(StarLevelEunm),false))
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.DEFAULT_STAR)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: center">
+                <input id="btnSubmit" type="submit" class="l-button" value="提交" />
+            </td>
+        </tr>
+    </table>
+}
+
+@section Head
+{
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+}

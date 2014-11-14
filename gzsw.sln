@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gzsw.model", "gzsw.model\gzsw.model.csproj", "{F4663DC8-A7E8-40BA-8D44-5ECC3BE73371}"
 EndProject
@@ -31,41 +31,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{F2AD39E3-41F
 		lib\C5.dll = lib\C5.dll
 		lib\Common.Logging.dll = lib\Common.Logging.dll
 		lib\Common.Logging.Log4Net1211.dll = lib\Common.Logging.Log4Net1211.dll
+		..\数据库设计\FusionChartsFree\FusionChartsFree\Code\CSNET\bin\FusionCharts.dll = ..\数据库设计\FusionChartsFree\FusionChartsFree\Code\CSNET\bin\FusionCharts.dll
+		lib\FusionCharts.dll = lib\FusionCharts.dll
 		lib\log4net.dll = lib\log4net.dll
 		lib\Quartz.dll = lib\Quartz.dll
 		lib\Quartz.pdb = lib\Quartz.pdb
 		lib\Quartz.xml = lib\Quartz.xml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gzsw.winservicetest", "gzsw.winservicetest\gzsw.winservicetest.csproj", "{DEA62433-AC4E-4AFC-BDA2-612FA67A71F9}"
+EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://gzsw.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = gzsw.model\\gzsw.model.csproj
-		SccProjectName1 = gzsw.model
-		SccLocalPath1 = gzsw.model
-		SccProjectUniqueName2 = gzsw.controller\\gzsw.controller.csproj
-		SccProjectName2 = gzsw.controller
-		SccLocalPath2 = gzsw.controller
-		SccProjectUniqueName3 = gzsw.dal\\gzsw.dal.csproj
-		SccProjectName3 = gzsw.dal
-		SccLocalPath3 = gzsw.dal
-		SccProjectUniqueName4 = gzsw.test\\gzsw.test.csproj
-		SccProjectName4 = gzsw.test
-		SccLocalPath4 = gzsw.test
-		SccProjectUniqueName5 = gzsw.web\\gzsw.web.csproj
-		SccProjectName5 = gzsw.web
-		SccLocalPath5 = gzsw.web
-		SccProjectUniqueName6 = gzsw.util\\gzsw.util.csproj
-		SccProjectName6 = gzsw.util
-		SccLocalPath6 = gzsw.util
-		SccProjectUniqueName7 = gzsw.winservice\\gzsw.winservice.csproj
-		SccProjectTopLevelParentUniqueName7 = gzsw.sln
-		SccProjectName7 = gzsw.winservice
-		SccLocalPath7 = gzsw.winservice
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -99,11 +75,16 @@ Global
 		{EE13823B-9581-4AE5-9A98-83FAEB10BFA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE13823B-9581-4AE5-9A98-83FAEB10BFA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE13823B-9581-4AE5-9A98-83FAEB10BFA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEA62433-AC4E-4AFC-BDA2-612FA67A71F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEA62433-AC4E-4AFC-BDA2-612FA67A71F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEA62433-AC4E-4AFC-BDA2-612FA67A71F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEA62433-AC4E-4AFC-BDA2-612FA67A71F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{EE13823B-9581-4AE5-9A98-83FAEB10BFA8} = {2BB8C2F5-55C1-48DF-A69C-7B7CC0E7B24A}
+		{DEA62433-AC4E-4AFC-BDA2-612FA67A71F9} = {2BB8C2F5-55C1-48DF-A69C-7B7CC0E7B24A}
 	EndGlobalSection
 EndGlobal

@@ -4,6 +4,7 @@
 }
 
 @using gzsw.model
+@using gzsw.model.Enums
 @using gzsw.util
 @model gzsw.model.CHK_STAFF_APPLYDETAIL
 
@@ -30,7 +31,7 @@
     <tr>
         <td class="tdLeft">假期类型:</td>
         <td>
-           @(EnumHelper.ConvertToE<CHK_STAFF_APPLYDETAIL.HOLLI_TYPE_ENUM>(Model.HOLLI_TYP.ToString()))
+           @(EnumHelper.ConvertToE<HOLLI_TYPE_ENUM>(Model.HOLLI_TYP.ToString()))
         </td>
     </tr>
     <tr>

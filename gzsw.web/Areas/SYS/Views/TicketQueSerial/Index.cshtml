@@ -12,7 +12,7 @@
             <td style="width:100px;">队列名称：</td>
             <td style="width:170px;"><input type="text" name="txtSNAM" id="txtSNAM" value="@ViewBag.SNAM" /></td>
             <td style="width:80px;"> 组织机构：</td>
-            <td style="width:170px;">@Html.DropDownList("ddlORGID", ViewBag.UserORG as SelectList, "--请选择--")</td>
+            <td style="width:170px;">@Html.DropDownList("ddlORGID", ViewBag.UserORG as SelectList)</td>
             <td>
                 <div id="btnSearch"></div>
             </td>
@@ -29,16 +29,10 @@
                     <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
                     <th>序号 </th>
                     <th>
-                        组织机构
-                    </th>
-                    <th>
-                        服务厅
-                    </th>
-                    <th>
                         排队业务名称
                     </th>
                     <th>
-                        等候超时时间（分）
+                        等候超时时间（分钟）
                     </th>
                     <th>
                         该业务生成排队号码的前缀
@@ -63,12 +57,6 @@
                     <td><input name="cbId" type="checkbox" value="@item.Q_ID" /></td>
                     <td>
                         @(i++)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Org.ORG_NAM)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Hall.HALL_NAM)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Q_SERIALNAME)

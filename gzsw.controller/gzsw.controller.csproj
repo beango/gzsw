@@ -39,6 +39,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FusionCharts">
+      <HintPath>..\lib\FusionCharts.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\packages\NPOI.2.0.6\lib\net40\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
@@ -71,6 +74,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -98,6 +102,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -107,15 +112,77 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CHK\ApplyDetailController.cs" />
-    <Compile Include="CHK\ApplyDetailModel.cs" />
-    <Compile Include="CHK\CounterModel.cs" />
+    <Compile Include="CHK\BonusController.cs" />
+    <Compile Include="CHK\HALLCompreEvalMController.cs" />
+    <Compile Include="CHK\Models\CHK_HALL_ITEM_MARKViewModel.cs" />
+    <Compile Include="CHK\Models\CHK_HALL_STAR_SYSTEM_CON_Model.cs" />
+    <Compile Include="CHK\Models\StaffAttendDeductConModel.cs" />
+    <Compile Include="CHK\StaffAttendDeductConController.cs" />
+    <Compile Include="CHK\StaffCompreEvalMController.cs" />
+    <Compile Include="CHK\CurrqueuehistController.cs" />
+    <Compile Include="CHK\DetailSvrCoefConController.cs" />
+    <Compile Include="CHK\HALLchkitemconController.cs" />
+    <Compile Include="CHK\HALLitemmarkController.cs" />
+    <Compile Include="CHK\HALLstatMarkController.cs" />
+    <Compile Include="CHK\Models\ApplyDetailModel.cs" />
+    <Compile Include="CHK\Models\CHK_HALL_CHKITEM_CON_VIEW.cs" />
+    <Compile Include="CHK\Models\PersonnelAttendanceViewModel.cs" />
+    <Compile Include="CHK\Models\CounterModel.cs" />
+    <Compile Include="CHK\Models\CurrqueuehistModel.cs" />
+    <Compile Include="CHK\Models\DetailSvrCoefConAddModel.cs" />
+    <Compile Include="CHK\Models\QueuingDetentionViewModel.cs" />
+    <Compile Include="CHK\Models\RateComplaintViewModel.cs" />
+    <Compile Include="CHK\Models\RateCompletionViewModel.cs" />
+    <Compile Include="CHK\Models\RateErrorViewModel.cs" />
+    <Compile Include="CHK\Models\RateSatisfactionViewModel.cs" />
+    <Compile Include="CHK\Models\SatisRtConAddModel.cs" />
+    <Compile Include="CHK\Models\StaffCompreSanMarkAddModel.cs" />
+    <Compile Include="CHK\Models\StaffEvalstatMModel.cs" />
+    <Compile Include="CHK\Models\StaffQualitystatMModel.cs" />
+    <Compile Include="CHK\Models\StaffStarSystemConAddModel.cs" />
+    <Compile Include="CHK\Models\StaffSvrstatMModel.cs" />
+    <Compile Include="CHK\Models\StaffSystemConAddModel.cs" />
+    <Compile Include="CHK\Models\StaffUsuActConModel.cs" />
+    <Compile Include="CHK\Models\STARsystemconViewModel.cs" />
+    <Compile Include="CHK\Models\StatStaffChkstatMModel.cs" />
+    <Compile Include="CHK\PerformanceController.cs" />
+    <Compile Include="CHK\Models\StaffUsuActMarkModel.cs" />
+    <Compile Include="CHK\PerformanceEvalController.cs" />
+    <Compile Include="CHK\QueuingDetentionController.cs" />
+    <Compile Include="CHK\RateComplaintController.cs" />
+    <Compile Include="CHK\RateCompletionController.cs" />
+    <Compile Include="CHK\RateErrorController.cs" />
+    <Compile Include="CHK\RateSatisfactionController.cs" />
+    <Compile Include="CHK\SatisRtConController.cs" />
+    <Compile Include="CHK\StaffCompreSanMarkController.cs" />
+    <Compile Include="CHK\StaffEvalstatMController.cs" />
+    <Compile Include="CHK\StaffQualitystatMController.cs" />
+    <Compile Include="CHK\StaffStarSystemConController.cs" />
+    <Compile Include="CHK\StaffSystemConController.cs" />
+    <Compile Include="CHK\StaffUsuActConController.cs" />
+    <Compile Include="CHK\StaffUsuActMarkController.cs" />
+    <Compile Include="CHK\STARsystemconController.cs" />
+    <Compile Include="CHK\StatStaffChkstatMController.cs" />
+    <Compile Include="CHK\StatStaffSvrstatMController.cs" />
     <Compile Include="CHK\TimeScoreController.cs" />
-    <Compile Include="CHK\TimeScoreCreateModel.cs" />
+    <Compile Include="CHK\Models\TimeScoreCreateModel.cs" />
     <Compile Include="Default\DefaultController.cs" />
+    <Compile Include="Detail\BusinessMistakeController.cs" />
+    <Compile Include="Detail\CityDetailController.cs" />
+    <Compile Include="Detail\CurrqueuehistController.cs" />
+    <Compile Include="Detail\CurrywhistController.cs" />
+    <Compile Include="Detail\HistroyAccountDetailController.cs" />
+    <Compile Include="Detail\StaffApplyDetailController.cs" />
+    <Compile Include="Detail\StaffUsuActMarkController.cs" />
+    <Compile Include="Detail\TaxpayerEvaluationController.cs" />
+    <Compile Include="Detail\WarncomplaindatailController.cs" />
+    <Compile Include="Detail\WarnDisposalController.cs" />
     <Compile Include="FileController.cs" />
     <Compile Include="Map\MapServerController.cs" />
+    <Compile Include="MON\Models\TypeValueModel.cs" />
     <Compile Include="MON\VirtualHall.cs" />
     <Compile Include="MON\VirtualMonitorController.cs" />
+    <Compile Include="MON\WarningController.cs" />
     <Compile Include="MyAuth\MyFormsAuthentication.cs" />
     <Compile Include="MyAuth\MyFormsPrincipal.cs" />
     <Compile Include="MyAuth\MyUserDataPrincipal.cs" />
@@ -127,7 +194,16 @@
     <Compile Include="CHK\CounterController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AUTH\MenuController.cs" />
+    <Compile Include="STAT\ComplaintReportController.cs" />
+    <Compile Include="STAT\SerivceHandleController.cs" />
+    <Compile Include="STAT\statbusinessController.cs" />
+    <Compile Include="STAT\ServiceContrastController.cs" />
+    <Compile Include="STAT\StatController.cs" />
+    <Compile Include="STAT\StatDownController.cs" />
+    <Compile Include="STAT\statstaffqueuebusidController.cs" />
+    <Compile Include="STAT\StatStaffCallController.cs" />
     <Compile Include="StatisticsController.cs" />
+    <Compile Include="STAT\WarnAnalysisController.cs" />
     <Compile Include="SYS\CounterController.cs" />
     <Compile Include="SYS\HallController.cs" />
     <Compile Include="SYS\StaffController.cs" />
@@ -144,7 +220,17 @@
     <Compile Include="AUTH\UserController.cs" />
     <Compile Include="SYS\QueSerialController.cs" />
     <Compile Include="SYS\VirtualHallController.cs" />
+    <Compile Include="WARN\CurrqueuehistDealStateController.cs" />
+    <Compile Include="WARN\CurrqueuehistEvaluationController.cs" />
+    <Compile Include="WARN\CurrywhistSameCityDealController.cs" />
+    <Compile Include="WARN\CurrywhistTwiceDealController.cs" />
     <Compile Include="WARN\ReleaseController.cs" />
+    <Compile Include="WARN\SenduserconController.cs" />
+    <Compile Include="WARN\TimeoutDealFinshController.cs" />
+    <Compile Include="WARN\TimeoutWaitController.cs" />
+    <Compile Include="WARN\WarnalarminfoController.cs" />
+    <Compile Include="WARN\WarnComplainController.cs" />
+    <Compile Include="WARN\WarnComplainDetailController.cs" />
     <Compile Include="WARN\WarnInfoController.cs" />
     <Compile Include="WARN\WarnParamController.cs" />
   </ItemGroup>

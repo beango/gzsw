@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using PetaPoco;
 using gzsw.util;
+using System.Collections;
+using gzsw.model;
 
 namespace gzsw.dal
 {
@@ -14,7 +16,7 @@ namespace gzsw.dal
         /// <param name="obj">待添加的对象</param>
         public virtual T AddObject(T obj)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
             db.Insert(obj);
             return obj;
         }
@@ -36,7 +38,7 @@ namespace gzsw.dal
         /// <param name="priKey"></param>
         public void Delete(string priKey, object val)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
             db.Delete(typeof(T).Name, priKey, null, val);
         }
 
@@ -46,7 +48,7 @@ namespace gzsw.dal
         /// <param name="obj">待删除的对象</param>
         public virtual void DeleteObject(T obj)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
             db.Delete(obj);
         }
 
@@ -70,7 +72,7 @@ namespace gzsw.dal
         /// <returns>实体</returns>
         public virtual T GetEntity(params object[] paras)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
 
             var sql = Sql.Builder.Append("From dbo." + typeof(T).Name + " where 1=1 ");
             if (null != paras)
@@ -94,7 +96,7 @@ namespace gzsw.dal
         {
             try
             {
-                var db = new Database();
+                var db = gzswDB.GetInstance();
                 if (null == primaryKey || primaryKey.Length == 0)
                 {
                     db.Save(obj);
@@ -120,7 +122,7 @@ namespace gzsw.dal
         /// <returns>符合条件的实体的集合</returns>
         public IList<T> FindList()
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
 
             var sql = Sql.Builder.Append("From dbo." + typeof(T).Name);
 
@@ -141,7 +143,7 @@ namespace gzsw.dal
         /// <returns>符号条件的实体的集合</returns>
         public Page<T> GetList(int pageIndex, int pageSize, string orderby, params object[] paras)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
 
             var sql = Sql.Builder.Append("From dbo." + typeof(T).Name + " where 1=1 ");
             if (null != paras)
@@ -156,8 +158,19 @@ namespace gzsw.dal
                         sql.Append("and " + paras[i] + " @0 ", "%" + paras[i + 1] + "%");
                     else if (paras[i].ToString().EndsWith(" in"))
                     {
-                        if (null != paras[i + 1])
+                        int parcount = 0;
+                        if ((paras[i + 1] as IEnumerable) != null &&
+                            (paras[i + 1] as string) == null &&
+                            (paras[i + 1] as byte[]) == null)
+                        {
+                            foreach (var item in paras[i + 1] as IEnumerable)
+                                parcount++;
+                        }
+
+                        if (null != paras[i + 1] && parcount>0)
                             sql.Append("and " + paras[i] + " (@0) ", paras[i + 1]);
+                        else
+                            sql.Append("and 1=2 ");
                     }
                     else
                         sql.Append("and " + paras[i] + " =@0 ", paras[i + 1]);
@@ -180,7 +193,7 @@ namespace gzsw.dal
         /// <returns>符号条件的实体的集合</returns>
         public IList<T> FindList(string orderby, params object[] paras)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
 
             var sql = Sql.Builder.Append("From dbo." + typeof(T).Name + " where 1=1 ");
             if (null != paras)
@@ -194,6 +207,27 @@ namespace gzsw.dal
                     if (paras[i].ToString().EndsWith(" like"))
                         sql.Append("and " + paras[i] + " @0 ", "%" + paras[i + 1] + "%");
                     else if (paras[i].ToString().EndsWith(" in"))
+                    {
+                        int parcount = 0;
+                        if ((paras[i + 1] as IEnumerable) != null &&
+                            (paras[i + 1] as string) == null &&
+                            (paras[i + 1] as byte[]) == null)
+                        {
+                            foreach (var item in paras[i + 1] as IEnumerable)
+                                parcount++;
+                        }
+
+                        if (null != paras[i + 1] && parcount > 0)
+                            sql.Append("and " + paras[i] + " (@0) ", paras[i + 1]);
+                        else
+                            sql.Append("and 1=2 ");
+                    }
+                    else if (paras[i].ToString().EndsWith(">="))
+                    {
+                        if (null != paras[i + 1])
+                            sql.Append("and " + paras[i] + " (@0) ", paras[i + 1]);
+                    }
+                    else if (paras[i].ToString().EndsWith("<="))
                     {
                         if (null != paras[i + 1])
                             sql.Append("and " + paras[i] + " (@0) ", paras[i + 1]);
@@ -218,7 +252,7 @@ namespace gzsw.dal
         /// <returns></returns>
         public bool Exists(params object[] paras)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
 
             var sql = Sql.Builder.Append("select count (1) From dbo." + typeof(T).Name + " where 1=1 ");
             if (null != paras)
@@ -240,7 +274,33 @@ namespace gzsw.dal
                         sql.Append("and " + paras[i] + " =@0 ", paras[i + 1]);
                 }
             }
-            return db.ExecuteScalar<int>(sql)>0;
+            return db.ExecuteScalar<int>(sql) > 0;
+        }
+
+        public Page<T> GetPage(int pageIndex, int pageSize, params object[] paras)
+        {
+            var db = gzswDB.GetInstance();
+            var sql = Sql.Builder.Append("select * From dbo." + typeof(T).Name);
+            if (null != paras)
+            {
+                for (int i = 0; i < paras.Length; i += 2)
+                {
+                    if (null == paras[i + 1])
+                        continue;
+                    if (paras[i + 1] is string && string.IsNullOrEmpty(paras[i + 1].ToString()))
+                        continue;
+                    if (paras[i].ToString().EndsWith(" like"))
+                        sql.Append("and " + paras[i] + " @0 ", "%" + paras[i + 1] + "%");
+                    else if (paras[i].ToString().EndsWith(" in"))
+                    {
+                        if (null != paras[i + 1])
+                            sql.Append("and " + paras[i] + " (@0) ", paras[i + 1]);
+                    }
+                    else
+                        sql.Append("and " + paras[i] + " =@0 ", paras[i + 1]);
+                }
+            }
+            return db.Page<T>(pageIndex, pageSize, sql);
         }
         #endregion
     }

@@ -20,16 +20,17 @@
                 @Html.DisplayFor(model => model.Hall.HALL_NAM)
                 @Html.ValidationMessageFor(model => model.Q_SYSNO)</td>
             
-            <td class="tdLeft" style="width: 100px;">排队业务：</td>
-            <td>@Html.DropDownList("Q_SERIALID", ViewData["QUSERIAL"] as SelectList)
-            @Html.ValidationMessageFor(model => model.Q_SERIALID)</td>
+            <td class="tdLeft" style="width: 110px;">排队业务：</td>
+            <td>@Model.Q_SERIALNAME
+                @Html.HiddenFor(model => model.Q_SERIALID)
+                @Html.ValidationMessageFor(model => model.Q_SERIALID)</td>
         </tr>
         <tr>
             <td class="tdLeft">号码前缀：</td>
             <td>@Html.EditorFor(model => model.Q_NUMBERQCHAR)
             @Html.ValidationMessageFor(model => model.Q_NUMBERQCHAR)</td>
 
-            <td class="tdLeft">等候超时（分）：</td>
+            <td class="tdLeft">等候超时（分钟）：</td>
             <td>@Html.EditorFor(model => model.Q_WAITCSTIME)
             @Html.ValidationMessageFor(model => model.Q_WAITCSTIME)</td>
         </tr>
@@ -284,5 +285,6 @@
         .tableform i {
             display: block;
         }
+        .tableform tr td{line-height:32px;height:32px;}
     </style>
 }

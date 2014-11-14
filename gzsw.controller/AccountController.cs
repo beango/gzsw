@@ -165,7 +165,7 @@ namespace gzsw.controller
                     if (id > 0)
                     {
                         Alter("修改密码成功！", util.Enum.AlterTypeEnum.Success, false, true);
-                        return Redirect("/Home/Blank");
+                        return View(model);
                     }
                     Alter("修改密码失败！", util.Enum.AlterTypeEnum.Success, false, true);
                     return View(model);

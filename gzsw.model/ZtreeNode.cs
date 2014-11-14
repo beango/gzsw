@@ -23,6 +23,7 @@ namespace gzsw.model
         public byte? Org_LV { get; set; }
         public string id { get; set; }
         public string name { get; set; }
+        public bool hasauth { get; set; }
         public bool isParent { get; set; }
         public bool @checked { get; set; }
         public bool open { get; set; }

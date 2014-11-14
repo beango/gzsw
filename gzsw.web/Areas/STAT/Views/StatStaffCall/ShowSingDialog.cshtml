@@ -1,0 +1,50 @@
+﻿@using gzsw.util
+@using gzsw.web
+@model PetaPoco.Page<dynamic>
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = "ShowSingDialog";
+}
+
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th style="width:40px;">序号</th>
+                <th>结算日</th>
+                <th>营业厅</th>
+                <th>员工</th>
+                <th>业务名称</th>
+                <th>呼叫量</th>
+                <th></th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td><input name="cbId" type="checkbox" value="@item.CALL_CNT" /></td>
+                <td>
+                    @(i++)
+                </td>
+                <td>@item.STAT_DT.ToString("yyyy-MM-dd")</td>
+                <td>@item.HALL_NAM</td>
+                <td>@item.STAFF_NAM</td>
+                <td>@item.Q_SERIALNAME</td>
+                <td>
+                    @item.CALL_CNT
+                </td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>

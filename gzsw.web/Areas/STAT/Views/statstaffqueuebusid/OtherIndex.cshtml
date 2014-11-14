@@ -1,0 +1,332 @@
+﻿@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model List<dynamic>
+@{
+    ViewBag.Title = "排队业务分析";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var index = 0;
+}
+@{
+    Html.RenderPartial("~/Areas/STAT/Views/Shared/SearchView.cshtml", new object());
+}
+<div id="navtab1" style="margin: 3px 3px 0 3px; overflow: hidden; border: 1px solid #A3C0E8;">
+    <div tabid="home" title="报表" lselected="true">
+        <div class="tablePanel" style="padding-top: 5px;">
+            <table id="datatable" class="tablelist tablesorter tablesorter-default" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                          <th style="text-align: center; background-image: none;" ></th>
+                        <th style="text-align: center; background-image: none;" colspan="2">排队业务</th>
+                        <th style="text-align: center; background-image: none;" colspan="2">
+                            <a href="#" onclick="return showCNT('CALL_CNT', '', '排队业务报表--呼叫量')" target="_blank">呼叫量</a>
+                        </th> 
+                        <th style="text-align: center; background-image: none;" colspan="2">
+                            <a href="#" onclick="return showCNT('OVERTIME_WAIT_CNT','','排队业务报表--超时等候量')" target="_blank">超时等候量</a>
+                        </th>
+                        
+                        
+                        
+
+                        <th style="text-align: center; background-image: none;" colspan="2">
+                            <a href="#" onclick="return showCNT('HANDLE_CNT','','排队业务报表--办理量')" target="_blank">办理量</a> 
+                        </th>
+                        
+                        
+                        <th style="text-align: center; background-image: none;" colspan="2">
+                            <a href="#" onclick="return showCNT('ABANDON_CNT','','排队业务报表--弃号量')" target="_blank">弃号量</a> 
+                        </th>
+
+                        <th style="text-align: center; background-image: none;" colspan="2">
+                            <a href="#" onclick="return showCNT('WAIT_DUR','','排队业务报表--平均等候时间')" target="_blank">平均时间</a> 
+                        </th>
+                        <th style="text-align: center; background-image: none;" colspan="2">
+                            最长时间
+                        </th>
+                        <th style="text-align: center; background-image: none;" colspan="2">
+                            <a href="#" onclick="return showCNT('VOTECNT','','排队业务报表--超时办理')" target="_blank">超时办理</a> 
+                        </th >
+                        <th style="text-align: center; background-image: none;" colspan="2" rowspan="2" >
+                             <a href="#" onclick="return showCNT('TOT_TICKET_CNT','','排队业务报表--超时办理量')" target="_blank">人流量</a>
+                        </th>
+                    </tr>
+                    <tr>
+                         <th style="width: 25px; background-image: none;">序号</th>
+                        <th style="width: 25px; background-image: none;">编码</th>
+                        <th style="width: 80px; ">名称</th> 
+                        <th style="width: 80px;">呼叫量</th>
+                        <th style="width: 40px; ">呼叫率</th> 
+                        <th style="width: 80px;">超时等候量</th>
+                        <th style="width: 40px; ">超时等候率</th>
+                        <th style="width: 80px; "> 办理量</th>
+                        <th style="width: 40px; ">办理率</th>
+                        <th style="width: 80px; ">弃号量</th>
+                        <th style="width: 40px; ">弃号率</th>
+                        <th style="width: 80px; ">平均办理时间</th>
+                        <th style="width: 80px; ">平均等待时间</th>
+                        <th style="width: 80px; "> <a href="#" onclick="return showCNT('MAX_WAIT_DUR','','排队业务报表--最长等待时间')" target="_blank">最大等待时间</a></th>
+                        <th style="width: 80px; ">
+                              <a href="#" onclick="return showCNT('MAX_HANDLE_DUR','','排队业务报表--最长办理时间')" target="_blank">
+                              最长办理时间
+                                  </a>
+                        </th>
+                        <th style="width: 80px; ">超时办理量</th>
+                        <th style="width: 40px; ">超时办理率</th>
+                    </tr>
+                </thead>
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                    <tr>
+                        <td>@(++index)</td>
+                        <td>
+                            @item.QUEUE_BUSI_CD
+
+                        </td>
+                        <td>
+                             @item.Q_SERIALNAME 
+
+                        </td>
+                        <td>
+                            <a href="#" onclick="return showCNT('CALL_CNT','@item.QUEUE_BUSI_CD','排队业务报表--呼叫量')" target="_blank">@item.CALL_CNT</a>
+                        </td>
+                        <td>
+                            @((item.CALL_CNT * 100.0 / item.TOT_TICKET_CNT).ToString("f2")) %
+                        </td>
+                      
+                        <td>
+                            <a href="#" onclick="return showCNT('OVERTIME_WAIT_CNT','@item.QUEUE_BUSI_CD','排队业务报表--超时等候量')" target="_blank">@item.OVERTIME_WAIT_CNT</a>
+                        </td>
+                        <td>
+                            @(Model.Sum(obj => obj.OVERTIME_WAIT_CNT)==0?"0":(item.OVERTIME_WAIT_CNT * 100.0 /item.TOT_TICKET_CNT).ToString("f2")) %
+                        </td>
+                        
+                          <td>
+                            <a href="#" onclick="return showCNT('HANDLE_CNT','@item.QUEUE_BUSI_CD','排队业务报表--办理量')" target="_blank">@item.HANDLE_CNT</a>
+                        </td>
+                        <td>
+                            @((item.HANDLE_CNT * 100.0 / item.TOT_TICKET_CNT).ToString("f2")) %
+                        </td>
+                        
+                          <td>
+                            <a href="#" onclick="return showCNT('ABANDON_CNT','@item.QUEUE_BUSI_CD','排队业务报表--弃号量')" target="_blank">@item.ABANDON_CNT</a>
+                        </td>
+                        <td>
+                            @((item.ABANDON_CNT * 100.0 / item.TOT_TICKET_CNT).ToString("f2")) %
+                        </td>
+                        
+                        
+ 
+                        <td>
+                            <a href="#" onclick="return showCNT('HANDLE_DUR','@item.QUEUE_BUSI_CD','排队业务报表--平均办理时间')" target="_blank">@(((int)(item.HANDLE_CNT!=0?((item.HANDLE_DUR / item.HANDLE_CNT)):0)).ToTimeString())</a>  
+                        </td>
+                        <td>
+                            <a href="#" onclick="return showCNT('WAIT_DUR','@item.QUEUE_BUSI_CD','排队业务报表--平均等待时间')" target="_blank">@(((int)((item.WAIT_DUR / item.CALL_CNT))).ToTimeString())</a>  
+                        </td>
+                        <td>
+                            <a href="#" onclick="return showCNT('MAX_WAIT_DUR','@item.QUEUE_BUSI_CD','排队业务报表--最长等待时间')" target="_blank">
+                                  @(((int)item.MAX_WAIT_DUR).ToTimeString())
+
+                            </a>
+                        </td>
+                        <td>
+                             <a href="#" onclick="return showCNT('MAX_HANDLE_DUR','@item.QUEUE_BUSI_CD','排队业务报表--最长办理时间')" target="_blank">
+                                   @(((int)item.MAX_HANDLE_DUR).ToTimeString())
+
+                             </a>
+                            
+                        </td>
+                        <td>
+                            <a href="#" onclick="return showCNT('OVERTIME_HANDLE_CNT','@item.QUEUE_BUSI_CD','排队业务报表--超时办理量')" target="_blank">@item.OVERTIME_HANDLE_CNT
+                            </a>
+                        </td>
+                        <td>
+                            
+                            
+                            @(@item.HANDLE_CNT==0?"0.00":(item.OVERTIME_HANDLE_CNT * 100.0 / item.HANDLE_CNT).ToString("f2")) %
+                          
+                        </td> 
+                        <td colspan="2">
+                            @*@Model.Sum(obj => obj.TOT_TICKET_CNT)*@
+                            
+                             <a href="#" onclick="return showCNT('TOT_TICKET_CNT','@item.QUEUE_BUSI_CD','排队业务报表--人流量')" target="_blank">@item.TOT_TICKET_CNT</a>
+                        </td> 
+                      
+                    </tr>
+                    }
+
+                     <tfoot>
+                        <tr>
+                            <td colspan="3" style="text-align: center; font-weight: bold; font-size: 14px;">合计</td>
+                            <td><a href="#" onclick="return showCNT('CALL_CNT', '', '排队业务报表--呼叫量')" target="_blank">@Model.Sum(obj => obj.CALL_CNT)</a></td>
+                            <td> @((Model.Sum(obj => obj.CALL_CNT )* 100.0 / Model.Sum(obj => obj.TOT_TICKET_CNT)).ToString("f2")) %</td>
+                            
+                            <td><a href="#" onclick="return showCNT('OVERTIME_WAIT_CNT','','排队业务报表--超时等候量')" target="_blank">@Model.Sum(obj => obj.OVERTIME_WAIT_CNT)</a></td>
+                            <td> @(Model.Sum(obj => obj.OVERTIME_WAIT_CNT)==0?"0":(Model.Sum(obj => obj.OVERTIME_WAIT_CNT)* 100.0 / Model.Sum(obj => obj.TOT_TICKET_CNT)).ToString("f2")) %</td>
+                            <td><a href="#" onclick="return showCNT('HANDLE_CNT','','排队业务报表--办理量')" target="_blank">@Model.Sum(obj => obj.HANDLE_CNT)</a></td>
+                            <td> @((Model.Sum(obj => obj.HANDLE_CNT) * 100.0 / Model.Sum(obj => obj.TOT_TICKET_CNT)).ToString("f2")) %</td>
+                            <td><a href="#" onclick="return showCNT('ABANDON_CNT','','排队业务报表--弃号量')" target="_blank">@Model.Sum(obj => obj.ABANDON_CNT)</a></td>
+                            <td> @((Model.Sum(obj => obj.ABANDON_CNT) * 100.0 / Model.Sum(obj => obj.TOT_TICKET_CNT)).ToString("f2")) %</td>
+                           
+                            <td>
+                                <a href="#" onclick="return showCNT('HANDLE_DUR','','排队业务报表--平均办理时间')" target="_blank">
+                                    @(Model.Sum(obj => obj.HANDLE_CNT)==0?"0秒":Convert.ToInt32(((Model.Sum(obj => obj.HANDLE_DUR) / Model.Sum(obj => obj.HANDLE_CNT)))).ToTimeString())
+                                </a>
+                            </td>
+                            <td><a href="#" onclick="return showCNT('WAIT_DUR','','排队业务报表--平均等待时间')" target="_blank">@((Model.Sum(x=>x.WAIT_DUR) / Model.Sum(obj => obj.CALL_CNT)).ToTimeString())</a></td> 
+                            <td> 
+                                
+                                <a href="#" onclick="return showCNT('MAX_WAIT_DUR','','排队业务报表--最长等待时间')" target="_blank">
+                                    @(((int)Model.Max(obj => obj.MAX_WAIT_DUR)).ToTimeString())
+                                        
+
+                                </a>
+                            </td> 
+                             <td>
+                                 <a href="#" onclick="return showCNT('MAX_HANDLE_DUR','','排队业务报表--最长办理时间')" target="_blank">
+                                     
+                                     @(((int)Model.Max(obj => obj.MAX_HANDLE_DUR)).ToTimeString())
+                                 </a>
+                            
+                        </td>
+
+                            <td>
+                                
+                                  <a href="#" onclick="return showCNT('VOTECNT','','排队业务报表--超时办理量')" target="_blank">@Model.Sum(obj => obj.OVERTIME_HANDLE_CNT)</a> 
+                            </td>
+                            <td>  @((Model.Sum(obj => obj.OVERTIME_HANDLE_CNT) * 100.0 / Model.Sum(obj => obj.HANDLE_CNT)).ToString("f2")) %</td>
+                              <td colspan="2">
+                           
+                                  <a href="#" onclick="return showCNT('TOT_TICKET_CNT','','排队业务报表--人流量')" target="_blank">@Model.Sum(obj => obj.TOT_TICKET_CNT)</a>
+                        </td> 
+                        </tr>
+                    </tfoot> 
+                }
+            </table>
+            @if (Model == null || Model.Count <= 0)
+            {
+                <div class="l-panel-notDATA">
+                    暂无数据
+                </div>
+            } 
+            else
+            {
+                Html.RenderPartial("~/Areas/STAT/Views/Shared/PagerView.cshtml");
+            }
+
+        </div>
+    </div>
+    <div title="柱状图"  >
+        <div>
+            @Html.Raw(ViewBag.ChartColumn3DXML)
+        </div>
+    </div>
+   <div title="线状图"  >
+        <div>
+            @Html.Raw(ViewBag.ChartSplineXML)
+        </div>
+    </div> 
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    @Html.JavaScript("lib/counter/orgTree.js")
+    <!-- 图表排序脚本 -->
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.js")
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.widgets.min.js")
+    @Html.JavaScript("lib/fusionchart/FusionCharts.js")
+    <style type="text/css">
+        .tablelist th {
+            background-image: none;
+            font-weight: normal;
+            text-indent: 0;
+        }
+
+        .tablelist td {
+            text-indent: 0;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            // 表格数据排序
+            $("#datatable").tablesorter({
+                headers: {
+                    0: { sorter: false },
+                    1: { sorter: false },
+                    2: { sorter: false },
+                    3: { sorter: false },
+                    4: { sorter: false },
+                    5: { sorter: false },
+                    6: { sorter: false },
+                    7: { sorter: false },
+                    8: { sorter: false },
+                    9: { sorter: false },
+                    10: { sorter: false }
+                }
+            });
+            //// 查询
+            //$("#btnSearch").click(function () {
+            //    var url = location.href;
+            //    url = url.getUrl({
+            //        _t: Date.parse(new Date()),
+            //        beginTime: $("#txtBeginTime").val(),
+            //        endTime: $("#txtEndTime").val()
+            //    });
+            //    location.href = url;
+            //});
+
+            // 打印报表
+            $("#btnOutPut").click(function () {
+                var url = "@Html.Raw(Request.Url.PathAndQuery)" + ("@Html.Raw(Request.Url.PathAndQuery)".indexOf('?') > -1 ? "&" : "?") + "export=true";
+                window.open(url);
+            });
+        });
+
+        function showCNT(ct, id, caption) {
+            //var url = "/STAT/statstaffqueuebusid/ShowCNT";
+            //url += "?ct=" + ct + "&caption=" + caption;
+            //url += "&beginTime=" + $("#txtBeginTime").val() + "&endTime=" + $("#txtEndTime").val();
+            var url = '@Url.Action("ShowCNT")';
+            var param = {
+                ct: ct,
+                beginTime: $("#beginTime").val(),
+                endTime: $("#endTime").val(),
+                queueBusiCd: id,
+                _t: Date.parse(new Date())
+            };
+            url = url.getUrl(param);
+            window.open(url);
+            return false;
+        }
+        function chk(obj, ct) {
+            if (ct == "LOCALCNT") {
+                if ($(obj).is(":checked")) {
+                    $("#datatable tr").find('th:eq(6)').hide();
+                    $("#datatable tr").find('td:eq(11)').hide();
+                    $("#datatable tr").find('td:eq(12)').hide();
+                }
+                else {
+                    $("#datatable tr").find('th:eq(6)').show();
+                    $("#datatable tr").find('td:eq(11)').show();
+                    $("#datatable tr").find('td:eq(12)').show();
+                }
+            }
+            if (ct == "VOTECNT") {
+                if ($(obj).is(":checked")) {
+                    $("#datatable tr").find('th:eq(7)').hide();
+                    $("#datatable tr").find('td:eq(13)').hide();
+                    $("#datatable tr").find('td:eq(14)').hide();
+                }
+                else {
+                    $("#datatable tr").find('th:eq(7)').show();
+                    $("#datatable tr").find('td:eq(13)').show();
+                    $("#datatable tr").find('td:eq(14)').show();
+                }
+            }
+        }
+        $(function () {
+            $("#navtab1").ligerTab();
+        });
+    </script>
+}

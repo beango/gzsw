@@ -79,5 +79,7 @@ namespace gzsw.dal
         /// <param name="paras"></param>
         /// <returns></returns>
         bool Exists(params object[] paras);
+
+        Page<T> GetPage(int pageIndex, int pageSize, params object[] paras);
     }
 }

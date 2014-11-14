@@ -40,13 +40,13 @@
                     所属大类业务
                 </th>
                 <th>
-                    办理超时时间
+                    办理超时时间（分）
                 </th>
                 <th>
-                    至少办理该业务的时间
+                    业务至少办理时间（秒）
                 </th>
                 <th>
-                    提醒倒计时时间点
+                    提醒倒计时时间点（秒）
                 </th>
                 <th>
                     默认业务量折合系数
@@ -118,7 +118,7 @@
             bar.addItem({ line: true });
             bar.addItem(@Html.AuthAddButton("SYS_DETAILSERIAL_ADD", Url.Action("Create", "DetailSerial"),"新增",500,400));
             bar.addItem({ line: true });
-            bar.addItem(@Html.AuthEditButton("SYS_DETAILSERIAL_EDT", Url.Action("Edit", "DetailSerial"),500,400));
+            bar.addItem(@Html.AuthEditButton("SYS_DETAILSERIAL_EDT", Url.Action("Edit", "DetailSerial"),"修改",500,400));
             bar.addItem({ line: true });
             bar.addItem(@Html.AuthDelButton("SYS_DETAILSERIAL_DEL", Url.Action("Delete", "DetailSerial")));
         });

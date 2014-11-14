@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace gzsw.util
 {
-    public class EnumHelper
+    public partial class EnumHelper
     {
         /// <summary>
         /// 获取枚举的描述文本
@@ -36,25 +36,59 @@ namespace gzsw.util
             //如果没有检测到合适的注释，则用默认名称
             return e.ToString();
         }
+
         public static string ConvertToE<T>(string strValue) where T : struct , IConvertible
         {
             T t;
             return System.Enum.TryParse(strValue, true, out t) ? t.ToString() : "";
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="strValue"></param>
+        /// <returns></returns>
+        public static T ConvertToEnum<T>(string strValue) where T : struct , IConvertible
+        {
+            T t ;
+            if (System.Enum.TryParse(strValue, true, out t))
+            {
+                return t;
+            }
+            return default(T);
+        }
+
         /// <summary>
         ///  把枚举的描述和值绑定到DropDownList
         /// </summary>
         /// <param name="enumType"></param>
         /// <returns></returns>
-        public static List<SelectListItem> GetCategorySelectList(Type enumType,bool addAll = true)
+        public static List<SelectListItem> GetCategorySelectList(Type enumType,bool addAll = true, object value=null)
         {
             List<SelectListItem> selectList = new List<SelectListItem>();
             if (addAll)
-            selectList.Add(new SelectListItem { Text = "--请选择--", Value = "", Selected = true });
+            {
+                selectList.Add(value == null
+                    ? new SelectListItem {Text = "--请选择--", Value = "", Selected = true}
+                    : new SelectListItem {Text = "--请选择--", Value = ""});
+            }
 
             foreach (object e in System.Enum.GetValues(enumType))
             {
-                selectList.Add(new SelectListItem { Text = GetEnumDescription(e), Value = ((int)e).ToString() });
+                if (value != null && ((int) e) == (int)value)
+                {
+                    selectList.Add(new SelectListItem
+                                   {
+                                       Text = GetEnumDescription(e),
+                                       Value = ((int) e).ToString(),
+                                       Selected = true
+                                   });
+                }
+                else
+                {
+                    selectList.Add(new SelectListItem {Text = GetEnumDescription(e), Value = ((int) e).ToString()});
+                }
             }
 
             return selectList;

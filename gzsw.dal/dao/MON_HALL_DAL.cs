@@ -14,7 +14,7 @@ namespace gzsw.dal.dao
     {
         public List<MON_HALL_TAB_DEF> GetHallTabDefs(string hallNo)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
 
             var sql = Sql.Builder.Append(@"FROM [MON_HALL_TAB_DEF] 
                                           WHERE [HALL_NO]=@0",hallNo);
@@ -24,7 +24,7 @@ namespace gzsw.dal.dao
 
         public List<MON_HALL_CAMERA_DEF> GetHallCameraDefs(string hallNo)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
 
             var sql = Sql.Builder.Append(@"FROM [MON_HALL_CAMERA_DEF] 
                                           WHERE [HALL_NO]=@0", hallNo);
@@ -34,7 +34,7 @@ namespace gzsw.dal.dao
 
         public void SaveHallTabDef(MON_HALL_TAB_DEF item)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
             var tab = db.FirstOrDefault<MON_HALL_TAB_DEF>(Sql.Builder.Append("SELECT * FROM MON_HALL_TAB_DEF WHERE [HALL_NO]=@0 AND [COUNTER_ID]=@1", item.HALL_NO, item.COUNTER_ID));
             if (tab == null)
             {
@@ -54,7 +54,7 @@ namespace gzsw.dal.dao
 
         public void DeleteHallTabDef(string hallNo)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
             var sql = Sql.Builder.Append(@"DELETE FROM [MON_HALL_TAB_DEF] WHERE [HALL_NO] = @0 ", hallNo);
             db.Execute(sql);
         }
@@ -62,7 +62,7 @@ namespace gzsw.dal.dao
 
         public void SaveHallCameraDef(MON_HALL_CAMERA_DEF item)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
             if (item.SEQ > 0)
             {
                 db.Update(item);
@@ -75,7 +75,7 @@ namespace gzsw.dal.dao
 
         public void RemoveHallTabDef(string hallNo, int counterId)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
             db.Execute(Sql.Builder.Append(@"DELETE FROM [MON_HALL_TAB_DEF]
                                              WHERE [HALL_NO] = @0 AND [COUNTER_ID]=@1",
                                             hallNo,counterId));
@@ -83,7 +83,7 @@ namespace gzsw.dal.dao
 
         public void RemoveHallCameraDef(int seq)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
 
             db.Execute(Sql.Builder.Append(@"DELETE FROM [MON_HALL_CAMERA_DEF]
                                              WHERE [SEQ] = @0 ",

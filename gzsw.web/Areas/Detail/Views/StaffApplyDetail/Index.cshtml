@@ -1,0 +1,151 @@
+﻿@{
+    ViewBag.Title = "人员考勤明细";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.model.Enums
+@using gzsw.model.Subclasses
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model PetaPoco.Page<CHK_STAFF_APPLYDETAIL>
+
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:80px;">服务厅：</td>
+            <td style="width:150px;">
+                @Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)
+            </td>
+            <td style="width:90px;">开始时间</td>
+            <td style="width: 120px;">
+                <input type="text" name="txtBeginTime" id="txtBeginTime" value="@ViewBag.BeginTime" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
+            </td>
+            <td style="width:80px;">结束时间</td>
+            <td style="width: 120px;">
+                <input type="text" name="txtEndTime" id="txtEndTime" value="@ViewBag.EndTime" o onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
+            </td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+            <td>
+                <span style="float: right;margin-right: 10px;"><a id="seniorSelect" href="javascript:void(0);">高级查询</a></span>
+            </td>
+        </tr>
+        <tr style="@(ViewBag.IsSenior != 0 ? "" : "display: none;") " d-tyle='senior'>
+            <td>员工编号:</td>
+            <td>
+                <input type="text" id="txtStaffId" value="@ViewBag.StaffId" />
+            </td>
+            <td>员工名称:</td>
+            <td>
+                <input type="text" id="txtStaffName" value="@ViewBag.StaffName" />
+            </td>
+            <td>假期类型:</td>
+            <td colspan="3">
+                <input type="hidden" id="hidIsSenior" value="@ViewBag.IsSenior" />
+                @Html.DropDownList("ddlType", EnumHelper.GetCategorySelectList(typeof(HOLLI_TYPE_ENUM), true, (object)ViewBag.Type))
+            </td>
+        </tr>
+    </table>
+
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:30px;">
+                    <input id="chkAll" name="chkAll" type="checkbox" />
+                </th>
+                <th style="width:38px;">序号 </th>
+                <th>请假员工</th>
+                <th>请假起始时间</th>
+                <th>请假结束时间</th>
+                <th>假期类型</th>
+                <th>请假原因</th>
+
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.APPLYDETAIL_ID" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>@item.STAFF_NAM</td>
+                <td>@item.BEGIN_TIME.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@item.END_TIME.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@(EnumHelper.ConvertToE<HOLLI_TYPE_ENUM>(item.HOLLI_TYP.ToString()))</td>
+                <td>@item.APPLY_REASON</td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head
+{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+}
+
+<script type="text/javascript">
+    $(function () {
+        // 查询
+        $("#btnSearch").ligerButton(
+                {
+                    text: " 查 询 ",
+                    click: function () {
+                        $("#txtCounter").focus();
+                        $("#txtNsrsbm").focus();
+                        var begin = $("#txtBeginTime").val();
+                        var end = $("#txtEndTime").val();
+                        var url = "?orgId=" + encodeURI($("#ddlORGID").val())
+                            + "&beginTime=" + encodeURI(begin)
+                            + "&endTime=" + encodeURI(end)
+                            + "&staffNo=" + encodeURI($("#txtStaffId").val())
+                            + "&staffName=" + encodeURI($("#txtStaffName").val())
+                            + "&type=" + encodeURI($("#ddlType").val())
+                            + "&isSenior=" + encodeURI($("#hidIsSenior").val());
+                        location.href = url.urlstamp();
+                    },
+                    icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+                });
+        $("#seniorSelect").click(function () {
+            var isSenior = $("#hidIsSenior").val();
+            if (isSenior==1) {
+                $("#hidIsSenior").val(0);
+                $("tr[d-tyle='senior']").hide();
+            } else {
+                $("#hidIsSenior").val(1);
+                $("tr[d-tyle='senior']").show();
+             }
+        });
+        // 顶部导航
+        var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+        @if (Html.ChkAuth("Detail_CHK_STAFF_APPLYDETAIL_VIW"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "Detail_CHK_STAFF_APPLYDETAIL_VIW", 800, 450));
+                @:ligerToolBar.addItem({ line: true });
+             }
+
+
+    });
+</script>

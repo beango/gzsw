@@ -1,0 +1,69 @@
+﻿@using gzsw.model
+@using gzsw.util
+@using gzsw.web;
+@model PetaPoco.Page<dynamic>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<!-- 查询菜单 --> 
+
+<div class="tablePanel">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                
+                <th style="width:38px;">序号 </th>  
+                     <th>服务厅编码</th>
+                <th>服务厅名称</th>
+                <th>员工编码</th>
+                <th>员工名称</th>
+                <th >大类事项</th>
+                <th >明细事项</th>
+                <th >业务笔数</th>
+                <th >业务折合量</th>
+                <th >总办理时长</th>
+                <th>超时办理量</th>
+                <th>同城业务量</th> 
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+              
+                <td>
+                    @(i++)
+                </td>
+                <td>@item.HALL_NO</td>
+                <td>@item.HALL_NAM</td>
+                <td>@item.STAFF_ID</td>
+                <td>@item.STAFF_NAM</td>
+                <td>@item.DLS_SERIALNAME</td>
+                <td>@item.SERIALNAME</td>
+                <td>@item.BUSI_CNT</td>
+                <td>@item.CONVERT_BUSI_CNT</td>
+                <td>@item.HANDLE_DUR</td>
+                <td>@item.OVERTIME_HANDLE_CNT</td>
+                <td>@item.LOCAL_CNT</td> 
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+     
+}

@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="业务差错分析">
+    <Position X="2.104" Y="0.76" Height="0.29" Width="1.117" />
+  </Comment>
+  <Comment CommentText="质量类型">
+    <Position X="6.104" Y="0.698" Height="0.312" Width="0.95" />
+  </Comment>
+  <Comment CommentText="事项大类">
+    <Position X="9.5" Y="0.771" Height="0.323" Width="0.815" />
+  </Comment>
+  <Class Name="gzsw.model.dto.ServiceSlipAnalysisViewModel">
+    <Position X="1.5" Y="1.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAIAAAAAAAAACABAAAAAAAAIAA=</HashCode>
+      <FileName>ViewModel\ServiceSlipAnalysisViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Items" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="gzsw.model.dto.QualityViewModel">
+    <Position X="5.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAQAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\QualityViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Items" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="gzsw.model.dto.ItemBigTypeViewModel">
+    <Position X="9.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAACAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>ViewModel\ItemBigTypeViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="微软雅黑" Size="9" />
+</ClassDiagram>

@@ -48,5 +48,16 @@ namespace gzsw.util
 
             return output;
         }
+
+        /// <summary>
+        /// 把decimal?格式输出
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="format"></param>
+        /// <returns></returns>
+        public static string GetDecimalToString(decimal? value, string format="F")
+        {
+            return value == null ? "0" : value.GetValueOrDefault().ToString(format);
+        }
     }
 }

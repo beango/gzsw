@@ -61,15 +61,11 @@ gzsw.map = function () {
       } 
       LocalMapType.prototype.tileSize = new google.maps.Size(256, 256);
 	  LocalMapType.prototype.maxZoom = 15;   //地图显示最大级别
-	  LocalMapType.prototype.minZoom =6;    //地图显示最小级别
-	 /* LocalMapType.prototype.name = '监控分布地图';
-	  LocalMapType.prototype.alt = '显示监控分布地图';*/
-/*    debugger;
-	  LocalMapType.prototype.style.visibility = "hidden";*/
+	  LocalMapType.prototype.minZoom = 6;    //地图显示最小级别 
+	  LocalMapType.prototype.name = '监控分布地图';
+	  LocalMapType.prototype.alt = '显示监控分布地图'; 
 	  LocalMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
-	     
-	      //alert($(ownerDocument.body).find("div[title='显示江西省-监控分布地图-监控分布地图']").length);
-
+	      
 	      var img = ownerDocument.createElement('img');
 	      img.style.width = this.tileSize.width + 'px';
 	      img.style.height = this.tileSize.height + 'px';
@@ -94,7 +90,7 @@ gzsw.map = function () {
                 map: map,
                 draggable: false, 
                 title: $$Settings.text,//$$Settings.title,
-                zIndex: 10, 
+                zIndex: 10
                 /*   icon:'/Content/lib/map/mapfiles/marker_sprite.png' */
             }); 
            
@@ -204,12 +200,12 @@ gzsw.map = function () {
                                           enabled: false
                                       },
                                       tooltip: {
-                                          pointFormat: '当前排队人数: <b>{point.y} 位</b>',
+                                          pointFormat: '当前排队人数: <b>{point.y} 位</b>'
                                       },
                                       series: [
                                           {
                                               name: 'Population',
-                                              data: waitPersonY,
+                                              data: waitPersonY
                                              /* dataLabels: {
                                                   enabled: true,
                                                   rotation: -90,
@@ -257,12 +253,12 @@ gzsw.map = function () {
                                           enabled: false
                                       },
                                       tooltip: {
-                                          pointFormat: '当前平均等候时间（分钟）: <b>{point.y} 分钟</b>',
+                                          pointFormat: '当前平均等候时间（分钟）: <b>{point.y} 分钟</b>'
                                       },
                                       series: [
                                           {
                                               name: 'Population',
-                                              data: waitPersonsTimeY,
+                                              data: waitPersonsTimeY
                                              /* dataLabels: {
                                                   enabled: true,
                                                   rotation: -90,
@@ -429,6 +425,7 @@ gzsw.map = function () {
                 center: myLatlng,
                 zoom: 16,
                 streetViewControl: false,
+              /*  position: google.maps.ControlPosition.TOP_RIGHT,*/
                 mapTypeControlOptions: {
                     mapTypeIds: [
                        /*  google.maps.MapTypeId.ROADMAP,
@@ -441,13 +438,13 @@ gzsw.map = function () {
             };
             var localMapType = new LocalMapType();
            
-            //localMapType.name =  $$Settings.txt ;
-           // localMapType.alt = "显示" + $$Settings.txt + "-监控分布地图";
+            localMapType.name = "本地数据" ;
+            localMapType.alt = "本地数据";
              
-            map = new google.maps.Map(document.getElementById('map_canvas'), myOptions);
+            map = new google.maps.Map(document.getElementById('map_canvas'), myOptions); 
             map.mapTypes.set('locaMap', localMapType); //绑定本地地图类型 
             map.setMapTypeId('locaMap'); //指定显示本地地图
-             
+              
         }
     };
 }();

@@ -12,7 +12,7 @@
     <table class="tabSearchList">
         <tr>
             <td style="width:80px;"> 组织机构：</td>
-            <td style="width:170px;">@Html.DropDownList("ddlORGID", ViewBag.UserORG as SelectList, "--请选择--")</td>
+            <td style="width:170px;">@Html.DropDownList("ddlORGID", ViewBag.UserORG as SelectList)</td>
             <td>
                 <div id="btnSearch"></div>
             </td>
@@ -28,39 +28,33 @@
         <table class="tablelist">
             <thead>
                 <tr>
-                    <th style="width:15px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
-                    <th style="width:30px;">序号 </th>
-                    <th style="width:30px;">
-                        窗口
+                    <th style="width:1%;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                    <th style="width:5%;">序号 </th>
+                    <th style="width:5%;">
+                        窗口号
                     </th>
-                    <th style="width: 11%;">
-                        组织机构
-                    </th>
-                    <th style="width: 12%;">
-                        服务厅
-                    </th>
-                    <th style="width:20px;" title="特呼功能">
+                    <th style="width:5%;" title="特呼功能">
                         特呼
                     </th>
-                    <th style="width:50px;">
+                    <th style="width:7%;">
                         状态
                     </th>
-                    <th style="width: 30px;" title="最大业务条数">
+                    <th style="width: 5%;" title="最大业务条数">
                         业务数
                     </th>
-                    <th style="width: 9%; " title="业务组1排队队列">
+                    <th style="width: 14%; " title="业务组1排队队列">
                         业务组1
                     </th>
-                    <th style="width: 9%; " title="业务组2排队队列">
+                    <th style="width: 14%; " title="业务组2排队队列">
                         业务组2
                     </th>
-                    <th style="width: 9%; " title="业务组3排队队列">
+                    <th style="width: 14%; " title="业务组3排队队列">
                         业务组3
                     </th>
-                    <th style="width: 9%; " title="业务组4排队队列">
+                    <th style="width: 13%; " title="业务组4排队队列">
                         业务组4
                     </th>
-                    <th style="width: 9%;" title="业务组5排队队列">
+                    <th style="width: 13%; " title="业务组5排队队列">
                         业务组5
                     </th>
                 </tr>
@@ -80,13 +74,6 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.COUNTER_ID)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Org.ORG_NAM)
-                    </td>
-                    <td>
-                        @(item.Hall != null ? item.Hall.HALL_NAM : "")
-                    </td>
-
                     <td>
                         @(item.SPEC_FUN_IND ? "是" : "否")
                     </td>

@@ -1,0 +1,332 @@
+﻿@{
+    ViewBag.Title = "服务厅综合评定";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.model.Enums
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model PetaPoco.Page<dynamic>
+
+
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:80px;">服务厅：</td>
+            <td style="width:150px;">
+                @Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)
+            </td>
+            <td style="width: 60px;"> 年份：</td>
+            <td style="width:120px;">
+                @Html.DropDownList("ddlYears", ViewBag.Years as List<SelectListItem>)
+            </td>
+            <td style="width: 60px;"> 月份：</td>
+            <td style="width:120px;">
+                @Html.DropDownList("ddlMonth", ViewBag.Months as List<SelectListItem>)
+            </td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+
+        </tr>
+    </table>
+
+</div>
+
+<div class="tablePanel" style="margin-top: 5px;">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:30px;">
+                    <input id="chkAll" name="chkAll" type="checkbox" />
+                </th>
+                <th style="width:38px;">序号 </th>
+                <th>服务厅编码</th>
+                <th>服务厅名称</th>
+                <th>人员出勤率分数</th>
+                <th>排队滞留率分数</th>
+                <th>按时办结率分数</th>
+                <th>办税差错率分数</th>
+                <th>评价满意率分数</th>
+                <th>综合投诉率分数</th>
+                <th>环境建设分数</th>
+                <th>制度建设分数</th>
+                <th>规范建设分数</th>
+                <th>行风建设分数</th>
+                <th>第三方调查分数</th>
+                <th>其他项目分数</th>
+                <th>星级</th>
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.STAT_MO" d-staffid="@item.HALL_NO" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @item.HALL_NO
+                </td>
+                <td>@item.HALL_NAM</td>
+                <td>
+                    <a href="javascript:void(0);" d-type="ATTEND_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO" >@item.ATTEND_SCORE</a> 
+                </td>
+                <td>
+                    <a href="javascript:void(0);" d-type="QUEUE_DETAIN_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.QUEUE_DETAIN_SCORE</a> 
+                </td> 
+                <td>
+                    <a href="javascript:void(0);" d-type="HANDLE_ONTIME_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.HANDLE_ONTIME_SCORE</a> 
+                </td>
+                <td>
+                    <a href="javascript:void(0);" d-type="QUALITY_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.QUALITY_SCORE</a> 
+                </td>
+                <td>
+                    <a href="javascript:void(0);" d-type="EVAL_SATISFY_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.EVAL_SATISFY_SCORE</a> 
+                </td>
+                <td>
+                    <a href="javascript:void(0);" d-type="COMPLAIN_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.COMPLAIN_SCORE</a> 
+                </td> 
+                 <td>
+                    <a href="javascript:void(0);" d-type="ENVIRON_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.ENVIRON_SCORE</a> 
+                </td>  
+                 <td>
+                    <a href="javascript:void(0);" d-type="SYSTEM_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.SYSTEM_SCORE</a> 
+                </td>  
+                 <td>
+                    <a href="javascript:void(0);" d-type="NORM_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.NORM_SCORE</a> 
+                </td>  
+                 <td>
+                    <a href="javascript:void(0);" d-type="PROFESS_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.PROFESS_SCORE</a> 
+                </td>  
+                 <td>
+                    <a href="javascript:void(0);" d-type="THIRD_SURVEY_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.THIRD_SURVEY_SCORE</a> 
+                </td>   
+                 <td>
+                    <a href="javascript:void(0);" d-type="OTHER_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.OTHER_SCORE</a> 
+                </td>   
+                <td> @(((StarLevelEunm)item.STAR_LEVEL).GetDescription())</td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head
+{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+}
+
+<script type="text/javascript">
+    $(function () {
+        // 查询
+        $("#btnSearch").ligerButton(
+                {
+                    text: " 查 询 ",
+                    click: function () {
+                        var url = "?years=" + encodeURI($("#ddlYears").val())
+                            + "&month=" + encodeURI($("#ddlMonth").val())
+                            + "&orgId=" + encodeURI($("#ddlORGID").val());
+                        location.href = url.urlstamp();
+                    },
+                    icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+                });
+
+        //人员出勤率分数
+        $("a[d-type='ATTEND_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailATTEND")?mo=' + mo + "&hallno=" + encodeURI(staffId);
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 900,
+                height: 320,
+                isReload: false
+            });
+        });
+        
+
+        //排队滞留率分数
+        $("a[d-type='QUEUE_DETAIN_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailQUEUEDETAIN")?mo=' + mo + "&hallno=" + encodeURI(staffId);
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 900,
+                height: 320,
+                isReload: false
+            });
+        });
+        
+
+
+        //按时办结率分数
+        $("a[d-type='HANDLE_ONTIME_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailHANDLEONTIME")?mo=' + mo + "&hallno=" + encodeURI(staffId);
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 900,
+                height: 320,
+                isReload: false
+            });
+        });
+
+
+        //差错
+        $("a[d-type='QUALITY_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailQUALITY")?mo=' + mo + "&hallno=" + encodeURI(staffId);
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 900,
+                height: 320,
+                isReload: false
+            });
+        });
+
+
+        //不满意
+        $("a[d-type='EVAL_SATISFY_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailEVALSATISFY")?mo=' + mo + "&hallno=" + encodeURI(staffId);
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 900,
+                height: 320,
+                isReload: false
+            });
+        });
+
+        //不满意
+        $("a[d-type='COMPLAIN_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailCOMPLAIN")?mo=' + mo + "&hallno=" + encodeURI(staffId);
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 900,
+                height: 320,
+                isReload: false
+            });
+        });
+
+
+        //环境建设分数
+        $("a[d-type='ENVIRON_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailOTHER")?mo=' + mo + "&hallno=" + encodeURI(staffId) + "&type=1";
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 800,
+                height: 320,
+                isReload: false
+            });
+        });
+        //制度建设分数
+        $("a[d-type='SYSTEM_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailOTHER")?mo=' + mo + "&hallno=" + encodeURI(staffId) + "&type=2";
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 800,
+                height: 320,
+                isReload: false
+            });
+        });
+        //规范建设分数
+        $("a[d-type='NORM_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailOTHER")?mo=' + mo + "&hallno=" + encodeURI(staffId) + "&type=3";
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 800,
+                height: 320,
+                isReload: false
+            });
+        });
+        //行风建设分数
+        $("a[d-type='PROFESS_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailOTHER")?mo=' + mo + "&hallno=" + encodeURI(staffId) + "&type=4";
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 800,
+                height: 320,
+                isReload: false
+            });
+        });
+        //第三方调查分数
+        $("a[d-type='THIRD_SURVEY_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailOTHER")?mo=' + mo + "&hallno=" + encodeURI(staffId) + "&type=5";
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 800,
+                height: 320,
+                isReload: false
+            });
+        });
+        //其他项目分数
+        $("a[d-type='OTHER_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid"); 
+            var url = '@Url.Action("DetailOTHER")?mo=' + mo + "&hallno=" + encodeURI(staffId) + "&type=6";
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 800,
+                height: 320,
+                isReload: false
+            });
+        });
+         
+    });
+</script>

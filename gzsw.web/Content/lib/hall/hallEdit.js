@@ -524,6 +524,11 @@ var virtualConfig = function () {
         if ($panel.length < 1) {
             $panel = $("<div id='cameraAttribute' style='width:400px;'></div>");
             var table = $("<table class='formTable' cellpadding='0' cellspacing='0'>").appendTo($panel);
+
+            var tr0 = $("<tr>").appendTo(table);
+            tr0.append("<td class='tdLeft'> 摄像名称: </td>");
+            tr0.append("<td> <input type='text' d-type='CameraName' class='text-box' /> </td>");
+
             var tr1 = $("<tr>").appendTo(table);
             tr1.append("<td class='tdLeft'> IP地址: </td>");
             tr1.append("<td> <input type='text' d-type='IP' class='text-box' /> </td>");
@@ -580,6 +585,7 @@ var virtualConfig = function () {
         }
 
         //设置参数
+        $panel.find("input[d-type='CameraName']").val(item.CameraName);
         $panel.find("input[d-type='IP']").val(item.Ip);
         $panel.find("select[d-type='HTTP_PROTOCOL']").val(item.HttpProtocol);
         $panel.find("input[d-type='IPORT']").val(item.Iport);
@@ -659,7 +665,7 @@ var virtualConfig = function () {
            data.RtspPort = rtspPort;
            data.MonCounter = panelCamera.find("input[d-type='MON_COUNTER']").val();
            data.MonShowing = panelCamera.find("input[d-type='MON_SHOW_IND']").prop("checked");
-           
+           data.CameraName = panelCamera.find("input[d-type='CameraName']").val();
 
            $target.data("data", data);
 

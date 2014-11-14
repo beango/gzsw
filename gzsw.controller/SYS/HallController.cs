@@ -33,14 +33,14 @@ namespace gzsw.controller.SYS
             ViewBag.NAM = nam;
             ViewBag.ORGNAM = orgnam;
             ViewBag.ORGID = orgid;
-            ViewBag.UserORG = new SelectList(UserState.UserOrgs.Where(obj => obj.ORG_LEVEL == 4)
+            var orgall = new SYS_USER_DAL().GetUserORG(UserState.UserID);
+            if (string.IsNullOrEmpty(orgid) && orgall != null)
+                orgid = orgall.FirstOrDefault(obj => obj.ORG_LEVEL == 4).ORG_ID;
+
+            ViewBag.UserORG = new SelectList(orgall.Where(obj => obj.ORG_LEVEL == 4)
                 , "ORG_ID", "ORG_NAM", orgid);
 
-            var orgs = UserState.UserOrgs.Select(obj => obj.ORG_ID);
-            if (UserState.UserID == "admin")
-            {
-                orgs = DaoOrganize.FindList().Select(obj => obj.ORG_ID);
-            }
+            var orgs = orgall.Select(obj => obj.ORG_ID);
             if (!string.IsNullOrEmpty(orgid))
             {
                 orgs = orgs.Where(obj => obj == orgid);
@@ -139,7 +139,7 @@ namespace gzsw.controller.SYS
         {
             if (string.IsNullOrEmpty(info.HALL_NO))
             {
-                ModelState.AddModelError("HALL_NO", "服务厅编码不能为空！");
+                ModelState.AddModelError("HALL_NO", "不能为空！");
             }
             else
             {
@@ -148,13 +148,13 @@ namespace gzsw.controller.SYS
                     var exists = dao.GetEntity("HALL_NO", info.HALL_NO);
                     if (null != exists)
                     {
-                        ModelState.AddModelError("HALL_NO", "服务厅编码已经存在！");
+                        ModelState.AddModelError("HALL_NO", "已经存在！");
                     }
                 }
             }
             if (string.IsNullOrEmpty(info.HALL_NAM))
             {
-                ModelState.AddModelError("HALL_NAM", "服务厅名称不能为空！");
+                ModelState.AddModelError("HALL_NAM", "不能为空！");
             }
             else
             {
@@ -163,83 +163,83 @@ namespace gzsw.controller.SYS
                 {
                     if (null != exists)
                     {
-                        ModelState.AddModelError("HALL_NAM", "服务厅名称已经存在！");
+                        ModelState.AddModelError("HALL_NAM", "已经存在！");
                     }
                 }
                 else
                 {
                     if (null != exists && exists.HALL_NO != info.HALL_NO)
                     {
-                        ModelState.AddModelError("HALL_NAM", "服务厅名称已经存在！");
+                        ModelState.AddModelError("HALL_NAM", "已经存在！");
                     }
                 }
             }
             if (string.IsNullOrEmpty(info.ADDRESS))
             {
-                ModelState.AddModelError("ADDRESS", "服务厅地址不能为空！");
+                ModelState.AddModelError("ADDRESS", "不能为空！");
             }
             if (string.IsNullOrEmpty(info.LONGITUDE))
             {
-                ModelState.AddModelError("LONGITUDE", "服务厅经度不能为空！");
+                ModelState.AddModelError("LONGITUDE", "不能为空！");
             }
             if (string.IsNullOrEmpty(info.DIMENSION))
             {
-                ModelState.AddModelError("DIMENSION", "服务厅纬度不能为空！");
+                ModelState.AddModelError("DIMENSION", "不能为空！");
             }
             if (info.HEAD == null)
             {
-                ModelState.AddModelError("HEAD", "服务厅负责人不能为空！");
+                ModelState.AddModelError("HEAD", "不能为空！");
             }
             if (info.HEAD_TEL == null)
             {
-                ModelState.AddModelError("HEAD_TEL", "负责人电话不能为空！");
+                ModelState.AddModelError("HEAD_TEL", "不能为空！");
             }
             if (info.ORG_ID == null)
             {
-                ModelState.AddModelError("ORG_ID", "组织机构不能为空！");
+                ModelState.AddModelError("ORG_ID", "不能为空！");
             }
             else
             {
                 var exists = dao.GetEntity("ORG_ID", info.ORG_ID);
                 if (!isEdit && null != exists)
                 {
-                    ModelState.AddModelError("ORG_ID", "该组织机构已经存在服务厅！");
+                    ModelState.AddModelError("ORG_ID", "已经存在服务厅！");
                 }
                 if (isEdit)
                 {
                     if (null != exists && exists.HALL_NO != info.HALL_NO)
                     {
-                        ModelState.AddModelError("ORG_ID", "该组织机构已经存在服务厅！");
+                        ModelState.AddModelError("ORG_ID", "已经存在服务厅！");
                     }
                 }
             }
             if (info.LIMIT_CNT==null)
             {
-                ModelState.AddModelError("LIMIT_CNT", "服务厅容纳人数不能为空！");
+                ModelState.AddModelError("LIMIT_CNT", "不能为空！");
             }
             if (info.LIMIT_CNT <=0)
             {
-                ModelState.AddModelError("LIMIT_CNT", "服务厅容纳人数必须大于0！");
+                ModelState.AddModelError("LIMIT_CNT", "必须大于0！");
             }
             if (info.COUNTER_CNT <= 0)
             {
-                ModelState.AddModelError("COUNTER_CNT", "柜台数量必须大于0！");
+                ModelState.AddModelError("COUNTER_CNT", "必须大于0！");
             }
             if (info.AUTO_CALL_SEC <= 0)
             {
-                ModelState.AddModelError("AUTO_CALL_SEC", "自动顺呼时间必须大于0！");
+                ModelState.AddModelError("AUTO_CALL_SEC", "必须大于0！");
             }
-            if (info.AUTO_END_SEC <= 0)
+            if (info.AUTO_END_SEC > 0 && info.AUTO_END_SEC <= 10)
             {
-                ModelState.AddModelError("AUTO_END_SEC", "自动结束办理时间必须大于0！");
+                ModelState.AddModelError("AUTO_END_SEC", "必须大于10，或等于0！");
             }
-            if (info.AUTO_EVAL_SEC <= 0)
+            if (info.AUTO_EVAL_SEC > 0 && info.AUTO_EVAL_SEC <= 10)
             {
-                ModelState.AddModelError("AUTO_EVAL_SEC", "自动评价时间必须大于0！");
+                ModelState.AddModelError("AUTO_EVAL_SEC", "必须大于0，或等于0！");
             }
-            if (info.EVAL_STAY_SEC <= 0)
+            if (info.EVAL_STAY_SEC > 0 && info.EVAL_STAY_SEC <= 10)
             {
-                ModelState.AddModelError("EVAL_STAY_SEC", "评价停留时间必须大于0！");
+                ModelState.AddModelError("EVAL_STAY_SEC", "必须大于0，或等于0！");
             }
         }
 
@@ -253,7 +253,11 @@ namespace gzsw.controller.SYS
                 if (!string.IsNullOrEmpty(id))
                     info = GetEdtDT(id);
                 if (!string.IsNullOrEmpty(orgid))
+                {
                     info = dao.GetEntity("ORG_ID", orgid);
+                    info.HALLORG = DaoOrganize.GetEntity("ORG_ID", info.ORG_ID);
+                }
+                    
                 GetEDTData(orgid, info.TICKETNUM);
                 return View(info);
             }
@@ -266,16 +270,18 @@ namespace gzsw.controller.SYS
 
         private void GetEDTData(string orgid,byte? ticknum)
         {
-            ViewBag.UserORG = new SelectList(UserState.UserOrgs.Where(obj => obj.ORG_LEVEL == 4)
-            , "ORG_ID", "ORG_NAM", orgid);
+            //ViewBag.UserORG = new SelectList(UserState.UserOrgs.Where(obj => obj.ORG_LEVEL == 4)
+            //, "ORG_ID", "ORG_NAM", orgid);
+            //ViewBag.UserORG = UserState.UserOrgs.FirstOrDefault(obj => obj.ORG_ID == orgid);
             var selelist = EnumHelper.GetCategorySelectList(typeof(SYS_HALL.TICKETNUM_ENUM), false);
             ViewBag.TICKETNUMList = new SelectList(selelist, "Value", "Text", ticknum);
         }
 
         private SYS_HALL GetEdtDT(string id)
         {
-            var info = dao.GetEntity("HALL_NO", id);
-            return info;
+           var hall = dao.GetEntity("HALL_NO", id);
+           hall.HALLORG= DaoOrganize.GetEntity("ORG_ID", hall.ORG_ID);
+           return hall;
         }
 
         [HttpPost]

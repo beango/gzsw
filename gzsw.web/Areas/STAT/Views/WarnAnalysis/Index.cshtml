@@ -1,0 +1,198 @@
+﻿@using gzsw.util
+@using gzsw.web
+@model IList<gzsw.model.dto.Statistics_WarnAnalysisDto>
+@{
+    ViewBag.Title = "预警分析";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var index = 0;
+}
+
+@section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+
+    <!-- 图表排序脚本 -->
+    @*@Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.js")
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.widgets.min.js")*@
+    <!-- 图表排序 -->
+    @*@Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.pager.js")*@
+    @Html.JavaScript("lib/fusionchart/FusionCharts.js")
+    <style type="text/css">
+        .tablelist th {
+            background-image: none;
+            font-weight: normal;
+            text-indent: 0;
+        }
+
+        .tablelist td {
+            text-indent: 0;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            //// 表格数据排序
+            //$("#datatable").tablesorter({});
+            //  初始化TAB
+            $("#navtab1").ligerTab();
+            // 打印报表
+            $("#btnOutPut").click(function () {
+                var url = "@Html.Raw(Request.Url.PathAndQuery)" + ("@Html.Raw(Request.Url.PathAndQuery)".indexOf('?') > -1 ? "&" : "?") + "export=true";
+                window.open(url);
+            });
+        });
+    </script>
+}
+@{
+    Html.RenderPartial("~/Areas/STAT/Views/Shared/SearchView.cshtml", new object());
+}
+
+<div id="navtab1" style="margin: 3px 3px 0 3px; overflow: hidden; border: 1px solid #A3C0E8; ">
+    <div tabid="home" title="报表" lselected="true">
+        <div class="tablePanel" style="padding-top: 5px;">
+            <table id="datatable" class="tablelist tablesorter tablesorter-default" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th style="text-align: center; background-image: none;">序号</th>
+                        <th style="text-align: center; background-image: none;">服务厅</th>
+                        <th style="text-align: center; background-image: none;">
+                            @*<a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 0, warnLevel = 0, hallNo = "" })" target="_blank">*@
+                                预警级别
+                            @*</a>*@
+                        </th>
+                        <th style="text-align: center; background-image: none;">
+                            <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 1, warnLevel = 0, hallNo = "" })" target="_blank">
+                                等候超时
+                            </a>
+                        </th>
+                        <th style="text-align: center; background-image: none;">
+                            <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 2, warnLevel = 0, hallNo = "" })" target="_blank">
+                                等候超时率
+                            </a>
+                        </th>
+                        <th style="text-align: center; background-image: none;">
+                            <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 3, warnLevel = 0, hallNo = "" })" target="_blank">
+                                窗口饱和度
+                            </a>
+                        </th>
+                        <th style="text-align: center; background-image: none;">
+                            <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 4, warnLevel = 0, hallNo = "" })" target="_blank">
+                                大厅饱和度
+                            </a>
+                        </th>
+                        <th style="text-align: center; background-image: none;">
+                            <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 5, warnLevel = 0, hallNo = "" })" target="_blank">
+                                超时办结率
+                            </a>
+                        </th>
+                        <th style="text-align: center; background-image: none;">
+                            <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 6, warnLevel = 0, hallNo = "" })" target="_blank">
+                                超时业务笔数
+                            </a>
+                        </th>
+                        <th style="text-align: center; background-image: none;">
+                            <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 7, warnLevel = 0, hallNo = "" })" target="_blank">
+                                弃号率
+                            </a>
+                        </th>
+                        <th style="text-align: center; background-image: none;">
+                            <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 8, warnLevel = 0, hallNo = "" })" target="_blank">
+                                差评笔数预警
+                            </a>
+                        </th>
+                        <th style="text-align: center; background-image: none;">
+                            <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 9, warnLevel = 0, hallNo = "" })" target="_blank">
+                                连续工作时长超界
+                            </a>
+                        </th>
+                    </tr>
+                </thead>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            @if (item.L_Value == 1)
+                            {
+                                <td rowspan="4">
+                                    @(++index)
+                                </td>
+                                <td rowspan="4">
+                                    @item.HALL_NAM
+                                </td>
+                            }
+                            @if (item.L_Value != 0)
+                            {
+                                <td>@item.L_Name</td>
+                            }
+                            else
+                            {
+                                <td style="font-weight: bold; font-size: 12px;">@item.L_Name</td>
+                            }
+                            <td>
+                                <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 1, warnLevel = item.L_Value, hallNo = item.HALL_NO })" target="_blank">
+                                    @item.Count_T1
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 2, warnLevel = item.L_Value, hallNo = item.HALL_NO })" target="_blank">
+                                    @item.Count_T2
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 3, warnLevel = item.L_Value, hallNo = item.HALL_NO })" target="_blank">
+                                    @item.Count_T3
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 4, warnLevel = item.L_Value, hallNo = item.HALL_NO })" target="_blank">
+                                    @item.Count_T4
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 5, warnLevel = item.L_Value, hallNo = item.HALL_NO })" target="_blank">
+                                    @item.Count_T5
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 6, warnLevel = item.L_Value, hallNo = item.HALL_NO })" target="_blank">
+                                    @item.Count_T6
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 7, warnLevel = item.L_Value, hallNo = item.HALL_NO })" target="_blank">
+                                    @item.Count_T7
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 8, warnLevel = item.L_Value, hallNo = item.HALL_NO })" target="_blank">
+                                    @item.Count_T8
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("WarnAnalysisDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, warnType = 9, warnLevel = item.L_Value, hallNo = item.HALL_NO })" target="_blank">
+                                    @item.Count_T9
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                </table>
+
+                @if (Model == null || Model.Count <= 0)
+                {
+                    <div class="l-panel-notDATA">
+                        暂无数据
+                    </div>
+                }
+            </div>
+        </div>
+        <div title="柱状图">
+            <div>
+                @Html.Raw(ViewBag.ChartColumn3DXML)
+            </div>
+        </div>
+        <div title="线状图">
+            <div>
+                @Html.Raw(ViewBag.ChartSplineXML)
+            </div>
+        </div>
+    </div>

@@ -9,7 +9,7 @@ namespace gzsw.model
 {
     public partial class SYS_HALL
     {
-        [Ignore]
+        [ResultColumn]
         public SYS_ORGANIZE HALLORG { get; set; }
 
         public enum TICKETNUM_ENUM

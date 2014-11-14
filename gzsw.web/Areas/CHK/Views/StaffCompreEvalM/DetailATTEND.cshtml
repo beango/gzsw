@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "个人考核评定-考勤分";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.model.Enums
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model PetaPoco.Page<gzsw.model.Subclasses.STAT_STAFF_CHKSTAT_M_SUB>
+
+
+<!-- 查询菜单 -->
+
+<div class="tablePanel" style="margin-top: 5px;">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:38px;">序号 </th>
+                <th>员工名称</th>
+                <th>月份</th>
+                <th>上班</th>
+                <th>迟到</th>
+                <th>早退</th>
+                <th>未签退</th>
+                <th>事假</th>
+                <th>病假</th>
+                <th>丧假</th>
+                <th>婚假</th>
+                <th>年休假</th>
+                <th>工伤假</th>
+                <th>加班补休</th>
+                <th>陪产假</th>
+                <th>产假</th>
+                <th>公差</th>
+                <th>会议</th>
+                <th>学习</th>
+                <th>旷工</th>
+                <th>其他</th>
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    @(i++)
+                </td>
+                <td>@item.STAFF_NAM</td>
+                <td>@item.STAT_MO.ToYearsMonthString()</td>
+                <td>@item.COR_WORK_DAY_CNT</td>
+                <td>@item.COR_LAT_DAY_CNT</td>
+                <td>@item.COR_EAR_DAY_CNT</td>
+                <td>@item.COR_NONSIGN_OUT_CNT</td>
+                <td>@item.COR_HOLLI_TYP1_CNT</td>
+                <td>@item.COR_HOLLI_TYP2_CNT</td>
+                <td>@item.COR_HOLLI_TYP3_CNT</td>
+                <td>@item.COR_HOLLI_TYP4_CNT</td>
+                <td>@item.COR_HOLLI_TYP5_CNT</td>
+                <td>@item.COR_HOLLI_TYP6_CNT</td>
+                <td>@item.COR_HOLLI_TYP7_CNT</td>
+                <td>@item.COR_HOLLI_TYP8_CNT</td>
+                <td>@item.COR_HOLLI_TYP9_CNT</td>
+                <td>@item.COR_HOLLI_TYP10_CNT</td>
+                <td>@item.COR_HOLLI_TYP11_CNT</td>
+                <td>@item.COR_HOLLI_TYP12_CNT</td>
+                <td>@item.COR_ABSENT_DAY_CNT</td>
+                <td>@item.COR_HOLLI_TYP13_CNT</td>
+            </tr>
+        }
+    @if (Model.Items.Count > 0)
+    {
+        <tr class="total">
+            <td>合计</td>
+            <td></td>
+            <td></td>
+            <td>@ViewBag.Total.COR_WORK_DAY_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COR_LAT_DAY_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COR_EAR_DAY_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COR_NONSIGN_OUT_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COR_HOLLI_TYP1_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COR_HOLLI_TYP2_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COR_HOLLI_TYP3_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COR_HOLLI_TYP4_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COR_HOLLI_TYP5_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COR_HOLLI_TYP6_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COR_HOLLI_TYP7_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COR_HOLLI_TYP8_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COR_HOLLI_TYP9_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COR_HOLLI_TYP10_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COR_HOLLI_TYP11_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COR_HOLLI_TYP12_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COR_ABSENT_DAY_CNT</td>
+            <td>@ViewBag.Total.COR_HOLLI_TYP13_CNT_TOTAL</td>
+        </tr>
+    }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+

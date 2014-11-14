@@ -1,28 +1,4 @@
-﻿/* 弹出层
- * obj: 弹出层对象
- * w: 宽
- * h: 高
- */
-function Dialog1(obj, w, h) {
-    var url = $(obj).attr("href");
-    gzsw.dialog.open({
-        // 页面地址
-        url: url.urlstamp(),
-        // 标题
-        title: "提示",
-        // 左面板ID
-        width: w,
-        // 内容面板ID
-        height: h,
-        // 关闭是否刷新页面
-        isReload: false,
-        // 关闭事件
-        closeFun: function () {
-        }
-    });
-}
-
-/* 初始化Ajax异步提交表单 */
+﻿/* 初始化Ajax异步提交表单 */
 function InitAjaxForm() {
     var options = {
         dataType: 'json',
@@ -80,29 +56,6 @@ function InitAjaxForm() {
     });
 }
 
-/* ztree树 */
-var ztree_setting_checkbox_YN = {
-    check: {
-        enable: true,
-        nocheckInherit: false,
-        chkboxType: { "Y": "", "N": "" }
-    },
-    async: {
-        enable: false
-        //autoParam: ["id", "name"]//异步加载时需要提交的参数，多个用逗号分隔
-    },
-    data: {
-        simpleData: {
-            enable: true,
-            idKey: "id",
-            pIdKey: "pId",
-            rootPId: 0
-        }
-    },
-    view: {
-        showIcon: showIconForTree
-    }
-};
 /* ztree树 */
 var ztree_setting_checkbox_YN2 = {
     check: {
@@ -168,10 +121,6 @@ function showIconForTree(treeId, treeNode) {
 };
 function Tree(obj, zNodes) {
     $.fn.zTree.init($(obj), ztree_setting, zNodes);
-}
-function checkboxTreeYN(obj, zNodes)
-{
-    $.fn.zTree.init($(obj), ztree_setting_checkbox_YN, zNodes);
 }
 function checkboxTreeYN2(obj, zNodes) {
     $.fn.zTree.init($(obj), ztree_setting_checkbox_YN2, zNodes);

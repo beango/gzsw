@@ -43,19 +43,28 @@
     <!-- 图表排序 -->
     @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.pager.js")
     <style type="text/css">
-     .ztree {
-        z-index: 9999;
-    }
-</style>
+        .ztree {
+            z-index: 9999;
+        }
+    </style>
+@if (Model == null || Model.Count() <= 0)
+{
+    <style type="text/css">
+        .tablelist th {
+            background-image: none;
+            font-weight: normal;
+        }
+    </style>
+}
     <script type="text/javascript">
-        $(function() {
-            // 表格数据排序 
-            $("#datatable").tablesorter()
-                    .tablesorterPager({container: $("#pager")}); 
-            //初始化树
-            orgTree.init({
-                documentId: "txtORG_NAM", 
-                loadDataUrl: '@Url.Action("GetHallTree", "VirtualHall", new {area = "SYS"})',
+    $(function() {
+        // 表格数据排序
+        $("#datatable").tablesorter()
+                .tablesorterPager({container: $("#pager")});
+        //初始化树
+        orgTree.init({
+            documentId: "txtORG_NAM",
+            loadDataUrl: '@Url.Action("GetHallTree", "VirtualHall", new { area = "SYS", @level = 4 })',
                 onSelect: onSelect
             });
 
@@ -67,8 +76,30 @@
                 }
             }
 
+            // 打印报表
+            $("#btnOutPut").click(function() {
+                gzsw.dialog.confirm({
+                    msg: '是否导出该报表？',
+                    yesFun: function (index) {
+                        layer.close(index);
+                        // 导出报表
+                        var url = '@Url.Action("STAT_DAYYWTJ_OutPut", "Statistics")';
+                        url= url.getUrl({
+                            _t: Date.parse(new Date()),
+                            txtBeginTime: $("#txtBeginTime").val(),
+                            txtEndTime: $("#txtEndTime").val(),
+                            hdORG_NAM: $("#hdORG_NAM").val(),
+                            txtORG_NAM: $("#txtORG_NAM").val()
+                        });
+                     
+                        location.href = url;
+                    }
+                });
+            });
+
             // 查询
-            $("#btnSearch").click(function() {
+        $("#btnSearch").click(function() {
+            
                 var url = location.href;
                 url = url.getUrl({
                     _t: Date.parse(new Date()),
@@ -76,7 +107,7 @@
                     txtEndTime: $("#txtEndTime").val(),
                     hdORG_NAM: $("#hdORG_NAM").val(),
                     txtORG_NAM: $("#txtORG_NAM").val()
-                });
+                }); 
                 location.href = url;
             });
             // 根据Table 生成图表
@@ -95,74 +126,74 @@
                     /*   , margin: [50, 50, 100, 80]*/
                     },
                     title: { text: '个人评价分布图<br/><span style=\"font-size:12px;\">(@(ViewData["beginTime"]) ~ @(ViewData["txtEndTime"]))</span> ' },
-                    xAxis: {
-                        categories: @Html.Raw(ViewData["x"])
+                xAxis: {
+                    categories: @Html.Raw(ViewData["x"])
                     },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: '次数'
-                        }
-                        /*  ,
-                           allowDecimals: true */
-                    }, 
-                        plotOptions: {
-                column: {
-                depth: 25
-            }
-            },
-                    tooltip: {
-                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                            '<td style="padding:0"><b>{point.y} 次 </b></td></tr>',
-                        footerFormat: '</table>',
-                        shared: true,
-                        useHTML: true
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: '次数'
+                    }
+                    /*  ,
+                       allowDecimals: true */
+                },
+                plotOptions: {
+                    column: {
+                        depth: 25
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y} 次 </b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [
+                    {
+                        name: '很满意量',
+                        data: @Html.Raw(ViewData["y1Value"]),
+                        color: "#52ab46"
                     },
-                    legend: {
-                        enabled: false
+                    {
+                        name: '满意量',
+                        data: @Html.Raw(ViewData["y2Value"]),
+                        color: "#78e16a"
                     },
-                    series: [
-                        {
-                            name: '很满意量',
-                            data: @Html.Raw(ViewData["y1Value"]),
-                            color: "#52ab46"
-                        },
-                        {
-                            name: '满意量',
-                            data: @Html.Raw(ViewData["y2Value"]),
-                            color: "#78e16a"
-                        },
-                        {
-                            name: '一般量',
-                            data: @Html.Raw(ViewData["y3Value"]),
-                            color: "#ccd451"
-                        },
-                        {
-                            name: '不满意量',
-                            data: @Html.Raw(ViewData["y4Value"]),
-                            color: "#ff9e9e"
-                        },
-                        {
-                            name: '很不满意量',
-                            data: @Html.Raw(ViewData["y5Value"]),
-                            color: "#cb0000"
-                        },
-                        {
-                            name:'未评价量',
-                            data:@Html.Raw(ViewData["y0Value"]),
-                            color:"#e35cf7"
-                        }
-                    ]
-                };
+                    {
+                        name: '一般量',
+                        data: @Html.Raw(ViewData["y3Value"]),
+                        color: "#ccd451"
+                    },
+                    {
+                        name: '不满意量',
+                        data: @Html.Raw(ViewData["y4Value"]),
+                        color: "#ff9e9e"
+                    },
+                    {
+                        name: '很不满意量',
+                        data: @Html.Raw(ViewData["y5Value"]),
+                        color: "#cb0000"
+                    },
+                    {
+                        name:'未评价量',
+                        data:@Html.Raw(ViewData["y0Value"]),
+                        color:"#e35cf7"
+                    }
+                ]
+            };
 
-             /*   window.setInterval(function() {*/
-                    var saturationChart = new Highcharts.Chart(saturationOption);
+            /*   window.setInterval(function() {*/
+            var saturationChart = new Highcharts.Chart(saturationOption);
 
-              /*  },3000);*/
-               
-            });
+            /*  },3000);*/
+
         });
+    });
     </script>
 }
 <!-- 查询条件 -->
@@ -171,23 +202,31 @@
         <tbody>
             <tr>
                 <td style="width:85px;">开始时间：</td>
-                <td style="width:170px;"><input type="text" readonly="readonly" onclick="WdatePicker()" value="@(ViewData["beginTime"])" name="txtBeginTime" id="txtBeginTime"></td>
+                <td style="width:140px;"><input type="text" style="width:100px;" readonly="readonly" onclick="WdatePicker()" value="@(ViewData["beginTime"])" name="txtBeginTime" id="txtBeginTime"></td>
                 <td style="width: 85px;"> 结束时间：</td>
-                <td style="width:170px;"><input type="text" readonly="readonly" onclick="WdatePicker()" value="@(ViewData["txtEndTime"])" name="txtEndTime" id="txtEndTime"></td>
-                <td style="width: 100px;"> 组织机构名称：</td>
+                <td style="width:140px;"><input type="text" style="width:100px;" readonly="readonly" onclick="WdatePicker()" value="@(ViewData["txtEndTime"])" name="txtEndTime" id="txtEndTime"></td>
+                <td style="width: 85px;"> 组织机构：</td>
                 <td style="width:170px;">
-                    <input type="text" name="txtORG_NAM" value="@(ViewData["organizeName"])" readonly="readonly" id="txtORG_NAM">
+                    <input type="text" style="width:140px;" name="txtORG_NAM" value="@(ViewData["organizeName"])" readonly="readonly" id="txtORG_NAM">
                     <div id="orgTreeContent" style="display: none; position: absolute; background-color: #FFF; border: 1px solid #ccc;">
                         <ul id="treeOrg" class="ztree" style="clear:both;"></ul>
                     </div>
                     <input type="hidden" value="@(ViewData["organizeId"])" id="hdORG_NAM" name="hdORG_NAM" />
                 </td>
-                <td>
+                <td style="width:90px;">
                     <div id="btnSearch" class="l-button l-button-hasicon" ligeruiid="btnSearch" style="width: 60px; margin-left: 10px;">
                         <div class="l-button-l"></div>
                         <div class="l-button-r"></div>
                         <span> 查 询 </span>
                         <img src="/Content/lib/ligerUI/skins/icons/search.png">
+                    </div>
+                </td>
+                <td>
+                    <div id="btnOutPut" class="l-button l-button-hasicon" ligeruiid="btnSearch" style="width: 80px; ">
+                        <div class="l-button-l"></div>
+                        <div class="l-button-r"></div>
+                        <span>  &nbsp;导出excel </span>
+                        <img src="@Html.Url("Content/lib/ligerUI/skins/icons/view.gif")">
                     </div>
                 </td>
             </tr>
@@ -200,29 +239,29 @@
     <table id="datatable" class="tablelist tablesorter tablesorter-default" cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th style="text-align: center; background-image: none;  " colspan="2">  </th>
-                <th style="text-align: center; background-image: none;  " colspan="2">很满意   </th>
-                <th style="text-align: center; background-image: none;  " colspan="2">满意   </th>
-                <th style="text-align: center; background-image: none;  " colspan="2">一般   </th>
-                <th style="text-align: center; background-image: none;  " colspan="2">不满意   </th>
-                <th style="text-align: center; background-image: none;  " colspan="2">很不满意   </th>
-                <th style="text-align: center; background-image: none;  " colspan="2">未评价   </th>
+                <th style="text-align: center; background-image: none; width: 15px" colspan="2">  </th>
+                <th style="text-align: center;" colspan="2">很满意   </th>
+                <th style="text-align: center;" colspan="2">满意   </th>
+                <th style="text-align: center;" colspan="2">一般   </th>
+                <th style="text-align: center;" colspan="2">不满意   </th>
+                <th style="text-align: center;" colspan="2">很不满意   </th>
+                <th style="text-align: center;" colspan="2">未评价   </th>
             </tr>
             <tr>
-                <th style="background-image: none; ">序号</th>
-                <th style="background-image: none; ">员工名称</th>
-                <th style="background-image: none; ">很满意量</th>
-                <th style="background-image: none; ">很满意占比</th>
-                <th style="background-image: none; ">满意量</th>
-                <th style="background-image: none; ">满意占比</th>
-                <th style="background-image: none; ">一般量</th>
-                <th style="background-image: none; ">一般占比</th>
-                <th style="background-image: none; ">不满意量</th>
-                <th style="background-image: none; ">不满意占比</th>
-                <th style="background-image: none; ">很不满意量</th>
-                <th style="background-image: none; ">很不满意占比</th>
-                <th style="background-image: none; ">未评价量</th>
-                <th style="background-image: none; ">未评价占比</th>
+                <th >序号</th>
+                <th >员工名称</th>
+                <th >很满意量</th>
+                <th >很满意占比</th>
+                <th >满意量</th>
+                <th >满意占比</th>
+                <th >一般量</th>
+                <th >一般占比</th>
+                <th >不满意量</th>
+                <th >不满意占比</th>
+                <th >很不满意量</th>
+                <th >很不满意占比</th>
+                <th >未评价量</th>
+                <th >未评价占比</th>
             </tr>
         </thead>
         @if (Model != null && Model.Count() > 0)

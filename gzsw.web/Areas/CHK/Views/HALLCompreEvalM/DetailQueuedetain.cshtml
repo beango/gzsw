@@ -1,0 +1,73 @@
+﻿@using gzsw.model
+@using gzsw.util
+@using gzsw.web;
+@model PetaPoco.Page<dynamic>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<!-- 查询菜单 --> 
+
+<div class="tablePanel">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                
+                <th style="width:38px;">序号 </th>  
+                     <th>服务厅编码</th>
+                <th>服务厅名称</th> 
+                <th >排队业务</th>
+                <th >呼叫量</th>
+                <th >超时等待量</th>
+                <th >办理量</th>
+                <th >弃号量</th>
+                <th>总办理时长</th>
+                <th>总等待时长</th>
+                <th >最长等待时长</th>
+                <th>最长办理时长</th>
+                <th>超时办理量</th>
+                <th>总出票量</th> 
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+             
+                <td>
+                    @(i++)
+                </td>
+                <td>@item.HALL_NO</td>
+                <td>@item.HALL_NAM</td>  
+                <td>@item.Q_SERIALNAME</td>
+                <td>@item.CALL_CNT</td>
+                <td>@item.OVERTIME_WAIT_CNT</td>
+                <td>@item.HANDLE_CNT</td>
+                <td>@item.ABANDON_CNT</td>
+                <td>@item.HANDLE_DUR</td>
+                <td>@item.WAIT_DUR</td>
+                <td>@item.MAX_WAIT_DUR</td>
+                <td>@item.MAX_HANDLE_DUR</td>
+                <td>@item.OVERTIME_HANDLE_CNT</td>
+                <td>@item.TOT_TICKET_CNT</td> 
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+     
+}

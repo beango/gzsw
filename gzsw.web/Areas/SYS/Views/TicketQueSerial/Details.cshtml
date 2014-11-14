@@ -14,7 +14,7 @@
     <tr>
         <td class="tdLeft"> 号码前缀：</td>
         <td>@Html.DisplayFor(model => model.Q_NUMBERQCHAR)</td>
-        <td class="tdLeft">  等候超时时间（分）：</td>
+        <td class="tdLeft">  等候超时时间（分钟）：</td>
         <td>@Html.DisplayFor(model => model.Q_WAITCSTIME)</td>
     </tr>
     <tr>
@@ -221,4 +221,7 @@
 
 </div>
 @section Head{
+    <style type="text/css">
+        .tableform tr td{line-height:32px;height:32px;}
+    </style>
 }

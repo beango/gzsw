@@ -8,6 +8,9 @@ using gzsw.model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using gzsw.util;
+using gzsw.model.Enums;
+using gzsw.dal;
 
 namespace gzsw.test
 {
@@ -41,6 +44,16 @@ namespace gzsw.test
             Assert.AreEqual(false, r.Match(":4").Success);
             Assert.AreEqual(false, r.Match("2").Success);
             Assert.AreEqual(false, r.Match("").Success);
+
+            var param = new Dictionary<string, object>
+            {
+                {"USER_ID like", 123},
+                {"USER_ID in", 223}, 
+                {"USER_NAM like", 222},
+                {"CREATE_ID", 576}
+            };
+            var arr = param.ToArray();
+            Assert.AreEqual(4, arr.Count());
         }
 
         [TestMethod]
@@ -50,6 +63,28 @@ namespace gzsw.test
             Console.WriteLine(3 / v);
         }
 
+        [TestMethod]
+        public void GetHighLV()
+        {
+            var e1 = EnumHelper.ConvertToEnum<UserLV_ENUM>("6");
+            Assert.AreEqual(UserLV_ENUM.省级, (UserLV_ENUM)e1);
+        }
 
+        [TestMethod]
+        public void T3()
+        {
+            var log = new SYS_LOG()
+            {
+                LOG_DTIME = DateTime.Now,
+                MENU_NAM = "",
+                USER_ID = "tte"
+            };
+            log.LOG_INFO = "java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示u_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示框(跟QQ提示一样) - xu_...java实现页面最小化后桌面右下角出现提示";
+            log.LOG_INFO = log.LOG_INFO.Substring(0, 1025);
+            Console.WriteLine(log.LOG_INFO.Length);
+            if (!string.IsNullOrEmpty(log.LOG_INFO) && log.LOG_INFO.Length > 1024)
+                log.LOG_INFO = log.LOG_INFO.Substring(0, 1024);
+            new DaoTemplate<SYS_LOG>().AddObject(log);
+        }
     }
 }

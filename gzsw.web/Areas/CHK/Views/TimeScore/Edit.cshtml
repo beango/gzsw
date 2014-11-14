@@ -77,60 +77,6 @@
                 </td>
             </tr>
             <tr>
-                <td class="tdLeft">早退扣分：</td>
-                <td>
-                    @Html.TextBoxFor(m => m.EAR_SCORE, new { @class = "text-box", @style = "width:100px;" })
-                    
-                </td>
-                <td class="tdLeft">
-                    @Html.ValidationMessageFor(m => m.EAR_SCORE)
-                </td>
-                <td class="tdLeft">旷工扣分：</td>
-                <td>
-                    @Html.TextBoxFor(m => m.NEG_SCORE, new { @class = "text-box", @style = "width:100px;" })
-                   
-                </td>
-                <td>
-                    @Html.ValidationMessageFor(m => m.NEG_SCORE)
-                </td>
-            </tr>
-            <tr>
-                <td class="tdLeft">病假扣分：</td>
-                <td>
-                    @Html.TextBoxFor(m => m.ILL_SCORE, new { @class = "text-box", @style = "width:100px;" })
-                   
-                </td>
-                <td>
-                    @Html.ValidationMessageFor(m => m.ILL_SCORE)
-                </td>
-                <td class="tdLeft">事假扣分：</td>
-                <td>
-                    @Html.TextBoxFor(m => m.ABS_SCORE, new { @class = "text-box", @style = "width:100px;" })
-                   
-                </td>
-                <td>
-                    @Html.ValidationMessageFor(m => m.ABS_SCORE)
-                </td>
-            </tr>
-            <tr>
-                <td class="tdLeft">迟到扣分：</td>
-                <td>
-                    @Html.TextBoxFor(m => m.LAT_SCORE, new { @class = "text-box", @style = "width:100px;" })
-                    
-                </td>
-                <td>
-                    @Html.ValidationMessageFor(m => m.LAT_SCORE)
-                </td>
-                <td class="tdLeft">未签退扣分：</td>
-                <td>
-                    @Html.TextBoxFor(m => m.NONSIGN_SCORE, new { @class = "text-box", @style = "width:100px;" })
-                    
-                </td>
-                <td>
-                    @Html.ValidationMessageFor(m => m.NONSIGN_SCORE)
-                </td>
-            </tr>
-            <tr>
                 <td class="tdLeft" colspan="6" style="text-align: center;"> 
                 
                     <input type="submit" class="l-button" value="提交" />

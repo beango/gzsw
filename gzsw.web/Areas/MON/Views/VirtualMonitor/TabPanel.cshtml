@@ -31,7 +31,7 @@
                         {
                             var counter = (CLI_COUNTERSTATE)ViewBag.CounterState;
                             var message = counter.Q_SERIALNAME;
-                            message = string.IsNullOrEmpty(message) ? counter.SERIALNAME : (string.IsNullOrEmpty(counter.SERIALNAME) ? message : message + ":" + counter.SERIALNAME);
+                            message = string.IsNullOrEmpty(message) ? counter.SERIALNAME : (string.IsNullOrEmpty(counter.SERIALNAME) ? message : message + "：" + counter.SERIALNAME);
                             switch (counter.STATE)
                             {
                                 case 0:

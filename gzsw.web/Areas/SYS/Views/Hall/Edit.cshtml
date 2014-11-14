@@ -12,78 +12,65 @@
     <div class="formbody" style="display:@none;">
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
-        
+
         <table class="formTable" cellpadding="0" cellspacing="0">
             <tr>
                 <td class="tdLeft" style="width:120px;">服务厅编码：</td>
-                <td>
+                <td colspan="3">
                     @Html.HiddenFor(model => model.HALL_NO)
                     @Html.DisplayFor(model => model.HALL_NO)
-                </td>
-                <td>
                     @Html.ValidationMessageFor(model => model.HALL_NO)
                 </td>
             </tr>
             <tr>
                 <td class="tdLeft">服务厅名称：</td>
-                <td>
-                    @Html.EditorFor(model => model.HALL_NAM)
-                </td>
-                <td>
+                <td colspan="3">
+                    @Html.DisplayFor(model => model.HALL_NAM)
+                    @Html.HiddenFor(model => model.HALL_NAM)
                     @Html.ValidationMessageFor(model => model.HALL_NAM)
                 </td>
             </tr>
             <tr>
                 <td class="tdLeft">组织机构：</td>
-                <td>
-                    @Html.DropDownList("ORG_ID", ViewBag.UserORG as SelectList, "--请选择--")
-                </td>
-                <td>
+                <td colspan="3">
+                    @(null == Model.HALLORG ? "" : Model.HALLORG.ORG_NAM)
+                    @Html.HiddenFor(model => model.ORG_ID)
+                    @*@Html.DropDownList("ORG_ID", ViewBag.UserORG as SelectList, "--请选择--")*@
                     @Html.ValidationMessageFor(model => model.ORG_ID)
                 </td>
             </tr>
             <tr>
                 <td class="tdLeft">地址：</td>
-                <td>
+                <td colspan="3">
                     @Html.EditorFor(model => model.ADDRESS)
-                </td>
-                <td>
                     @Html.ValidationMessageFor(model => model.ADDRESS)
                 </td>
             </tr>
             <tr>
                 <td class="tdLeft">经度：</td>
-                <td>
+                <td colspan="3">
                     @Html.EditorFor(model => model.LONGITUDE)
-                </td>
-                <td>
                     @Html.ValidationMessageFor(model => model.LONGITUDE)
                 </td>
             </tr>
             <tr>
                 <td class="tdLeft">纬度：</td>
-                <td>
+                <td colspan="3">
                     @Html.EditorFor(model => model.DIMENSION)
-                </td>
-                <td>
                     @Html.ValidationMessageFor(model => model.DIMENSION)
                 </td>
             </tr>
             <tr>
                 <td class="tdLeft">柜台数量：</td>
-                <td>
+                <td colspan="3">
                     @Html.EditorFor(model => model.COUNTER_CNT)
-                </td>
-                <td>
                     @Html.ValidationMessageFor(model => model.COUNTER_CNT)
                 </td>
             </tr>
             <tr>
                 <td class="tdLeft">自动顺呼时间（秒）：</td>
-                <td>
+                <td colspan="3">
                     @Html.EditorFor(model => model.AUTO_CALL_SEC)
-                </td>
-                <td>
                     @Html.ValidationMessageFor(model => model.AUTO_CALL_SEC)
                 </td>
             </tr>
@@ -92,98 +79,81 @@
                 <td>
                     @Html.RadioButtonFor(model => model.AUTO_CALL_IND, true, new { @checked = "checked" })是
                     @Html.RadioButtonFor(model => model.AUTO_CALL_IND, false)否
-                </td>
-                <td>
                     @Html.ValidationMessageFor(model => model.AUTO_CALL_IND)
                 </td>
+                @*<td class="tdLeft">有无排队功能：</td>
+                    <td>
+                        @Html.RadioButtonFor(model => model.HAV_QUEUE_IND, true, new { @checked = "checked" })有
+                        @Html.RadioButtonFor(model => model.HAV_QUEUE_IND, false)无
+                        @Html.ValidationMessageFor(model => model.HAV_QUEUE_IND)
+                    </td>*@
             </tr>
             <tr>
                 <td class="tdLeft">自动结束办理（秒）：</td>
-                <td>
+                <td colspan="3">
                     @Html.EditorFor(model => model.AUTO_END_SEC)
-                </td>
-                <td>
                     @Html.ValidationMessageFor(model => model.AUTO_END_SEC)
+                    <i>为0时屏蔽该功能</i>
                 </td>
             </tr>
             <tr>
                 <td class="tdLeft">自动评价时间（秒）：</td>
-                <td>
+                <td colspan="3">
                     @Html.EditorFor(model => model.AUTO_EVAL_SEC)
-                </td>
-                <td>
                     @Html.ValidationMessageFor(model => model.AUTO_EVAL_SEC)
+                    <i>为0时屏蔽该功能</i>
                 </td>
             </tr>
             <tr>
                 <td class="tdLeft">评价停留时间（秒）：</td>
-                <td>
+                <td colspan="3">
                     @Html.EditorFor(model => model.EVAL_STAY_SEC)
-                </td>
-                <td>
                     @Html.ValidationMessageFor(model => model.EVAL_STAY_SEC)
-                </td>
-            </tr>
-            <tr>
-                <td class="tdLeft">有无排队功能：</td>
-                <td>
-                    @Html.RadioButtonFor(model => model.HAV_QUEUE_IND, true, new { @checked = "checked" })有
-                    @Html.RadioButtonFor(model => model.HAV_QUEUE_IND, false)无
-                </td>
-                <td>
-                    @Html.ValidationMessageFor(model => model.HAV_QUEUE_IND)
+                    <i>为0时屏蔽该功能</i>
                 </td>
             </tr>
             <tr>
                 <td class="tdLeft">取号数量限制类型：</td>
-                <td>
+                <td colspan="3">
                     @Html.DropDownList("TICKETNUM", @ViewBag.TICKETNUMLIST as IEnumerable<SelectListItem>)
-                </td>
-                <td>
                     @Html.ValidationMessageFor(model => model.TICKETNUM)
                 </td>
             </tr>
             <tr>
                 <td class="tdLeft">容纳人数：</td>
-                <td>
+                <td colspan="3">
                     @Html.EditorFor(model => model.LIMIT_CNT)
-                </td>
-                <td>
                     @Html.ValidationMessageFor(model => model.LIMIT_CNT)
                 </td>
             </tr>
             <tr>
                 <td class="tdLeft">负责人：</td>
-                <td>
+                <td colspan="3">
                     @Html.EditorFor(model => model.HEAD)
-                </td>
-                <td>
                     @Html.ValidationMessageFor(model => model.HEAD)
                 </td>
             </tr>
             <tr>
                 <td class="tdLeft">负责人电话：</td>
-                <td>
+                <td colspan="3">
                     @Html.EditorFor(model => model.HEAD_TEL)
-                </td>
-                <td>
                     @Html.ValidationMessageFor(model => model.HEAD_TEL)
                 </td>
             </tr>
             <tr>
                 <td class="tdLeft">备注：</td>
-                <td>
-                    @Html.EditorFor(model => model.NOTE)
-                </td>
-                <td>
+                <td colspan="3">
+                    @Html.TextAreaFor(model => model.NOTE, new { @style = "height:50px;width:300px;" })
                     @Html.ValidationMessageFor(model => model.NOTE)
                 </td>
             </tr>
             <tr>
-                <td colspan="3" style="text-align: center">
+                <td class="tdLeft"></td>
+                <td colspan="3">
                     @Html.HiddenFor(model => model.HALL_PICT_URL)
                     @Html.HiddenFor(model => model.CREATE_ID)
                     @Html.HiddenFor(model => model.CREATE_DTIME)
+                    @Html.HiddenFor(model => model.AUTO_CALL_IND)
                     <input type="submit" class="l-button" value="提交" />
                 </td>
             </tr>

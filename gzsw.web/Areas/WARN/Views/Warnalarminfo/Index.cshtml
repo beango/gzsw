@@ -1,0 +1,172 @@
+﻿@using gzsw.model
+@using gzsw.util
+@using gzsw.web;
+@model PetaPoco.Page<dynamic>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<!-- 查询菜单 --> 
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:60px;">状态:</td>
+            <td style="width:80px;">
+                <select id="dl_status_bywarndetail">
+                    <option value="0">全部</option>
+                    <option value="1">未处理</option>
+                    <option value="2">已处理</option>
+                    <option value="3">撤销投诉</option>
+                </select>
+            </td>
+            <td style="width:60px;">服务厅:</td>
+            <td style="width:80px;">
+                @Html.DropDownList("ddlORGID", ViewBag.UserORG as SelectList)
+            </td>
+            <td style="width:70px;">开始时间:</td>
+            <td style="width:80px;">
+                <input type="text" readonly="readonly"  onclick="WdatePicker()" value="" style="width:80px;" name="txtBeginTime" id="txtBeginTime">
+            </td>
+            <td style="width:70px;">结束时间:</td>
+            <td style="width:80px;">
+             <input type="text" readonly="readonly" onclick="    WdatePicker()" value="" style="width: 80px;" name="txtEndTime" id="txtEndTime"> 
+            </td> 
+            <td style="width:80px;">
+                <div id="btnSearch"></div>
+            </td> 
+             
+        </tr>
+    </table>  
+</div>
+
+
+
+
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th>序号</th>
+                <th>
+                    前台员工编码
+                </th>
+                <th>
+                    前台员工名称
+                </th>
+                <th>
+                    窗口号 
+                </th>
+                <th>
+                    报警类型
+                </th>
+                <th>
+                    生成时间
+                </th>
+                <th>
+                    服务厅名称
+                </th>
+                <th>
+                    处理状态
+                </th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@(item.ALARM_SEQ)" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @item.STAFF_ID
+                </td>
+                  <td>
+                    @item.STAFF_NAM
+                </td>
+                <td>
+                    @item.COUNTER_ID 
+                </td>
+                <td> 
+                      @(EnumHelper.ConvertToE<gzsw.model.ext.WARN_ALARM_INFO_DETAIL.ALARM_TYP_ENUM>(item.ALARM_TYP.ToString()))
+                </td>
+                <td>
+                    @item.CREATE_DTIME.ToString("yyyy-MM-dd")
+                </td>
+                <td>
+                    @item.HALL_NAM
+                </td>
+                <td> 
+                    
+                    @(EnumHelper.ConvertToE<gzsw.model.ext.WARN_ALARM_INFO_DETAIL.DETAIL_STATUS_ENUM>(item.STATE.ToString()))
+                </td>
+            </tr>
+        }
+
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    <script type="text/javascript">
+        $(function () {
+            // 注册事件
+            var status = '@ViewBag.status';
+            $("#dl_status_bywarndetail").val(status);
+            var start = '@ViewBag.start';
+            var end = '@ViewBag.end';
+            $("#txtBeginTime").val(start);
+            $("#txtEndTime").val(end);
+
+            // 查询
+            $("#btnSearch").ligerButton(
+            {
+                text: " 查 询 ",
+                click: function () {
+                    var url = "?status=" + $("#dl_status_bywarndetail").val() + "&start=" + $("#txtBeginTime").val() + "&end=" + $("#txtEndTime").val() + "&hall=" + $("#ddlORGID").val();
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+            // 顶部导航
+            // 顶部导航
+            var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+            @if (Html.ChkAuth("WARN_ALARM_INFO_DETAIL_VIW"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看报警信息", "WARN_ALARM_INFO_DETAIL_VIW", 450, 400));
+                            @:ligerToolBar.addItem({ line: true });
+                        }
+            
+            @if (Html.ChkAuth("WARN_ALARM_INFO_DETAIL_VIW"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("List"), "报警发送详细", "WARN_ALARM_INFO_DETAIL_VIW", 600, 500));
+                            @:ligerToolBar.addItem({ line: true });
+                        }
+
+            @if (Html.ChkAuth("WARN_ALARM_INFO_DETAIL_EDT"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "处理报警", "WARN_ALARM_INFO_DETAIL_EDT", 600, 500));
+                            @:ligerToolBar.addItem({ line: true });
+                        }
+             
+ 
+        });
+    </script>
+}

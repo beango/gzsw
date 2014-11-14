@@ -20,7 +20,7 @@ namespace gzsw.winservice.Job
             try
             {
                 LogHelper.WriteLog("PRO_CHK_STAFFCHK_EVENT_D_JOB");
-                var db = new Database();
+                var db = gzswDB.GetInstance();
 
                 model.SVR_TIM_EVENT e = db.SingleOrDefault<model.SVR_TIM_EVENT>("select * from SVR_TIM_EVENT where PROGRAM_METHOD='PRO_CHK_STAFFCHK_EVENT_D'");
                 if (null != e)
@@ -30,10 +30,9 @@ namespace gzsw.winservice.Job
                     log.RUN_TIME = DateTime.Now;
                     log.RUN_STATE = 1;
                     log.PAR_INFO = "";
-                    log.ERROR_INFO = "";     
-                    while(true)
+                    log.ERROR_INFO = "";
+                    while (true)
                     {
-
                         bool continu = ExecuteProd(log);
                         db.Insert(log);//写日志
                         if (!continu)
@@ -56,21 +55,40 @@ namespace gzsw.winservice.Job
         {
             try
             {
-                var db = new Database();
+                var db = gzswDB.GetInstance();
                 var parlist = db.Fetch<SVR_TIM_EVENT_PAR>("select * from SVR_TIM_EVENT_PAR where EVENT_GUID=@0 order by PAR_ORD asc", log.EVENT_GUID);
+                var par1 = parlist.FirstOrDefault(obj => obj.PAR_ORD == 1);
 
                 log.PAR_INFO = string.Join(",", parlist.Select(obj => obj.PAR_VALUE));
                 log.RUN_TIME = DateTime.Now;
-                db.Execute("exec PRO_CHK_STAFFCHK_EVENT_D @0, @1", parlist.Select(obj => obj.PAR_VALUE).ToArray());
-                var par1 = parlist.FirstOrDefault(obj => obj.PAR_ORD == 1);
-                if (null != par1)
+
+                if (!CHkParam(par1))
                 {
-                    var nextpar = DateTime.Parse(par1.PAR_VALUE).AddDays(1);
-                    par1.PAR_VALUE = nextpar.ToString("yyyy-MM-dd");
-                    db.Save(par1);//更新参数
-                    
-                    if (nextpar <= DateTime.Today)
-                        return true;//继续执行
+                    log.ERROR_INFO = "参数检查不通过！";
+                    log.RUN_STATE = 2;
+                    return false;
+                }
+
+                try
+                {
+                    db.Execute("exec PRO_CHK_STAFFCHK_EVENT_D @0, @1", parlist.Select(obj => obj.PAR_VALUE).ToArray());
+
+                    if (null != par1)
+                    {
+                        var nextpar = DateTime.Parse(par1.PAR_VALUE).AddDays(1);
+                        par1.PAR_VALUE = nextpar.ToString("yyyy-MM-dd");
+                        db.Save(par1);//更新参数
+
+                        if (nextpar < DateTime.Today)
+                            return true;//继续执行
+                        return false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    log.ERROR_INFO = ex.Message;
+                    log.RUN_STATE = 2;
+                    LogHelper.ErrorLog("", ex);
                     return false;
                 }
             }
@@ -82,6 +100,24 @@ namespace gzsw.winservice.Job
             return false;
         }
 
+        /// <summary>
+        /// 参数检查
+        /// </summary>
+        /// <param name="par1"></param>
+        /// <returns></returns>
+        private bool CHkParam(SVR_TIM_EVENT_PAR par1)
+        {
+            if (!string.IsNullOrEmpty(par1.PAR_VALUE))
+            {
+                DateTime dt;
+                if (DateTime.TryParse(par1.PAR_VALUE, out dt)
+                    && dt < DateTime.Today)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         #endregion
     }
 }

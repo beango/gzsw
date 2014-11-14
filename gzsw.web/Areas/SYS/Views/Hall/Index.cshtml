@@ -12,7 +12,7 @@
             <td style="width:100px;">服务厅名称：</td>
             <td style="width:170px;"><input type="text" name="txtHALLNAM" id="txtHALLNAM" value="@ViewBag.NAM" /></td>
             <td style="width:80px;"> 组织机构：</td>
-            <td style="width:170px;">@Html.DropDownList("ddlORGID", ViewBag.UserORG as SelectList, "--请选择--")</td>
+            <td style="width:170px;">@Html.DropDownList("ddlORGID", ViewBag.UserORG as SelectList)</td>
             <td>
                 <div id="btnSearch"></div>
             </td>
@@ -34,9 +34,6 @@
                     </th>
                     <th>
                         服务厅名称
-                    </th>
-                    <th>
-                        组织机构
                     </th>
                     <th>
                         经度
@@ -70,9 +67,6 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.HALL_NAM)
-                    </td>
-                    <td>
-                        @(item.HALLORG == null ? "" : item.HALLORG.ORG_NAM)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.LONGITUDE)
@@ -125,15 +119,15 @@
 
             @if (Html.ChkAuth("SYS_HALLINFO_VIW"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "SYS_HALLINFO_VIW", 550, 520));
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "SYS_HALLINFO_VIW", 550, 460));
                 @:ligerToolBar.addItem({ line: true });
             }
             
-            @if (Html.ChkAuth("SYS_HALLINFO_ADD"))
+            @*@if (Html.ChkAuth("SYS_HALLINFO_ADD"))
             {
                 @:ligerToolBar.addItem(@Html.LigerUIAddButton(Url.Action("Create"), "增加", "SYS_HALLINFO_ADD", 550, 500));
                 @:ligerToolBar.addItem({ line: true });
-            }
+            }*@
 
             @if (Html.ChkAuth("SYS_HALLINFO_EDT"))
             {

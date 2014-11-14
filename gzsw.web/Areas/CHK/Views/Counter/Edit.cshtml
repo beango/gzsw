@@ -23,6 +23,7 @@
         <tr>
             <td class="tdLeft">窗口：</td>
             <td>
+                @Html.HiddenFor(m=>m.CounterId)
                 @Html.DisplayFor(m => m.CounterId, new { @style = "width:250px;", @readonly = "readonly" })
             </td>
             <td>
@@ -32,7 +33,7 @@
         <tr>
             <td class="tdLeft">备注：</td>
             <td>
-                @Html.TextBoxFor(m => m.Note, new { @style = "width:250px;" })
+                @Html.TextAreaFor(m => m.Note, new { @style = "width:250px;" })
             </td>
             <td>
                 @Html.ValidationMessageFor(m => m.Note)
@@ -53,14 +54,12 @@
                 <td>周一 </td>
                 <td class="tdLeft pdRight">上午:</td>
                 <td>
-                    @Html.HiddenFor(m=>m.W1A_STAFF_ID)
                     @Html.DropDownListFor(m => m.W1A_STAFF_ID, (List<SelectListItem>)ViewBag.StaffSelectList, new { @style = "width:100px;" })
                 </td>
                 <td class="tdLeft pdRight">
                     下午:
                 </td>
                 <td>
-                    @Html.HiddenFor(m => m.W1P_STAFF_ID)
                    @Html.DropDownListFor(m => m.W1P_STAFF_ID, (List<SelectListItem>)ViewBag.StaffSelectList, new {  @style = "width:100px;" })
                 </td>
             </tr>
@@ -68,14 +67,12 @@
                 <td>周二 </td>
                 <td class="tdLeft pdRight">上午:</td>
                 <td>
-                    @Html.HiddenFor(m => m.W2A_STAFF_ID)
                     @Html.DropDownListFor(m => m.W2A_STAFF_ID, (List<SelectListItem>)ViewBag.StaffSelectList, new {  @style = "width:100px;" })
                 </td>
                 <td class="tdLeft pdRight">
                     下午:
                 </td>
                 <td>
-                    @Html.HiddenFor(m => m.W2P_STAFF_ID)
                     @Html.DropDownListFor(m => m.W2P_STAFF_ID, (List<SelectListItem>)ViewBag.StaffSelectList, new {  @style = "width:100px;" })
                 </td>
             </tr>
@@ -83,14 +80,12 @@
                 <td>周三 </td>
                 <td class="tdLeft pdRight">上午:</td>
                 <td>
-                    @Html.HiddenFor(m => m.W3A_STAFF_ID)
                     @Html.DropDownListFor(m => m.W3A_STAFF_ID, (List<SelectListItem>)ViewBag.StaffSelectList, new {  @style = "width:100px;" })
                 </td>
                 <td class="tdLeft pdRight">
                     下午:
                 </td>
                 <td>
-                    @Html.HiddenFor(m => m.W3P_STAFF_ID)
                     @Html.DropDownListFor(m => m.W3P_STAFF_ID, (List<SelectListItem>)ViewBag.StaffSelectList, new {  @style = "width:100px;" })
                 </td>
             </tr>
@@ -98,14 +93,12 @@
                 <td>周四 </td>
                 <td class="tdLeft pdRight">上午:</td>
                 <td>
-                    @Html.HiddenFor(m => m.W4A_STAFF_ID)
                     @Html.DropDownListFor(m => m.W4A_STAFF_ID, (List<SelectListItem>)ViewBag.StaffSelectList, new { @style = "width:100px;" })
                 </td>
                 <td class="tdLeft pdRight">
                     下午:
                 </td>
                 <td>
-                    @Html.HiddenFor(m => m.W4P_STAFF_ID)
                     @Html.DropDownListFor(m => m.W4P_STAFF_ID, (List<SelectListItem>)ViewBag.StaffSelectList, new {  @style = "width:100px;" })
                 </td>
             </tr>
@@ -113,14 +106,12 @@
                 <td>周五 </td>
                 <td class="tdLeft pdRight">上午:</td>
                 <td>
-                    @Html.HiddenFor(m => m.W5A_STAFF_ID)
                     @Html.DropDownListFor(m => m.W5A_STAFF_ID, (List<SelectListItem>)ViewBag.StaffSelectList, new {  @style = "width:100px;" })
                 </td>
                 <td class="tdLeft pdRight">
                     下午:
                 </td>
                 <td>
-                    @Html.HiddenFor(m => m.W5P_STAFF_ID)
                     @Html.DropDownListFor(m => m.W5P_STAFF_ID, (List<SelectListItem>)ViewBag.StaffSelectList, new { @style = "width:100px;" })
                 </td>
             </tr>
@@ -128,14 +119,12 @@
                 <td>周六 </td>
                 <td class="tdLeft pdRight">上午:</td>
                 <td>
-                    @Html.HiddenFor(m => m.W6A_STAFF_ID)
                     @Html.DropDownListFor(m => m.W6A_STAFF_ID, (List<SelectListItem>)ViewBag.StaffSelectList, new {  @style = "width:100px;" })
                 </td>
                 <td class="tdLeft pdRight">
                     下午:
                 </td>
                 <td>
-                    @Html.HiddenFor(m => m.W6P_STAFF_ID)
                     @Html.DropDownListFor(m => m.W6P_STAFF_ID, (List<SelectListItem>)ViewBag.StaffSelectList, new { @style = "width:100px;" })
                 </td>
             </tr>
@@ -143,14 +132,12 @@
                 <td>周日 </td>
                 <td class="tdLeft pdRight">上午:</td>
                 <td>
-                    @Html.HiddenFor(m => m.W7A_STAFF_ID)
                     @Html.DropDownListFor(m => m.W7A_STAFF_ID, (List<SelectListItem>)ViewBag.StaffSelectList, new { @style = "width:100px;" })
                 </td>
                 <td class="tdLeft pdRight">
                     下午:
                 </td>
                 <td>
-                    @Html.HiddenFor(m => m.W7P_STAFF_ID)
                     @Html.DropDownListFor(m => m.W7P_STAFF_ID, (List<SelectListItem>)ViewBag.StaffSelectList, new { @style = "width:100px;" })
                 </td>
             </tr>
@@ -169,5 +156,7 @@
     @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
     @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
     @Html.StyleSheet("lib/ztree/zTreeStyle.css")
-
+    <style type="text/css">
+        table tbody tr { height: 30px; }
+    </style>
 }

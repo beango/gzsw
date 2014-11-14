@@ -11,7 +11,7 @@ namespace gzsw.dal.dao
     {
         public Page<dynamic> GetList(int page, int PageSize,int? mt,int? id, string title)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
 
             var sql = PetaPoco.Sql.Builder.Append(@"
                 SELECT [STAFF_DETAIL_ID],[RELEASE_USER_ID],[RELEASE_TIME],[RELEASE_MESSAGE],t3.HALL_NO,t1.[STAFF_ID]

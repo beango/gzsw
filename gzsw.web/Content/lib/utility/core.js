@@ -6,14 +6,13 @@
 /************************************************/
 /*------------------------------------------------String 命名空间扩展-----------------------------------------*/
 //分析url
-function parseURL(url) {
+function parseURL(url) { 
     var a = document.createElement('a');
-    a.href = url;
+    a.href = url;  
     return {
-        source: url,
-        protocol: a.protocol.replace(':', ''),
-        host: a.hostname,
-        port: a.port,
+        source: url, 
+        host: window.location.host,
+        port: window.location.port,
         query: a.search,
         params: (function () {
             var ret = {},
@@ -36,8 +35,7 @@ function parseURL(url) {
 }
 
 //替换myUrl中的同名参数值
-function replaceUrlParams(myUrl, newParams) {
-
+function replaceUrlParams(myUrl, newParams) { 
     for (var x in newParams) {
         var hasInMyUrlParams = false;
         for (var y in myUrl.params) {
@@ -53,7 +51,9 @@ function replaceUrlParams(myUrl, newParams) {
             myUrl.params[x] = newParams[x];
         }
     }
-    var result = myUrl.protocol + "://" + myUrl.host + ":" + myUrl.port + myUrl.path + "?";
+   
+    var result = "";
+    result = "http://" + myUrl.host + myUrl.path + "?";
 
     for (var p in myUrl.params) {
         result += (p + "=" + myUrl.params[p] + "&");
@@ -70,9 +70,29 @@ function replaceUrlParams(myUrl, newParams) {
 }
 
 /*替换URL*/
-String.prototype.getUrl = function (option) {
-    var obj =  parseURL(this);
-    return replaceUrlParams(obj,option)
+String.prototype.getUrl = function (option) { 
+    var obj = parseURL(this);
+    return replaceUrlParams(obj, option);
+};
+
+/** 
+ * 生成完整Url
+ * @param data 参数
+ **/
+String.prototype.toFullUrl = function (data) {
+    var that = this;
+    if (!data) {
+        return that;
+    }
+    var list = new Array();
+    for (var name in data) {
+        list.push(name + "=" + escape(data[name]));
+    }
+    var exstring = that.indexOf("#") >= 0 ? "&" : "?";
+    if (list.length > 0) {
+        that = that + exstring + list.join("&");
+    }
+    return that;
 }
 
 /*获取GUID*/

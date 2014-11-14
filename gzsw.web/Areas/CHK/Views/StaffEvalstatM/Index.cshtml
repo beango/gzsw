@@ -1,0 +1,123 @@
+﻿@{
+    ViewBag.Title = "纳税人评价表现修正";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model PetaPoco.Page<gzsw.model.Subclasses.STAT_STAFF_EVALSTAT_M_SUB>
+@{
+    var Day = int.Parse(DateTime.Now.AddMonths(-1).ToString("yyyyMM"));
+}
+
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:80px;">服务厅：</td>
+            <td style="width:150px;">
+                @Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)
+            </td>
+            <td style="width: 60px;"> 月份：</td>
+            <td style="width:120px;">
+                <input type="text" name="txtStatMo" id="txtStatMo" value="@ViewBag.StatMo" onclick="WdatePicker({ dateFmt: 'yyyy-MM' })" />
+            </td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+
+        </tr>
+    </table>
+
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:30px;">
+                    <input id="chkAll" name="chkAll" type="checkbox" />
+                </th>
+                <th style="width:38px;">序号 </th>
+                <th>员工编码</th>
+                <th>员工名称</th>
+                <th>评价非常满意量</th>
+                <th>评价满意量</th>
+                <th>评价基本满意量</th>
+                <th>评价不满意量</th>
+                <th>未评价量</th>
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.STAT_MO" d-staffid="@item.STAFF_ID"  type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>@item.STAFF_ID</td>
+                <td>@item.STAFF_NAM</td>
+                <td>@item.COR_VERY_SATISFY_CNT</td>
+                <td>@item.COR_SATISFY_CNT</td>
+                <td>@item.COR_COMMON_CNT</td>
+                <td>@item.COR_UNSATISFY_CNT</td>
+                <td>@item.COR_NON_EVAL_CNT</td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head
+{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+}
+
+<script type="text/javascript">
+    $(function () {
+        // 查询
+        $("#btnSearch").ligerButton(
+                {
+                    text: " 查 询 ",
+                    click: function () {
+                        var url = "?statMo=" + encodeURI($("#txtStatMo").val())
+                            + "&orgId=" + encodeURI($("#ddlORGID").val());
+                        location.href = url.urlstamp();
+                    },
+                    icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+                });
+
+        // 顶部导航
+        var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+        @if (Html.ChkAuth("CHK_STAT_STAFF_EVALSTAT_M_VIW"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "CHK_STAT_STAFF_EVALSTAT_M_VIW", 450, 320, "staffId", "@:$('table.tablelist').getSelAttr('d-staffId')"));
+                @:ligerToolBar.addItem({ line: true });
+             }
+
+
+        @if (Html.ChkAuth("CHK_STAT_STAFF_EVALSTAT_M_EDT") && ViewBag.Stat <= Day)
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "CHK_STAT_STAFF_EVALSTAT_M_EDT", 650, 320, "staffId", "@:$('table.tablelist').getSelAttr('d-staffId')"));
+            }
+
+
+
+    });
+</script>

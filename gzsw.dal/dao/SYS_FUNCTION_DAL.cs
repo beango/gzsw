@@ -18,7 +18,7 @@ namespace gzsw.dal.dao
                            )
                            delete FROM SYS_FUNCTION WHERE FUNCTION_ID IN(SELECT FUNCTION_ID from FUNCInfo)"
                 ,funid);
-            Database db = new Database();
+            Database db = gzswDB.GetInstance();
             db.Execute(sql);
         }
     }

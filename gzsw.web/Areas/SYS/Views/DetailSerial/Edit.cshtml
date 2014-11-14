@@ -13,7 +13,7 @@
 
         <table class="formTable" cellpadding="0" cellspacing="0">
             <tr>
-                <td style="width:110px;" class="tdLeft">
+                <td style="width:160px;" class="tdLeft">
                     事项编码：
                 </td>
                 <td>@Html.DisplayFor(model => model.SERIALID)</td>
@@ -54,7 +54,7 @@
 
             <tr>
                 <td class="tdLeft">
-                    办理超时时间：
+                    办理超时时间（分）：
                 </td>
                 <td>@Html.EditorFor(model => model.BLCSTIME)</td>
                 <td>
@@ -64,7 +64,7 @@
 
             <tr>
                 <td class="tdLeft">
-                    业务至少办理时间：
+                    业务至少办理时间（秒）：
                 </td>
                 <td>@Html.EditorFor(model => model.MINBLTIME)</td>
                 <td>
@@ -74,7 +74,7 @@
 
             <tr>
                 <td class="tdLeft">
-                    提醒倒计时时间点：
+                    提醒倒计时时间点（秒）：
                 </td>
                 <td>
                 @Html.EditorFor(model => model.DJSTIME)</td>
@@ -97,7 +97,7 @@
                 <td class="tdLeft">
                     备注：
                 </td><td>
-                @Html.EditorFor(model => model.SYS_BZ)</td>
+                @Html.TextAreaFor(model => model.SYS_BZ, new { @style = "height:50px;width:300px;" })</td>
                 <td>
                     @Html.ValidationMessageFor(model => model.SYS_BZ)
                 </td>

@@ -4,9 +4,9 @@
     ConnectionStringName = "gzswEntities2";			// Uses last connection string in config if not specified
     Namespace = "gzsw.model";
     RepoName = "gzswDB";
-    GenerateOperations = true;
+    GenerateOperations = false;
 	GeneratePocos = true;
-	GenerateCommon = false;
+	GenerateCommon = true;
 	ClassPrefix = "";
 	ClassSuffix = "";
 	TrackModifiedColumns = false;
@@ -14,7 +14,7 @@
     // Read schema
 	var tables = LoadTables();
 
-
+	 
 /*
 	// Tweak Schema
 	tables["tablename"].Ignore = true;							// To ignore a table

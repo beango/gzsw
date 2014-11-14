@@ -54,7 +54,11 @@ namespace gzsw.web.Areas.SYS.Models
     /// </summary>
     public class HallTabConfig : HallConfig
     {
-
+        /// <summary>
+        /// 摄像的ID，只用于读数据,
+        /// 用于在点击窗口时，进行摄像的播放
+        /// </summary>
+        public HallCameraConfig CameraConfig { get; set; }
     }
 
     /// <summary>
@@ -62,6 +66,7 @@ namespace gzsw.web.Areas.SYS.Models
     /// </summary>
     public class HallCameraConfig : HallConfig
     {
+        public string CameraName { get; set; }
         /// <summary>
         /// 方向类型
         /// </summary>

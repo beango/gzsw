@@ -4,8 +4,7 @@
     ViewBag.Title = "用户管理";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
-@section Head{
-   
+@section Head{ 
     <script lang="javascript">
         $(function () {
             // 注册事件
@@ -14,7 +13,10 @@
             {
                 text: " 查 询 ",
                 click: function () {
-                    var url = "?USERID=" + $("#txtUSERID").val() + "&USERNAM=" + $("#txtUSERNAM").val();
+                    var url = "?USERID=" + $("#txtUSERID").val()
+                        + "&USERNAM=" + $("#txtUSERNAM").val()
+                        + "&orgid=" + $("#hidORGID").val()
+                        + "&orgnam=" + $("#txtORGNAM").val();
                     location.href = url.urlstamp();
                 },
                 icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
@@ -22,22 +24,117 @@
             // 顶部导航
             var bar = $("#toptoolbar").ligerToolBar();
 
-            bar.addItem(@Html.AuthViewButton("AUTH_USER_VIW", Url.Action("Details", "User")));
-            bar.addItem({ line: true });
-            bar.addItem(@Html.AuthAddButton("AUTH_USER_ADD", Url.Action("Create", "User"))); 
-            bar.addItem({ line: true });
-            bar.addItem(@Html.AuthEditButton("AUTH_USER_EDT", Url.Action("Edit", "User"))); 
-            bar.addItem({ line: true });
-            bar.addItem(@Html.AuthViewButton("AUTH_ROLE_VIW", Url.Action("UserRole", "User"), "角色")); 
-            bar.addItem({ line: true });
-            bar.addItem(@Html.AuthViewButton("SYS_ORG_VIW", Url.Action("UserOrg", "User"), "组织机构")); 
-            bar.addItem({ line: true });
-            bar.addItem(@Html.AuthDelButton("AUTH_USER_DEL", Url.Action("Delete", "User"))); 
-
-           
+            @if (Html.ChkAuth("AUTH_USER_VIW"))
+            {
+                @:bar.addItem(@Html.AuthViewButton("AUTH_USER_VIW", Url.Action("Details", "User")));
+                @:bar.addItem({ line: true });
+            }
+            @if (Html.ChkAuth("AUTH_USER_ADD"))
+            {
+                @:bar.addItem(@Html.AuthAddButton("AUTH_USER_ADD", Url.Action("Create", "User"))); 
+                @:bar.addItem({ line: true });
+            }
+            @if (Html.ChkAuth("AUTH_USER_EDT"))
+            {
+                @:bar.addItem(@Html.AuthEditButton("AUTH_USER_EDT", Url.Action("Edit", "User"))); 
+                @:bar.addItem({ line: true });
+            }
+            @if (Html.ChkAuth("AUTH_ROLE_VIW"))
+            {
+                @:bar.addItem(@Html.AuthViewButton("AUTH_ROLE_VIW", Url.Action("UserRole", "User"), "角色")); 
+                @:bar.addItem({ line: true });
+            }
+            @if (Html.ChkAuth("SYS_ORG_VIW"))
+            {
+                @:bar.addItem(@Html.AuthViewButton("SYS_ORG_VIW", Url.Action("UserOrg", "User"), "组织机构")); 
+                @:bar.addItem({ line: true });
+            }
+            @if (Html.ChkAuth("AUTH_USER_DEL"))
+            {
+                @:bar.addItem(@Html.AuthDelButton("AUTH_USER_DEL", Url.Action("Delete", "User"))); 
+            } 
         });
     </script>
+@Html.StyleSheet("lib/ztree/zTreeStyle.css")
+@Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
+@Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
+    <script type="text/javascript">
+        function showOrg() {
+            var orgObj = $("#txtORGNAM");
+            var orgOffset = $("#txtORGNAM").offset();
+            $("#orgTreeContent").css({ left: orgOffset.left + "px", top: orgOffset.top + orgObj.outerHeight() + "px" }).slideDown("fast");
 
+            $("body").bind("mousedown", onBodyDown);
+        }
+        function showIconForTree(treeId, treeNode) {
+            return false;
+        };
+        function onBodyDown(event) {
+            if (!(event.target.id == "orgTreeContent" || $(event.target).parents("#orgTreeContent").length > 0)) {
+                hideMenu();
+            }
+        }
+        function hideMenu() {
+            $("#orgTreeContent").fadeOut("fast");
+            $("body").unbind("mousedown", onBodyDown);
+        }
+        function onClick(e, treeId, treeNode) {
+            var zTree = $.fn.zTree.getZTreeObj("treeOrg"),
+			nodes = zTree.getSelectedNodes(),
+			v = "", id = "";
+            nodes.sort(function compare(a, b) { return a.id - b.id; });
+            for (var i = 0, l = nodes.length; i < l; i++) {
+                v += nodes[i].name + ",";
+                id += nodes[i].id + ",";
+            }
+            if (v.length > 0) v = v.substring(0, v.length - 1);
+            if (id.length > 0) id = id.substring(0, id.length - 1);
+            var orgid = $("#txtORGNAM");
+            orgid.attr("value", v);
+            $("#hidORGID").val(id);
+            hideMenu();
+        }
+        var ztree_setting_org = {
+            async: {
+                enable: false
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pId",
+                    rootPId: 0
+                }
+            },
+            view: {
+                dblClickExpand: false,
+                showIcon: showIconForTree
+            },
+            callback: {
+                onClick: onClick
+            }
+        };
+        var zNodes;
+        $(function () {
+            $.ajax({
+                async: false,
+                cache: false,
+                type: 'POST',
+                dataType: 'json',
+                url: "/SYS/Org/GetSearchOrgsTree?nRoot=1",
+                success: function (data) {
+                    zNodes = data;
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            if (zNodes.length == 0)
+                $("#txtORGNAM").parent().hide();
+            else
+                $.fn.zTree.init($("#treeOrg"), ztree_setting_org, zNodes);
+        });
+    </script>
 }
 <!-- 查询菜单 -->
 <div class="l-panel-search">
@@ -47,6 +144,8 @@
             <td style="width:170px;"><input type="text" name="txtUSERID" id="txtUSERID" value="@ViewBag.USERID" /></td>
             <td style="width:80px;"> 用户名称：</td>
             <td style="width:170px;"><input type="text" name="txtUSERNAM" id="txtUSERNAM" value="@ViewBag.USERNAM" /></td>
+            <td>组织机构：<input type="text" readonly name="txtORGNAM" id="txtORGNAM" value="@ViewBag.ORGNAM" onclick="showOrg(); return false;" />
+                <input type="hidden" name="hidORGID" id="hidORGID" value="@ViewBag.ORGID" /></td>
             <td>
                 <div id="btnSearch"></div>
             </td>
@@ -65,21 +164,21 @@
                 <th>用户名称</th>
                 <th>电话号码</th>
                 <th>电子邮箱</th>
-                <th>备注</th>
+                <th>创建人</th>
+                <th>创建时间</th>
             </tr>
         </thead>
         @{
-            var i = 1;
+            var i = ((Model.CurrentPage - 1) * Model.ItemsPerPage);
         }
         @foreach (var item in Model.Items)
         {
-
             <tr>
                 <td>
                     <input name="cbId" value="@item.USER_ID" type='checkbox' />
                 </td>
                 <td>
-                    @(i++)
+                    @(++i)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.USER_ID)
@@ -94,7 +193,10 @@
                     @Html.DisplayFor(modelItem => item.EMAIL)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.NOTE)
+                    @Html.DisplayFor(modelItem => item.CREATE_ID)
+                </td>
+                <td>
+                    @(item.CREATE_DTIME.HasValue?item.CREATE_DTIME.Value.ToString("yyyy-MM-dd"):"")
                 </td>
             </tr>
         }
@@ -107,4 +209,8 @@
     }
     <!--  分页 --> 
      @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)  
+</div>
+<div id="orgTreeContent" style="display:none; position: absolute;">
+    <ul id="treeOrg" class="ztree" style="background: #f0f9fd;"></ul>
+    <div style="clear:both;"></div>
 </div>

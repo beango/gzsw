@@ -131,13 +131,13 @@
 
     // 获取选中数  
     $.fn.getSelCount = function () {
-        return $(this).find("input[type='checkbox']:checked").length;
+        return $(this).find("input[type='checkbox']:checked").not("[name='chkAll']").length;
     }; 
     // 获取选中值
     $.fn.getSelValue = function () {
         var selObj = $(this).find("input[type='checkbox']:checked").not("[name='chkAll']");
         if (selObj.length == 1) {
-            return $(this).find("input[type='checkbox']:checked").val();
+            return selObj.val();
         } else {
             var value = ""; 
             for (var i=0;i<selObj.length;i++) { 

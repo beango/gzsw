@@ -1,0 +1,60 @@
+﻿@using System.Reflection
+@using gzsw.controller.MON.Models
+
+@helper AlarmColor(AlarmLevelEnum alarmLevel)
+{
+    switch (alarmLevel)
+    {
+        case AlarmLevelEnum.正常:
+            @:background-color:#00ff00;
+            break;
+        case AlarmLevelEnum.黄色预警:
+            @:background-color:yellow;
+            break;
+        case AlarmLevelEnum.橙色预警:
+            @:background-color:orange;
+            break;
+        case AlarmLevelEnum.红色预警:
+            @:background-color:red;
+            break;
+        default:
+            @:background-color:#00ff00;
+            break;
+    }
+}
+
+@helper SaturationColor(SaturationEnum saturation)
+{
+    switch (saturation)
+    {
+        case SaturationEnum.未饱和:
+            @:background-color:#00ff00;
+            break;
+            @:background-color:
+        case SaturationEnum.饱和:
+            @:background-color:yellow;
+            break;
+        case SaturationEnum.非常饱和:
+            @:background-color:orange;
+            break;
+        case SaturationEnum.极度饱和:
+            @:background-color:red;
+            break;
+        default:
+            @:background-color:#00ff00;
+            break;
+    }
+}
+
+@helper SetUrlParam(object obj)
+{
+    var type = obj.GetType();
+    foreach (var property in type.GetProperties())
+    { 
+        var name = property.Name.ToLower();
+        if (name != "begintime" && name != "endtime" && name != "pageindex" && name != "pagesize")
+        {
+            <input type="hidden" d-type='UrlParam' name="@name" value="@property.GetValue(obj, null)" />
+        }
+    }
+}

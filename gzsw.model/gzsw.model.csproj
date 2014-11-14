@@ -48,7 +48,10 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.30506.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,13 +67,40 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Database.tt</DependentUpon>
     </Compile>
+    <Compile Include="dto\CHK_STAFF_QUALITY_MARKDto.cs" />
+    <Compile Include="dto\ComprehensiveDto.cs" />
+    <Compile Include="dto\CounterDto.cs" />
+    <Compile Include="dto\ServiceAmountDto.cs" />
+    <Compile Include="dto\ServiceSlipAnalysisDto.cs" />
+    <Compile Include="dto\Statistics_ComplaintReportDto.cs" />
+    <Compile Include="Enums\UserLV_ENUM.cs" />
+    <Compile Include="Subclasses\STAT_STAFF_QUALITY_STAT_D_SUB.cs" />
+    <Compile Include="ViewModel\ItemBigTypeViewModel.cs" />
     <Compile Include="dto\OrganizeQueueingDto.cs" />
-    <Compile Include="dto\Statistics_DAYQUEUETJ.cs" />
-    <Compile Include="dto\Statistics_DAYQUEUETJChart.cs" />
-    <Compile Include="dto\Statistics_STAT_DAYYWTJ.cs" />
-    <Compile Include="dto\Statistics_STAT_DAYYWTJChart.cs" />
+    <Compile Include="ViewModel\QualityViewModel.cs" />
+    <Compile Include="ViewModel\ServiceSlipAnalysisViewModel.cs" />
+    <Compile Include="dto\Statistics_KeyValueDto.cs" />
+    <Compile Include="dto\Statistics_TaxpayerEvalDto.cs" />
+    <Compile Include="dto\Statistics_TaxpayerActionDto.cs" />
+    <Compile Include="dto\Statistics_WarnAnalysisDto.cs" />
+    <Compile Include="dto\Virtual_Mon_Dto.cs" />
+    <Compile Include="Enums\ApplyAfternoonEnum.cs" />
+    <Compile Include="Enums\CHK_STAFF_QUALITY_IMPORT_STATE_ENUM.cs" />
+    <Compile Include="Enums\HOLLI_TYPE_ENUM.cs" />
+    <Compile Include="Enums\QuarterEnum.cs" />
+    <Compile Include="Enums\StarLevel.cs" />
+    <Compile Include="Enums\USUACTTYPEENUM.cs" />
     <Compile Include="ext\CHK_COUNTER.ext.cs" />
+    <Compile Include="ext\CHK_DETAIL_SVR_COEF_CON.ext.cs" />
+    <Compile Include="ext\CHK_HALL_CHKITEM_CON.ext.cs" />
+    <Compile Include="ext\CHK_HALL_ITEM_MARK.ext.cs" />
+    <Compile Include="ext\CHK_SATIS_RT_CON.ext.cs" />
     <Compile Include="ext\CHK_STAFF_APPLYDETAIL.ext.cs" />
+    <Compile Include="ext\CHK_STAFF_COMPRE_SAN_MARK.ext.cs" />
+    <Compile Include="ext\CHK_STAFF_STAR_SYSTEM_CON.ext.cs" />
+    <Compile Include="ext\CHK_STAFF_SYSTEM_CON.ext.cs" />
+    <Compile Include="ext\CHK_STAFF_USU_ACT_CON.ext.cs" />
+    <Compile Include="ext\CHK_STAFF_USU_ACT_MARK.ext.cs" />
     <Compile Include="ext\CHK_TIMESCORE_PARAM.ext.cs" />
     <Compile Include="ext\CLI_COUNTERSTATE.ext.cs" />
     <Compile Include="ext\SYS_COUNTER.ext.cs" />
@@ -82,10 +112,25 @@
     <Compile Include="ext\SYS_TICKETQUEUESERIAL.ext.cs" />
     <Compile Include="ext\SYS_ROLE.ext.cs" />
     <Compile Include="ext\SYS_STAFF.ext.cs" />
+    <Compile Include="ext\WARN_ALARM_INFO_DETAIL.ext.cs" />
+    <Compile Include="ext\WARN_ALARM_SEND_USER_CON.ext.cs" />
+    <Compile Include="ext\WARN_COMPLAIN_DETAIL.ext.cs" />
+    <Compile Include="ext\WARN_COMPLAIN_TYP_CON.ext.cs" />
+    <Compile Include="ext\WARN_INFO_DETAIL.ext.cs" />
     <Compile Include="ext\WARN_RELEASE_STAFF_DETAIL.ext.cs" />
     <Compile Include="HallBusinessNum.cs" />
     <Compile Include="PetaPoco.cs" />
+    <Compile Include="PetaPoco.DataTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Subclasses\CHK_STAFF_ATTEND_DEDUCT_CON_SUB.cs" />
+    <Compile Include="Subclasses\CHK_STAFF_COMPRE_EVAL_M_SUB.cs" />
+    <Compile Include="Subclasses\STAT_STAFF_CHKSTAT_M_SUB.cs" />
+    <Compile Include="Subclasses\STAT_STAFF_EVALSTAT_M_SUB.cs" />
+    <Compile Include="Subclasses\STAT_STAFF_LARGE_BUSI_D_Handle_SUB.cs" />
+    <Compile Include="Subclasses\STAT_STAFF_QUALITYSTAT_M_SUB.cs" />
+    <Compile Include="Subclasses\STAT_STAFF_SVRSTAT_M_SUB.cs" />
+    <Compile Include="Subclasses\SYS_CURRQUEUEHIST_SUB.cs" />
+    <Compile Include="Subclasses\SYS_CURRYWHIST_SUB.cs" />
     <Compile Include="UserFuncs.cs" />
     <Compile Include="ZtreeNode.cs" />
   </ItemGroup>
@@ -97,6 +142,7 @@
       <LastGenOutput>Database.cs</LastGenOutput>
     </None>
     <Compile Include="ext\SYS_HALL.ext.cs" />
+    <None Include="Diagram\DtoDiagram.cd" />
     <None Include="packages.config" />
     <None Include="PetaPoco.Core.ttinclude" />
     <None Include="PetaPoco.Generator.ttinclude" />

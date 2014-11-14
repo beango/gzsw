@@ -20,38 +20,8 @@ namespace gzsw.winservice.Job
         {
             try
             {
-                var db = new Database();
-                //检查PRO_INIT_QUEUEDEAL_D作业当天是否已经执行
-                //如果没有执行，PRO_STAT_STAFF_CHKSTAT_M作业暂停1分钟，直到执行为止
-                while (true)
-                {
-                    var isrun = db.ExecuteScalar<int>(@"
-                    select DATEDIFF(D,GETDATE(),MAX(t1.RUN_TIME)) isRun
-                    from SVR_TIM_EVENT_LOG t1
-                    where t1.EVENT_GUID=(
-                        select EVENT_GUID from SVR_TIM_EVENT where PROGRAM_METHOD='PRO_INIT_QUEUEDEAL_D'
-                    )
-                    ");
-                    if (isrun==0)//当天已经执行
-                    {
-                        LogHelper.WriteLog("作业PRO_STAT_STAFF_CHKSTAT_M从PRO_INIT_QUEUEDEAL_D暂停中恢复。");
-                        context.Scheduler.ResumeJob(context.JobDetail.Key);
-                        break;
-                    }
-                    LogHelper.WriteLog("作业PRO_STAT_STAFF_CHKSTAT_M因为PRO_INIT_QUEUEDEAL_D暂停1分钟。");
-                    context.Scheduler.PauseJob(context.JobDetail.Key);
-                    Thread.Sleep(60 * 1000);
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.ErrorLog("PRO_STAT_STAFF_CHKSTAT_M_JOB", ex);
-                return;
-            }
-            try
-            {
                 LogHelper.WriteLog("PRO_STAT_STAFF_CHKSTAT_M_JOB");
-                var db = new Database();
+                var db = gzswDB.GetInstance();
 
                 model.SVR_TIM_EVENT e = db.SingleOrDefault<model.SVR_TIM_EVENT>("select * from SVR_TIM_EVENT where PROGRAM_METHOD='PRO_STAT_STAFF_CHKSTAT_M'");
                 if (null != e)
@@ -86,21 +56,27 @@ namespace gzsw.winservice.Job
         {
             try
             {
-                var db = new Database();
+                var db = gzswDB.GetInstance();
                 var parlist = db.Fetch<SVR_TIM_EVENT_PAR>("select * from SVR_TIM_EVENT_PAR where EVENT_GUID=@0 order by PAR_ORD asc", log.EVENT_GUID);
-
+                var par1 = parlist.FirstOrDefault(obj => obj.PAR_ORD == 1);
                 log.PAR_INFO = string.Join(",", parlist.Select(obj => obj.PAR_VALUE));
                 log.RUN_TIME = DateTime.Now;
+
+                if (!CHkParam(par1))
+                {
+                    log.ERROR_INFO = "参数检查不通过！";
+                    log.RUN_STATE = 2;
+                    return false;
+                }
                 db.Execute("exec PRO_STAT_STAFF_CHKSTAT_M @0, @1", parlist.Select(obj => obj.PAR_VALUE).ToArray());
-                var par1 = parlist.FirstOrDefault(obj => obj.PAR_ORD == 1);
+
                 if (null != par1)
                 {
-                    par1.PAR_VALUE = par1.PAR_VALUE.Substring(0, 4) + "-" + par1.PAR_VALUE.Substring(4) + "-1";
-                    var nextpar = DateTime.Parse(par1.PAR_VALUE).AddMonths(1);
-                    par1.PAR_VALUE = nextpar.ToString("yyyyMM");
+                    var nextpar = DateTime.Parse(par1.PAR_VALUE).AddDays(1);
+                    par1.PAR_VALUE = nextpar.ToString("yyyy-MM-dd");
                     db.Save(par1);//更新参数
-                    
-                    if (nextpar <= new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1))
+
+                    if (nextpar < DateTime.Today)
                         return true;//继续执行
                     return false;
                 }
@@ -112,7 +88,24 @@ namespace gzsw.winservice.Job
             }
             return false;
         }
-
+        /// <summary>
+        /// 参数检查
+        /// </summary>
+        /// <param name="par1"></param>
+        /// <returns></returns>
+        private bool CHkParam(SVR_TIM_EVENT_PAR par1)
+        {
+            if (!string.IsNullOrEmpty(par1.PAR_VALUE))
+            {
+                DateTime dt;
+                if (DateTime.TryParse(par1.PAR_VALUE, out dt)
+                    && dt < DateTime.Today)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         #endregion
     }
 }

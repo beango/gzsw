@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "个人考核评定-日常行为分";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.model.Enums
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model PetaPoco.Page<CHK_STAFF_USU_ACT_MARK>
+
+
+<!-- 查询菜单 -->
+
+<div class="tablePanel" style="margin-top: 5px;">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:38px;">序号 </th>
+                <th>员工名称</th>
+                <th>月份</th>
+                <th>行为类型</th>
+                <th>扣分</th>
+                <th>打分时间</th>
+                <th>原因</th>
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    @(i++)
+                </td>
+                <td>@item.STAFF_NAM</td>
+                <td>@item.STAT_MO.ToYearsMonthString()</td>
+                <td>@(((USUACTTYPEENUM)item.USU_ACT_TYP).GetDescription())</td>
+                <td>@item.DEDUCT</td>
+                <td>@(item.MARK_TIME == null ? "" : item.MARK_TIME.GetValueOrDefault().ToString("yyyy-MM-dd HH:mm:ss")) </td>
+                <td>@item.REASON</td>
+            </tr>
+        }
+        @if (Model.Items.Count > 0)
+        {
+            <tr class="total">
+                <td>合计</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>@ViewBag.Total.DEDUCT_TOTAL </td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+

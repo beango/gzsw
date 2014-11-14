@@ -9,11 +9,8 @@
 <div class="l-panel-search">
     <table class="tabSearchList">
         <tr>
-            <td style="width:100px;">服务厅编号：</td>
-            <td style="width:170px;"><input type="text" name="txtHallNo" id="txtHallNo" value="@ViewBag.HallNo" /> </td>
-            <td style="width: 100px;"> 服务厅名称：</td>
-            <td style="width:120px;"><input type="text" name="txtHallName" id="txtHallName" value="@ViewBag.HallName" /></td>
-            
+            <td style="width:100px;">服务厅：</td>
+            <td style="width:150px;">@Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)</td>
             <td>
                 <div id="btnSearch"></div>
             </td>
@@ -36,8 +33,6 @@
                     <th>服务厅名</th>
                     <th>窗口号</th>
                     <th>备注</th>
-                    <th>最后修改人</th>
-                    <th>最后修改时间</th>
                 </tr>
             </thead>
             @{
@@ -64,12 +59,6 @@
                     <td>
                         @item.NOTE
                     </td>
-                    <td>
-                        @item.MODIFY_ID
-                    </td>
-                    <td>
-                        @(item.MODIFY_DTIME != null ? item.MODIFY_DTIME.GetValueOrDefault().ToString("yyyy-MM-dd hh:mm:ss") : "")
-                    </td>
                 </tr>
             }
         </table>
@@ -83,9 +72,6 @@
     </div>
 
 @section Head{
-    @Html.StyleSheet("lib/colorbox/colorbox.css")
-    @Html.JavaScript("lib/colorbox/jquery.colorbox.js")
-    @Html.JavaScript("lib/utility/ext.js")
     <script lang="javascript">
 
         $(function() {
@@ -94,8 +80,7 @@
             {
                 text: " 查 询 ",
                 click: function() {
-                    var url = "?hallNo=" + encodeURI($("#txtHallNo").val())
-                        + "&hallName=" + encodeURI($("#txtHallName").val());
+                    var url = "?hallNo=" + encodeURI($("#ddlORGID").val());
                     location.href = url.urlstamp();
                 },
                 icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"

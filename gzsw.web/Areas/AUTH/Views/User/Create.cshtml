@@ -37,7 +37,7 @@
         </tr>
         <tr>
             <td class="tdLeft">备注：</td>
-            <td>@Html.EditorFor(model => model.NOTE)</td>
+            <td>@Html.TextAreaFor(model => model.NOTE, new { @style = "height:50px;width:300px;" })</td>
             <td>@Html.ValidationMessageFor(model => model.NOTE)</td>
         </tr>
         <tr>

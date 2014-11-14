@@ -1,0 +1,36 @@
+﻿@using gzsw.web
+@{
+    ViewBag.Title = "业务办理分析";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+
+<div class="divPanel">
+    <div id="navtabStat">
+        <div title="柱状图">
+            @Html.Raw(ViewBag.ChartColumn3DXML)
+        </div>
+        <div title="线状图">
+            @Html.Raw(ViewBag.ChartSplineXML)
+        </div>
+        <div title="饼图">
+            <div>
+                @Html.Raw(ViewBag.ChartPie3DXML)
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Head{
+    <!-- 图表排序脚本 -->
+
+    @Html.JavaScript("lib/fusionchart/FusionCharts.js")
+}
+
+<script type="text/javascript">
+    $(function() {
+        $("#navtabStat").ligerTab();
+    });
+</script>
+

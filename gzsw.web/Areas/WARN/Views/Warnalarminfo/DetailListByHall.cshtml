@@ -1,0 +1,117 @@
+﻿@using gzsw.model
+@using gzsw.util
+@using gzsw.web;
+@model PetaPoco.Page<dynamic>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<!-- 查询菜单 -->
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th></th>
+                <th>序号</th>
+                <th>
+                    手机号码
+                </th>
+                <th>
+                    用户名称
+                </th>
+                <th style="width: 380px;">
+                    预警发送实际信息
+                </th>
+                <th>
+                    发送时间
+                </th>
+                <th>
+                    服务厅编码
+                </th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@(item.ALARM_SEQ)" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @item.MOB_NBR
+                </td>
+                <td>
+                    @item.USER_NAM
+                </td>
+                <td>
+                    @item.ALARM_INFO
+                </td>
+                <td>
+                    @item.SEND_TIME.ToString("yyyy-MM-dd")
+                </td>
+                <td>
+                    @item.HALL_NAM
+                </td>
+            </tr>
+        }
+
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    <script type="text/javascript">
+        $(function () {
+            // 注册事件
+
+
+            // 顶部导航
+            var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+            @if (Html.ChkAuth("WARN_ALARM_INFO_DETAIL_VIW"))
+            {
+                @*@:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看报警信息", "WARN_ALARM_INFO_DETAIL_VIW", 450, 400));*@
+                <text>
+                    ligerToolBar.addItem({
+                        text: '查看报警信息',
+                        click: function () {
+                            if ($(".tablelist").getSelCount() != 1) {
+                                gzsw.dialog.alert("请选择需要操作的单个选项!"); return false;
+
+                            }
+                            var url = '@Url.Action("Details")?id=' + $(".tablelist").getSelValue();
+                            gzsw.dialog.openFull({
+                                title:'查看',
+                                url: url.urlstamp(),
+                                width: 800,
+                                height: 450,
+                                isReload: false
+
+                            });
+
+                        },
+                        icon: 'archives'
+
+                    });
+                </text>
+                @:ligerToolBar.addItem({ line: true });
+           }
+
+
+        });
+    </script>
+}

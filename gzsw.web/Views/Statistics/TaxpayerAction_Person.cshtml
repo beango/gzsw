@@ -1,0 +1,123 @@
+﻿@using gzsw.util
+@using gzsw.web
+@model IList<gzsw.model.dto.Statistics_TaxpayerActionDto>
+@{
+    ViewBag.Title = "员工评价分析";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var index = 0;
+    // 统计量总数 （很满意量+满意量+一般量+不满意量）
+    double valueCount = Model.Select(
+        x => x.LOCAL_CNT + x.SECOND_SVR_CNT).Sum();
+
+
+    // 同城业务量
+    var value1 = (Model.Select(x => x.LOCAL_CNT).Sum());
+    // 二次办税业务量
+    var value2 = (Model.Select(x => x.SECOND_SVR_CNT).Sum()); 
+}
+
+@section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+
+    <!-- 图表排序脚本 -->
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.js")
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.widgets.min.js")
+    <!-- 图表排序 -->
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.pager.js")
+    @Html.JavaScript("lib/fusionchart/FusionCharts.js")
+    <style type="text/css">
+        .tablelist th {
+            background-image: none;
+            font-weight: normal;
+            text-indent: 0;
+        }
+
+        .tablelist td {
+            text-indent: 0;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            // 表格数据排序
+            $("#datatable").tablesorter({}).tablesorterPager({ container: $("#pager") });
+            //  初始化TAB
+            $("#navtab1").ligerTab();
+            // 打印报表
+            $("#btnOutPut").click(function () {
+                var url = "@Html.Raw(Request.Url.PathAndQuery)" + ("@Html.Raw(Request.Url.PathAndQuery)".indexOf('?') > -1 ? "&" : "?") + "export=true";
+                window.open(url);
+            });
+        });
+    </script>
+}
+@{
+    Html.RenderPartial("~/Areas/STAT/Views/Shared/SearchView.cshtml", new object());
+}
+
+<div id="navtab1" style="margin: 3px 3px 0 3px; overflow: hidden; border: 1px solid #A3C0E8; ">
+    <div tabid="home" title="报表" lselected="true">
+        <div class="tablePanel" style="padding-top: 5px;">
+            <table id="datatable" class="tablelist tablesorter tablesorter-default" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th style="text-align: center; background-image: none;" rowspan="2">序号  </th>
+                        <th style="text-align: center; background-image: none;" colspan="2"> 员工</th>
+                        <th style="text-align: center; background-image: none;" colspan="2"> 同城业务量</th>
+                        <th style="text-align: center; background-image: none;" colspan="2"> 二次办税业务量 </th>
+                    
+                    </tr>
+                    <tr>
+                        <th>工号</th>
+                        <th>姓名</th>
+                        <th>同城业务量</th>
+                        <th>二次办税业务量</th> 
+                    </tr>
+                </thead>
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@(++index)</td>
+                            <td>@item.PersonNo</td>
+                            <td>@item.PersonName</td>
+                            <td>@item.LOCAL_CNT</td>
+                            <td>@item.SECOND_SVR_CNT </td> 
+                        </tr>
+
+                    }
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" style="text-align: center; font-weight: bold; font-size: 14px;">合计</td>
+                            <td> @value1</td>
+                            <td> @value2</td> 
+                        </tr>
+                    </tfoot>
+
+                }
+            </table>
+
+            @if (Model == null || Model.Count <= 0)
+            {
+                <div class="l-panel-notDATA">
+                    暂无数据
+                </div>
+            }
+            else
+            {
+                Html.RenderPartial("~/Areas/STAT/Views/Shared/PagerView.cshtml");
+            }
+        </div>
+    </div>
+    <div title="柱状图">
+        <div>
+            @Html.Raw(ViewBag.ChartColumn3DXML)
+        </div>
+    </div>
+    <div title="线状图">
+        <div>
+            @Html.Raw(ViewBag.ChartSplineXML)
+        </div>
+    </div>
+</div>
+<!-- 内容 -->

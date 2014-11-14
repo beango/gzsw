@@ -25,7 +25,7 @@ namespace gzsw.controller.SYS
         public IDao<SYS_QUEUESERIAL> DaoQueueserial { get; set; }
 
         [UserAuth("SYS_DETAILSERIAL_VIW")]
-        public ActionResult Index(string sid, string snam, string qid, string dlid, int pageIndex = 1,int pageSize=20)
+        public ActionResult Index(string sid, string snam, string qid, string dlid, int pageIndex = 1, int pageSize = 20)
         {
             ViewBag.SID = sid;
             ViewBag.SNAM = snam;
@@ -154,22 +154,6 @@ namespace gzsw.controller.SYS
             {
                 ModelState.AddModelError("SSDLSERIALID", "所属大类业务不能为空！");
             }
-            //if (detailSerial.BLCSTIME == null)
-            //{
-            //    ModelState.AddModelError("BLCSTIME", "办理超时时间不能为空或格式不对！");
-            //}
-            //if (detailSerial.MINBLTIME == null)
-            //{
-            //    ModelState.AddModelError("MINBLTIME", "至少办理该业务的时间不能为空或格式不对！");
-            //}
-            //if (detailSerial.DJSTIME == null)
-            //{
-            //    ModelState.AddModelError("DJSTIME", "提醒倒计时时间点不能为空或格式不对！");
-            //}
-            //if (detailSerial.DEFAULTYWLXS == null)
-            //{
-            //    ModelState.AddModelError("DEFAULTYWLXS", "默认业务量折合系数不能为空或格式不对！");
-            //}
         }
         [HttpGet]
         [UserAuth("SYS_DETAILSERIAL_EDT")]
@@ -190,14 +174,22 @@ namespace gzsw.controller.SYS
 
         private SYS_DETAILSERIAL GetEdtModel(string id)
         {
-            var detailSerial = DaoDetailserial.GetEntity("SERIALID", id);
+            try
+            {
+                var detailSerial = DaoDetailserial.GetEntity("SERIALID", id);
 
-            var list1 = new SelectList(DaoDlserial.FindList(), "DLS_SERIALID", "DLS_SERIALNAME", detailSerial.SSDLSERIALID);
-            ViewData["DLSERIAL"] = list1;
+                var list1 = new SelectList(DaoDlserial.FindList(), "DLS_SERIALID", "DLS_SERIALNAME", detailSerial.SSDLSERIALID);
+                ViewData["DLSERIAL"] = list1;
 
-            var list2 = new SelectList(DaoQueueserial.FindList(), "Q_SERIALID", "Q_SERIALNAME", detailSerial.SSQUEUESERIALID);
-            ViewData["QUSERIAL"] = list2;
-            return detailSerial;
+                var list2 = new SelectList(DaoQueueserial.FindList(), "Q_SERIALID", "Q_SERIALNAME", detailSerial.SSQUEUESERIALID);
+                ViewData["QUSERIAL"] = list2;
+                return detailSerial;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLog("系统出错！", ex);
+                return null;
+            }
         }
 
         [HttpPost]

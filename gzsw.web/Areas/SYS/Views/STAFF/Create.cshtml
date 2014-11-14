@@ -15,8 +15,6 @@
             <td class="tdLeft" style="width:100px;">员工编码：</td>
             <td>
                 @Html.EditorFor(model => model.STAFF_ID)
-            </td>
-            <td>
                 @Html.ValidationMessageFor(model => model.STAFF_ID)
             </td>
         </tr>
@@ -24,8 +22,6 @@
             <td class="tdLeft">员工姓名：</td>
             <td>
                 @Html.EditorFor(model => model.STAFF_NAM)
-            </td>
-            <td>
                 @Html.ValidationMessageFor(model => model.STAFF_NAM)
             </td>
         </tr>
@@ -33,17 +29,13 @@
             <td class="tdLeft">密码：</td>
             <td>
                 @Html.EditorFor(model => model.STAFF_PASSWORD)
-            </td>
-            <td>
                 @Html.ValidationMessageFor(model => model.STAFF_PASSWORD)
             </td>
         </tr>
         <tr>
             <td class="tdLeft">组织机构：</td>
             <td>
-                @Html.DropDownList("ORG_ID", ViewBag.UserORG as SelectList, "--请选择--")
-            </td>
-            <td>
+                @Html.DropDownList("ORG_ID", ViewBag.UserORG as SelectList)
                 @Html.ValidationMessageFor(model => model.ORG_ID)
             </td>
         </tr>
@@ -51,30 +43,26 @@
             <td class="tdLeft">星级：</td>
             <td>
                 @Html.DropDownList("STAR_LEVEL", @ViewBag.STAR_LEVELLIST as IEnumerable<SelectListItem>)
-            </td>
-            <td>
                 @Html.ValidationMessageFor(model => model.STAR_LEVEL)
             </td>
         </tr>
         <tr>
             <td class="tdLeft">照片：</td>
             <td>
-                <label id="uploadphoto" style="width:110px;text-align:left;">
+                <label id="uploadphoto"></label>
+                <label style="text-align:left;">
                     <div id="fileQueue"></div>
                     <input type="file" name="uploadify" id="uploadify" />
                 </label>
-            </td>
-            <td>
                 @Html.HiddenFor(model => model.PHOTE_URL)
-                @Html.ValidationMessageFor(model => model.STAR_LEVEL)
+                @Html.ValidationMessageFor(model => model.PHOTE_URL)
+                <input type="hidden" id="isup" name="isup" value="1" />
             </td>
         </tr>
         <tr>
             <td class="tdLeft">员工类型：</td>
             <td>
                 @Html.DropDownList("STAFF_TYP", @ViewBag.STAFF_TYPLIST as IEnumerable<SelectListItem>)
-            </td>
-            <td>
                 @Html.ValidationMessageFor(model => model.STAFF_TYP)
             </td>
         </tr>
@@ -83,31 +71,25 @@
             <td>
                 @Html.RadioButtonFor(model => model.STAR_EVAL_TYP, 1) 是
                 @Html.RadioButtonFor(model => model.STAR_EVAL_TYP, 0) 否
-            </td>
-            <td>
                 @Html.ValidationMessageFor(model => model.STAR_EVAL_TYP)
             </td>
         </tr>
         <tr>
             <td class="tdLeft">星级评定备注：</td>
             <td>
-                @Html.EditorFor(model => model.STAR_EVAL_NOTE)
-            </td>
-            <td>
+                @Html.TextAreaFor(model => model.STAR_EVAL_NOTE, new { @style = "height:50px;width:300px;" })
                 @Html.ValidationMessageFor(model => model.STAR_EVAL_NOTE)
             </td>
         </tr>
         <tr>
             <td class="tdLeft">备注：</td>
             <td>
-                @Html.EditorFor(model => model.NOTE)
-            </td>
-            <td>
+                @Html.TextAreaFor(model => model.NOTE, new { @style = "height:50px;width:300px;" })
                 @Html.ValidationMessageFor(model => model.NOTE)
             </td>
         </tr>
         <tr>
-            <td style="text-align: center;" colspan="3">
+            <td style="text-align: center;" colspan="2">
                 <input type="submit" class="l-button" value="提交" />
             </td>
         </tr>
@@ -123,37 +105,37 @@
     @Html.JavaScript("lib/jquery.uploadify/jquery.uploadify.js")
     @Html.JavaScript("lib/utility/ext.js?v1")
     <script type="text/javascript">
-		$(function () {
-		    InitAjaxForm();//异步提交
-		});
+        $(function () {
+            InitAjaxForm();//异步提交
+        });
     </script>
     <script type="text/javascript">
         $(document).ready(function () {
             var auth = "@(Request.Cookies[FormsAuthentication.FormsCookieName] == null ? string.Empty : Request.Cookies[FormsAuthentication.FormsCookieName].Value)";
             var sessionid = "@(Session.SessionID)";
 
-        $("#uploadify").uploadify({
-            'uploader': '/Content/lib/jquery.uploadify/uploadify.swf',
-            'script': '/SYS/Staff/ImportStaffPHOTE',
-            'cancelImg': '/Content/lib/jquery.uploadify/cancel.png',
-            'folder': 'UploadFile',
-            'queueID': 'fileQueue',
-            'auto': true,
-            scriptData: { 'ASPSESSID': sessionid, 'AUTHID': auth },
-            //'buttonText':'选择文件',
-            fileExt: '*.jpg',
-            'buttonImg': "/Content/lib/jquery.uploadify/btn.png",
-            'fileDesc':'请选择jpg图片',
-            'onComplete': function (event, queueId, fileObj, response, data) {
-                var rest = JSON.parse(response);
-                if(rest.result)
-                {
-                    $("#uploadphoto").html("<img style='width:64px;height:64px;' src='" + rest.desc + "' />");
-                    $("#PHOTE_URL").val(rest.desc);
+            $("#uploadify").uploadify({
+                'uploader': '/Content/lib/jquery.uploadify/uploadify.swf',
+                'script': '/SYS/Staff/ImportStaffPHOTE',
+                'cancelImg': '/Content/lib/jquery.uploadify/cancel.png',
+                'folder': 'UploadFile',
+                'queueID': 'fileQueue',
+                'auto': true,
+                scriptData: { 'ASPSESSID': sessionid, 'AUTHID': auth },
+                'buttonText': '选择文件',
+                //fileExt: '*.jpg',
+                'buttonImg': "/Content/lib/jquery.uploadify/btn.png",
+                'fileDesc': '请选择jpg图片',
+                'onComplete': function (event, queueId, fileObj, response, data) {
+                    var rest = JSON.parse(response);
+                    if (rest.result) {
+                        $("#uploadphoto").html("<img style='width:64px;height:64px;' src='" + rest.desc + "' />");
+                        $("#PHOTE_URL").val(rest.desc);
+                        $("#isup").val(1);
+                    }
                 }
-            }
+            });
         });
-    });
     </script>
 }
 

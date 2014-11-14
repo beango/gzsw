@@ -26,8 +26,21 @@ namespace gzsw.controller.CHK
         [UserAuth("CHK_COUNTER_VIW")]
         public ActionResult Index(string hallNo,string hallName, int pageIndex = 1,int pageSize=20)
         {
+
+            if (string.IsNullOrEmpty(hallNo))
+            {
+                hallNo = SetViewBagOrgData(hallNo);
+            }
+            else
+            {
+                SetViewBagOrgData(hallNo);
+            }
+
             ViewBag.HallNo = hallNo;
             ViewBag.HallName = hallName;
+
+            
+
             var counterDal = new CHK_COUNTER_DAL();
             var list = counterDal.GetCounterFuncs(hallNo, hallName, UserState.UserID, pageIndex, pageSize);
 
@@ -81,6 +94,7 @@ namespace gzsw.controller.CHK
         [UserAuth("CHK_COUNTER_ADD")]
         public ActionResult Create()
         {
+            SetViewBagOrgData();
             return View(new CounterModel());
         }
 
@@ -88,6 +102,7 @@ namespace gzsw.controller.CHK
         [UserAuth("CHK_COUNTER_ADD")]
         public ActionResult Create(CounterModel model)
         {
+            SetViewBagOrgData(model.HallNo);
             if (ModelState.IsValid)
             {
                 try

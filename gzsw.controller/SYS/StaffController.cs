@@ -26,6 +26,8 @@ namespace gzsw.controller.SYS
         public IDao<SYS_DETAILSERIAL> DaoDetailserial { get; set; }
         [Inject]
         public IDao<SYS_STAFFBUSI> DaoStaffbusi { get; set; }
+        [Inject]
+        public IDao<SYS_DLSERIAL> DaoDLSERIAL { get; set; }
 
         [UserAuth("SYS_STAFF_VIW")]
         public ActionResult Index(string nam, string orgid, string orgnam, int? stafftype, int pageIndex = 1,int pageSize=20)
@@ -34,16 +36,16 @@ namespace gzsw.controller.SYS
             ViewBag.ORGID = orgid;
             ViewBag.ORGNAM = orgnam;
             ViewBag.STAFFTYP = stafftype;
-            ViewBag.UserORG = new SelectList(UserState.UserOrgs.Where(obj => obj.ORG_LEVEL == 4)
-               , "ORG_ID", "ORG_NAM", orgid);
+            var orgall = new SYS_USER_DAL().GetUserORG(UserState.UserID);
+            if (string.IsNullOrEmpty(orgid) && orgall != null)
+                orgid = orgall.FirstOrDefault(obj => obj.ORG_LEVEL == 4).ORG_ID;
+            ViewBag.UserORG = new SelectList(orgall.Where(obj => obj.ORG_LEVEL == 4)
+                , "ORG_ID", "ORG_NAM", orgid);
 
             GetCreateDT(orgid);
 
-            var orgs = UserState.UserOrgs.Select(obj => obj.ORG_ID);
-            if (UserState.UserID == "admin")
-            {
-                orgs = DaoOrganize.FindList().Select(obj=>obj.ORG_ID);
-            }
+            var orgs = orgall.Select(obj => obj.ORG_ID);
+            
             if (!string.IsNullOrEmpty(orgid))
             {
                 orgs = orgs.Where(obj => obj == orgid);
@@ -89,7 +91,7 @@ namespace gzsw.controller.SYS
         private void GetCreateDT(string org=null)
         {
             ViewBag.STAR_LEVELLIST = EnumHelper.GetCategorySelectList(typeof(SYS_STAFF.STAR_LEVEL_ENUM));  
-            ViewBag.STAFF_TYPLIST = EnumHelper.GetCategorySelectList(typeof(SYS_STAFF.STAFF_TYP_ENUM));
+            ViewBag.STAFF_TYPLIST = EnumHelper.GetCategorySelectList(typeof(SYS_STAFF.STAFF_TYP_ENUM),false);
             ViewBag.UserORG = new SelectList(UserState.UserOrgs.Where(obj => obj.ORG_LEVEL == 4)
                 , "ORG_ID", "ORG_NAM", org);
         }
@@ -162,14 +164,6 @@ namespace gzsw.controller.SYS
                         
                 }
             }
-            //if (null == info.STAR_LEVEL)
-            //{
-            //    ModelState.AddModelError("STAR_LEVEL", "星级不能为空！");
-            //}
-            //if (info.STAFF_TYP == null)
-            //{
-            //    ModelState.AddModelError("STAFF_TYP", "员工类型不能为空！");
-            //}
             if (info.STAR_EVAL_TYP == null)
             {
                 ModelState.AddModelError("STAR_EVAL_TYP", "请选择是否参与星级评定！");
@@ -187,15 +181,19 @@ namespace gzsw.controller.SYS
                 }
                 string fileName = Path.GetFileName(filepath);//原始文件名称
                 string fileExtension = Path.GetExtension(fileName); //文件扩展名
+                if(fileExtension.ToLower()!=".jpg")
+                    ModelState.AddModelError("PHOTE_URL", "照片只能是JPG格式！");
                 string newfile = "/Uploads/StaffPhoto/"+ info.STAFF_ID+ fileExtension;
                 //改名
                 FileInfo fi = new FileInfo(filepath);
-                LogHelper.ErrorLog(filepath);
-                LogHelper.ErrorLog(newfile);
                 if (System.IO.File.Exists(Server.MapPath("~/Uploads/StaffPhoto/") + info.STAFF_ID + fileExtension))
                     System.IO.File.Delete(Server.MapPath("~/Uploads/StaffPhoto/") + info.STAFF_ID + fileExtension);
                 fi.MoveTo(Server.MapPath("~/Uploads/StaffPhoto/")+ info.STAFF_ID+ fileExtension);
                 info.PHOTE_URL = newfile;
+            }
+            if (string.IsNullOrEmpty(info.PHOTE_URL))
+            {
+                ModelState.AddModelError("PHOTE_URL", "请上传照片！");
             }
         }
 
@@ -284,7 +282,13 @@ namespace gzsw.controller.SYS
             try
             {
                 ViewBag.StaffID = id;
-                ViewBag.DetailSerialList = DaoDetailserial.FindList("SYS_LRTIME desc");
+                var _DetailserialList = DaoDetailserial.FindList("SYS_LRTIME desc");
+                var dl = DaoDLSERIAL.FindList();
+                foreach (var _ds in _DetailserialList)
+                {
+                    _ds.SYS_DLSERIAL = dl.FirstOrDefault(o => o.DLS_SERIALID == _ds.SSDLSERIALID);
+                }
+                ViewBag.DetailSerialList = _DetailserialList;
                 var staffbusi = DaoStaffbusi.FindList("","STAFF_ID",id);
                 return View(staffbusi);
             }

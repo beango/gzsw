@@ -16,12 +16,12 @@ namespace gzsw.dal.dao
     {
         public List<CHK_TIMESCORE_PARAM> GetPageList(string orgId, string userId)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
 
-            var whereStr = " PAR_ORG_ID is null ";
+            var whereStr = " PAR_ORG_ID is null OR  PAR_ORG_ID='' ";
             if (!string.IsNullOrEmpty(orgId))
             {
-                whereStr = " ORG_ID = @0 ";
+                whereStr = " ORG_ID = '" + orgId  + "' ";
             }
 
             var sql = Sql.Builder.Append(@";WITH locs(ORG_ID,ORG_NAM,PAR_ORG_ID,ORG_LEVEL,loclevel)     
@@ -43,13 +43,7 @@ namespace gzsw.dal.dao
 			                                        p.A_END_TIME,
 			                                        p.P_END_TIME,
 			                                        p.LAT_LAST_MIN,
-			                                        p.EAR_LAST_MIN,
-			                                        p.EAR_SCORE,
-			                                        p.NEG_SCORE,
-			                                        p.ILL_SCORE,
-			                                        p.ABS_SCORE,
-			                                        p.LAT_SCORE,
-			                                        p.NONSIGN_SCORE 
+			                                        p.EAR_LAST_MIN
 		                                        from locs as l
 		                                        join SYS_HALL as ti
 		                                        on ti.ORG_ID=l.ORG_ID
@@ -57,7 +51,7 @@ namespace gzsw.dal.dao
 		                                        on ti.ORG_ID=p.ORG_ID
 		                                        join SYS_USERORGANIZE as u
 		                                        on ti.ORG_ID = u.ORG_ID
-		                                        where u.[USER_ID]=@1", orgId, userId);
+		                                        where u.[USER_ID]=@0",  userId);
 
             var list = db.Fetch<CHK_TIMESCORE_PARAM>(sql);
             return list;
@@ -65,7 +59,7 @@ namespace gzsw.dal.dao
 
         private List<string> getOrgList(string orgId, string userId)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
 
             var whereStr = " PAR_ORG_ID is null ";
             if (!string.IsNullOrEmpty(orgId))
@@ -93,7 +87,7 @@ namespace gzsw.dal.dao
 
         public void Save(CHK_TIMESCORE_PARAM param,string userId)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
             var list = getOrgList(param.ORG_ID, userId);
             if (list == null || list.Count <= 0) return;
             foreach (var orgId in list)
@@ -115,7 +109,7 @@ namespace gzsw.dal.dao
 
         public CHK_TIMESCORE_PARAM Get(string orgId)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
             var sql = Sql.Builder.Append(@"SELECT HA.HALL_NO,
 			                                        HA.HALL_NAM,
                                                     PA.ORG_ID,
@@ -126,13 +120,7 @@ namespace gzsw.dal.dao
 			                                        PA.A_END_TIME,
 			                                        PA.P_END_TIME,
 			                                        PA.LAT_LAST_MIN,
-			                                        PA.EAR_LAST_MIN,
-			                                        PA.EAR_SCORE,
-			                                        PA.NEG_SCORE,
-			                                        PA.ILL_SCORE,
-			                                        PA.ABS_SCORE,
-			                                        PA.LAT_SCORE,
-			                                        PA.NONSIGN_SCORE  
+			                                        PA.EAR_LAST_MIN 
                                             FROM CHK_TIMESCORE_PARAM AS PA
                                             JOIN SYS_HALL as HA
                                             ON PA.ORG_ID=HA.ORG_ID 

@@ -33,7 +33,7 @@ var orgTree = function () {
                         },
                         view: {
                             dblClickExpand: false,
-                            showIcon: false,
+                            showIcon: false
                         },
                         callback: {
                             onClick: onClick

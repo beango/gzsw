@@ -20,7 +20,7 @@ namespace gzsw.dal.dao
         /// <returns></returns>
         public Page<CounterFuncs> GetCounterFuncs(string hallNo, string hallName, string userId, int pageIndex, int pageSize)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
 
             var sql = Sql.Builder.Append(@"SELECT COU.HALL_NO,
                                                         HA.HALL_NAM,
@@ -47,7 +47,7 @@ namespace gzsw.dal.dao
 
         public void Delete(string hallNo, int counterId)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
             var sql = Sql.Builder.Append(@"DELETE FROM CHK_COUNTER WHERE HALL_NO=@0 AND COUNTER_ID=@1", hallNo,
                 counterId);
 
@@ -56,7 +56,7 @@ namespace gzsw.dal.dao
 
         public CHK_COUNTER GetCounterByHallNoCounterId(string hallNo, int counterId)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
 
             var sql = Sql.Builder.Append(@"SELECT 
                                             COU.HALL_NO
@@ -90,7 +90,7 @@ namespace gzsw.dal.dao
 
         public int Update(CHK_COUNTER item)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
             var sql = Sql.Builder.Append(@"UPDATE CHK_COUNTER 
                                         SET    [MODIFY_ID] = @0
                                               ,[MODIFY_DTIME] = @1

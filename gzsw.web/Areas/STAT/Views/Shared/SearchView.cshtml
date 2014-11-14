@@ -1,0 +1,164 @@
+﻿@using gzsw.web
+@using  gzsw.util.Extensions
+@model object
+           
+
+<script type="text/javascript">
+    $(function () {
+
+        // 处理参数问题
+        $("a[ref]").click(function () {
+            var url = $(this).attr("ref");
+            var selValue = $("#ddlMonth").val();
+            var param = {
+                ddlMonth: $("#ddlMonth").val(),
+                _t: Date.parse(new Date())
+            };
+            if (selValue == "4") {
+                // 时间段
+                param = {
+                    ddlMonth: $("#ddlMonth").val(),
+                    beginTime: $("#beginTime").val(),
+                    endTime: $("#endTime").val(),
+                    _t: Date.parse(new Date())
+                };
+            }
+
+            url = url.getUrl(param);
+            window.open(url);
+        });
+
+        $("#ddlMonth").change(function() {
+            var value = $(this).val();
+            var bt = $("#ddlMonth").find("option[value='" + value + "']").attr("bt"); 
+            var dt = $("#ddlMonth").find("option[value='" + value + "']").attr("dt"); 
+            $("#beginTime").val(bt);
+            $("#endTime").val(dt);
+            if (value == "4") {  
+                $('#beginTime').attr("disabled", false);
+                $('#endTime').attr("disabled", false);
+            } else { 
+                $('#beginTime').attr("disabled", true); 
+                $('#endTime').attr("disabled", true);
+            }
+        });
+         
+        $("#ddlMonth").val(@ViewData["ddlMonth"]);
+
+        @if (ViewData["ddlMonth"] != null && ViewData["ddlMonth"].ToString().Trim() == "4")
+        {
+            
+            <text> 
+                $('#beginTime').attr("disabled", false);
+                $('#endTime').attr("disabled", false);
+              </text>
+        } 
+
+        $("#btnSearch").ligerButton(
+        {
+            text: " 查 询 ",
+            click: function () {
+                if ($("#beginTime").val() == "" || $("#endTime").val() == "") {
+                    debugger;
+                    gzsw.dialog.alert('请选择开始/结束时间!', 5,function() {
+                        $("#beginTime").val('@DateTime.Now.ToWeekForBeginTime()');
+                        $("#endTime").val('@DateTime.Now.ToWeekForEndTime()');
+                    });
+                   
+                    return false;
+                } else {
+                    var param = {
+                        beginTime: $("#beginTime").val(),
+                        endTime: $("#endTime").val(),
+                        ddlMonth: $("#ddlMonth").val(),
+                        _t: Date.parse(new Date())
+                    };
+                    $("input[d-type='UrlParam']").each(function () {
+                        var $this = $(this);
+                        param[$this.attr("name")] = $this.val();
+                    });
+                    var url = location.href.getUrl(param);
+                    location.href = url;
+                } 
+            },
+            icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+        });
+
+        var advance = $("#divAdvance");
+        //高级选项,有高级选项的div是显示
+        if (advance.length > 0) {
+            $("#btnAdvance").click(function () {
+                gzsw.dialog.openDiv({
+                    Div: "#divAdvance",
+                    title: "高级选项",
+                    width: 300,
+                    height: 250
+                });
+                return false;
+            });
+        }
+        else
+        {
+            $("#btnAdvance").hide();
+        }
+        
+    });
+    function chk(obj, ct) {
+        $("." + ct).toggle();
+    }
+</script>
+
+<!-- 默认查询条件 --> 
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:80px;">时间条件：</td>
+            <td style="width:80px;">
+                <select id="ddlMonth" name="ddlMonth">
+                    <option value="1" bt="@DateTime.Now.ToWeekForBeginTime()" dt="@DateTime.Now.ToWeekForEndTime()">本周</option>
+                    <option value="2" bt="@DateTime.Now.ToMonthForBeginTime()" dt="@DateTime.Now.ToMonthForEndTime()">本月</option>
+                    <option value="3" bt="@DateTime.Now.ToYearForBeginTime()" dt="@DateTime.Now.ToYearForEndTime()">本年</option>  
+                    <option value="4" bt="" dt="">时间段</option> 
+                </select> 
+            </td>
+            <td style="width:80px;">开始时间：</td>
+            <td style="width:80px;">
+                @Html.TextBox("beginTime", ViewData["beginTime"], new
+                { 
+                    @readonly ="readonly",
+                    @onfocus = "WdatePicker({ dateFmt: 'yyyy-M-d' })", 
+                    disabled = "disabled"
+                })
+            </td>
+            <td style="width:80px;">结束时间：</td>
+            <td style="width:80px;">
+                @Html.TextBox("endTime", ViewData["endTime"], new
+                { 
+                    @readonly = "readonly",
+                    @onfocus = "WdatePicker({ dateFmt: 'yyyy-M-d' })",
+                    disabled = "disabled"
+                })
+            </td> 
+            <td style="width:80px;">
+                <div id="btnSearch"></div>
+            </td>
+            <td style="width:80px;">
+                <div id="btnOutPut" class="l-button l-button-hasicon" ligeruiid="btnSearch" style="width: 80px; ">
+                    <div class="l-button-l"></div>
+                    <div class="l-button-r"></div>
+                    <span>  &nbsp;导出excel </span>
+                    <img src="@Html.Url("Content/lib/ligerUI/skins/icons/view.gif")">
+                </div>
+            </td>
+            <td>
+                <div id="btnAdvance" class="l-button l-button-hasicon" ligeruiid="btnAdvance" style="width: 70px; ">
+                    <div class="l-button-l"></div>
+                    <div class="l-button-r"></div>
+                    <span> &nbsp;高级选项 </span>
+                    <img src="@Html.Url("Content/lib/ligerUI/skins/icons/view.gif")">
+                </div>
+            </td>
+        </tr>
+    </table> 
+    @PageHelper.SetUrlParam(Model)
+</div>

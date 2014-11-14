@@ -1,4 +1,5 @@
-﻿using PetaPoco;
+﻿using gzsw.model;
+using PetaPoco;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace gzsw.dal.dao
                            )
                            delete FROM SYS_MENU WHERE MENU_ID IN(SELECT MENU_ID from MENUInfo)"
                 , funid);
-            Database db = new Database();
+            Database db = gzswDB.GetInstance();
             db.Execute(sql);
         }
     }

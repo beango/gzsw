@@ -35,7 +35,7 @@ namespace gzsw.controller.Default
             TempData["topMenu"] = sysMenu;
             var menuall = DaoMenu.FindList("MENU_ORD asc");
 
-            if (UserState.UserID != "admin")
+            if (!isAdmin)
             {
                 menuall = menuall.Where(obj =>
                         UserState.UserFuncs != null && UserState.UserFuncs.Any(obj2 => obj2.FUNCTION_ID == obj.FUNCTION_ID)
@@ -50,30 +50,55 @@ namespace gzsw.controller.Default
                 var listTree = new List<HomeController.MenuTree>();
                 var organizeList = new SYS_ORGANIZE_DAL().GetListForUserId(UserState.UserID);
 
-                // 读取省的菜单
-                var level1 = organizeList.FirstOrDefault(x => x.PAR_ORG_ID == null&& x.ORG_LEVEL==1);
-                if (level1 != null)
+                // 如果只有营业厅权限只显示营业厅
+                if (organizeList.Count == organizeList.Count(x => x.ORG_LEVEL == 4))
                 {
-                    listTree.Add(new HomeController.MenuTree()
+                    // 读取省的菜单
+                    var level4List = organizeList.Where(x => x.ORG_LEVEL == 4).ToList();
+                    if (level4List != null && level4List.Count()>0)
                     {
-                        id = level1.ORG_ID,
-                        text = level1.ORG_NAM,
-                        url = Url.Action("Index", "MapServer", new { @orgId = level1.ORG_ID }),
-                        children = GetMenuTreeForOrganize(organizeList, level1.ORG_ID)
-                    });
+                        foreach (var item in level4List)
+                        {
+                            listTree.Add(new HomeController.MenuTree()
+                            {
+                                id = item.ORG_ID,
+                                text = item.ORG_NAM,
+                                url = Url.Action("Index", "MapServer", new { @orgId = item.ORG_ID }),
+                                children = GetMenuTreeForOrganize(organizeList, item.ORG_ID)
+                            });
+                        } 
+                       
+                    }
                 }
-                // 读取市菜单
-                var level2 = organizeList.Where(x => x.ORG_LEVEL == 2).ToList();
-                foreach (var node in level2)
+                else
                 {
-                    listTree.Add(new HomeController.MenuTree()
+                    // 读取省的菜单
+                    var level1 = organizeList.FirstOrDefault(x => x.PAR_ORG_ID == null && x.ORG_LEVEL == 1);
+                    if (level1 != null)
                     {
-                        id = node.ORG_ID,
-                        text = node.ORG_NAM,
-                        url = Url.Action("Index", "MapServer", new {@orgId = node.ORG_ID}),
-                        children = GetMenuTreeForOrganize(organizeList, node.ORG_ID)
-                    });
+                        listTree.Add(new HomeController.MenuTree()
+                        {
+                            id = level1.ORG_ID,
+                            text = level1.ORG_NAM,
+                            url = Url.Action("Index", "MapServer", new { @orgId = level1.ORG_ID }),
+                            children = GetMenuTreeForOrganize(organizeList, level1.ORG_ID)
+                        });
+                    }
+                    // 读取市菜单
+                    var level2 = organizeList.Where(x => x.ORG_LEVEL == 2).ToList();
+                    foreach (var node in level2)
+                    {
+                        listTree.Add(new HomeController.MenuTree()
+                        {
+                            id = node.ORG_ID,
+                            text = node.ORG_NAM,
+                            url = Url.Action("Index", "MapServer", new { @orgId = node.ORG_ID }),
+                            children = GetMenuTreeForOrganize(organizeList, node.ORG_ID)
+                        });
+                    } 
                 }
+
+                
                 ViewData["MapServer"] = true;
 
                /* listTree.AddRange(organizeList.Where(x => x.ORG_LEVEL == null).Select(node => new HomeController.MenuTree()
@@ -98,14 +123,14 @@ namespace gzsw.controller.Default
         /// 首页
         /// </summary>
         /// <returns></returns>
-         [UserAuth]
+        [UserAuth]
         public ActionResult Index()
         {
-            // 获取惨淡
+            // 获取
             var menuList = DaoMenu.FindList("MENU_ORD asc");
             var menuall = menuList.Where(obj =>
                               (obj.PAR_MENU_ID == 0 || obj.PAR_MENU_ID == null));
-            if (UserState.UserID != "admin")
+            if (!isAdmin)
             {
                 menuall = menuall.Where(obj =>
                     UserState.UserFuncs != null && UserState.UserFuncs.Any(obj2 => obj2.FUNCTION_ID == obj.FUNCTION_ID)
@@ -116,7 +141,6 @@ namespace gzsw.controller.Default
             ViewBag.UserName = UserState.UserName; 
             return View(menuall);
         }
-
 
         public ActionResult Welcome()
         {

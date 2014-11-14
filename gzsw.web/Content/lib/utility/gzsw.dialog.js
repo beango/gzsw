@@ -63,7 +63,7 @@ gzsw.dialog = function () {
             // 关闭是否刷新页面
             isReload: true,
             // 关闭事件
-            closeFun: null
+            closeFun: null,
         };
         return settings;
     }
@@ -89,15 +89,17 @@ gzsw.dialog = function () {
             noFun:null
         };
         return settings;
-    } 
+    }
 
     return {
-
-        alert: function (msg, imgType,fn) {
+        alert: function(msg, imgType, fn) {
             if (imgType == undefined || imgType < 0) {
                 imgType = 0;
             }
-
+            //if (top != self) {
+            //    top.gzsw.dialog.alert(msg, imgType, fn);
+            //    return false;
+            //}
             /*layer.border = [3, 0.3, '#BED5F3'];
             layer.alert(msg, imgType, function(index) {
                 layer.close(index);
@@ -107,19 +109,27 @@ gzsw.dialog = function () {
             $.layer({
                 area: ['auto', 'auto'],
                 title: "对话框",
-                border: [3, 0.3, '#BED5F3'],
+                border: [1, 0.3, '#BED5F3'],
                 dialog: {
                     msg: msg,
                     btns: 1,
                     type: imgType,
                     btn: ['确定'],
-                    yes: function (index) {
+                    yes: function(index) {
                         layer.close(index);
-                    } 
+
+                        if (typeof fn == 'function') {
+                            fn(index);
+                        }
+                    }
                 }
             });
         },
         confirm: function(options) {
+            //if (top != self) {
+            //    top.gzsw.dialog.confirm(options);
+            //    return false;
+            //}
             var $$Settings = CreateConfirmDialog();
             if (options) {
                 $.extend($$Settings, options);
@@ -135,13 +145,13 @@ gzsw.dialog = function () {
                     btns: 2,
                     type: 4,
                     btn: ['确定', '取消'],
-                    yes: function () {
+                    yes: function(index) {
                         if ($.isFunction($$Settings.yesFun)) {
-                            $$Settings.yesFun();
+                            $$Settings.yesFun(index);
                         }
                     },
-                    no: function (index) {
-                        if ($.isFunction($$Settings.noFun)) { 
+                    no: function(index) {
+                        if ($.isFunction($$Settings.noFun)) {
                             $$Settings.noFun(index);
                         }
                         layer.close(index);
@@ -155,7 +165,7 @@ gzsw.dialog = function () {
                 $.extend($$Settings, options);
             }
             var layerObj = $.layer({
-                type: 1,   //0-4的选择,
+                type: 1, //0-4的选择,
                 title: $$Settings.title,
                 border: [2, 0.3, '#000'],
                 shade: [0],
@@ -168,13 +178,13 @@ gzsw.dialog = function () {
             });
             return layerObj;
         },
-        openHtml: function (options) { 
+        openHtml: function(options) {
             var $$Settings = CreateOpenHtmlDialog();
             if (options) {
                 $.extend($$Settings, options);
             }
-           var layerObj =   $.layer({
-                type: 1,   //0-4的选择,
+            var layerObj = $.layer({
+                type: 1, //0-4的选择,
                 title: $$Settings.title,
                 border: [3, 0.3, '#BED5F3'],
                 shade: [0],
@@ -182,21 +192,27 @@ gzsw.dialog = function () {
                 maxmin: false,
                 area: [$$Settings.width, $$Settings.height],
                 page: {
-                    html:  $$Settings.html
-                }, 
+                    html: $$Settings.html
+                },
                 shift: $$Settings.showType
-               /*, offset: $$Settings.offset,*/
+                /*, offset: $$Settings.offset,*/
 /*                success: function (othis) {
                     layer.setTop(othis);
                 }*/
-             });
+            });
             return layerObj;
         },
-        open:function(options) {
+        open: function(options) {
+
+            //if (top != self) {
+            //    top.gzsw.dialog.open(options);
+            //    return false;
+            //}
             var $$Settings = CreateOpenDialog();
             if (options) {
-                $.extend($$Settings, options); 
+                $.extend($$Settings, options);
             }
+
             $.layer({
                 type: 2,
                 title: $$Settings.title,
@@ -208,7 +224,7 @@ gzsw.dialog = function () {
                 iframe: {
                     src: $$Settings.url
                 },
-                end: function () {
+                end: function() {
                     if ($.isFunction($$Settings.closeFun)) {
                         $$Settings.closeFun();
                     }
@@ -216,10 +232,18 @@ gzsw.dialog = function () {
                         location.reload();
                     }
                 },
-                close: function (index) {
+                close: function(index) {
                     $$Settings.isReload = false;
                 }
-            }); 
+            });
+        },
+        //顶级父类中打开
+        openFull: function(options) {
+            if (top != self) {
+                top.gzsw.dialog.open(options);
+                return false;
+            }
+            gzsw.dialog.open(options);
         }
     };
 }();

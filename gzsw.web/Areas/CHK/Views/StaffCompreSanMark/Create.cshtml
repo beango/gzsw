@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "新增综合评议额外奖罚分";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.util
+@using gzsw.web
+@model gzsw.controller.CHK.Models.StaffCompreSanMarkAddModel
+
+@{
+    var selectStaff = new List<SelectListItem>()
+                      {
+                          new SelectListItem()
+                          {
+                              Text="--请选择--",
+                              Value = "",
+                              Selected=true
+                          }
+                      };
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="tdLeft">服务厅：</td>
+            <td>
+                @Html.DropDownList("ORG_ID", ViewBag.Orgs as SelectList, "--请选择--", new { @style = "width: 150px;" })
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.ORG_ID)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">员工名称:</td>
+            <td>
+                @Html.DropDownList("STAFF_ID", selectStaff, new { @style = "width:150px;" })
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.STAFF_ID)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">月份:</td>
+            <td>
+                @Html.TextBoxFor(m => m.STAT_MO, new { @class = "text-box", @onclick = "WdatePicker({ dateFmt: 'yyyy-MM' })" })
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.STAT_MO)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">综合奖罚项类型:</td>
+            <td>
+                @Html.DropDownListFor(m => m.COMPRE_SAN_TYP, EnumHelper.GetCategorySelectList(typeof(COMPRESANTYPEENUM)), new { @style = "width: 150px;" })
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.COMPRE_SAN_TYP)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">得分:</td>
+            <td>
+                @Html.TextBoxFor(m => m.SCORE)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.SCORE)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">原因:</td>
+            <td>
+                @Html.TextAreaFor(m => m.REASON, new { @style = "width: 150px;" })
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.REASON)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: center">
+                <input id="btnSubmit" type="submit" class="l-button" value="提交" />
+            </td>
+        </tr>
+    </table>
+}
+@section Head
+{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+}
+<script type="text/javascript">
+    $(function() {
+
+        $("#ORG_ID").on("change", function () {
+            var id = $(this).val();
+            //获取员工信息
+            $.ajax({
+                cache: false,
+                type: 'GET',
+                dataType: 'json',
+                url: '@Url.Action("GetStaffs", "Counter")?hallNo=' + id + "&_=" + (new Date()).getTime(),
+                success: function (data) {
+                    //W1A_STAFF_NAME
+                    var $selectA = $("#STAFF_ID");
+                        $("option:gt(0)", $selectA).remove();
+
+                        if (data && data.length > 0) {
+                            $.each(data, function (n, item) {
+                                $selectA.append("<option value='" + item.Value + "'>" + item.Text + "</option>");
+                            });
+                        }
+                }
+            });
+        });
+
+
+
+    });
+</script>

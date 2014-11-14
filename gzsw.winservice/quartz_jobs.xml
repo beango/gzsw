@@ -9,7 +9,7 @@
   </processing-directives>
 
   <schedule>
-    <job>
+    <!--<job>
       <name>TEST_JOB1</name>
       <group>TEST_JOBGroup1</group>
       <description>TEST_JOB1</description>
@@ -24,15 +24,16 @@
       <job-type>gzsw.winservice.TestJob2, gzsw.winservice</job-type>
       <durable>true</durable>
       <recover>false</recover>
-    </job>
-    <job>
+    </job>-->
+    <!--<job>
       <name>PRO_WARN_MON_JOB</name>
       <group>PRO_WARN_MON_JOBGroup</group>
       <description>PRO_WARN_MON_JOB</description>
       <job-type>gzsw.winservice.Job.PRO_WARN_MON_JOB, gzsw.winservice</job-type>
       <durable>true</durable>
       <recover>false</recover>
-    </job>
+    </job>-->
+    <!--员工考勤统计-->
     <job>
       <name>PRO_STAT_STAFF_CHKSTAT_M_JOB</name>
       <group>PRO_STAT_STAFF_CHKSTAT_M_JOBGroup</group>
@@ -41,6 +42,7 @@
       <durable>true</durable>
       <recover>false</recover>
     </job>
+    <!---->
     <job>
       <name>PRO_CHK_STAFFCHK_EVENT_D_JOB</name>
       <group>PRO_CHK_STAFFCHK_EVENT_D_JOBGroup</group>
@@ -49,24 +51,224 @@
       <durable>true</durable>
       <recover>false</recover>
     </job>
-    <job>
+    <!--迁移库的服务-->
+    <!--<job>
       <name>PRO_INIT_QUEUEDEAL_D_JOB</name>
       <group>PRO_INIT_QUEUEDEAL_D_JOBGroup</group>
       <description>PRO_INIT_QUEUEDEAL_D_JOB</description>
       <job-type>gzsw.winservice.Job.PRO_INIT_QUEUEDEAL_D_JOB, gzsw.winservice</job-type>
       <durable>true</durable>
       <recover>false</recover>
-    </job>
+    </job>-->
+    <!--旧的统计报表-->
     <job>
       <name>PRO_REPORT_STAT_D_JOB</name>
-      <group>PRO_REPORT_STAT_D_JOBGroup</group>
+      <group></group>
       <description>PRO_REPORT_STAT_D_JOB</description>
       <job-type>gzsw.winservice.Job.PRO_REPORT_STAT_D_JOB, gzsw.winservice</job-type>
       <durable>true</durable>
       <recover>false</recover>
     </job>
+    <!--员工业务量统计-->
+    <!--<job>
+      <name>PRO_STAT_STAFF_SVRSTAT_M_JOB</name>
+      <group>PRO_STAT_STAFF_SVRSTAT_M_JOBGroup</group>
+      <description>PRO_STAT_STAFF_SVRSTAT_M_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_STAT_STAFF_SVRSTAT_M_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>-->
+    <!--员工业务质量统计-->
+    <!--<job>
+      <name>PRO_STAT_STAFF_QUALITYSTAT_M_JOB</name>
+      <group>PRO_STAT_STAFF_QUALITYSTAT_M_JOBGroup</group>
+      <description>PRO_STAT_STAFF_QUALITYSTAT_M_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_STAT_STAFF_QUALITYSTAT_M_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>-->
+    <!--员工评价信息统计-->
+    <!--<job>
+      <name>PRO_STAT_STAFF_EVALSTAT_M_JOB</name>
+      <group>PRO_STAT_STAFF_EVALSTAT_M_JOBGroup</group>
+      <description>PRO_STAT_STAFF_EVALSTAT_M_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_STAT_STAFF_EVALSTAT_M_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>-->
+    <!--服务厅考核统计-->
+    <job>
+      <name>PRO_CHK_HALL_STAT_M_JOB</name>
+      <group>PRO_CHK_HALL_STAT_M_JOBGroup</group>
+      <description>PRO_CHK_HALL_STAT_M_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_CHK_HALL_STAT_M_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <!--个人业务统计日总-->
+    <!--<job>
+      <name>PRO_STAT_STAFF_BUSI_TOT_D_JOB</name>
+      <group>PRO_STAT_STAFF_BUSI_TOT_D_JOBGroup</group>
+      <description>PRO_STAT_STAFF_BUSI_TOT_D_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_STAT_STAFF_BUSI_TOT_D_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>-->
+    <!--个人排队业务统计-->
+    <!--<job>
+      <name>PRO_STAT_STAFF_QUEUE_BUSI_D_JOB</name>
+      <group>PRO_STAT_STAFF_QUEUE_BUSI_D_JOBGroup</group>
+      <description>PRO_STAT_STAFF_QUEUE_BUSI_D_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_STAT_STAFF_QUEUE_BUSI_D_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>-->
+    <!--个人大类业务统计-->
+    <!--<job>
+      <name>PRO_STAT_STAFF_LARGE_BUSI_D_JOB</name>
+      <group>PRO_STAT_STAFF_LARGE_BUSI_D_JOBGroup</group>
+      <description>PRO_STAT_STAFF_LARGE_BUSI_D_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_STAT_STAFF_LARGE_BUSI_D_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>-->
+    <!--纳税行为分析统计-->
+    <!--<job>
+      <name>PRO_STAT_TAXPAYER_BEHAV_STAT_D_JOB</name>
+      <group>PRO_STAT_TAXPAYER_BEHAV_STAT_D_JOBGroup</group>
+      <description>PRO_STAT_TAXPAYER_BEHAV_STAT_D_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_STAT_TAXPAYER_BEHAV_STAT_D_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>-->
+    <!--员工业务差错统计-->
+    <job>
+      <name>PRO_STAT_STAFF_QUALITY_STAT_D_JOB</name>
+      <group>PRO_STAT_STAFF_QUALITY_STAT_D_JOBGroup</group>
+      <description>PRO_STAT_STAFF_QUALITY_STAT_D_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_STAT_STAFF_QUALITY_STAT_D_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <!--服务厅预警统计-->
+    <job>
+      <name>PRO_STAT_WARN_HALL_STAT_D_JOB</name>
+      <group>PRO_STAT_WARN_HALL_STAT_D_JOBGroup</group>
+      <description>PRO_STAT_WARN_HALL_STAT_D_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_STAT_WARN_HALL_STAT_D_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <!--服务厅投诉举报统计-->
+    <job>
+      <name>PRO_STAT_COMPLAIN_HALL_STAT_D_JOB</name>
+      <group>PRO_STAT_COMPLAIN_HALL_STAT_D_JOBGroup</group>
+      <description>PRO_STAT_COMPLAIN_HALL_STAT_D_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_STAT_COMPLAIN_HALL_STAT_D_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <!--员工投诉举报统计-->
+    <job>
+      <name>PRO_STAT_COMPLAIN_STAFF_STAT_D_JOB</name>
+      <group>PRO_STAT_COMPLAIN_STAFF_STAT_D_JOBGroup</group>
+      <description>PRO_STAT_COMPLAIN_STAFF_STAT_D_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_STAT_COMPLAIN_STAFF_STAT_D_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <!--考核个人综合评定-->
+    <!--<job>
+      <name>PRO_CHK_STAFF_COMPRE_EVAL_M_JOB</name>
+      <group>PRO_CHK_STAFF_COMPRE_EVAL_M_JOBGroup</group>
+      <description>PRO_CHK_STAFF_COMPRE_EVAL_M_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_CHK_STAFF_COMPRE_EVAL_M_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>-->
+    <!--等候超时预警-->
+    <job>
+      <name>PRO_MON_WAIT_OVERTIME_TIME_JOB</name>
+      <group>PRO_MON_WAIT_OVERTIME_TIME_JOBGroup</group>
+      <description>PRO_MON_WAIT_OVERTIME_TIME_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_MON_WAIT_OVERTIME_TIME_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <!--等候超时率预警-->
+    <job>
+      <name>PRO_MON_WAIT_OVERTIME_RT_JOB</name>
+      <group>PRO_MON_WAIT_OVERTIME_RT_JOBGroup</group>
+      <description>PRO_MON_WAIT_OVERTIME_RT_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_MON_WAIT_OVERTIME_RT_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <!--窗口饱和度预警-->
+    <job>
+      <name>PRO_MON_COUNTER_SATUR_RT_JOB</name>
+      <group>PRO_MON_COUNTER_SATUR_RT_JOBGroup</group>
+      <description>PRO_MON_COUNTER_SATUR_RT_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_MON_COUNTER_SATUR_RT_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <!--大厅饱和度预警-->
+    <job>
+      <name>PRO_MON_HALL_SATUR_RT_JOB</name>
+      <group>PRO_MON_HALL_SATUR_RT_JOBGroup</group>
+      <description>PRO_MON_HALL_SATUR_RT_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_MON_HALL_SATUR_RT_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <!--超时办结率预警-->
+    <job>
+      <name>PRO_MON_COMPLETE_OVERTIME_RT_JOB</name>
+      <group>PRO_MON_COMPLETE_OVERTIME_RT_JOBGroup</group>
+      <description>PRO_MON_COMPLETE_OVERTIME_RT_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_MON_COMPLETE_OVERTIME_RT_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <!--超时业务笔数预警-->
+    <job>
+      <name>PRO_MON_COMPLETE_OVERTIME_CNT_JOB</name>
+      <group>PRO_MON_COMPLETE_OVERTIME_CNT_JOBGroup</group>
+      <description>PRO_MON_COMPLETE_OVERTIME_CNT_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_MON_COMPLETE_OVERTIME_CNT_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <!--弃号率预警-->
+    <job>
+      <name>PRO_MON_ABAN_RT_JOB</name>
+      <group>PRO_MON_ABAN_RT_JOBGroup</group>
+      <description>PRO_MON_ABAN_RT_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_MON_ABAN_RT_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <!--差评笔数预警预警-->
+    <job>
+      <name>PRO_MON_EVAL_UNSATISFY_CNT_JOB</name>
+      <group>PRO_MON_EVAL_UNSATISFY_CNT_JOBGroup</group>
+      <description>PRO_MON_EVAL_UNSATISFY_CNT_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_MON_EVAL_UNSATISFY_CNT_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <!--连续工作时长超界预警-->
+    <job>
+      <name>PRO_MON_CONTIN_WORK_DUR_JOB</name>
+      <group>PRO_MON_CONTIN_WORK_DUR_JOBGroup</group>
+      <description>PRO_MON_CONTIN_WORK_DUR_JOB</description>
+      <job-type>gzsw.winservice.Job.PRO_MON_CONTIN_WORK_DUR_JOB, gzsw.winservice</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
 
-    <trigger>
+    <!--<trigger>
       <cron>
         <name>PRO_WARN_MON_JOBTrigger</name>
         <group>PRO_WARN_MON_JOBTriggerGroup</group>
@@ -75,17 +277,17 @@
         <job-group>PRO_WARN_MON_JOBGroup</job-group>
         <cron-expression>0 0/5 * * * ?</cron-expression>
       </cron>
-    </trigger>
-    <trigger>
+    </trigger>-->
+    <!--<trigger>
       <cron>
         <name>PRO_STAT_STAFF_CHKSTAT_M_JOBTrigger</name>
         <group>PRO_STAT_STAFF_CHKSTAT_M_JOBTriggerGroup</group>
         <description>PRO_STAT_STAFF_CHKSTAT_M_JOB; 每月执行一次</description>
         <job-name>PRO_STAT_STAFF_CHKSTAT_M_JOB</job-name>
         <job-group>PRO_STAT_STAFF_CHKSTAT_M_JOBGroup</job-group>
-        <cron-expression>0 0 0 1 * ?</cron-expression><!--0 0 0 1 * ?-->
+        <cron-expression>0 0 0 1 * ?</cron-expression>
       </cron>
-    </trigger>
+    </trigger>-->
     <trigger>
       <cron>
         <name>PRO_CHK_STAFFCHK_EVENT_D_JOBTrigger</name>
@@ -96,7 +298,7 @@
         <cron-expression>0 0 0 * * ?</cron-expression>
       </cron>
     </trigger>
-    <trigger>
+    <!--<trigger>
       <cron>
         <name>PRO_INIT_QUEUEDEAL_D_JOBTrigger</name>
         <group>PRO_INIT_QUEUEDEAL_D_JOBTriggerGroup</group>
@@ -105,18 +307,237 @@
         <job-group>PRO_INIT_QUEUEDEAL_D_JOBGroup</job-group>
         <cron-expression>0 0 0 * * ?</cron-expression>
       </cron>
-    </trigger>
+    </trigger>-->
     <trigger>
       <cron>
         <name>PRO_REPORT_STAT_D_JOBTrigger</name>
         <group>PRO_REPORT_STAT_D_JOBTriggerGroup</group>
         <description>PRO_REPORT_STAT_D; 每天执行一次</description>
         <job-name>PRO_REPORT_STAT_D_JOB</job-name>
-        <job-group>PRO_REPORT_STAT_D_JOBGroup</job-group>
+        <job-group></job-group>
         <cron-expression>0 0 0 * * ?</cron-expression>
       </cron>
     </trigger>
-    
+    <!--<trigger>
+      <cron>
+        <name>PRO_STAT_STAFF_SVRSTAT_M_JOBTrigger</name>
+        <group>PRO_STAT_STAFF_SVRSTAT_M_JOBTriggerGroup</group>
+        <description>PRO_STAT_STAFF_SVRSTAT_M_JOB; 每天0点执行一次</description>
+        <job-name>PRO_STAT_STAFF_SVRSTAT_M_JOB</job-name>
+        <job-group>PRO_STAT_STAFF_SVRSTAT_M_JOBGroup</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>-->
+    <!--<trigger>
+      <cron>s
+        <name>PRO_STAT_STAFF_QUALITYSTAT_M_JOBTrigger</name>
+        <group>PRO_STAT_STAFF_QUALITYSTAT_M_JOBTriggerGroup</group>
+        <description>PRO_STAT_STAFF_QUALITYSTAT_M_JOB; 每天0点执行一次</description>
+        <job-name>PRO_STAT_STAFF_QUALITYSTAT_M_JOB</job-name>
+        <job-group>PRO_STAT_STAFF_QUALITYSTAT_M_JOBGroup</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>-->
+    <!--<trigger>
+      <cron>
+        <name>PRO_STAT_STAFF_EVALSTAT_M_JOBTrigger</name>
+        <group>PRO_STAT_STAFF_EVALSTAT_M_JOBTriggerGroup</group>
+        <description>PRO_STAT_STAFF_EVALSTAT_M_JOB; 每天0点执行一次</description>
+        <job-name>PRO_STAT_STAFF_EVALSTAT_M_JOB</job-name>
+        <job-group>PRO_STAT_STAFF_EVALSTAT_M_JOBGroup</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>-->
+    <trigger>
+      <cron>
+        <name>PRO_CHK_HALL_STAT_M_JOBTrigger</name>
+        <group>PRO_CHK_HALL_STAT_M_JOBTriggerGroup</group>
+        <description>PRO_CHK_HALL_STAT_M_JOB; 每天0点执行一次</description>
+        <job-name>PRO_CHK_HALL_STAT_M_JOB</job-name>
+        <job-group>PRO_CHK_HALL_STAT_M_JOBGroup</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <!--<trigger>
+      <cron>
+        <name>PRO_STAT_STAFF_BUSI_TOT_D_JOBTrigger</name>
+        <group>PRO_STAT_STAFF_BUSI_TOT_D_JOBTriggerGroup</group>
+        <description>PRO_STAT_STAFF_BUSI_TOT_D_JOB; 每天0点执行一次</description>
+        <job-name>PRO_STAT_STAFF_BUSI_TOT_D_JOB</job-name>
+        <job-group>PRO_STAT_STAFF_BUSI_TOT_D_JOBGroup</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>-->
+    <!--<trigger>
+      <cron>
+        <name>PRO_STAT_STAFF_QUEUE_BUSI_D_JOBTrigger</name>
+        <group>PRO_STAT_STAFF_QUEUE_BUSI_D_JOBTriggerGroup</group>
+        <description>PRO_STAT_STAFF_QUEUE_BUSI_D_JOB; 每天0点执行一次</description>
+        <job-name>PRO_STAT_STAFF_QUEUE_BUSI_D_JOB</job-name>
+        <job-group>PRO_STAT_STAFF_QUEUE_BUSI_D_JOBGroup</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>-->
+    <!--<trigger>
+      <cron>
+        <name>PRO_STAT_STAFF_LARGE_BUSI_D_JOBTrigger</name>
+        <group>PRO_STAT_STAFF_LARGE_BUSI_D_JOBTriggerGroup</group>
+        <description>PRO_STAT_STAFF_LARGE_BUSI_D_JOB; 每天0点执行一次</description>
+        <job-name>PRO_STAT_STAFF_LARGE_BUSI_D_JOB</job-name>
+        <job-group>PRO_STAT_STAFF_LARGE_BUSI_D_JOBGroup</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>-->
+    <!--<trigger>
+      <cron>
+        <name>PRO_STAT_TAXPAYER_BEHAV_STAT_D_JOBTrigger</name>
+        <group>PRO_STAT_TAXPAYER_BEHAV_STAT_D_JOBTriggerGroup</group>
+        <description>PRO_STAT_TAXPAYER_BEHAV_STAT_D_JOB; 每天0点执行一次</description>
+        <job-name>PRO_STAT_TAXPAYER_BEHAV_STAT_D_JOB</job-name>
+        <job-group>PRO_STAT_TAXPAYER_BEHAV_STAT_D_JOBGroup</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>-->
+    <trigger>
+      <cron>
+        <name>PRO_STAT_STAFF_QUALITY_STAT_D_JOBTrigger</name>
+        <group>PRO_STAT_STAFF_QUALITY_STAT_D_JOBTriggerGroup</group>
+        <description>PRO_STAT_STAFF_QUALITY_STAT_D_JOB; 每天0点执行一次</description>
+        <job-name>PRO_STAT_STAFF_QUALITY_STAT_D_JOB</job-name>
+        <job-group>PRO_STAT_STAFF_QUALITY_STAT_D_JOBGroup</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <trigger>
+      <cron>
+        <name>PRO_STAT_WARN_HALL_STAT_D_JOBTrigger</name>
+        <group>PRO_STAT_WARN_HALL_STAT_D_JOBTriggerGroup</group>
+        <description>PRO_STAT_WARN_HALL_STAT_D_JOB; 每天0点执行一次</description>
+        <job-name>PRO_STAT_WARN_HALL_STAT_D_JOB</job-name>
+        <job-group>PRO_STAT_WARN_HALL_STAT_D_JOBGroup</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <trigger>
+      <cron>
+        <name>PRO_STAT_COMPLAIN_HALL_STAT_D_JOBTrigger</name>
+        <group>PRO_STAT_COMPLAIN_HALL_STAT_D_JOBTriggerGroup</group>
+        <description>PRO_STAT_COMPLAIN_HALL_STAT_D_JOB; 每天0点执行一次</description>
+        <job-name>PRO_STAT_COMPLAIN_HALL_STAT_D_JOB</job-name>
+        <job-group>PRO_STAT_COMPLAIN_HALL_STAT_D_JOBGroup</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <trigger>
+      <cron>
+        <name>PRO_STAT_COMPLAIN_STAFF_STAT_D_JOBTrigger</name>
+        <group>PRO_STAT_COMPLAIN_STAFF_STAT_D_JOBTriggerGroup</group>
+        <description>PRO_STAT_COMPLAIN_STAFF_STAT_D_JOB; 每天0点执行一次</description>
+        <job-name>PRO_STAT_COMPLAIN_STAFF_STAT_D_JOB</job-name>
+        <job-group>PRO_STAT_COMPLAIN_STAFF_STAT_D_JOBGroup</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <!--<trigger>
+      <cron>
+        <name>PRO_CHK_STAFF_COMPRE_EVAL_M_JOBTrigger</name>
+        <group>PRO_CHK_STAFF_COMPRE_EVAL_M_JOBTriggerGroup</group>
+        <description>PRO_CHK_STAFF_COMPRE_EVAL_M_JOB; 每天0点执行一次</description>
+        <job-name>PRO_CHK_STAFF_COMPRE_EVAL_M_JOB</job-name>
+        <job-group>PRO_CHK_STAFF_COMPRE_EVAL_M_JOBGroup</job-group>
+        <cron-expression>0 0 0 * * ?</cron-expression>
+      </cron>
+    </trigger>-->
+    <trigger>
+      <cron>
+        <name>PRO_MON_WAIT_OVERTIME_TIME_JOBTrigger</name>
+        <group>PRO_MON_WAIT_OVERTIME_TIME_JOBTriggerGroup</group>
+        <description>PRO_MON_WAIT_OVERTIME_TIME_JOB; 10分钟一次</description>
+        <job-name>PRO_MON_WAIT_OVERTIME_TIME_JOB</job-name>
+        <job-group>PRO_MON_WAIT_OVERTIME_TIME_JOBGroup</job-group>
+        <cron-expression>0 0/10 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <trigger>
+      <cron>
+        <name>PRO_MON_WAIT_OVERTIME_RT_JOBTrigger</name>
+        <group>PRO_MON_WAIT_OVERTIME_RT_JOBTriggerGroup</group>
+        <description>PRO_MON_WAIT_OVERTIME_RT_JOB; 10分钟一次</description>
+        <job-name>PRO_MON_WAIT_OVERTIME_RT_JOB</job-name>
+        <job-group>PRO_MON_WAIT_OVERTIME_RT_JOBGroup</job-group>
+        <cron-expression>0 0/10 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <trigger>
+      <cron>
+        <name>PRO_MON_COUNTER_SATUR_RT_JOBTrigger</name>
+        <group>PRO_MON_COUNTER_SATUR_RT_JOBTriggerGroup</group>
+        <description>PRO_MON_COUNTER_SATUR_RT_JOB; 10分钟一次</description>
+        <job-name>PRO_MON_COUNTER_SATUR_RT_JOB</job-name>
+        <job-group>PRO_MON_COUNTER_SATUR_RT_JOBGroup</job-group>
+        <cron-expression>0 0/10 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <trigger>
+      <cron>
+        <name>PRO_MON_HALL_SATUR_RT_JOBTrigger</name>
+        <group>PRO_MON_HALL_SATUR_RT_JOBTriggerGroup</group>
+        <description>PRO_MON_HALL_SATUR_RT_JOB; 10分钟一次</description>
+        <job-name>PRO_MON_HALL_SATUR_RT_JOB</job-name>
+        <job-group>PRO_MON_HALL_SATUR_RT_JOBGroup</job-group>
+        <cron-expression>0 0/10 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <trigger>
+      <cron>
+        <name>PRO_MON_COMPLETE_OVERTIME_RT_JOBTrigger</name>
+        <group>PRO_MON_COMPLETE_OVERTIME_RT_JOBTriggerGroup</group>
+        <description>PRO_MON_COMPLETE_OVERTIME_RT_JOB; 10分钟一次</description>
+        <job-name>PRO_MON_COMPLETE_OVERTIME_RT_JOB</job-name>
+        <job-group>PRO_MON_COMPLETE_OVERTIME_RT_JOBGroup</job-group>
+        <cron-expression>0 0/10 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <trigger>
+      <cron>
+        <name>PRO_MON_COMPLETE_OVERTIME_CNT_JOBTrigger</name>
+        <group>PRO_MON_COMPLETE_OVERTIME_CNT_JOBTriggerGroup</group>
+        <description>PRO_MON_COMPLETE_OVERTIME_CNT_JOB; 10分钟一次</description>
+        <job-name>PRO_MON_COMPLETE_OVERTIME_CNT_JOB</job-name>
+        <job-group>PRO_MON_COMPLETE_OVERTIME_CNT_JOBGroup</job-group>
+        <cron-expression>0 0/10 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <trigger>
+      <cron>
+        <name>PRO_MON_ABAN_RT_JOBTrigger</name>
+        <group>PRO_MON_ABAN_RT_JOBTriggerGroup</group>
+        <description>PRO_MON_ABAN_RT_JOB; 10分钟一次</description>
+        <job-name>PRO_MON_ABAN_RT_JOB</job-name>
+        <job-group>PRO_MON_ABAN_RT_JOBGroup</job-group>
+        <cron-expression>0 0/10 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <trigger>
+      <cron>
+        <name>PRO_MON_EVAL_UNSATISFY_CNT_JOBTrigger</name>
+        <group>PRO_MON_EVAL_UNSATISFY_CNT_JOBTriggerGroup</group>
+        <description>PRO_MON_EVAL_UNSATISFY_CNT_JOB; 10分钟一次</description>
+        <job-name>PRO_MON_EVAL_UNSATISFY_CNT_JOB</job-name>
+        <job-group>PRO_MON_EVAL_UNSATISFY_CNT_JOBGroup</job-group>
+        <cron-expression>0 0/10 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <trigger>
+      <cron>
+        <name>PRO_MON_CONTIN_WORK_DUR_JOBTrigger</name>
+        <group>PRO_MON_CONTIN_WORK_DUR_JOBTriggerGroup</group>
+        <description>PRO_MON_CONTIN_WORK_DUR_JOB; 10分钟一次</description>
+        <job-name>PRO_MON_CONTIN_WORK_DUR_JOB</job-name>
+        <job-group>PRO_MON_CONTIN_WORK_DUR_JOBGroup</job-group>
+        <cron-expression>0 0/10 * * * ?</cron-expression>
+      </cron>
+    </trigger>
     <!--<trigger>
       <cron>
         <name>TEST_JOBTrigger1</name>

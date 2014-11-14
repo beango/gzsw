@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "查看纳税人评价修正";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model gzsw.model.Subclasses.SYS_CURRQUEUEHIST_SUB
+
+
+
+<table class="formTable" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="width: 160px;" class="tdLeft">服务厅:</td>
+        <td>
+            @Html.DisplayFor(m => m.HALL_NAM)
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">窗口:</td>
+        <td>
+            @Html.DisplayFor(m => m.CHQUEUE_COUNTER)
+        </td>
+    </tr>
+    <tr>
+        <td  class="tdLeft">业务:</td>
+        <td>
+            @Html.DisplayFor(m => m.Q_SERIALNAME)
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">操作员工:</td>
+        <td>
+            @Html.DisplayFor(m => m.STAFF_NAM)
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">纳税人识别码:</td>
+        <td>
+            @Html.DisplayFor(m => m.CHQUEUE_NSRSBM)
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">纳税人名称:</td>
+        <td>
+            @Html.DisplayFor(m => m.CHQUEUE_NSRMC)
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">评价结果值:</td>
+        <td>
+            @(((PJRESULTENUM)Model.CHQUEUE_PJRESULT).GetDescription())
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">评价时间:</td>
+        <td>
+            @(Model.CHQUEUE_ETIME != null ? Model.CHQUEUE_ETIME.GetValueOrDefault().ToString("yyyy-MM-dd HH:mm:ss") : "")
+        </td>
+    </tr>
+</table>

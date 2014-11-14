@@ -230,6 +230,7 @@ namespace gzsw.web
             }
 
             var output = new StringBuilder("<div class=\"l-panel-bar\"> <div class=\"l-panel-bbar-inner\">");
+
             output.Append("<div class=\"l-bar-group  l-bar-message\">");
             output.Append(string.Format("<span class=\"l-bar-text\">当前第{0}页/共{1}页 (共:{2}条记录/每页显示:{3})</span>",
                 currentPage,
@@ -248,22 +249,22 @@ namespace gzsw.web
             output.Append("</div>");
 
             output.Append("<div class=\"l-bar-separator\"></div>");
+
             output.Append("<div class=\"l-bar-group\">");
             output.Append("<div class=\"l-bar-button l-bar-btnfirst\">");
             output.Append(string.Format("<span tag=\"firstBtn\" title=\"{0}\"  class=\"{1}\"></span>", "首页", currentPage == 1 ? "l-disabled" : ""));
             output.Append("</div>");
             output.Append(string.Format("<div class=\"l-bar-button l-bar-btnprev\"><span title=\"上一页\"  class=\"{0}\" tag=\"upBtn\"></span></div>", currentPage == 1?"l-disabled":""));
             output.Append("</div>");
-            output.Append(" <div class=\"l-bar-separator\"></div>");
+            output.Append("<div class=\"l-bar-separator\"></div>");
 
-            output.Append(" <div class=\"l-bar-group\">");
+            output.Append("<div class=\"l-bar-group\">");
             output.Append("<span class=\"pcontrol\">");
-
             output.Append(string.Format("<input type=\"text\" tag=\"num\" maxvalue=\"{0}\" size=\"4\" value=\"{1}\" style=\"width:30px;height:14px;\"> / <span>{2}</span>",
                 totalPages, currentPage, totalPages));
             output.Append("</span></div>");
 
-            output.Append(" <div class=\"l-bar-separator\"></div>");
+            output.Append("<div class=\"l-bar-separator\"></div>");
 
             output.Append("<div class=\"l-bar-group\">");
 
@@ -273,12 +274,14 @@ namespace gzsw.web
                     currentPage >= totalPages ? "l-disabled" : ""));
             output.Append(string.Format("<div class=\"l-bar-button l-bar-btnlast\"><span class=\"{0}\" title=\"尾页\" tag=\"endBtn\"></span></div>",currentPage >= totalPages ? "l-disabled" : ""));
             output.Append("</div>");
-            output.Append("<div class=\"l-bar-group\">");
 
+            output.Append("<div class=\"l-bar-group\">");
             output.Append(string.Format("<div class=\"l-bar-group\"><div class=\"l-bar-button l-bar-btnload\"><span tag=\"refresh\" title=\"刷新\"></span></div></div>"));
             output.Append("<div class=\"l-bar-group\"><div class=\"l-clear\"></div>");
-             
             output.Append("</div></div>");
+
+            output.Append("</div></div>");
+
             // 新增处理脚本依赖jqueryHelper.js
             output.Append("<script type=\"text/javascript\">$(function () { $(\".l-panel-bar\").pager(); });</script>");
                

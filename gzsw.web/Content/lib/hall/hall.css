@@ -6,6 +6,10 @@ body {
     margin-top: 2px;
 }
 
+.b-content {
+    font-family: '微软雅黑';
+}
+
 .setting {
     float: left; width: 50px;margin-left: 5px;
 }
@@ -60,8 +64,8 @@ body {
     height: 12px;
 }
 .web-hall em img.imgSize {
-    width: 20px;
-    height: 20px;
+    width: 40px;
+    height: 40px;
 }
 
 .device {
@@ -205,6 +209,14 @@ table.input td {
     height: 340px;
     background: url("./images/vidoControl.png")
 }
+.video-right2 {
+    width: 200px;
+    float: left;
+    margin-left: 10px;
+    height: 340px;
+}
+
+
 .handle {
     width: 492px;
     height: 20px;
@@ -347,6 +359,24 @@ a.ui-slider-handle,a.ui-slider-handle:link,a.ui-slider-handle:visited,a.ui-slide
     height: 35px;
     background: url("./images/minusSign.png") no-repeat 0px; display:inline-block;
 }
+.playSlow {
+    cursor: pointer;
+    width:30px;
+    height: 30px;
+    background: url("./images/playSlow.png") no-repeat 0px; display:inline-block;
+}
+.playFast {
+    cursor: pointer;
+    width:30px;
+    height: 30px;
+    background: url("./images/playFast.png") no-repeat 0px; display:inline-block;
+}
+.reversePlayback {
+    cursor: pointer;
+    width:30px;
+    height: 30px;
+    background: url("./images/reversePlayback.png") no-repeat 0px; display:inline-block;
+}
 
 /**2**/
 .autoControlSel {
@@ -415,6 +445,16 @@ a.ui-slider-handle,a.ui-slider-handle:link,a.ui-slider-handle:visited,a.ui-slide
     width:35px;
     height: 35px;
     background: url("./images/minusSign2.png") no-repeat 0px; display:inline-block;
+}
+
+.playback {
+    cursor: pointer;
+    width:35px;
+    height: 35px;
+    background: url("./images/playback.png") no-repeat 0px; display:inline-block;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
 }
 
 

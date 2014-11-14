@@ -41,7 +41,7 @@ namespace gzsw.controller.SYS
             }
             catch (Exception ex)
             {
-                LogHelper.ErrorLog("查看排队机队列出错", ex);
+                LogHelper.ErrorLog("系统错误！", ex);
                 return Redirect("/Home/Error");
             }
         }
@@ -116,7 +116,7 @@ namespace gzsw.controller.SYS
             }
             catch (Exception ex)
             {
-                LogHelper.ErrorLog("修改排队机队列出错", ex);
+                LogHelper.ErrorLog("修改出错", ex);
                 return Redirect("/Home/Error");
             }
         }
@@ -129,7 +129,7 @@ namespace gzsw.controller.SYS
             {
                 if (string.IsNullOrEmpty(quSerial.Q_SERIALNAME))
                 {
-                    ModelState.AddModelError("Q_SERIALNAME", "排队机队列名称不能为空！");
+                    ModelState.AddModelError("Q_SERIALNAME", "队列名称不能为空！");
                 }
 
                 if (!ModelState.IsValid)
@@ -152,7 +152,7 @@ namespace gzsw.controller.SYS
             }
             catch (Exception ex)
             {
-                LogHelper.ErrorLog("修改排队机队列出错！", ex);
+                LogHelper.ErrorLog("修改出错！", ex);
                 return Redirect("/Home/Error");
             }
         }
@@ -172,7 +172,7 @@ namespace gzsw.controller.SYS
             }
             catch (Exception ex)
             {
-                LogHelper.ErrorLog("删除排队机队列出错", ex);
+                LogHelper.ErrorLog("删除出错", ex);
                 return Redirect("/Home/Error");
             }
         }

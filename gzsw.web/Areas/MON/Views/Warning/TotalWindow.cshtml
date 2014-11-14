@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "总窗口";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@model List<gzsw.model.dto.CounterDto>
+
+<div class="tablePanel" style="margin-top: 10px;">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>窗口号</th>
+                <th>当前在线员工</th>
+                <th>窗口状态</th>
+                <th>当前排队号</th>
+                <th>纳税人识别码</th>
+                <th>当前受理业务名称</th>
+                <th>排队队列名称</th>
+                <th>实时监控</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.COUNTER_ID</td>
+                <td>@item.STAFF_NAM</td>
+                <td>@item.GetState()</td>
+                <td>@item.LST_QUEUE_NUMBER</td>
+                <td>@item.LST_NSR_SBM</td>
+                <td>@item.SERIALNAME</td>
+                <td>@item.Q_SERIALNAME</td>
+                <td>
+                    <a href="javascript:void(0);" d-open="select" d-counterid="@item.COUNTER_ID" d-hallno="@item.HALL_NO" >查看</a>
+                </td>
+            </tr>
+        }
+    </table>
+    @if (Model.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    $(function() {
+
+        $("a[d-open='select']").click(function () {
+            var hallNo = $(this).attr("d-hallno");
+            var counterId = $(this).attr("d-counterid");
+
+            var aUrl="@Url.Action("GetCounterCamera", "VirtualMonitor")?hallNo=" + hallNo + "&counterId=" + counterId;
+            var url = "@Url.Action("CounterPlayVideo", "VirtualMonitor")?hallNo=" + hallNo + "&counterId=" + counterId;
+
+            $.ajax({
+                type: "GET",
+                url: aUrl.urlstamp(),
+                success: function (data) {
+                    if (data) {
+                        var cameratype = Number(data.CAMERA_TYP);
+                        var width = cameratype == 1 ? 685 : 500;
+                        parent.gzsw.dialog.open({
+                            title: '摄像窗口',
+                            url: url.urlstamp(),
+                            width: width,
+                            height: 368,
+                            isReload: false
+                        });
+                    }
+                }
+
+            });
+
+
+            
+        });
+    });
+</script>

@@ -1,0 +1,165 @@
+﻿@{
+    ViewBag.Title = "排队叫号明细";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.model.Subclasses
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model PetaPoco.Page<gzsw.model.Subclasses.SYS_CURRQUEUEHIST_SUB>
+
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:80px;">服务厅：</td>
+            <td style="width:150px;">
+                @Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)
+            </td>
+            <td style="width:90px;">开始时间</td>
+            <td style="width: 120px;">
+                <input type="text" name="txtBeginTime" id="txtBeginTime" value="@ViewBag.BeginTime" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
+            </td>
+            <td style="width:80px;">结束时间</td>
+            <td style="width: 120px;">
+                <input type="text" name="txtEndTime" id="txtEndTime" value="@ViewBag.EndTime" o onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
+            </td>
+            <td>
+                <div id="btnSearch"></div> 
+            </td>
+            <td>
+                <span style="float: right;margin-right: 10px;"><a id="seniorSelect" href="javascript:void(0);">高级查询</a></span>
+            </td>
+        </tr>
+        <tr style="@(ViewBag.IsSenior != 0 ? "" : "display: none;") " d-tyle='senior'>
+            <td>排队号码:</td>
+            <td>
+                <input type="text" id="txtNumber" value="@ViewBag.Number" />
+            </td>
+            <td>窗口编号:</td>
+            <td>
+                <input type="text" id="txtCounter" value="@ViewBag.Counter" />
+            </td>
+            <td>员工编号:</td>
+            <td colspan="3">
+                <input type="text" id="txtStaffId" value="@ViewBag.StaffId" />
+            </td>
+        </tr>
+        <tr style="@(ViewBag.IsSenior!=0 ? "" : "display: none;")" d-tyle='senior'>
+            <td>状态:</td>
+            <td>
+                @Html.DropDownList("ddlStatus", EnumHelper.GetCategorySelectList(typeof(SYS_CURRQUEUEHIST_SUB.STATUSENUM),true, (object)ViewBag.Status))
+            </td>
+            <td>纳税人识别码:</td>
+            <td colspan="5">
+                <input type="text" id="txtNsrsbm" value="@ViewBag.Nsrsbm" />
+                <input type="hidden" id="hidIsSenior" value="@ViewBag.IsSenior" />
+            </td>
+        </tr>
+    </table>
+
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:30px;">
+                    <input id="chkAll" name="chkAll" type="checkbox" />
+                </th>
+                <th style="width:38px;">序号 </th>
+                <th>排队号码</th>
+                <th>取号时间</th>
+                <th>排队业务</th>
+                <th>纳税人名称</th>
+                <th>受理时长</th>
+                <th>纳税人所属纳税机构代码</th>
+
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@(item.CHQUEUE_TRANSCODEID)" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>@item.CHQUEUE_NUMBER</td>
+                <td>@item.CHQUEUE_TICKETTIME.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@item.Q_SERIALNAME</td>
+                <td>@item.CHQUEUE_NSRMC</td>
+                <td>@(item.CHQUEUE_BLTIME.ToTimeString())</td>
+                
+                <td>@(item.CHQUEUE_SWJGDM)</td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head
+{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+}
+
+<script type="text/javascript">
+    $(function () {
+        // 查询
+        $("#btnSearch").ligerButton(
+                {
+                    text: " 查 询 ",
+                    click: function () {
+                        $("#txtCounter").focus();
+                        $("#txtNsrsbm").focus();
+                        var begin = $("#txtBeginTime").val();
+                        var end = $("#txtEndTime").val();
+                        var url = "?orgId=" + encodeURI($("#ddlORGID").val())
+                            + "&beginTime=" + encodeURI(begin)
+                            + "&endTime=" + encodeURI(end)
+                            + "&number=" + encodeURI($("#txtNumber").val())
+                            + "&counter=" + encodeURI($("#txtCounter").val())
+                            + "&staffId=" + encodeURI($("#txtStaffId").val())
+                            + "&nsrsbm=" + encodeURI($("#txtNsrsbm").val())
+                            + "&status=" + encodeURI($("#ddlStatus").val())
+                            + "&isSenior=" + encodeURI($("#hidIsSenior").val());
+                        location.href = url.urlstamp();
+                    },
+                    icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+                });
+        $("#seniorSelect").click(function () {
+            var isSenior = $("#hidIsSenior").val();
+            if (isSenior==1) {
+                $("#hidIsSenior").val(0);
+                $("tr[d-tyle='senior']").hide();
+            } else {
+                $("#hidIsSenior").val(1);
+                $("tr[d-tyle='senior']").show();
+             }
+        });
+        // 顶部导航
+        var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+        @if (Html.ChkAuth("MON_Warning"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("DetailList","HistroyAccountDetail"), "查看", "MON_Warning", 800, 450));
+                @:ligerToolBar.addItem({ line: true });
+             }
+
+
+    });
+</script>

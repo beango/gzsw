@@ -1,113 +1,287 @@
 ﻿@using gzsw.web
-@model gzsw.model.WARN_PARAM
-
+@model gzsw.controller.WARN.Model_WARN_PARAM
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
 @using (Html.BeginForm())
 {
-    <div class="formbody">
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)
-
-        <ul class="forminfo">
-
-            <li>
-                <label>
-                    预警名称
-                </label>
-                <label>
-                    @Html.EditorFor(model => model.WARN_PARAM_NAM)
-                    @Html.ValidationMessageFor(model => model.WARN_PARAM_NAM)
-                </label>
-            </li>
-            <li>
-                <label>
-                   临界值
-                </label>
-                <label>
-                    @Html.EditorFor(model => model.CRITICAL_VALUE)
-                    @Html.ValidationMessageFor(model => model.CRITICAL_VALUE)
-                </label>
-            </li>
-            <li>
-                <label>
-                    预警级别
-                </label>
-                <label>
-                    @Html.EditorFor(model => model.WARN_LEVEL)
-                    @Html.ValidationMessageFor(model => model.WARN_LEVEL)
-                </label>
-            </li>
-            <li>
-                <label>
-                    预警类型
-                </label>
-                <label>
-                    @Html.EditorFor(model => model.WARN_TYP)
-                    @Html.ValidationMessageFor(model => model.WARN_TYP)
-                </label>
-            </li>
-            <li>
-                <label>
-                   预警范围
-                </label>
-                <label>
-                    @Html.EditorFor(model => model.WARN_SCOPE)
-                    @Html.ValidationMessageFor(model => model.WARN_SCOPE)
-                </label>
-            </li>
-            <li>
-                <label>
-                    组织机构
-                </label>
-                <label>
-                    @Html.EditorFor(model => model.ORG_ID)
-                    @Html.ValidationMessageFor(model => model.ORG_ID)
-                </label>
-            </li>
-            <li>
-                <label>
-                    信息发送模版
-                </label>
-                <label>
-                    @Html.EditorFor(model => model.WARN_INFO_MODEL)
-                    @Html.ValidationMessageFor(model => model.WARN_INFO_MODEL)
-                </label>
-            </li>
-            <li>
-                <label>
-                    预警备注
-                </label>
-                <label>
-                    @Html.EditorFor(model => model.NOTE)
-                    @Html.ValidationMessageFor(model => model.NOTE)
-                </label>
-            </li>
-            <li>
-                <label>
-                </label>
-                <label>
-                    <input type="submit" class="btn" value="提交" />
-                </label>
-            </li>
-        </ul>
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="tablePanel">
+        <table class="tablelist" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th style="width:13%;">
+                        指标名称
+                    </th>
+                    <th style="width: 12%;">
+                        黄色预警设定
+                    </th>
+                    <th style="width: 12%;">
+                        橙色预警设定
+                    </th>
+                    <th style="width: 12%;">
+                        红色预警设定
+                    </th>
+                    <th style="width: 13%;">
+                        预警频率（分）
+                    </th>
+                    <th>
+                        信息发送模板
+                    </th>
+                </tr>
+            </thead>
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    等候超时（超过最大办理时间％，单位：分钟）
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE11)
+                    @Html.ValidationMessage("CRITICAL_VALUE11")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE12)
+                    @Html.ValidationMessage("CRITICAL_VALUE12")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE13)
+                    @Html.ValidationMessage("CRITICAL_VALUE13")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.FRE_MIN1)
+                    @Html.ValidationMessage("FRE_MIN1")
+                </td>
+                <td>
+                    @Html.TextAreaFor(model => model.WARN_INFO_MODEL1)
+                    @Html.ValidationMessage("WARN_INFO_MODEL1")
+                </td>
+            </tr>
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    等候超时率（高于）
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE21)%
+                    @Html.ValidationMessage("CRITICAL_VALUE21")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE22)%
+                    @Html.ValidationMessage("CRITICAL_VALUE22")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE23)%
+                    @Html.ValidationMessage("CRITICAL_VALUE23")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.FRE_MIN2)
+                    @Html.ValidationMessage("FRE_MIN2")
+                </td>
+                <td>
+                    @Html.TextAreaFor(model => model.WARN_INFO_MODEL2)
+                    @Html.ValidationMessage("WARN_INFO_MODEL2")
+                </td>
+            </tr>
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    窗口饱和度（高于，人/窗口）
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE31)
+                    @Html.ValidationMessage("CRITICAL_VALUE31")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE32)
+                    @Html.ValidationMessage("CRITICAL_VALUE32")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE33)
+                    @Html.ValidationMessage("CRITICAL_VALUE33")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.FRE_MIN3)
+                    @Html.ValidationMessage("FRE_MIN3")
+                </td>
+                <td>
+                    @Html.TextAreaFor(model => model.WARN_INFO_MODEL3)
+                    @Html.ValidationMessage("WARN_INFO_MODEL3")
+                </td>
+            </tr>
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    大厅饱和度（高于，实时人流量/大厅容纳人数）
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE41)
+                    @Html.ValidationMessage("CRITICAL_VALUE41")%
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE42)
+                    @Html.ValidationMessage("CRITICAL_VALUE42")%
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE43)
+                    @Html.ValidationMessage("CRITICAL_VALUE43")%
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.FRE_MIN4)
+                    @Html.ValidationMessage("FRE_MIN4")
+                </td>
+                <td>
+                    @Html.TextAreaFor(model => model.WARN_INFO_MODEL4)
+                    @Html.ValidationMessage("WARN_INFO_MODEL4")
+                </td>
+            </tr>
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    超时办结率（高于，超时业务量/总业务量）
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE51)
+                    @Html.ValidationMessage("CRITICAL_VALUE51")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE52)
+                    @Html.ValidationMessage("CRITICAL_VALUE52")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE53)
+                    @Html.ValidationMessage("CRITICAL_VALUE53")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.FRE_MIN5)
+                    @Html.ValidationMessage("FRE_MIN5")
+                </td>
+                <td>
+                    @Html.TextAreaFor(model => model.WARN_INFO_MODEL5)
+                    @Html.ValidationMessage("WARN_INFO_MODEL5")
+                </td>
+            </tr>
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    超时业务笔数（高于）
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE61)
+                    @Html.ValidationMessage("CRITICAL_VALUE61")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE62)
+                    @Html.ValidationMessage("CRITICAL_VALUE62")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE63)
+                    @Html.ValidationMessage("CRITICAL_VALUE63")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.FRE_MIN6)
+                    @Html.ValidationMessage("FRE_MIN6")
+                </td>
+                <td>
+                    @Html.TextAreaFor(model => model.WARN_INFO_MODEL6)
+                    @Html.ValidationMessage("WARN_INFO_MODEL6")
+                </td>
+            </tr>
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    弃号率（高于，弃号数/总出票数*100%）
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE71)
+                    @Html.ValidationMessage("CRITICAL_VALUE71")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE72)
+                    @Html.ValidationMessage("CRITICAL_VALUE72")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE73)
+                    @Html.ValidationMessage("CRITICAL_VALUE73")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.FRE_MIN7)
+                    @Html.ValidationMessage("FRE_MIN7")
+                </td>
+                <td>
+                    @Html.TextAreaFor(model => model.WARN_INFO_MODEL7)
+                    @Html.ValidationMessage("WARN_INFO_MODEL7")
+                </td>
+            </tr>
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    差评笔数预警（高于）
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE81)
+                    @Html.ValidationMessage("CRITICAL_VALUE81")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE82)
+                    @Html.ValidationMessage("CRITICAL_VALUE82")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE83)
+                    @Html.ValidationMessage("CRITICAL_VALUE83")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.FRE_MIN8)
+                    @Html.ValidationMessage("FRE_MIN8")
+                </td>
+                <td>
+                    @Html.TextAreaFor(model => model.WARN_INFO_MODEL8)
+                    @Html.ValidationMessage("WARN_INFO_MODEL8")
+                </td>
+            </tr>
+            <tr>
+                <td style="width:100px;" class="tdLeft">
+                    连续工作时长超界 （高于，单位:分钟数）
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE91)
+                    @Html.ValidationMessage("CRITICAL_VALUE91")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE92)
+                    @Html.ValidationMessage("CRITICAL_VALUE92")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CRITICAL_VALUE93)
+                    @Html.ValidationMessage("CRITICAL_VALUE93")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.FRE_MIN9)
+                    @Html.ValidationMessage("FRE_MIN9")
+                </td>
+                <td>
+                    @Html.TextAreaFor(model => model.WARN_INFO_MODEL9)
+                    @Html.ValidationMessage("WARN_INFO_MODEL9")
+                </td>
+            </tr>
+        </table>
+        <div style="margin-top:5px;">
+            <input type="submit" class="l-button" value="提交" />
+            <input type="button" class="l-button" onclick="location.href = '/WARN/WarnParam/Details?hallno=@Request.QueryString["hallno"]'" value="取消" />
+            <i>参数替换：@@HALL_NAM:营业厅名称
+            @@CRITICAL_VALUE:临界值
+            @@REAL_VALUE:实际值</i>
+        </div>
     </div>
 }
 
 @section Head{
-    @Html.JavaScript("lib/utility/ext.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
     <style type="text/css">
-        body {
-            min-width: 100px;
+        .tablelist textarea {
+            width: 200px;
+            height: 34px;
+        }
+
+        .tablelist input[type="text"], input[type="number"] {
+            width: 55px;
         }
     </style>
-
-    <script type="text/javascript">
-        InitAjaxForm();//异步提交
-    </script>
 }
 
 

@@ -1,0 +1,292 @@
+﻿@using gzsw.web
+@model gzsw.controller.WARN.Model_WARN_PARAM
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div id="toptoolbar"></div>
+@using (Html.BeginForm())
+{
+    <div class="tablePanel">
+        <table class="tablelist" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                    <th style="width:18%;">
+                        指标名称
+                    </th>
+                    <th style="width: 12%;">
+                        黄色预警设定
+                    </th>
+                    <th style="width: 12%;">
+                        橙色预警设定
+                    </th>
+                    <th style="width: 12%;">
+                        红色预警设定
+                    </th>
+                    <th style="width: 13%;">
+                        预警频率（分）
+                    </th>
+                    <th>
+                        信息发送模板
+                    </th>
+                </tr>
+            </thead>
+            <tr>
+                <td>
+                    <input name="cbId" value="1" type='checkbox' />
+                </td>
+                <td class="tdLeft">
+                    等候超时（超过最大办理时间％，单位：分钟）
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE11)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE12)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE13)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.FRE_MIN1)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.WARN_INFO_MODEL1)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="cbId" value="2" type='checkbox' />
+                </td>
+                <td style="width:100px;" class="tdLeft">
+                    等候超时率（高于）
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE21)%
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE22)%
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE23)%
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.FRE_MIN2)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.WARN_INFO_MODEL2)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="cbId" value="3" type='checkbox' />
+                </td>
+                <td style="width:100px;" class="tdLeft">
+                    窗口饱和度（高于，人/窗口）
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE31)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE32)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE33)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.FRE_MIN3)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.WARN_INFO_MODEL3)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="cbId" value="4" type='checkbox' />
+                </td>
+                <td style="width:100px;" class="tdLeft">
+                    大厅饱和度（高于，实时人流量/大厅容纳人数）
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE41)%
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE42)%
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE43)%
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.FRE_MIN4)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.WARN_INFO_MODEL4)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="cbId" value="5" type='checkbox' />
+                </td>
+                <td style="width:100px;" class="tdLeft">
+                    超时办结率（高于，超时业务量/总业务量）
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE51)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE52)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE53)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.FRE_MIN5)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.WARN_INFO_MODEL5)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="cbId" value="6" type='checkbox' />
+                </td>
+                <td style="width:100px;" class="tdLeft">
+                    超时业务笔数（高于）
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE61)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE62)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE63)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.FRE_MIN6)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.WARN_INFO_MODEL6)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="cbId" value="7" type='checkbox' />
+                </td>
+                <td style="width:100px;" class="tdLeft">
+                    弃号率（高于，弃号数/总出票数*100%）
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE71)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE72)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE73)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.FRE_MIN7)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.WARN_INFO_MODEL7)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="cbId" value="8" type='checkbox' />
+                </td>
+                <td style="width:100px;" class="tdLeft">
+                    差评笔数预警（高于）
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE81)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE82)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE83)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.FRE_MIN8)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.WARN_INFO_MODEL8)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="cbId" value="9" type='checkbox' />
+                </td>
+                <td style="width:100px;" class="tdLeft">
+                    连续工作时长超界（高于，单位:分钟数）
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE91)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE92)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CRITICAL_VALUE93)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.FRE_MIN9)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.WARN_INFO_MODEL9)
+                </td>
+            </tr>
+        </table>
+        <i>
+            发送模板参数替换：@@HALL_NAM:营业厅名称
+            @@CRITICAL_VALUE:临界值
+            @@REAL_VALUE:实际值
+        </i>
+    </div>
+}
+
+@section Head
+{
+    <script lang="javascript">
+        $(function () {
+            // 注册事件
+            // 查询
+            $("#btnSearch").ligerButton(
+            {
+                text: " 查 询 ",
+                click: function () {
+                    var url = "?HALLNAM=" + $("#txtHALLNAM").val();
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+            // 顶部导航
+            var bar = $("#toptoolbar").ligerToolBar();
+
+            bar.addItem(@Html.AuthViewButton("WARN_PARAM_VIW",
+            Url.Content("ParamSendUsr") + "?hallno=" + Request.QueryString["hallno"],
+            "预警发送人配置", 500, 400));
+            bar.addItem({
+                text: '修改',
+                click: function (item) {
+                    var url = '@Url.Content("Create")?hallno=@Request.QueryString["hallno"]';
+                    location.href = url;
+                },
+                icon: 'archives'
+            });
+
+        });
+    </script>
+
+    <script lang="javascript">
+        $(function () {
+            $(".tablelist a[name=viewModel]").each(
+                function () {
+                    $(this).ligerTip({ content: $(this).next().html(), width: 110, auto: true });
+                });
+        });
+    </script>
+}

@@ -1,0 +1,80 @@
+﻿@using gzsw.web
+@{
+    ViewBag.Title = "业务办理分析";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@model object
+@{
+    
+    var type = Model.GetType().GetProperty("viewName");
+    var viewName = type.GetValue(Model, null).ToString();
+}
+
+<!-- 查询条件 -->
+@{
+    Html.RenderPartial("SearchView",Model);
+}
+
+
+<div class="divPanel">
+    <div id="navtabStat">
+        @Html.Action(viewName,Model)
+    </div>
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    <!-- 图表排序脚本 -->
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.js")
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.widgets.min.js")
+    <!-- 图表排序 -->
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.pager.js")
+
+    @Html.JavaScript("lib/fusionchart/FusionCharts.js")
+}
+<script type="text/javascript">
+    $(function () {
+        $("#navtabStat").ligerTab();
+
+        $("a[d-open='show']").click(function () {
+            var that = $(this);
+            var type = that.attr("d-type");
+            var title = that.attr("d-title");
+            var orgId = that.attr("d-hallno");
+            var serialid = that.attr("serialid");
+            var staffId = that.attr('staffId');
+            if (!orgId) {
+                orgId = '';
+            }
+            if (!serialid) {
+                serialid = '';
+            }
+            if (!staffId) {
+                staffId = '';
+            }
+            var param = {
+                orgId:orgId,
+                type: encodeURI(type),
+                title: encodeURI(title),
+                serialid: encodeURI(serialid),
+                staffId:encodeURI(staffId),
+                beginTime: $("#beginTime").val(),
+                endTime: $("#endTime").val()
+            };
+            var url = "@Url.Action("ShowCNT")";
+            that.attr("target", "_blank");
+            that.attr("href", url.getUrl(param).urlstamp());
+        });
+
+
+        // 打印报表
+        $("#btnOutPut").click(function () {
+            //var url = ".indexOf('?') > -1 ? "&" : "?") + "export=true";
+            var pa = "@Html.Raw(Request.Url.Query)";
+            pa = pa + "&export=true";
+            var url = "@Url.Action(ViewBag.ViewName)" + pa;
+
+            window.open(url);
+        });
+    });
+</script> 

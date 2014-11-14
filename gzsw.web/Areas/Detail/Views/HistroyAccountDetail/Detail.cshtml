@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "明细";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.model.Subclasses
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model dynamic
+
+
+
+<table class="formTable" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="width: 160px;" class="tdLeft">服务厅:</td>
+        <td>
+            @*@Html.DisplayFor(m => m.HALL_NAM)*@
+            @Model.HALL_NAM
+        </td>
+        <td class="tdLeft">窗口:</td>
+        <td>
+            @*@Html.DisplayFor(m => m.HYW_COUNTER)*@
+            @Model.HYW_COUNTER
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">排队号码:</td>
+        <td>
+            @Model.HYW_NUMBER
+        </td>
+        <td class="tdLeft">排队业务:</td>
+        <td>
+            @Model.Q_SERIALNAME
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">大类业务名:</td>
+        <td>
+            @Model.DLS_SERIALNAME
+        </td>
+        <td class="tdLeft">明细业务名:</td>
+        <td>
+            @Model.SERIALNAME
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">交易业务流水号:</td>
+        <td>
+            @Model.HYW_TRANSCODEID
+        </td>
+        <td class="tdLeft">操作员工:</td>
+        <td>
+            @Model.STAFF_NAM
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">开始受理时间:</td>
+        <td>
+            @Model.HYW_STIME.ToString("yyyy-MM-dd HH:mm:ss")
+        </td>
+        <td class="tdLeft">结束受理时间:</td>
+        <td>
+            @(Model.HYW_ETIME.ToString("yyyy-MM-dd HH:mm:ss") )
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">受理总时长:</td>
+        <td>
+            @Model.HYW_BLTIME
+        </td>
+        <td class="tdLeft">排队号码:</td>
+        <td>
+            @Model.HYW_NUMBER
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">纳税人识别码:</td>
+        <td>
+            @Model.HYW_NSRSBM
+        </td>
+        <td class="tdLeft">纳税人名称:</td>
+        <td>
+            @Model.HYW_NSRMC
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">纳税机构:</td>
+        <td>
+            @Model.SWJGDM_NAM
+        </td>
+        <td class="tdLeft">完成状态:</td>
+        <td>
+            @(Model.HYW_ISFINISHED ? "交易完结" : "未交易完结")
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">
+            <a id="palyBack" href="javascript:void(0);"> 录像回放 </a>
+            @*<input type="button" class="l-button" value="录像回放" />*@
+        </td>
+        <td colspan="3">
+            
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    $(function() {
+        $("#palyBack").click(function() {
+
+            var url = "@Html.Raw(Url.Action("PlayBack", "VirtualMonitor", new { area = "MON", hallNo = Model.HYW_SYSNO, counterId = Model.HYW_COUNTER,beginTime = Model.HYW_STIME, endTime = Model.HYW_ETIME }))";
+
+
+            gzsw.dialog.openFull({
+                title: '摄像窗口',
+                url: url.urlstamp(),
+                width: 760,
+                height: 368,
+                isReload: false
+            });
+
+            return false;
+        });
+    });
+</script>

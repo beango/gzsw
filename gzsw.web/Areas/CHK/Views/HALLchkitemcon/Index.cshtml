@@ -1,0 +1,118 @@
+﻿@using gzsw.util
+@using gzsw.web;
+@model PetaPoco.Page<dynamic>
+@using gzsw.model.ext
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width: 100px;">投诉类型名称：</td>
+            <td style="width: 170px;">
+                
+                @Html.DropDownList("CHKITEM_TYP", ViewBag.CHKITEM_TYP as SelectList, new { @style = "width: 150px;" })
+            </td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width: 40px;">
+                    <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th>序号</th>
+                 <th>服务厅考核指标编码
+                </th>
+                <th>服务厅考核指标名称
+                </th>
+                <th>服务厅考核指标类型
+                </th>
+
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@(item.HALL_CHKITEM_CD)" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>@item.HALL_CHKITEM_CD</td>
+                <td>
+                    @item.HALL_CHKITEM_NAM
+                </td>
+                <td>
+                  
+                    @(EnumHelper.ConvertToE<gzsw.model.ext.CHK_HALL_CHKITEM_CON.CHKITEM_TYP>(item.CHKITEM_TYP.ToString()))
+                </td>
+            </tr>
+        }
+
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/utility/ext.js")
+    <script lang="javascript">
+        $(function () {
+            // 注册事件
+
+            var tt = '@ViewBag.NAME';
+            $("#CHKITEM_TYP").val(tt);
+            // 查询
+            $("#btnSearch").ligerButton(
+            {
+                text: " 查 询 ",
+                click: function () {
+                    var url = "?Name=" + $("#txtTITLE").val();
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+            // 顶部导航
+            var bar = $("#toptoolbar").ligerToolBar();
+
+              @if (Html.ChkAuth("CHK_HALL_CHKITEM_CON_ADD"))
+              {
+                            @:bar.addItem(@Html.AuthAddButton("CHK_HALL_CHKITEM_CON_ADD", Url.Action("Create"), "新增", 500, 400));
+                                                                @:bar.addItem({ line: true });
+                                                }
+
+                        @if (Html.ChkAuth("CHK_HALL_CHKITEM_CON_EDT"))
+                        {
+                            @:bar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "CHK_HALL_CHKITEM_CON_EDT", 600, 400));
+
+                            @:bar.addItem({ line: true });
+                                    }
+
+            
+                      
+              @if (Html.ChkAuth("CHK_HALL_CHKITEM_CON_DEL"))
+              {
+                  @:bar.addItem(@Html.AuthDelButton("CHK_HALL_CHKITEM_CON_DEL", Url.Action("Delete")));
+                        
+              }
+        });
+    </script>
+}

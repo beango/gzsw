@@ -1,0 +1,166 @@
+﻿@using gzsw.web
+@model gzsw.model.WARN_COMPLAIN_DETAIL
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    var selectStaff = new List<SelectListItem>()
+                      {
+                          new SelectListItem()
+                          {
+                              Text="--请选择--",
+                              Value = "",
+                              Selected=true
+                          }
+                      };
+}
+
+@using (Html.BeginForm("Create", "WarnComplainDetail", null, FormMethod.Post, new { id = "WarnComplainDetailCreate" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="width: 160px;" class="tdLeft">纳税人身份证/企业识别码：
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.NSR_SBM)
+                @Html.ValidationMessageFor(m => m.NSR_SBM)
+            </td>
+        </tr>
+
+
+        <tr>
+            <td class="tdLeft">投诉所属服务厅：
+            </td>
+            <td>
+
+                @Html.DropDownList("HALL_NO", ViewBag.UserORG as SelectList, "--请选择--", new { @style = "width: 150px;" })
+                @Html.ValidationMessageFor(m => m.HALL_NO)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">投诉员工：
+            </td>
+            <td>
+                @*@ViewBag.StaffName*@
+                @*      @Html.TextBoxFor(m => m.STAFF_ID)
+                @Html.ValidationMessageFor(m => m.STAFF_ID)*@
+
+                @Html.DropDownList("STAFF_ID", selectStaff, new { @style = "width:150px;" })
+                @Html.ValidationMessageFor(m => m.STAFF_ID)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">投诉问题描述：
+            </td>
+            <td>
+                @Html.TextAreaFor(m => m.COMPLAIN_PRO, new { @style = "width: 150px;" })
+                @Html.ValidationMessageFor(m => m.COMPLAIN_PRO)
+            </td>
+        </tr>
+
+
+        <tr>
+            <td class="tdLeft">投诉类型名称：
+            </td>
+            <td>
+                @Html.DropDownListFor(m => m.COMPLAIN_NAM, ViewBag.WarnComplainlist as SelectList, "----请选择----", new { @style = "width: 145px;" })
+                @Html.ValidationMessageFor(m => m.COMPLAIN_NAM)
+            </td>
+        </tr>
+
+        <tr>
+            <td class="tdLeft">投诉时间：
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.COMPLAIN_TIME, new { @class = "text-box", @onclick = "WdatePicker({ dateFmt: 'yyyy-MM-dd' })" })
+                @Html.ValidationMessageFor(m => m.COMPLAIN_TIME)
+            </td>
+        </tr>
+
+
+        <tr>
+            <td class="tdLeft">投诉原因：
+            </td>
+            <td>
+
+                @Html.TextAreaFor(m => m.COMPLAIN_REASON, new { @style = "width: 150px;" })
+                @Html.ValidationMessageFor(m => m.COMPLAIN_REASON)
+
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">&nbsp;  </td>
+            <td>
+                <input type="button" id="bt_WarnComplainDetailCreate" class="l-button" value="提交" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    @Html.Hidden("INPUT_USER", Model.INPUT_USER);
+    @Html.Hidden("INPUT_TIME", Model.INPUT_TIME);
+}
+@section Head{
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    <script lang="javascript">
+        $(function() {
+            //初始化时间选择
+            $("#COMPLAIN_TIME").val("");
+            $("#NSR_SBM").focus();
+            $("#HALL_NO").on("change", function() {
+                var id = $(this).val();
+                //获取员工信息
+                $.ajax({
+                    cache: false,
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '@Url.Action("GetStaffs", "Counter", new {area = "CHK"})?hallNo=' + id + "&_=" + (new Date()).getTime(),
+                    success: function(data) {
+                        //W1A_STAFF_NAME
+                        var $selectA = $("#STAFF_ID");
+                        $("option:gt(0)", $selectA).remove();
+
+                        if (data && data.length > 0) {
+                            $.each(data, function(n, item) {
+                                $selectA.append("<option value='" + item.Value + "'>" + item.Text + "</option>");
+                            });
+                        }
+                    }
+                });
+            });
+            //$("#NSR_SBM").on("change", function() {
+            //});
+
+            
+
+            //提交
+            $("#bt_WarnComplainDetailCreate").click(function () { 
+                var $form = $("#WarnComplainDetailCreate");
+                var error = false; 
+                var code = $("#NSR_SBM").val();
+                $.ajax({
+                    cache: false,
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '@Url.Action("Check_NSR")?code=' + code + "&_=" + (new Date()).getTime(),
+                    success: function (data) { 
+                        if (data.isok) {
+                            $form.submit(); 
+                        } else {
+
+                            gzsw.dialog.alert(data.msg);
+                            return false;
+                        }
+                    }
+                });
+           
+            });
+
+        });
+    </script>
+}

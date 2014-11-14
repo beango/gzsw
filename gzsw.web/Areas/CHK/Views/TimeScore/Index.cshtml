@@ -9,13 +9,8 @@
 <div class="l-panel-search">
     <table class="tabSearchList">
         <tr>
-            <td style="width:100px;">组织机构：</td>
-            <td style="width:170px;">
-                <input type="hidden" id="txtOrgId" name="txtOrgId" value="@ViewBag.OrgId" />
-                <input type="text" name="txtOrgName" id="txtOrgName" readonly="readonly" value="@ViewBag.OrgName" />
-
-                
-            </td>
+            <td style="width:100px;">服务厅：</td>
+            <td style="width:150px;">@Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList, "-- 请选择 --")</td>
             <td>
                 <div id="btnSearch"></div>
             </td>
@@ -83,28 +78,12 @@
 
     <script type="text/javascript" lang="javascript">
         $(function() {
-            //选择
-            var onSelect = function(treeId, treeNode) {
-                $("#txtOrgId").val(treeNode.id);
-                $("#txtOrgName").val(treeNode.name);
-            };
-
-            //初始化树
-            orgTree.init({
-                documentId: "txtOrgName",
-                hidValueId: "txtOrgId",
-                panelID: 'orgTreeContent',
-                treeULId: 'treeOrg',
-                loadDataUrl: '@Url.Action("GetHallTree", "VirtualHall", new {area = "SYS"})',
-                onSelect: onSelect
-            });
-
             // 查询
             $("#btnSearch").ligerButton(
                 {
                     text: " 查 询 ",
                     click: function() {
-                        var url = "?orgId=" + encodeURI($("#txtOrgId").val());
+                        var url = "?orgId=" + encodeURI($("#ddlORGID").val());
                         location.href = url.urlstamp();
                     },
                     icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
@@ -116,7 +95,7 @@
 
             @if (Html.ChkAuth("CHK_TIMESCORE_PARAM_VIW"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Detail"), "查看", "CHK_TIMESCORE_PARAM_VIW", 450, 350));
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Detail"), "查看", "CHK_TIMESCORE_PARAM_VIW", 650, 350));
                 @:ligerToolBar.addItem({ line: true });
             }
             

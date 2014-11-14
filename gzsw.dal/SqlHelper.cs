@@ -5,6 +5,7 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Collections;
 
 namespace gzsw.dal
 {
@@ -14,7 +15,7 @@ namespace gzsw.dal
         {
             return ConfigurationManager.ConnectionStrings[connectionKey].ConnectionString;
         }
-
+        
         public static void BulkInsert(string connectStr, string tableName, DataTable dataTable)
         {
             if (dataTable.Rows.Count == 0)
@@ -32,6 +33,6 @@ namespace gzsw.dal
                 }
                 sqlbulkCopy.WriteToServer(dataTable);
             }
-        }
+        }       
     }
 }

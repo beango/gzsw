@@ -85,7 +85,8 @@ namespace gzsw.controller.SYS
                                                    UserName=m.USER_NAME,
                                                    ZeroChannelInd=m.ZERO_CHANNEL_IND,
                                                    CameraType=m.CAMERA_TYP,
-                                                   MonShowing=m.MON_SHOW_IND
+                                                   MonShowing=m.MON_SHOW_IND,
+                                                   CameraName=m.CAMERA_NAM
                                                }));
 
             return Json(list, JsonRequestBehavior.AllowGet);
@@ -164,7 +165,8 @@ namespace gzsw.controller.SYS
                                                                                       USER_PASSWORD=item.Password,
                                                                                       ZERO_CHANNEL_IND=item.ZeroChannelInd,
                                                                                       CAMERA_TYP=item.CameraType,
-                                                                                      MON_SHOW_IND = item.MonShowing
+                                                                                      MON_SHOW_IND = item.MonShowing,
+                                                                                      CAMERA_NAM = item.CameraName
                                                                                   }))
                     {
                         monHallService.SaveHallCameraDef(camera);
@@ -181,21 +183,41 @@ namespace gzsw.controller.SYS
             }
         }
 
-        public ActionResult GetHallTree(string hallName)
+        public ActionResult GetHallTree(string hallName, string level)
         {
-            var organizeList = new SYS_ORGANIZE_DAL().GetListForUserId(UserState.UserID);
+            if (!string.IsNullOrEmpty(level))
+            {
+                var organizeList = new SYS_ORGANIZE_DAL().GetListForUserId(UserState.UserID,level);
 
-            var list = organizeList.Select(m => new ZtreeNodeItem()
-                                                {
-                                                    id=m.ORG_ID,
-                                                    name=m.ORG_NAM,
-                                                    isParent = m.PAR_ORG_ID==null,
-                                                    open = m.PAR_ORG_ID == null,
-                                                    pId=m.PAR_ORG_ID,
-                                                    enable = m.ORG_LEVEL==4,
-                                                    highlight = (!string.IsNullOrEmpty(hallName) && m.ORG_NAM.Contains(hallName)),
-                                                });
-            return Json(list, JsonRequestBehavior.AllowGet);
+                var list = organizeList.Select(m => new ZtreeNodeItem()
+                {
+                    id = m.ORG_ID,
+                    name = m.ORG_NAM,
+                    isParent = m.PAR_ORG_ID == null,
+                    open = m.PAR_ORG_ID == null,
+                    pId = m.PAR_ORG_ID,
+                    enable = m.ORG_LEVEL == 4,
+                    highlight = (!string.IsNullOrEmpty(hallName) && m.ORG_NAM.Contains(hallName)),
+                });
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var organizeList = new SYS_ORGANIZE_DAL().GetListForUserId(UserState.UserID);
+
+                var list = organizeList.Select(m => new ZtreeNodeItem()
+                {
+                    id = m.ORG_ID,
+                    name = m.ORG_NAM,
+                    isParent = m.PAR_ORG_ID == null,
+                    open = m.PAR_ORG_ID == null,
+                    pId = m.PAR_ORG_ID,
+                    enable = m.ORG_LEVEL == 4,
+                    highlight = (!string.IsNullOrEmpty(hallName) && m.ORG_NAM.Contains(hallName)),
+                });
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+           
         }
     }
 }

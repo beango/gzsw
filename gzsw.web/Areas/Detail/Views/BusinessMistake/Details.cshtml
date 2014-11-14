@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "业务差错明细";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@using gzsw.model.Enums
+@using gzsw.util.Extensions
+@model dynamic
+
+
+<table class="formTable" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="width: 160px;" class="tdLeft">员工编码:</td>
+        <td>
+            @Model.STAFF_ID
+        </td>
+        <td class="tdLeft">员工姓名:</td>
+        <td>
+            @Model.STAFF_NAM
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">明细业务编码:</td>
+        <td>
+            @Model.SERIALID
+        </td>
+        <td class="tdLeft">明细业务名称:</td>
+        <td>
+            @Model.SERIALNAME
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">质量类型编码:</td>
+        <td>
+            @Model.QUALITY_CD
+        </td>
+        <td class="tdLeft">质量类型名称:</td>
+        <td>
+            @Model.QUALITY_NAM
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">数量:</td>
+        <td>
+            @Model.AMOUNT
+        </td>
+        <td class="tdLeft">差错发生日期:</td>
+        <td>
+            @(Model.OCCUR_DT == null ? string.Empty : Model.OCCUR_DT.ToString("yyyy-MM-dd"))
+
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">操作人:</td>
+        <td>
+            @Model.OUSERNAME
+        </td>
+        <td class="tdLeft">操作时间:</td>
+        <td>
+            @(Model.ODTIME == null ? string.Empty : Model.ODTIME.ToString("yyyy-MM-dd HH:mm:ss"))
+        </td>
+    </tr>
+    @{
+        if (Model.DATASOURCE == 2)
+        {
+            <tr>
+                <td class="tdLeft">导入状态:</td>
+                <td>
+                    @(((CHK_STAFF_QUALITY_IMPORT_STATE_ENUM)Model.OSTATE).GetDescription())
+
+                </td>
+                <td class="tdLeft">明细内容:</td>
+                <td>
+                    <a href="@Model.FILE_URL" target="_blank">下载</a>
+                </td>
+            </tr>
+        }
+    }
+</table>

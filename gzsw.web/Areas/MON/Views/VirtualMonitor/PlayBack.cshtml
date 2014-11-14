@@ -1,0 +1,273 @@
+﻿@{
+    ViewBag.Title = "摄像回放";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.web
+@model List<gzsw.model.MON_HALL_CAMERA_DEF>
+           
+<div class="video-main" >
+    
+    <div class="video-left">
+        <!--视频插件-->
+        <div id="divPlugin" class="plugin"></div>
+
+        <div class="handle">
+            <div class="realPlay" style="margin-top: -5px;width: 200px;">
+                <input type="button" id="startRealPlay" class="startRealPlay" title="播放" />
+                <input type="button" id="stopRealPlay" class="stopRealPlay hid" title="暂停" />
+                &nbsp;&nbsp;
+                <input type="button" id="reversePlayback" class="reversePlayback" title="倒放" />
+                <input type="button" id="playSlow" class="playSlow" title="后退" />
+                <input type="button" id="playFast" class="playFast" title="快进" />
+            </div>
+            <div class="sound" style="margin-left: 130px;">
+                <input type="button" id="openSound" class="openSound hid" />
+                <input type="button" id="closeSound" class="closeSound " />
+
+                <span class="Verticalslider" id="sliderSound">
+                    <div class="Vertical-slider-range" id="divSliderSoundRange" style="width: 100%;">
+                    </div>
+                </span>
+            </div>
+            <input type="button" id="fullScreen" class="fullScreen" title="全屏" />
+        </div>
+    </div>
+    
+    <div class="video-right2">
+        
+        <table class="tableInput">
+            <tr>
+                <td class="tdLeft" style="width: 80px;">摄像:</td>
+                <td>
+                    <select id="CameraList" style="width: 148px;">
+                        <option value="0">请选择</option>
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            foreach (var item in Model.Where(m => m.CAMERA_TYP == 2))
+                            {
+                                <option  value="@item.SEQ" @( item.SEQ == ViewBag.Seq?"selected='selected'":"" ) >@(string.IsNullOrEmpty(item.CAMERA_NAM) ? "窗口"+item.SEQ : item.CAMERA_NAM)</option>
+                            }
+                            foreach (var item in Model.Where(m => m.CAMERA_TYP == 1))
+                            {
+                                <option value="@item.SEQ" @( item.SEQ == ViewBag.Seq ? "selected='selected'" : "")>@(string.IsNullOrEmpty(item.CAMERA_NAM) ? "云台" + item.SEQ : item.CAMERA_NAM)</option>
+                            }
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">开始时间:</td>
+                <td>
+                    <input type="text" id="txtBeginTime" value="@(ViewBag.BeginTime.ToString("yyyy-MM-dd HH:mm:ss"))" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss' })" />
+                </td>
+            </tr>
+            <tr>
+                <td class="tdLeft">线束时间:</td>
+                <td>
+                    <input type="text" id="txtEndTime" value="@(ViewBag.EndTime.ToString("yyyy-MM-dd HH:mm:ss"))" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss' })" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <br/>
+                    <input type="button" id="btnSearch" class="l-button" value="查询" />
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+@section Head
+{
+    @Html.StyleSheet("lib/hall/hall.css")
+    @Html.JavaScript("lib/codebase/webVideoCtrl.js")
+    @Html.JavaScript("lib/jquery.ui/jquery.ui.core.js")
+    @Html.JavaScript("lib/jquery.ui/jquery.ui.widget.js")
+    @Html.JavaScript("lib/jquery.ui/jquery.ui.mouse.js")
+    @Html.JavaScript("lib/jquery.ui/jquery.ui.slider.js")
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    @Html.JavaScript("lib/codebase/playVideo.js")
+
+    <style type="text/css">
+        body {
+            background: #dcdedd;
+        }
+
+        .tableInput {
+            margin-top: 20px;
+            width: 210px;
+        }
+        .tableInput tr {
+            height: 30px;
+            padding: 10px 0px;
+        }
+        .tableInput td {
+            padding-left: 5px;
+        }
+    </style>
+}
+
+<script type="text/javascript">
+    $(function () {
+        var _Sound = 50;
+
+        video.init({ downloadUrl:'@Url.Content("~/Content/lib/WebComponents.zip")' });
+
+        var item = null;
+        var data = null;
+        @if (Model != null && Model.Count > 0)
+        {
+            @:data=@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        }
+        
+        
+        
+        @if (ViewBag.Seq>0)
+        {
+            <text>
+                for (var i = 0; i < data.length; i++) {
+                    var seq=@ViewBag.Seq;
+                    if (Number(data[i].SEQ) == Number(seq)){
+                        item = data[i];
+                        video.login({
+                            szIP: item.IP_ADDRESS,
+                            iPrototocol: item.HTTP_PROTOCOL,
+                            iPort: item.IPORT,
+                            szUserName: item.USER_NAME,
+                            szPassword: item.USER_PASSWORD
+                        });
+                    }
+                }
+            </text>
+        }
+
+        //选择摄像头
+        $("#CameraList").on("change", function() {
+            var $that = $(this);
+            var id = $that.val();
+            
+            if (data) {
+                for (var i = 0; i < data.length; i++) {
+                    if (Number(data[i].SEQ) == Number(id)) {
+                        item = data[i];
+                        video.closeSound();
+                        video.login({
+                            szIP: item.IP_ADDRESS,
+                            iPrototocol: item.HTTP_PROTOCOL,
+                            iPort: item.IPORT,
+                            szUserName: item.USER_NAME,
+                            szPassword: item.USER_PASSWORD
+                        });
+                        video.closeSound();
+                        break;;
+                    }
+                }
+            }
+        });
+
+        //查询
+        $("#btnSearch").click(function() {
+            if(item){
+                var begin = $("#txtBeginTime").val();
+                var end = $("txtEndTime").val();
+                video.startPlayback(Number(item.CHANNEL_ID),begin,end);
+
+                $("#startRealPlay").hide();
+                $("#stopRealPlay").show();
+            }
+        });
+
+        //播放
+        $("#startRealPlay").click(function() {
+            if(item) {
+                $(this).hide();
+                $("#stopRealPlay").show();
+                var begin = $("#txtBeginTime").val();
+                var end = $("txtEndTime").val();
+
+                if (video.isInPlay()) {
+                    video.resumeRealPlay();
+                } else {
+                    video.startPlayback(Number(item.CHANNEL_ID),begin,end);
+                }
+                //video.resumeRealPlay();
+            }
+        });
+
+        //暂停
+        $("#stopRealPlay").click(function() {
+            if(item) {
+                $(this).hide();
+                $("#startRealPlay").show();
+                video.pausePlay();
+            }
+        });
+
+        //倒放
+        $("#reversePlayback").click(function() {
+            if(item) {
+                var begin = $("#txtBeginTime").val();
+                var end = $("txtEndTime").val();
+                video.reversePlayback(Number(item.CHANNEL_ID), begin, end);
+            }
+        });
+
+        //后退
+        $("#playSlow").click(function() {
+            video.playSlow();
+        });
+
+        //快进    
+        $("#playFast").click(function() {
+            video.playFast();
+        });
+
+        //开声音
+        $("#openSound").click(function() {
+            $(this).hide();
+            $("#closeSound").show();
+            video.openSound();
+
+            $("#sliderSound").slider({ value: 0 });
+            $("#divSliderSoundRange").css("width",  "0%");
+            video.setVolume(0);
+        });
+        //关声音
+        $("#closeSound").click(function() {
+            $(this).hide();
+            $("#openSound").show();
+            video.closeSound();
+
+            $("#sliderSound").slider({ value: _Sound });
+            $("#divSliderSoundRange").css("width", _Sound+"%");
+            video.setVolume(_Sound);
+        });
+        //全屏
+        $("#fullScreen").click(function() {
+            video.fullScreen();
+        });
+
+        $("#divSliderSoundRange").css("width", "0%");
+        $("#sliderSound").slider({
+            value: 0,
+            min: 0,
+            max: 100,
+            slide: function (event, ui) {
+                $("#divSliderSoundRange").css("width", ui.value + "%");
+                var index = Number(ui.value);
+                _Sound = index;
+                if (index == 0) {
+                    _Sound = 50;
+                    $("#closeSound").show();
+                    $("#openSound").hide();
+                    video.closeSound();
+                } else {
+                    $("#closeSound").hide();
+                    $("#openSound").show();
+                    video.openSound();
+                }
+                video.setVolume(Number(ui.value));
+            }
+        });
+    });
+</script>

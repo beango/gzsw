@@ -1,0 +1,254 @@
+﻿@{
+    ViewBag.Title = "奖金分配";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using System.Web.UI.WebControls
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.model.Enums
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model PetaPoco.Page<gzsw.model.Subclasses.CHK_STAFF_COMPRE_EVAL_M_SUB>
+
+
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:80px;">服务厅：</td>
+            <td style="width:150px;">
+                @Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)
+            </td>
+            <td style="width: 60px;"> 年份：</td>
+            <td style="width:50px;">
+                @Html.DropDownList("ddlYears", ViewBag.Years as List<SelectListItem>)
+            </td>
+            <td style="width: 50px;"> 月份：</td>
+            <td style="width:220px;">
+                @Html.DropDownList("ddlMonth", ViewBag.Months as List<SelectListItem>)
+                -
+                @Html.DropDownList("ddlEndMonth", ViewBag.EndMonths as List<SelectListItem>)
+            </td>
+            <td style="width: 80px;"> 基本奖金：</td>
+            <td style="width:60px;">
+                <input type="text" style="width: 50px;" id="txtSonus" value="@ViewBag.Sonus" />
+            </td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+
+        </tr>
+    </table>
+
+</div>
+
+<div class="tablePanel" style="margin-top: 5px;">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:30px;">
+                    <input id="chkAll" name="chkAll" type="checkbox" />
+                </th>
+                <th style="width:38px;">序号 </th>
+                <th>员工编码</th>
+                <th>员工名称</th>
+                <th>业务分</th>
+                <th>质量分</th>
+                <th>效率分</th>
+                <th>评价分</th>
+                <th>考勤分</th>
+                <th>日常行为分</th>
+                <th>综合评定分</th>
+                <th>综合得分</th>
+                <th>奖金</th>
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.STAT_MO" d-staffid="@item.STAFF_ID" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @item.STAFF_ID
+                </td>
+                <td>@item.STAFF_NAM</td>
+                <td>
+                    <a href="javascript:void(0);" d-type="SVR_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.STAFF_ID">
+                        @OutputHelper.GetDecimalToString(item.SVR_SCORE)
+                    </a>
+                </td>
+                <td>
+                    <a href="javascript:void(0);" d-type="QUALITY_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.STAFF_ID">
+                        @OutputHelper.GetDecimalToString(item.QUALITY_SCORE)
+                    </a>
+                </td>
+                <td>
+                    <a href="javascript:void(0);" d-type="SVR_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.STAFF_ID">
+                        @OutputHelper.GetDecimalToString(item.EFFIC_SCORE)
+                    </a>
+                </td>
+                <td>
+                    <a href="javascript:void(0);" d-type="EVAL_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.STAFF_ID">
+                        @OutputHelper.GetDecimalToString(item.EVAL_SCORE)
+                    </a>
+                </td>
+                <td>
+                    <a href="javascript:void(0);" d-type="ATTEND_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.STAFF_ID">
+                        @OutputHelper.GetDecimalToString(item.ATTEND_SCORE)
+                    </a>
+                </td>
+                <td>
+                    <a href="javascript:void(0);" d-type="USU_ACT_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.STAFF_ID">
+                        @OutputHelper.GetDecimalToString(item.USU_ACT_SCORE)
+                    </a>
+                </td>
+                <td>
+                    <a href="javascript:void(0);" d-type="COMPRE_SAN_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.STAFF_ID">
+                        @OutputHelper.GetDecimalToString(item.COMPRE_SAN_SCORE)
+                    </a>
+                </td>
+                <td>@( item.TOT_SCORE == null ? "0" : item.TOT_SCORE.GetValueOrDefault().ToString("####.00##"))</td>
+                <td>
+                    @if (ViewBag.SonusNum > 0 && ViewBag.AverageScore > 0)
+                    {
+                        @((ViewBag.SonusNum * item.TOT_SCORE / ViewBag.AverageScore).ToString("N"))
+                    }
+                    else
+                    {
+                        @:0
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head
+{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+}
+
+<script type="text/javascript">
+    $(function () {
+        // 查询
+        $("#btnSearch").ligerButton(
+                {
+                    text: " 查 询 ",
+                    click: function () {
+                        var url = "?years=" + encodeURI($("#ddlYears").val())
+                            + "&month=" + encodeURI($("#ddlMonth").val())
+                            + "&endMonth=" + encodeURI($("#ddlEndMonth").val())
+                            + "&sonus=" + encodeURI($("#txtSonus").val())
+                            + "&orgId=" + encodeURI($("#ddlORGID").val());
+                        location.href = url.urlstamp();
+                    },
+                    icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+                });
+
+        //业务分
+        $("a[d-type='SVR_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailSVR", "StaffCompreEvalM")?mo=' + mo + "&staffId=" + encodeURI(staffId);
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 800,
+                height: 320,
+                isReload: false
+            });
+        });
+
+        //质量分
+        $("a[d-type='QUALITY_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailQUALITY", "StaffCompreEvalM")?mo=' + mo + "&staffId=" + encodeURI(staffId);
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 800,
+                height: 320,
+                isReload: false
+            });
+        });
+
+        //评价分
+        $("a[d-type='EVAL_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailEVAL", "StaffCompreEvalM")?mo=' + mo + "&staffId=" + encodeURI(staffId);
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 800,
+                height: 320,
+                isReload: false
+            });
+        });
+
+        //考勤分
+        $("a[d-type='ATTEND_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailATTEND", "StaffCompreEvalM")?mo=' + mo + "&staffId=" + encodeURI(staffId);
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 900,
+                height: 320,
+                isReload: false
+            });
+        });
+
+        //日常行为分
+        $("a[d-type='USU_ACT_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailUSUACTD", "StaffCompreEvalM")?mo=' + mo + "&staffId=" + encodeURI(staffId);
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 800,
+                height: 320,
+                isReload: false
+            });
+        });
+
+        //综合评定分
+        $("a[d-type='COMPRE_SAN_SCORE']").click(function () {
+            var $this = $(this);
+            var mo = $this.attr("d-mo");
+            var staffId = $this.attr("d-staffid");
+            var url = '@Url.Action("DetailCOMPRESAN", "StaffCompreEvalM")?mo=' + mo + "&staffId=" + encodeURI(staffId);
+            gzsw.dialog.open({
+                url: url.urlstamp(),
+                title: '查看',
+                width: 800,
+                height: 320,
+                isReload: false
+            });
+        });
+    });
+</script>

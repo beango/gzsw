@@ -1,0 +1,117 @@
+﻿@{
+    ViewBag.Title = "查看考勤数据修正";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model gzsw.model.Subclasses.STAT_STAFF_CHKSTAT_M_SUB
+
+
+
+<table class="formTable" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="width: 160px;" class="tdLeft">员工名称:</td>
+        <td colspan="3">
+            @Html.DisplayFor(m => m.STAFF_NAM)
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">月份:</td>
+        <td colspan="3">
+            @Model.STAT_MO.ToYearsMonthString()
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 160px;" class="tdLeft">上班天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_WORK_DAY_CNT)
+        </td>
+        <td style="width: 140px;" class="tdLeft">迟到天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_LAT_DAY_CNT)
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">早退天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_EAR_DAY_CNT)
+        </td>
+        <td class="tdLeft">未签退次数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_NONSIGN_OUT_CNT)
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">事假天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_HOLLI_TYP1_CNT)
+        </td>
+        <td class="tdLeft">病假天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_HOLLI_TYP2_CNT)
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">丧假天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_HOLLI_TYP3_CNT)
+        </td>
+        <td class="tdLeft">婚假天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_HOLLI_TYP4_CNT)
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">年休假天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_HOLLI_TYP5_CNT)
+        </td>
+        <td class="tdLeft">工伤假天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_HOLLI_TYP6_CNT)
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">加班补休天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_HOLLI_TYP7_CNT)
+        </td>
+        <td class="tdLeft">陪产假天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_HOLLI_TYP8_CNT)
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">产假天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_HOLLI_TYP9_CNT)
+        </td>
+        <td class="tdLeft">公差天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_HOLLI_TYP10_CNT)
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">会议天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_HOLLI_TYP11_CNT)
+        </td>
+        <td class="tdLeft">学习天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_HOLLI_TYP12_CNT)
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">旷工天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_ABSENT_DAY_CNT)
+        </td>
+        <td class="tdLeft">其他天数:</td>
+        <td>
+            @Html.DisplayFor(m => m.COR_HOLLI_TYP13_CNT)
+        </td>
+    </tr>
+</table>

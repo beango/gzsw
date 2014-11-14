@@ -25,7 +25,7 @@
 // 
 //     Connection String Name: `gzswEntities2`
 //     Provider:               `System.Data.SqlClient`
-//     Connection String:      `Server=10.10.1.184;Database=NSFWJXDB;UID=sa;password=**zapped**;`
+//     Connection String:      `Server=gzzx18927599768.vicp.cc,37310;Database=NSFWJXDB;UID=sa;password=**zapped**;`
 //     Schema:                 ``
 //     Include Views:          `False`
 
@@ -40,9 +40,174 @@ using System.ComponentModel.DataAnnotations;
 
 namespace gzsw.model
 {
+
+	public partial class gzswDB : PetaPoco.Database
+	{
+		public gzswDB() 
+			: base("gzswEntities2")
+		{
+			CommonConstruct();
+		}
+
+		public gzswDB(string connectionStringName) 
+			: base(connectionStringName)
+		{
+			CommonConstruct();
+		}
+		
+		partial void CommonConstruct();
+		
+		public interface IFactory
+		{
+			gzswDB GetInstance();
+		}
+		
+		public static IFactory Factory { get; set; }
+        public static gzswDB GetInstance()
+        {
+			if (_instance!=null)
+				return _instance;
+				
+			if (Factory!=null)
+				return Factory.GetInstance();
+			else
+				return new gzswDB();
+        }
+
+        [ThreadStatic]
+        static gzswDB _instance;
+		
+		public override void OnBeginTransaction()
+		{
+			if (_instance==null)
+				_instance=this;
+		}
+		
+		public override void OnEndTransaction()
+		{
+			if (_instance==this)
+				_instance=null;
+		}
+        
+
+	}
 	
 
 
+
+    
+	[TableName("CHK_STAFF_QUALITY_IMPORT")]
+
+
+	[PrimaryKey("IMPORT_SEQ")]
+
+
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class CHK_STAFF_QUALITY_IMPORT  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal IMPORT_SEQ { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"对应员工信息表SYS_STAFF的STAFF_ID")]
+
+
+		public string STAFF_ID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"对应员工信息表SYS_STAFF")]
+
+
+		public string STAFF_NAM { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联明细事项业务定义表SYS_DETAILSERIAL 的SERIALID")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string SERIALID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"对应 考核质量差错类型定义表 CHK_QUALITY_CON的QUALITY_CD")]
+
+
+		public string QUALITY_CD { get; set; }
+
+
+
+
+		[Column]
+
+		public string QUALITY_NAM { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int AMOUNT { get; set; }
+
+
+
+
+		[Column]
+
+		public DateTime? OCCUR_DT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string FILE_URL { get; set; }
+
+
+
+
+		[Column]
+
+		public string IMPORT_USER_ID { get; set; }
+
+
+
+
+		[Column]
+
+		public DateTime? IMPORT_DTIME { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1：已成功导入
+   2：员工数据有问题未导入
+   3：事项编码校验错误未导入
+   4：质量类型错误未导入
+   5：数量值错误未导入
+   6：错误发生日期有问题未导入")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte IMPORT_STATE { get; set; }
+
+
+
+	}
 
     
 	[TableName("SYS_NSRINFO")]
@@ -52,7 +217,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_NSRINFO   
+    public partial class SYS_NSRINFO  
     {
 
 
@@ -123,7 +288,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_NSRHY   
+    public partial class SYS_NSRHY  
     {
 
 
@@ -143,6 +308,215 @@ namespace gzsw.model
 	}
 
     
+	[TableName("CHK_STAFF_COMPRE_EVAL_M")]
+
+
+	[PrimaryKey("STAT_MO", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class CHK_STAFF_COMPRE_EVAL_M  
+    {
+
+
+		[Column]
+		[Display(Name=@"形式为 ：2014年9月记录 为 201409 ，其他类似")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public int STAT_MO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"服务大厅信息表SYS_HALL")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联 SYS_STAFF表取 员工名称")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string STAFF_ID { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? COMPRE_SAN_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? EVAL_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? SVR_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? QUALITY_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? EFFIC_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? ATTEND_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? USU_ACT_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? TOT_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public int? STAR_LEVEL { get; set; }
+
+
+
+	}
+
+    
+	[TableName("WARN_ALARM_SENDINFO_DETAIL")]
+
+
+	[PrimaryKey("SENDINFO_DETAIL_ID")]
+
+
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class WARN_ALARM_SENDINFO_DETAIL  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public long SENDINFO_DETAIL_ID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"对应　报警明细信息表WARN_ALARM_INFO_DETAIL")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public int ALARM_SEQ { get; set; }
+
+
+
+
+		[Column]
+
+		public string MOB_NBR { get; set; }
+
+
+
+
+		[Column]
+
+		public string USER_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string ALARM_INFO { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime SEND_TIME { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"0: 未发送
+   1：发送成功
+   2：发送失败（需记录失败信息到发送备注）")]
+
+
+		public byte? MOB_SEND_STATE { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"0: 未发送
+   1：发送成功
+   2：发送失败（需记录失败信息到发送备注）")]
+
+
+		public byte? CLI_SEND_STATE { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:已读，0：未读")]
+
+
+		public bool? CLI_READ_IND { get; set; }
+
+
+
+
+		[Column]
+
+		public DateTime? SMS_SEND_TIME { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"服务大厅信息表SYS_HALL")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
+
+
+
+	}
+
+    
 	[TableName("SYS_QUEUEING")]
 
 
@@ -152,7 +526,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_QUEUEING   
+    public partial class SYS_QUEUEING  
     {
 
 
@@ -257,7 +631,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SVR_TIM_EVENT   
+    public partial class SVR_TIM_EVENT  
     {
 
 
@@ -379,6 +753,111 @@ namespace gzsw.model
 	}
 
     
+	[TableName("WARN_ALARM_INFO_DETAIL")]
+
+
+	[PrimaryKey("ALARM_SEQ")]
+
+
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class WARN_ALARM_INFO_DETAIL  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int ALARM_SEQ { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string STAFF_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int COUNTER_ID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"１：客户端报警
+   ２：差评报警
+   ３：超时报警")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte ALARM_TYP { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime CREATE_DTIME { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"服务大厅信息表SYS_HALL")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:未处理
+   2：已处理")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte STATE { get; set; }
+
+
+
+
+		[Column]
+
+		public string HANDLE_USER { get; set; }
+
+
+
+
+		[Column]
+
+		public DateTime? HANDLE_TIME { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"报警处理的时候手工输入")]
+
+
+		public string ALARM_REASON { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"报警处理的时候手工输入")]
+
+
+		public string ALARM_METHOD { get; set; }
+
+
+
+	}
+
+    
 	[TableName("SVR_TIM_EVENT_PAR")]
 
 
@@ -388,7 +867,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SVR_TIM_EVENT_PAR   
+    public partial class SVR_TIM_EVENT_PAR  
     {
 
 
@@ -440,7 +919,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_MENU   
+    public partial class SYS_MENU  
     {
 
 
@@ -498,13 +977,9 @@ namespace gzsw.model
 	[TableName("SVR_TIM_EVENT_LOG")]
 
 
-	[PrimaryKey("SEQ")]
-
-
-
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SVR_TIM_EVENT_LOG   
+    public partial class SVR_TIM_EVENT_LOG  
     {
 
 
@@ -562,6 +1037,66 @@ namespace gzsw.model
 	}
 
     
+	[TableName("WARN_ALARM_SEND_USER_CON")]
+
+
+	[PrimaryKey("SEQ")]
+
+
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class WARN_ALARM_SEND_USER_CON  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int SEQ { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"服务大厅信息表SYS_HALL")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"１：客户端报警
+   ２：差评报警
+   ３：超时报警")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte ALARM_TYP { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"手机号码和用户登录名，不能全部为空，至少要配置一个或两个")]
+
+
+		public string MOB_NBR { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"手机号码和用户登录名，不能全部为空，至少要配置一个或两个")]
+
+
+		public string USER_ID { get; set; }
+
+
+
+	}
+
+    
 	[TableName("WARN_RELEASE_STAFF_DETAIL")]
 
 
@@ -571,7 +1106,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class WARN_RELEASE_STAFF_DETAIL   
+    public partial class WARN_RELEASE_STAFF_DETAIL  
     {
 
 
@@ -651,7 +1186,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class WARN_RELEASE_COUNTER_DETAIL   
+    public partial class WARN_RELEASE_COUNTER_DETAIL  
     {
 
 
@@ -720,6 +1255,82 @@ namespace gzsw.model
 	}
 
     
+	[TableName("CHK_TIMESCORE_PARAM")]
+
+
+	[PrimaryKey("ORG_ID", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class CHK_TIMESCORE_PARAM  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string ORG_ID { get; set; }
+
+
+
+
+		[Column]
+
+		public string MODIFY_ID { get; set; }
+
+
+
+
+		[Column]
+
+		public DateTime? MODIFY_DTIME { get; set; }
+
+
+
+
+		[Column]
+
+		public string A_BEGIN_TIME { get; set; }
+
+
+
+
+		[Column]
+
+		public string P_BEGIN_TIME { get; set; }
+
+
+
+
+		[Column]
+
+		public string A_END_TIME { get; set; }
+
+
+
+
+		[Column]
+
+		public string P_END_TIME { get; set; }
+
+
+
+
+		[Column]
+
+		public int? LAT_LAST_MIN { get; set; }
+
+
+
+
+		[Column]
+
+		public int? EAR_LAST_MIN { get; set; }
+
+
+
+	}
+
+    
 	[TableName("WARN_RELEASE_TABLE_DETAIL")]
 
 
@@ -729,7 +1340,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class WARN_RELEASE_TABLE_DETAIL   
+    public partial class WARN_RELEASE_TABLE_DETAIL  
     {
 
 
@@ -805,7 +1416,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class TR_RELEASE_TABLE_INFO   
+    public partial class TR_RELEASE_TABLE_INFO  
     {
 
 
@@ -839,6 +1450,101 @@ namespace gzsw.model
 	}
 
     
+	[TableName("STAT_STAFF_QUALITY_STAT_D")]
+
+
+	[PrimaryKey("STAT_DT", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class STAT_STAFF_QUALITY_STAT_D  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime STAT_DT { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:代表时间段为0点至1点
+   2:代表时间段为1点至2点
+   3:代表时间段为2点至3点
+   4:代表时间段为3点至4点
+   5:代表时间段为4点至5点
+   6:代表时间段为5点至6点
+   7:代表时间段为6点至7点
+   8:代表时间段为7点至8点
+   9:代表时间段为8点至9点
+   10:代表时间段为9点至10点
+   11:代表时间段为10点至11点
+   12:代表时间段为11点至12点
+   13:代表时间段为12点至13点
+   14:代表时间段为13点至14点
+   15:代表时间段为14点至15点
+   16:代表时间段为15点至16点
+   17:代表时间段为16点至17点
+   18:代表时间段为17点至18点
+   19:代表时间段为18点至19点
+   20:代表时间段为19点至20点
+   21:代表时间段为20点至21点
+   22:代表时间段为21点至22点
+   23:代表时间段为22点至23点
+   24:代表时间段为23点至24点")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte TIME_QUANTUM_CD { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联 服务大厅信息表SYS_HALL的服务厅编码HALL_NO来获取服务厅名称HALL_NAM")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联 SYS_STAFF表取 员工名称")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string STAFF_ID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"对应 考核质量差错类型定义表 CHK_QUALITY_CON的QUALITY_CD")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string QUALITY_CD { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联明细事项业务定义表SYS_DETAILSERIAL 的SERIALID")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string SERIALID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int AMOUNT { get; set; }
+
+
+
+	}
+
+    
 	[TableName("SYS_ROLEFUNCTION")]
 
 
@@ -848,7 +1554,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_ROLEFUNCTION   
+    public partial class SYS_ROLEFUNCTION  
     {
 
 
@@ -926,7 +1632,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_QUEUEHIST   
+    public partial class SYS_QUEUEHIST  
     {
 
 
@@ -1109,129 +1815,31 @@ namespace gzsw.model
 	}
 
     
-	[TableName("WARN_PARAM_SEND_USER_CON")]
+	[TableName("CHK_DETAIL_SVR_COEF_CON")]
 
 
-	[PrimaryKey("SEQ")]
-
-
+	[PrimaryKey("SERIALID", autoIncrement=false)]
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class WARN_PARAM_SEND_USER_CON   
+    public partial class CHK_DETAIL_SVR_COEF_CON  
     {
 
 
 		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public int SEQ { get; set; }
-
-
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public int WARN_PARAM_ID { get; set; }
-
-
-
-
-		[Column]
-		[Display(Name=@"手机号码和用户登录名，不能全部为空，至少要配置一个或两个")]
-
-
-		public string MOB_NBR { get; set; }
-
-
-
-
-		[Column]
-		[Display(Name=@"手机号码和用户登录名，不能全部为空，至少要配置一个或两个")]
-
-
-		public string USER_ID { get; set; }
-
-
-
-	}
-
-    
-	[TableName("WARN_INFO_DETAIL")]
-
-
-	[PrimaryKey("WARN_INFO_DETAIL_ID")]
-
-
-
-	[ExplicitColumns]
-	[Serializable]
-    public partial class WARN_INFO_DETAIL   
-    {
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public long WARN_INFO_DETAIL_ID { get; set; }
-
-
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public int WARN_PARAM_ID { get; set; }
-
-
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public int REAL_VALUE { get; set; }
-
-
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public DateTime CREATE_DTIME { get; set; }
-
-
-
-
-		[Column]
-		[Display(Name=@"1: 蓝色预警
-   2：黄色预警
-   3：橙色预警
-   4：红色预警
-   5：黑色预警")]
+		[Display(Name=@"对应  明细事项业务定义表SYS_DETAILSERIAL的事项编码SERIALID")]
 
 		[Required(ErrorMessage ="不能为空！")]
-		public byte WARN_LEVEL { get; set; }
+		public string SERIALID { get; set; }
 
 
 
 
 		[Column]
-		[Display(Name=@"1：正在排队等候人数预警
-   2：已受理等候超时45分钟人次预警
-   3：受理超时业务量预警
-   4：窗口差评次数预警(总数，非单个窗口)")]
+		[Display(Name=@"对应　组织机构表SYS_ORGANIZE　的组织机构ＩＤ
+   
+   只能设置地市级的数据")]
 
-		[Required(ErrorMessage ="不能为空！")]
-		public byte WARN_TYP { get; set; }
-
-
-
-
-		[Column]
-		[Display(Name=@"1:省级，2：市级，3：区级，4：服务厅级")]
-
-		[Required(ErrorMessage ="不能为空！")]
-		public byte WARN_SCOPE { get; set; }
-
-
-
-
-		[Column]
 		[Required(ErrorMessage ="不能为空！")]
 		public string ORG_ID { get; set; }
 
@@ -1239,11 +1847,337 @@ namespace gzsw.model
 
 
 		[Column]
-		[Display(Name=@"当数据还没写到 [dbo].[WARN_SENDINFO_DETAIL] 时为0
-   当数据写到 [dbo].[WARN_SENDINFO_DETAIL] 时改为1")]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COEFFICIENT { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"对应用户表SYS_USER的USER_ID")]
 
 		[Required(ErrorMessage ="不能为空！")]
-		public bool WARN_CREATE_IND { get; set; }
+		public string MODIFY_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime MODIFY_DTIME { get; set; }
+
+
+
+	}
+
+    
+	[TableName("CHK_SATIS_RT_CON")]
+
+
+	[PrimaryKey("ORG_ID", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class CHK_SATIS_RT_CON  
+    {
+
+
+		[Column]
+		[Display(Name=@"对应　组织机构表SYS_ORGANIZE　的组织机构ＩＤ
+   
+   只能设置地市级的数据")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string ORG_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal VERY_SATISFY_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal SATISFY_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COMMON_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal UNSATISFY_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal NON_EVAL_SCORE { get; set; }
+
+
+
+	}
+
+    
+	[TableName("STAT_STAFF_QUEUE_BUSI_D")]
+
+
+	[PrimaryKey("STAT_DT", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class STAT_STAFF_QUEUE_BUSI_D  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime STAT_DT { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:代表时间段为0点至1点
+   2:代表时间段为1点至2点
+   3:代表时间段为2点至3点
+   4:代表时间段为3点至4点
+   5:代表时间段为4点至5点
+   6:代表时间段为5点至6点
+   7:代表时间段为6点至7点
+   8:代表时间段为7点至8点
+   9:代表时间段为8点至9点
+   10:代表时间段为9点至10点
+   11:代表时间段为10点至11点
+   12:代表时间段为11点至12点
+   13:代表时间段为12点至13点
+   14:代表时间段为13点至14点
+   15:代表时间段为14点至15点
+   16:代表时间段为15点至16点
+   17:代表时间段为16点至17点
+   18:代表时间段为17点至18点
+   19:代表时间段为18点至19点
+   20:代表时间段为19点至20点
+   21:代表时间段为20点至21点
+   22:代表时间段为21点至22点
+   23:代表时间段为22点至23点
+   24:代表时间段为23点至24点")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte TIME_QUANTUM_CD { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联 服务大厅信息表SYS_HALL的服务厅编码HALL_NO来获取服务厅名称HALL_NAM")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联排队业务队列定义表SYS_QUEUESERIAL的Q_SERIALID")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string QUEUE_BUSI_CD { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int CALL_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int OVERTIME_WAIT_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int HANDLE_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int ABANDON_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"单位：秒；
+   展现到页面时需转化为 分钟
+   平均办理时长＝总办理时长/总办理量")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public int HANDLE_DUR { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"单位：秒；
+   展现到页面时需转化为 分钟
+   平均等待时长＝总等待时长/呼叫量")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public int WAIT_DUR { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"单位：秒；
+   展现到页面时需转化为 分钟")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public int MAX_WAIT_DUR { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"单位：秒；
+   展现到页面时需转化为 分钟")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public int MAX_HANDLE_DUR { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int OVERTIME_HANDLE_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int TOT_TICKET_CNT { get; set; }
+
+
+
+	}
+
+    
+	[TableName("STAT_TAXPAYER_BEHAV_STAT_D")]
+
+
+	[PrimaryKey("STAT_DT", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class STAT_TAXPAYER_BEHAV_STAT_D  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime STAT_DT { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:代表时间段为0点至1点
+   2:代表时间段为1点至2点
+   3:代表时间段为2点至3点
+   4:代表时间段为3点至4点
+   5:代表时间段为4点至5点
+   6:代表时间段为5点至6点
+   7:代表时间段为6点至7点
+   8:代表时间段为7点至8点
+   9:代表时间段为8点至9点
+   10:代表时间段为9点至10点
+   11:代表时间段为10点至11点
+   12:代表时间段为11点至12点
+   13:代表时间段为12点至13点
+   14:代表时间段为13点至14点
+   15:代表时间段为14点至15点
+   16:代表时间段为15点至16点
+   17:代表时间段为16点至17点
+   18:代表时间段为17点至18点
+   19:代表时间段为18点至19点
+   20:代表时间段为19点至20点
+   21:代表时间段为20点至21点
+   22:代表时间段为21点至22点
+   23:代表时间段为22点至23点
+   24:代表时间段为23点至24点")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte TIME_QUANTUM_CD { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联 服务大厅信息表SYS_HALL的服务厅编码HALL_NO来获取服务厅名称HALL_NAM")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联事项大类业务定义表SYS_DLSERIAL的DLS_SERIALID获取大类事项名称")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string DLS_SERIALID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联 SYS_STAFF表取 员工名称")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string STAFF_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string HY_NAME { get; set; }
+
+
+
+
+		[Column]
+
+		public int? LOCAL_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? SECOND_SVR_CNT { get; set; }
 
 
 
@@ -1257,7 +2191,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_CURRYWHIST   
+    public partial class SYS_CURRYWHIST  
     {
 
 
@@ -1410,7 +2344,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_USEROLE   
+    public partial class SYS_USEROLE  
     {
 
 
@@ -1472,7 +2406,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_CURRQUEUEHIST   
+    public partial class SYS_CURRQUEUEHIST  
     {
 
 
@@ -1648,87 +2582,48 @@ namespace gzsw.model
 	}
 
     
-	[TableName("WARN_SENDINFO_DETAIL")]
+	[TableName("CHK_QUALITY_CON")]
 
 
-	[PrimaryKey("SENDINFO_DETAIL_ID")]
-
-
+	[PrimaryKey("QUALITY_CD", autoIncrement=false)]
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class WARN_SENDINFO_DETAIL   
+    public partial class CHK_QUALITY_CON  
     {
 
 
 		[Column]
 		[Required(ErrorMessage ="不能为空！")]
-		public long SENDINFO_DETAIL_ID { get; set; }
-
-
-
-
-		[Column]
-
-		public string MOB_NBR { get; set; }
-
-
-
-
-		[Column]
-
-		public string USER_ID { get; set; }
-
-
-
-
-		[Column]
-
-		public string WARN_INFO { get; set; }
+		public string QUALITY_CD { get; set; }
 
 
 
 
 		[Column]
 		[Required(ErrorMessage ="不能为空！")]
-		public long WARN_INFO_DETAIL_ID { get; set; }
+		public string QUALITY_NAM { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal DEDUCT { get; set; }
 
 
 
 
 		[Column]
 
-		public DateTime? SEND_TIME { get; set; }
+		public string MODIFY_ID { get; set; }
 
 
 
 
 		[Column]
 
-		public byte? MOB_SEND_STATE { get; set; }
-
-
-
-
-		[Column]
-
-		public byte? CLI_SEND_STATE { get; set; }
-
-
-
-
-		[Column]
-
-		public string SEND_NOTE { get; set; }
-
-
-
-
-		[Column]
-		[Display(Name=@"1:已读，0：未读")]
-
-
-		public bool? CLI_READ_IND { get; set; }
+		public DateTime? MODIFY_DTIME { get; set; }
 
 
 
@@ -1744,7 +2639,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_TICKETPRINT   
+    public partial class SYS_TICKETPRINT  
     {
 
 
@@ -1823,13 +2718,9 @@ namespace gzsw.model
 	[TableName("SYS_YWHIST")]
 
 
-	[PrimaryKey("SEQ")]
-
-
-
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_YWHIST   
+    public partial class SYS_YWHIST  
     {
 
 
@@ -1982,7 +2873,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class CHK_STAFFCHK_EVENT   
+    public partial class CHK_STAFFCHK_EVENT  
     {
 
 
@@ -2119,6 +3010,160 @@ namespace gzsw.model
 	}
 
     
+	[TableName("WARN_COMPLAIN_TYP_CON")]
+
+
+	[PrimaryKey("COMPLAIN_TYP_ID")]
+
+
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class WARN_COMPLAIN_TYP_CON  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int COMPLAIN_TYP_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string COMPLAIN_NAM { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string CREATE_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime CREATE_DTIME { get; set; }
+
+
+
+
+		[Column]
+
+		public string MODIFY_ID { get; set; }
+
+
+
+
+		[Column]
+
+		public DateTime? MODIFY_DTIME { get; set; }
+
+
+
+	}
+
+    
+	[TableName("STAT_WARN_HALL_STAT_D")]
+
+
+	[PrimaryKey("STAT_DT", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class STAT_WARN_HALL_STAT_D  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime STAT_DT { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:代表时间段为0点至1点
+   2:代表时间段为1点至2点
+   3:代表时间段为2点至3点
+   4:代表时间段为3点至4点
+   5:代表时间段为4点至5点
+   6:代表时间段为5点至6点
+   7:代表时间段为6点至7点
+   8:代表时间段为7点至8点
+   9:代表时间段为8点至9点
+   10:代表时间段为9点至10点
+   11:代表时间段为10点至11点
+   12:代表时间段为11点至12点
+   13:代表时间段为12点至13点
+   14:代表时间段为13点至14点
+   15:代表时间段为14点至15点
+   16:代表时间段为15点至16点
+   17:代表时间段为16点至17点
+   18:代表时间段为17点至18点
+   19:代表时间段为18点至19点
+   20:代表时间段为19点至20点
+   21:代表时间段为20点至21点
+   22:代表时间段为21点至22点
+   23:代表时间段为22点至23点
+   24:代表时间段为23点至24点")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte TIME_QUANTUM_CD { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"服务大厅信息表SYS_HALL")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1：等候超时（超过最大办理时间％）
+   2：等候超时率（高于）
+   3：窗口饱和度（高于）
+   4：大厅饱和度（高于）
+   5：超时办结率（高于）
+   6：超时业务笔数（高于）
+   7：弃号率（高于）
+   8：差评笔数预警（高于）
+   9:  连续工作时长超界 （高于）")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte WARN_TYP { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1: 黄色预警
+   2：橙色预警
+   3：红色预警
+   ")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte WARN_LEVEL { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int AMOUNT { get; set; }
+
+
+
+	}
+
+    
 	[TableName("CLI_CLIENTEVENT")]
 
 
@@ -2128,7 +3173,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class CLI_CLIENTEVENT   
+    public partial class CLI_CLIENTEVENT  
     {
 
 
@@ -2183,6 +3228,157 @@ namespace gzsw.model
 	}
 
     
+	[TableName("CHK_STAFF_ATTEND_DEDUCT_CON")]
+
+
+	[PrimaryKey("ORG_ID", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class CHK_STAFF_ATTEND_DEDUCT_CON  
+    {
+
+
+		[Column]
+		[Display(Name=@"对应　组织机构表SYS_ORGANIZE　的组织机构ＩＤ
+   
+   只能设置地市级的数据")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string ORG_ID { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? EAR_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? NEG_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? LAT_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public string MODIFY_ID { get; set; }
+
+
+
+
+		[Column]
+
+		public DateTime? MODIFY_DTIME { get; set; }
+
+
+
+	}
+
+    
+	[TableName("STAT_COMPLAIN_HALL_STAT_D")]
+
+
+	[PrimaryKey("STAT_DT", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class STAT_COMPLAIN_HALL_STAT_D  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime STAT_DT { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:代表时间段为0点至1点
+   2:代表时间段为1点至2点
+   3:代表时间段为2点至3点
+   4:代表时间段为3点至4点
+   5:代表时间段为4点至5点
+   6:代表时间段为5点至6点
+   7:代表时间段为6点至7点
+   8:代表时间段为7点至8点
+   9:代表时间段为8点至9点
+   10:代表时间段为9点至10点
+   11:代表时间段为10点至11点
+   12:代表时间段为11点至12点
+   13:代表时间段为12点至13点
+   14:代表时间段为13点至14点
+   15:代表时间段为14点至15点
+   16:代表时间段为15点至16点
+   17:代表时间段为16点至17点
+   18:代表时间段为17点至18点
+   19:代表时间段为18点至19点
+   20:代表时间段为19点至20点
+   21:代表时间段为20点至21点
+   22:代表时间段为21点至22点
+   23:代表时间段为22点至23点
+   24:代表时间段为23点至24点")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte TIME_QUANTUM_CD { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"服务大厅信息表SYS_HALL")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string COMPLAIN_NAM { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"包含 未处理的，已处理的，撤销的  数量
+   报表展现撤销的  数量  可以采用 总数量 减  未处理的，已处理的")]
+
+
+		public int? AMOUNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? NON_HANDLE_AMOUNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? HANDLE_AMOUNT { get; set; }
+
+
+
+	}
+
+    
 	[TableName("STAT_DAYQUEUETJ")]
 
 
@@ -2190,7 +3386,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class STAT_DAYQUEUETJ   
+    public partial class STAT_DAYQUEUETJ  
     {
 
 
@@ -2429,6 +3625,402 @@ namespace gzsw.model
 	}
 
     
+	[TableName("STAT_STAFF_CHKSTAT_M")]
+
+
+	[PrimaryKey("STAT_MO", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class STAT_STAFF_CHKSTAT_M  
+    {
+
+
+		[Column]
+		[Display(Name=@"格式：201409月 为201409 其他类推")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public int STAT_MO { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string STAFF_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal WORK_DAY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal LAT_DAY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal EAR_DAY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int NONSIGN_OUT_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal HOLLI_TYP1_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal HOLLI_TYP2_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal HOLLI_TYP3_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal HOLLI_TYP4_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal HOLLI_TYP5_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal HOLLI_TYP6_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal HOLLI_TYP7_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal HOLLI_TYP8_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal HOLLI_TYP9_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal HOLLI_TYP10_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal HOLLI_TYP11_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal HOLLI_TYP12_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal HOLLI_TYP13_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_WORK_DAY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_LAT_DAY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_EAR_DAY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int COR_NONSIGN_OUT_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_HOLLI_TYP1_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_HOLLI_TYP2_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_HOLLI_TYP3_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_HOLLI_TYP4_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_HOLLI_TYP5_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_HOLLI_TYP6_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_HOLLI_TYP7_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_HOLLI_TYP8_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_HOLLI_TYP9_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_HOLLI_TYP10_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_HOLLI_TYP11_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_HOLLI_TYP12_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_HOLLI_TYP13_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public string MODIFY_ID { get; set; }
+
+
+
+
+		[Column]
+
+		public DateTime? MODIFY_DTIME { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal ABSENT_DAY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COR_ABSENT_DAY_CNT { get; set; }
+
+
+
+	}
+
+    
+	[TableName("STAT_COMPLAIN_STAFF_STAT_D")]
+
+
+	[PrimaryKey("STAT_DT", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class STAT_COMPLAIN_STAFF_STAT_D  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime STAT_DT { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:代表时间段为0点至1点
+   2:代表时间段为1点至2点
+   3:代表时间段为2点至3点
+   4:代表时间段为3点至4点
+   5:代表时间段为4点至5点
+   6:代表时间段为5点至6点
+   7:代表时间段为6点至7点
+   8:代表时间段为7点至8点
+   9:代表时间段为8点至9点
+   10:代表时间段为9点至10点
+   11:代表时间段为10点至11点
+   12:代表时间段为11点至12点
+   13:代表时间段为12点至13点
+   14:代表时间段为13点至14点
+   15:代表时间段为14点至15点
+   16:代表时间段为15点至16点
+   17:代表时间段为16点至17点
+   18:代表时间段为17点至18点
+   19:代表时间段为18点至19点
+   20:代表时间段为19点至20点
+   21:代表时间段为20点至21点
+   22:代表时间段为21点至22点
+   23:代表时间段为22点至23点
+   24:代表时间段为23点至24点")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte TIME_QUANTUM_CD { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"服务大厅信息表SYS_HALL")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联 SYS_STAFF表取 员工名称")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string STAFF_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string COMPLAIN_NAM { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"包含 未处理的，已处理的，撤销的  数量
+   报表展现撤销的  数量  可以采用 总数量 减  未处理的，已处理的")]
+
+
+		public int? AMOUNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? NON_HANDLE_AMOUNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? HANDLE_AMOUNT { get; set; }
+
+
+
+	}
+
+    
 	[TableName("SYS_ROLE")]
 
 
@@ -2438,7 +4030,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_ROLE   
+    public partial class SYS_ROLE  
     {
 
 
@@ -2493,6 +4085,427 @@ namespace gzsw.model
 	}
 
     
+	[TableName("CHK_STAFF_SYSTEM_CON")]
+
+
+	[PrimaryKey("ORG_ID", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class CHK_STAFF_SYSTEM_CON  
+    {
+
+
+		[Column]
+		[Display(Name=@"对应　组织机构表SYS_ORGANIZE　的组织机构ＩＤ
+   
+   只能设置地市级的数据")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string ORG_ID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1：综合评议额外奖罚与投诉分在１００分之外计入总分
+   2：综合评议额外奖罚与投诉分在１００分之内计入总分，并设置额外分上限
+   ")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte COMPRE_SAN_TYP { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal COMPRE_SAN_100_MAX_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal EVAL_CHK_RT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal SVR_CHK_RT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal QUALITY_CHK_RT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal EFFIC_CHK_RT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal EFFIC_AVOID_RT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal EFFIC_AVOID_EXC_DEDUCT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal ATTEND_CHK_RT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal USU_ACT_CHK_RT { get; set; }
+
+
+
+	}
+
+    
+	[TableName("WARN_INFO_DETAIL")]
+
+
+	[PrimaryKey("WARN_INFO_DETAIL_ID")]
+
+
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class WARN_INFO_DETAIL  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public long WARN_INFO_DETAIL_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal REAL_VALUE { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime CREATE_DTIME { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"当数据还没写到 [dbo].[WARN_SENDINFO_DETAIL] 时为0
+   当数据写到 [dbo].[WARN_SENDINFO_DETAIL] 时改为1")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public bool WARN_CREATE_IND { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"服务大厅信息表SYS_HALL")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1：等候超时（超过最大办理时间％）
+   2：等候超时率（高于）
+   3：窗口饱和度（高于）
+   4：大厅饱和度（高于）
+   5：超时办结率（高于）
+   6：超时业务笔数（高于）
+   7：弃号率（高于）
+   8：差评笔数预警（高于）
+   9:  连续工作时长超界 （高于）")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte WARN_TYP { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1: 黄色预警
+   2：橙色预警
+   3：红色预警
+   ")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte WARN_LEVEL { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:未处理
+   2：已处理")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte STATE { get; set; }
+
+
+
+
+		[Column]
+
+		public string HANDLE_USER { get; set; }
+
+
+
+
+		[Column]
+
+		public DateTime? HANDLE_TIME { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"预警处理的时候手工输入")]
+
+
+		public string WARN_REASON { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"预警处理的时候手工输入")]
+
+
+		public string WARN_METHOD { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"纳税人信息基础数据表SYS_NSRINFO")]
+
+
+		public string NSR_SBM { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"员工信息表SYS_STAFF，　　对　　9:  连续工作时长超界 （高于）　　有效")]
+
+
+		public string STAFF_ID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"对应SYS_QUEUEHIST或SYS_CURRQUEUEHIST的　交易业务流水号
+   对　1：等候超时（超过最大办理时间％）　有效")]
+
+
+		public string CHQUEUE_TRANSCODEID { get; set; }
+
+
+
+	}
+
+    
+	[TableName("CHK_STAFF_STAR_SYSTEM_CON")]
+
+
+	[PrimaryKey("ORG_ID", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class CHK_STAFF_STAR_SYSTEM_CON  
+    {
+
+
+		[Column]
+		[Display(Name=@"对应　组织机构表SYS_ORGANIZE　的组织机构ＩＤ
+   
+   只能设置地市级的数据")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string ORG_ID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:按月
+   ２：按年")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte TIME_DUR_TYP { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal STAR_5_MIN_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal STAR_4_MIN_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal STAR_3_MIN_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal STAR_2_MIN_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal STAR_1_MIN_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal STAR_4_MAX_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal STAR_3_MAX_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal STAR_2_MAX_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal STAR_1_MAX_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"到达最低分才能评定星级")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal EVAL_MIN_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"到达最低分才能评定星级")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal SVR_MIN_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"到达最低分才能评定星级")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal QUALITY_MIN_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"到达最低分才能评定星级")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal EFFIC_MIN_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"到达最低分才能评定星级")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal ATTEND_MIN_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"到达最低分才能评定星级")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal USU_ACT_MIN_SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"投诉次数小于这个数时才能评定星级")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public int COMPLAIN_MAX_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"不满足评定条件时的默认星级")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte DEFAULT_STAR { get; set; }
+
+
+
+	}
+
+    
 	[TableName("SYS_USERORGANIZE")]
 
 
@@ -2502,7 +4515,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_USERORGANIZE   
+    public partial class SYS_USERORGANIZE  
     {
 
 
@@ -2564,7 +4577,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class CLI_CLIENTEVENT_HI   
+    public partial class CLI_CLIENTEVENT_HI  
     {
 
 
@@ -2630,6 +4643,313 @@ namespace gzsw.model
 	}
 
     
+	[TableName("SYS_OVERRALL_CON")]
+
+
+	[PrimaryKey("OVERRALL_CD", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class SYS_OVERRALL_CON  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string OVERRALL_CD { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string OVERRALL_NAM { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? VALUE { get; set; }
+
+
+
+
+		[Column]
+
+		public string MESSAGE { get; set; }
+
+
+
+	}
+
+    
+	[TableName("STAT_STAFF_SVRSTAT_M")]
+
+
+	[PrimaryKey("STAT_MO", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class STAT_STAFF_SVRSTAT_M  
+    {
+
+
+		[Column]
+		[Display(Name=@"格式：201409月 为201409 其他类推")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public int STAT_MO { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string STAFF_ID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联明细事项业务定义表SYS_DETAILSERIAL 的SERIALID")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string SERIALID { get; set; }
+
+
+
+
+		[Column]
+
+		public string MODIFY_ID { get; set; }
+
+
+
+
+		[Column]
+
+		public DateTime? MODIFY_DTIME { get; set; }
+
+
+
+
+		[Column]
+
+		public int? DOOR_SVR_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? OTHER_SVR_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? COR_DOOR_SVR_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? OVERTIME_SVR_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? COR_OVERTIME_SVR_CNT { get; set; }
+
+
+
+	}
+
+    
+	[TableName("STAT_STAFF_QUALITYSTAT_M")]
+
+
+	[PrimaryKey("STAT_MO", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class STAT_STAFF_QUALITYSTAT_M  
+    {
+
+
+		[Column]
+		[Display(Name=@"格式：201409月 为201409 其他类推")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public int STAT_MO { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string STAFF_ID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联　　考核质量差错类型定义表CHK_QUALITY_CON")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string QUALITY_CD { get; set; }
+
+
+
+
+		[Column]
+
+		public string MODIFY_ID { get; set; }
+
+
+
+
+		[Column]
+
+		public DateTime? MODIFY_DTIME { get; set; }
+
+
+
+
+		[Column]
+
+		public int? ERROR_SVR_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? COR_ERROR_SVR_CNT { get; set; }
+
+
+
+	}
+
+    
+	[TableName("STAT_STAFF_EVALSTAT_M")]
+
+
+	[PrimaryKey("STAT_MO", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class STAT_STAFF_EVALSTAT_M  
+    {
+
+
+		[Column]
+		[Display(Name=@"格式：201409月 为201409 其他类推")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public int STAT_MO { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string STAFF_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int VERY_SATISFY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int SATISFY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int COMMON_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int UNSATISFY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int NON_EVAL_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int COR_VERY_SATISFY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int COR_SATISFY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int COR_COMMON_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int COR_UNSATISFY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int COR_NON_EVAL_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public string MODIFY_ID { get; set; }
+
+
+
+
+		[Column]
+
+		public DateTime? MODIFY_DTIME { get; set; }
+
+
+
+	}
+
+    
 	[TableName("CHK_COUNTER")]
 
 
@@ -2637,7 +4957,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class CHK_COUNTER   
+    public partial class CHK_COUNTER  
     {
 
 
@@ -2785,7 +5105,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class sysdiagram   
+    public partial class sysdiagram  
     {
 
 
@@ -2835,7 +5155,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class CHK_STAFF_APPLYDETAIL   
+    public partial class CHK_STAFF_APPLYDETAIL  
     {
 
 
@@ -2943,7 +5263,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_USER   
+    public partial class SYS_USER  
     {
 
 
@@ -3032,7 +5352,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_TICKETQUEUESERIAL   
+    public partial class SYS_TICKETQUEUESERIAL  
     {
 
 
@@ -3348,7 +5668,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class STAT_DAYYWTJ   
+    public partial class STAT_DAYYWTJ  
     {
 
 
@@ -3433,7 +5753,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class MON_HALL_CAMERA_DEF   
+    public partial class MON_HALL_CAMERA_DEF  
     {
 
 
@@ -3612,7 +5932,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_STAFFBUSI   
+    public partial class SYS_STAFFBUSI  
     {
 
 
@@ -3656,7 +5976,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_COUNTER   
+    public partial class SYS_COUNTER  
     {
 
 
@@ -3776,7 +6096,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class STAT_DAYHYYWTJ   
+    public partial class STAT_DAYHYYWTJ  
     {
 
 
@@ -3817,6 +6137,133 @@ namespace gzsw.model
 	}
 
     
+	[TableName("STAT_STAFF_LARGE_BUSI_D")]
+
+
+	[PrimaryKey("STAT_DT", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class STAT_STAFF_LARGE_BUSI_D  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime STAT_DT { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:代表时间段为0点至1点
+   2:代表时间段为1点至2点
+   3:代表时间段为2点至3点
+   4:代表时间段为3点至4点
+   5:代表时间段为4点至5点
+   6:代表时间段为5点至6点
+   7:代表时间段为6点至7点
+   8:代表时间段为7点至8点
+   9:代表时间段为8点至9点
+   10:代表时间段为9点至10点
+   11:代表时间段为10点至11点
+   12:代表时间段为11点至12点
+   13:代表时间段为12点至13点
+   14:代表时间段为13点至14点
+   15:代表时间段为14点至15点
+   16:代表时间段为15点至16点
+   17:代表时间段为16点至17点
+   18:代表时间段为17点至18点
+   19:代表时间段为18点至19点
+   20:代表时间段为19点至20点
+   21:代表时间段为20点至21点
+   22:代表时间段为21点至22点
+   23:代表时间段为22点至23点
+   24:代表时间段为23点至24点")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte TIME_QUANTUM_CD { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联 服务大厅信息表SYS_HALL的服务厅编码HALL_NO来获取服务厅名称HALL_NAM")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联 SYS_STAFF表取 员工名称")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string STAFF_ID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联事项大类业务定义表SYS_DLSERIAL的DLS_SERIALID获取大类事项名称")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string DLS_SERIALID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联　明细事项业务定义表SYS_DETAILSERIAL")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string SERIALID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int BUSI_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal CONVERT_BUSI_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"单位：秒；
+   展现到页面时需转化为 分钟
+   平均办理时长＝总办理时长／总办理量")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public int HANDLE_DUR { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int OVERTIME_HANDLE_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int LOCAL_CNT { get; set; }
+
+
+
+	}
+
+    
 	[TableName("SYS_ORGANIZE")]
 
 
@@ -3824,7 +6271,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_ORGANIZE   
+    public partial class SYS_ORGANIZE  
     {
 
 
@@ -3928,98 +6375,6 @@ namespace gzsw.model
 	}
 
     
-	[TableName("WARN_PARAM")]
-
-
-	[PrimaryKey("WARN_PARAM_ID")]
-
-
-
-	[ExplicitColumns]
-	[Serializable]
-    public partial class WARN_PARAM   
-    {
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public int WARN_PARAM_ID { get; set; }
-
-
-
-
-		[Column]
-
-		public string WARN_PARAM_NAM { get; set; }
-
-
-
-
-		[Column]
-
-		public string NOTE { get; set; }
-
-
-
-
-		[Column]
-
-		public int? CRITICAL_VALUE { get; set; }
-
-
-
-
-		[Column]
-
-		public byte? WARN_LEVEL { get; set; }
-
-
-
-
-		[Column]
-
-		public byte? WARN_TYP { get; set; }
-
-
-
-
-		[Column]
-
-		public byte? WARN_SCOPE { get; set; }
-
-
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public string ORG_ID { get; set; }
-
-
-
-
-		[Column]
-
-		public string WARN_INFO_MODEL { get; set; }
-
-
-
-
-		[Column]
-
-		public string MODIFY_ID { get; set; }
-
-
-
-
-		[Column]
-
-		public DateTime? MODIFY_DTIME { get; set; }
-
-
-
-	}
-
-    
 	[TableName("SYS_HALL")]
 
 
@@ -4027,7 +6382,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_HALL   
+    public partial class SYS_HALL  
     {
 
 
@@ -4197,6 +6552,13 @@ namespace gzsw.model
 
 
 
+
+		[Column]
+
+		public int? CHK_DETAIN_MIN { get; set; }
+
+
+
 	}
 
     
@@ -4209,7 +6571,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_LOG   
+    public partial class SYS_LOG  
     {
 
 
@@ -4259,7 +6621,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class TR_CHK_KEY_INF   
+    public partial class TR_CHK_KEY_INF  
     {
 
 
@@ -4312,116 +6674,174 @@ namespace gzsw.model
 	}
 
     
-	[TableName("SYS_COUNTER2")]
+	[TableName("WARN_SENDINFO_DETAIL")]
+
+
+	[PrimaryKey("SENDINFO_DETAIL_ID")]
+
 
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_COUNTER2   
+    public partial class WARN_SENDINFO_DETAIL  
     {
 
 
 		[Column]
 		[Required(ErrorMessage ="不能为空！")]
+		public long SENDINFO_DETAIL_ID { get; set; }
+
+
+
+
+		[Column]
+
+		public string MOB_NBR { get; set; }
+
+
+
+
+		[Column]
+
+		public string USER_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string WARN_INFO { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public long WARN_INFO_DETAIL_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime SEND_TIME { get; set; }
+
+
+
+
+		[Column]
+
+		public byte? MOB_SEND_STATE { get; set; }
+
+
+
+
+		[Column]
+
+		public byte? CLI_SEND_STATE { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:已读，0：未读")]
+
+
+		public bool? CLI_READ_IND { get; set; }
+
+
+
+
+		[Column]
+
+		public DateTime? SMS_SEND_TIME { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"服务大厅信息表SYS_HALL")]
+
+		[Required(ErrorMessage ="不能为空！")]
 		public string HALL_NO { get; set; }
 
 
 
+	}
+
+    
+	[TableName("CHK_STAFF_USU_ACT_CON")]
+
+
+	[PrimaryKey("ORG_ID", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class CHK_STAFF_USU_ACT_CON  
+    {
+
 
 		[Column]
+		[Display(Name=@"对应　组织机构表SYS_ORGANIZE　的组织机构ＩＤ
+   
+   只能设置地市一级的参数，各个占比之和加起来要限制为１")]
+
 		[Required(ErrorMessage ="不能为空！")]
-		public int COUNTER_ID { get; set; }
+		public string ORG_ID { get; set; }
 
 
 
 
 		[Column]
+		[Display(Name=@"30分的形式")]
+
 		[Required(ErrorMessage ="不能为空！")]
-		public bool SPEC_FUN_IND { get; set; }
+		public decimal WORK_DIS_RT { get; set; }
 
 
 
 
 		[Column]
+		[Display(Name=@"30分的形式")]
+
 		[Required(ErrorMessage ="不能为空！")]
-		public byte STATE { get; set; }
+		public decimal TAX_SVR_RT { get; set; }
 
 
 
 
 		[Column]
+		[Display(Name=@"30分的形式")]
 
-		public int? MAX_BUSI_CNT { get; set; }
-
-
-
-
-		[Column]
-
-		public string PRI1_BUSI_SER { get; set; }
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal TAX_LOOK_RT { get; set; }
 
 
 
 
 		[Column]
+		[Display(Name=@"30分的形式")]
 
-		public string PRI2_BUSI_SER { get; set; }
-
-
-
-
-		[Column]
-
-		public string PRI3_BUSI_SER { get; set; }
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal TRAIN_RT { get; set; }
 
 
 
 
 		[Column]
+		[Display(Name=@"30分的形式")]
 
-		public string PRI4_BUSI_SER { get; set; }
-
-
-
-
-		[Column]
-
-		public string PRI5_BUSI_SER { get; set; }
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal SEC_HEAL_RT { get; set; }
 
 
 
 
 		[Column]
+		[Display(Name=@"30分的形式")]
 
-		public string CREATE_ID { get; set; }
-
-
-
-
-		[Column]
-
-		public DateTime? CREATE_DTIME { get; set; }
-
-
-
-
-		[Column]
-
-		public string MODIFY_ID { get; set; }
-
-
-
-
-		[Column]
-
-		public DateTime? MODIFY_DTIME { get; set; }
-
-
-
-
-		[Column]
-
-		public string NOTE { get; set; }
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal OTHER_RT { get; set; }
 
 
 
@@ -4435,7 +6855,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_STAFF   
+    public partial class SYS_STAFF  
     {
 
 
@@ -4541,20 +6961,31 @@ namespace gzsw.model
 	}
 
     
-	[TableName("CHK_TIMESCORE_PARAM")]
+	[TableName("CHK_HALL_STAT_M")]
 
 
-	[PrimaryKey("ORG_ID", autoIncrement=false)]
+	[PrimaryKey("STAT_MO", autoIncrement=false)]
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class CHK_TIMESCORE_PARAM   
+    public partial class CHK_HALL_STAT_M  
     {
 
 
 		[Column]
+		[Display(Name=@"格式：201409月 为201409 其他类推")]
+
 		[Required(ErrorMessage ="不能为空！")]
-		public string ORG_ID { get; set; }
+		public int STAT_MO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"服务大厅信息表SYS_HALL")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
 
 
 
@@ -4575,158 +7006,291 @@ namespace gzsw.model
 
 		[Column]
 
-		public string A_BEGIN_TIME { get; set; }
+		public decimal? LAT_DAY_CNT { get; set; }
 
 
 
 
 		[Column]
 
-		public string P_BEGIN_TIME { get; set; }
+		public decimal? EAR_DAY_CNT { get; set; }
 
 
 
 
 		[Column]
 
-		public string A_END_TIME { get; set; }
+		public decimal? ABSENT_DAY_CNT { get; set; }
 
 
 
 
 		[Column]
 
-		public string P_END_TIME { get; set; }
+		public decimal? ATTEND_PER_CNT { get; set; }
 
 
 
 
 		[Column]
 
-		public int? LAT_LAST_MIN { get; set; }
+		public decimal? WORK_DAY_CNT { get; set; }
 
 
 
 
 		[Column]
 
-		public int? EAR_LAST_MIN { get; set; }
+		public decimal? COR_LAT_DAY_CNT { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? EAR_SCORE { get; set; }
+		public decimal? COR_EAR_DAY_CNT { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? NEG_SCORE { get; set; }
+		public decimal? COR_ABSENT_DAY_CNT { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? ILL_SCORE { get; set; }
+		public decimal? COR_ATTEND_PER_CNT { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? ABS_SCORE { get; set; }
+		public decimal? COR_WORK_DAY_CNT { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? LAT_SCORE { get; set; }
+		public int? OVERTIME_CNT { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? NONSIGN_SCORE { get; set; }
-
-
-
-	}
-
-    
-	[TableName("SYS_FUNCTION2")]
-
-
-	[ExplicitColumns]
-	[Serializable]
-    public partial class SYS_FUNCTION2   
-    {
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public int FUNCTION_ID { get; set; }
-
-
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public string FUNCTION_NAM { get; set; }
+		public int? VALID_QUEUE_CNT { get; set; }
 
 
 
 
 		[Column]
 
-		public int? PAR_FUNCTION_ID { get; set; }
+		public int? COR_OVERTIME_CNT { get; set; }
 
 
 
 
 		[Column]
 
-		public string NOTE { get; set; }
-
-
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public string CREATE_ID { get; set; }
-
-
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public DateTime CREATE_DTIME { get; set; }
+		public int? COR_VALID_QUEUE_CNT { get; set; }
 
 
 
 
 		[Column]
 
-		public string MODIFY_ID { get; set; }
+		public int? OVERTIME_SVR_CNT { get; set; }
 
 
 
 
 		[Column]
 
-		public DateTime? MODIFY_DTIME { get; set; }
+		public int? VALID_SVR_CNT { get; set; }
 
 
 
 
 		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public string FUNCTION_COD { get; set; }
+
+		public int? COR_OVERTIME_SVR_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? COR_VALID_SVR_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? MISTAKE_SVR_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? COR_MISTAKE_SVR_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? EVAL_DISSATISFY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"包括　未评价的数据")]
+
+
+		public int? VALID_EVAL_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? COR_EVAL_DISSATISFY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"包括　未评价的数据")]
+
+
+		public int? COR_VALID_EVAL_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? COMPLAIN_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? HALL_STAFF_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? COR_COMPLAIN_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public int? COR_HALL_STAFF_CNT { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? ATTEND_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? QUEUE_DETAIN_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? HANDLE_ONTIME_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? QUALITY_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? EVAL_SATISFY_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? COMPLAIN_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? ENVIRON_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? SYSTEM_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? NORM_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? PROFESS_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? THIRD_SURVEY_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public decimal? OTHER_SCORE { get; set; }
+
+
+
+
+		[Column]
+
+		public int? STAR_LEVEL { get; set; }
 
 
 
@@ -4742,7 +7306,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class CHK_STAFF_APPLYITEM   
+    public partial class CHK_STAFF_APPLYITEM  
     {
 
 
@@ -4790,6 +7354,101 @@ namespace gzsw.model
 	}
 
     
+	[TableName("CHK_STAFF_USU_ACT_MARK")]
+
+
+	[PrimaryKey("SEQ")]
+
+
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class CHK_STAFF_USU_ACT_MARK  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int SEQ { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"数据库记录形式为　２０１４年９月　为２０１４０９，其他类似，展现到前端需转化")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public int STAT_MO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"对应员工信息表SYS_STAFF的STAFF_ID")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string STAFF_ID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:工作纪律
+   2:办税服务
+   3:税容税貌
+   4:学习培训
+   5:安全卫生
+   6:其他项")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte USU_ACT_TYP { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal DEDUCT { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"对应用户表SYS_USER的USER_ID")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string MODIFY_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime MODIFY_DTIME { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"手工输入")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string REASON { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"录入时的时间，系统生成")]
+
+
+		public DateTime? MARK_TIME { get; set; }
+
+
+
+	}
+
+    
 	[TableName("SYS_FUNCTION")]
 
 
@@ -4799,7 +7458,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_FUNCTION   
+    public partial class SYS_FUNCTION  
     {
 
 
@@ -4873,7 +7532,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class IMPORT_NSRINFO   
+    public partial class IMPORT_NSRINFO  
     {
 
 
@@ -4949,7 +7608,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class CLI_COUNTERSTATE   
+    public partial class CLI_COUNTERSTATE  
     {
 
 
@@ -5082,7 +7741,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class MON_HALL_TAB_DEF   
+    public partial class MON_HALL_TAB_DEF  
     {
 
 
@@ -5123,6 +7782,99 @@ namespace gzsw.model
 	}
 
     
+	[TableName("CHK_STAFF_COMPRE_SAN_MARK")]
+
+
+	[PrimaryKey("SEQ")]
+
+
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class CHK_STAFF_COMPRE_SAN_MARK  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int SEQ { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"数据库记录形式为　２０１４年９月　为２０１４０９，其他类似，展现到前端需转化")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public int STAT_MO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"对应员工信息表SYS_STAFF的STAFF_ID")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string STAFF_ID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:综合评议分
+   2:额外奖分
+   3:额外罚分
+   4:投诉扣分")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte COMPRE_SAN_TYP { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal SCORE { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"对应用户表SYS_USER的USER_ID")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string MODIFY_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime MODIFY_DTIME { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"手工输入")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string REASON { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"录入时的时间，系统生成")]
+
+
+		public DateTime? MARK_TIME { get; set; }
+
+
+
+	}
+
+    
 	[TableName("SYS_LOGINLOG")]
 
 
@@ -5132,7 +7884,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_LOGINLOG   
+    public partial class SYS_LOGINLOG  
     {
 
 
@@ -5193,25 +7945,77 @@ namespace gzsw.model
 	}
 
     
-	[TableName("STAT_STAFF_CHKSTAT_M")]
+	[TableName("STAT_STAFF_BUSI_TOT_D")]
 
 
-	[PrimaryKey("STAT_MO", autoIncrement=false)]
+	[PrimaryKey("STAT_DT", autoIncrement=false)]
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class STAT_STAFF_CHKSTAT_M   
+    public partial class STAT_STAFF_BUSI_TOT_D  
     {
 
 
 		[Column]
 		[Required(ErrorMessage ="不能为空！")]
-		public int STAT_MO { get; set; }
+		public DateTime STAT_DT { get; set; }
 
 
 
 
 		[Column]
+		[Display(Name=@"1:代表时间段为0点至1点
+   2:代表时间段为1点至2点
+   3:代表时间段为2点至3点
+   4:代表时间段为3点至4点
+   5:代表时间段为4点至5点
+   6:代表时间段为5点至6点
+   7:代表时间段为6点至7点
+   8:代表时间段为7点至8点
+   9:代表时间段为8点至9点
+   10:代表时间段为9点至10点
+   11:代表时间段为10点至11点
+   12:代表时间段为11点至12点
+   13:代表时间段为12点至13点
+   14:代表时间段为13点至14点
+   15:代表时间段为14点至15点
+   16:代表时间段为15点至16点
+   17:代表时间段为16点至17点
+   18:代表时间段为17点至18点
+   19:代表时间段为18点至19点
+   20:代表时间段为19点至20点
+   21:代表时间段为20点至21点
+   22:代表时间段为21点至22点
+   23:代表时间段为22点至23点
+   24:代表时间段为23点至24点")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte TIME_QUANTUM_CD { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联　　排队业务队列定义表SYS_QUEUESERIAL")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string Q_SERIALID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联 服务大厅信息表SYS_HALL的服务厅编码HALL_NO来获取服务厅名称HALL_NAM")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联 SYS_STAFF表取 员工名称")]
+
 		[Required(ErrorMessage ="不能为空！")]
 		public string STAFF_ID { get; set; }
 
@@ -5219,99 +8023,450 @@ namespace gzsw.model
 
 
 		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int CALL_CNT { get; set; }
 
-		public decimal? WORK_DAY_CNT { get; set; }
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int HANDLE_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int ABANDON_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int LOCAL_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int VOTE_MULTI_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int VERY_SATISFY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int SATISFY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int COMMON_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int UNSATISFY_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int NON_EVAL_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"单位：秒；
+   展现到页面时需转化为 分钟
+   平均等候时长＝总等候时长／总呼叫量")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public long WAIT_DUR { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int OVERTIME_WAIT_CNT { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int SECOND_SVR_CNT { get; set; }
+
+
+
+	}
+
+    
+	[TableName("CHK_HALL_STAR_SYSTEM_CON")]
+
+
+	[PrimaryKey("STAR_LEVEL", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class CHK_HALL_STAR_SYSTEM_CON  
+    {
+
+
+		[Column]
+		[Display(Name=@"星级，１星级填１，２星级填２")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public int STAR_LEVEL { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? LAT_DAY_CNT { get; set; }
+		public decimal? ATTEND_SCORE { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? EAR_DAY_CNT { get; set; }
+		public decimal? QUEUE_DETAIN_SCORE { get; set; }
 
 
 
 
 		[Column]
 
-		public int? NONSIGN_OUT_CNT { get; set; }
+		public decimal? HANDLE_ONTIME_SCORE { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? HOLLI_TYP1_CNT { get; set; }
+		public decimal? QUALITY_SCORE { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? HOLLI_TYP2_CNT { get; set; }
+		public decimal? EVAL_SATISFY_SCORE { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? HOLLI_TYP3_CNT { get; set; }
+		public decimal? COMPLAIN_SCORE { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? HOLLI_TYP4_CNT { get; set; }
+		public decimal? ENVIRON_SCORE { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? HOLLI_TYP5_CNT { get; set; }
+		public decimal? SYSTEM_SCORE { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? HOLLI_TYP6_CNT { get; set; }
+		public decimal? NORM_SCORE { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? HOLLI_TYP7_CNT { get; set; }
+		public decimal? PROFESS_SCORE { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? HOLLI_TYP8_CNT { get; set; }
+		public decimal? THIRD_SURVEY_SCORE { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? HOLLI_TYP9_CNT { get; set; }
+		public decimal? OTHER_SCORE { get; set; }
+
+
+
+	}
+
+    
+	[TableName("WARN_PARAM")]
+
+
+	[PrimaryKey("HALL_NO", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class WARN_PARAM  
+    {
+
+
+		[Column]
+		[Display(Name=@"服务大厅信息表SYS_HALL")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1：等候超时（超过最大办理时间％）
+   2：等候超时率（高于）
+   3：窗口饱和度（高于）
+   4：大厅饱和度（高于）
+   5：超时办结率（高于）
+   6：超时业务笔数（高于）
+   7：弃号率（高于）
+   8：差评笔数预警（高于）")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte WARN_TYP { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1: 黄色预警
+   2：橙色预警
+   3：红色预警
+   ")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte WARN_LEVEL { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string WARN_PARAM_NAM { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal CRITICAL_VALUE { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"@HALL_NAM:营业厅名称
+   @CRITICAL_VALUE:临界值
+   @REAL_VALUE:实际值
+   （具体开发的时候可以定义）
+   ")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string WARN_INFO_MODEL { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string MODIFY_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime MODIFY_DTIME { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"单位：分钟")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public int FRE_MIN { get; set; }
+
+
+
+	}
+
+    
+	[TableName("CHK_HALL_CHKITEM_CON")]
+
+
+	[PrimaryKey("HALL_CHKITEM_CD", autoIncrement=false)]
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class CHK_HALL_CHKITEM_CON  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_CHKITEM_CD { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_CHKITEM_NAM { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string MODIFY_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime MODIFY_DTIME { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:环境建设
+   2:制度建设
+   3:规范建设
+   4:行风建设
+   5:第三方调查
+   6:其他")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte CHKITEM_TYP { get; set; }
+
+
+
+	}
+
+    
+	[TableName("CHK_HALL_ITEM_MARK")]
+
+
+	[PrimaryKey("SEQ")]
+
+
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class CHK_HALL_ITEM_MARK  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int SEQ { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:环境建设
+   2:制度建设
+   3:规范建设
+   4:行风建设
+   5:第三方调查
+   6:其他")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte CHKITEM_TYP { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"服务大厅信息表SYS_HALL")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
 
 
 
 
 		[Column]
 
-		public decimal? HOLLI_TYP10_CNT { get; set; }
+		public string HALL_CHKITEM_CD { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public decimal DEDUCT { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"对应用户表SYS_USER的USER_ID")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string MODIFY_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime MODIFY_DTIME { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"手工输入")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string REASON { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"录入时的时间，系统生成")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime MARK_TIME { get; set; }
 
 
 
@@ -5325,7 +8480,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_QUEUESERIAL   
+    public partial class SYS_QUEUESERIAL  
     {
 
 
@@ -5380,12 +8535,214 @@ namespace gzsw.model
 	}
 
     
+	[TableName("WARN_COMPLAIN_DETAIL")]
+
+
+	[PrimaryKey("SEQ")]
+
+
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class WARN_COMPLAIN_DETAIL  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int SEQ { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联纳税人信息基础数据表SYS_NSRINFO")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string NSR_SBM { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"对应员工信息表SYS_STAFF的STAFF_ID")]
+
+
+		public string STAFF_ID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string COMPLAIN_PRO { get; set; }
+
+
+
+
+		[Column]
+
+		public string COMPLAIN_NAM { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime COMPLAIN_TIME { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1:未处理
+   2：已处理
+   3: 撤销")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte STATE { get; set; }
+
+
+
+
+		[Column]
+
+		public string HANDLE_USER { get; set; }
+
+
+
+
+		[Column]
+
+		public DateTime? HANDLE_TIME { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"投诉处理的时候手工输入")]
+
+
+		public string COMPLAIN_REASON { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"投诉处理的时候手工输入")]
+
+
+		public string COMPLAIN_METHOD { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string INPUT_USER { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime INPUT_TIME { get; set; }
+
+
+
+	}
+
+    
+	[TableName("WARN_PARAM_SEND_USER_CON")]
+
+
+	[PrimaryKey("SEQ")]
+
+
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class WARN_PARAM_SEND_USER_CON  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int SEQ { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"手机号码和用户登录名，不能全部为空，至少要配置一个或两个")]
+
+
+		public string MOB_NBR { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"手机号码和用户登录名，不能全部为空，至少要配置一个或两个")]
+
+
+		public string USER_ID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"服务大厅信息表SYS_HALL")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string HALL_NO { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1：等候超时
+   2：等候达标率
+   3：窗口饱和度
+   4：大厅饱和度
+   5：超时办结率
+   6：超时业务笔数
+   7：弃号率
+   8：差评预警")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte WARN_TYP { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"1: 黄色预警
+   2：橙色预警
+   3：红色预警
+   ")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte WARN_LEVEL { get; set; }
+
+
+
+	}
+
+    
 	[TableName("SYS_DLSERIAL")]
 
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_DLSERIAL   
+    public partial class SYS_DLSERIAL  
     {
 
 
@@ -5447,7 +8804,7 @@ namespace gzsw.model
 
 	[ExplicitColumns]
 	[Serializable]
-    public partial class SYS_DETAILSERIAL   
+    public partial class SYS_DETAILSERIAL  
     {
 
 
@@ -5544,6 +8901,83 @@ namespace gzsw.model
 		[Column]
 
 		public string SYS_BZ { get; set; }
+
+
+
+	}
+
+    
+	[TableName("CHK_STAFF_QUALITY_MARK")]
+
+
+	[PrimaryKey("SEQ")]
+
+
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class CHK_STAFF_QUALITY_MARK  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int SEQ { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"对应员工信息表SYS_STAFF的STAFF_ID")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string STAFF_ID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"关联明细事项业务定义表SYS_DETAILSERIAL 的SERIALID")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string SERIALID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"对应 考核质量差错类型定义表 CHK_QUALITY_CON的QUALITY_CD")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string QUALITY_CD { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int AMOUNT { get; set; }
+
+
+
+
+		[Column]
+
+		public DateTime? OCCUR_DT { get; set; }
+
+
+
+
+		[Column]
+
+		public string MODIFY_ID { get; set; }
+
+
+
+
+		[Column]
+
+		public DateTime? MODIFY_DTIME { get; set; }
 
 
 

@@ -1,0 +1,96 @@
+﻿@{
+    ViewBag.Title = "查看人员考勤明细";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.model.Enums
+@using gzsw.model.Subclasses
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model CHK_STAFF_APPLYDETAIL
+
+
+
+<table class="formTable" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="width: 160px;" class="tdLeft">员工名称:</td>
+        <td>
+            @Model.STAFF_NAM
+        </td>
+        <td class="tdLeft">申请时间:</td>
+        <td>
+            @Model.APPLY_TIME.ToString("yyyy-MM-dd HH:mm:ss")
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">请假开始时间:</td>
+        <td>
+            @Model.BEGIN_TIME.ToString("yyyy-MM-dd HH:mm:ss")
+        </td>
+        <td class="tdLeft">请假结束时间:</td>
+        <td>
+            @Model.END_TIME.ToString("yyyy-MM-dd HH:mm:ss")
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">假期类型:</td>
+        <td>
+            @(EnumHelper.ConvertToE<HOLLI_TYPE_ENUM>(Model.HOLLI_TYP.ToString()))
+        </td>
+        <td class="tdLeft">操作员工:</td>
+        <td>
+            @Model.APPLY_USR_NAM
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">状态:</td>
+        <td>
+            @(EnumHelper.ConvertToE<CHK_STAFF_APPLYDETAIL.APPLY_STATE_ENUM>(Model.APPLY_STATE.ToString()))
+        </td>
+        <td class="tdLeft"></td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">请假原因:</td>
+        <td colspan="3">
+            @Model.APPLY_REASON
+        </td>
+    </tr>
+</table>
+
+<div class="tablePanel">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:38px;">序号 </th>
+                <th>日期</th>
+                <th>上下午</th>
+                <th>假期类型</th>
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in ViewBag.Items)
+        {
+            <tr>
+                <td>
+                    @(i++)
+                </td>
+                <td>@item.APPLY_DATE.ToString("yyyy-MM-dd")</td>
+                <td>@(((ApplyAfternoonEnum)item.A_P_TYP).GetDescription())</td>
+                <td>@(EnumHelper.ConvertToE<HOLLI_TYPE_ENUM>(item.HOLLI_TYP.ToString()))</td>
+            </tr>
+        }
+    </table>
+    @if (ViewBag.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+</div>

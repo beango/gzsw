@@ -117,12 +117,12 @@ namespace gzsw.web
             try
             {
                 var objExp = HttpContext.Current.Server.GetLastError();
-                LogHelper.ErrorLog("全局异常：<br/><strong>客户机IP</strong>：" + Request.UserHostAddress + "<br /><strong>错误地址</strong>：" + Request.Url, objExp);
+                LogHelper.ErrorLog("全局异常：\r\n客户机IP：" + Request.UserHostAddress + "\r\n错误地址：" + Request.Url, objExp);
                 //Response.Redirect("/Home/Error");
             }
             catch (System.Exception ex)
             {
-                LogHelper.ErrorLog("全局未能记录的异常",ex);
+                LogHelper.ErrorLog("全局未能记录的异常", ex);
                 throw ex;
             }
         }
@@ -142,7 +142,7 @@ namespace gzsw.web
                 return null;
             }
         }
-        private List<UserOrgs> GetUserOrgsCache(string userid)
+        private List<SYS_ORGANIZE> GetUserOrgsCache(string userid)
         {
             try
             {
@@ -185,5 +185,6 @@ namespace gzsw.web
         {
             return _kernel.GetAll(serviceType);
         }
+
     }
 }

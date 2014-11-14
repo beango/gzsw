@@ -1,0 +1,167 @@
+﻿@using gzsw.web;
+@model PetaPoco.Page<dynamic>
+
+@{
+    ViewBag.Title = "业务差错明细";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:90px;">开始时间:</td>
+            <td style="width: 120px;">
+                <input type="text" name="txtBeginTime" id="txtBeginTime" value="@ViewBag.BeginTime" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
+            </td>
+            <td style="width:90px;">结束时间:</td>
+            <td style="width: 120px;">
+                <input type="text" name="txtEndTime" id="txtEndTime" value="@ViewBag.EndTime" o onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
+            </td>
+            <td style="width:90px;">
+                <div id="btnSearch"></div>
+            </td>
+            <td>
+                <span style="float: right;margin-right: 10px;">
+                    <input type="hidden" id="hidIsSenior" value="@ViewBag.IsSenior" />
+                    <a id="seniorSelect" href="javascript:void(0);">高级查询</a>
+                </span>
+            </td>
+        </tr>
+        <tr style="@(ViewBag.IsSenior != 0 ? "" : "display: none;") " d-tyle='senior'>
+            <td>质量类型编码:</td>
+            <td>
+                <input type="text" id="txtQualityId" value="@ViewBag.QualityId" />
+            </td>
+            <td>质量类型名称:</td>
+            <td>
+                <input type="text" id="txtQualityName" value="@ViewBag.QualityName" />
+            </td>
+            <td>明细业务名:</td>
+            <td>
+                <input type="text" id="txtSerialName" value="@ViewBag.SerialName" />
+            </td>
+        </tr>
+    </table>
+
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th>序号</th>
+                <th>
+                    质量类型编码
+                </th>
+                <th>
+                    质量类型名称
+                </th>
+                <th>
+                    明细业务名
+                </th>
+                <th>
+                    数量
+                </th>
+                <th>
+                    差错发生日期
+                </th>
+                <th>
+                    录入人
+                </th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@(string.Format("{0}-{1}", item.DATASOURCE, item.SEQ))" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @item.QUALITY_CD
+                </td>
+                <td>
+                    @item.QUALITY_NAM
+                </td>
+                <td>
+                    @item.SERIALNAME
+                </td>
+                <td>
+                    @item.AMOUNT
+                </td>
+                <td>
+                    @(item.OCCUR_DT == null ? string.Empty : item.OCCUR_DT.ToString("yyyy-MM-dd"))
+                </td>
+                <td>
+                    @item.OUSERNAME
+                </td>
+            </tr>
+        }
+
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+
+@section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    <script type="text/javascript">
+    $(function () {
+
+        // 查询
+        $("#btnSearch").ligerButton(
+                {
+                    text: " 查 询 ",
+                    click: function () {
+                        var begin = $("#txtBeginTime").val();
+                        var end = $("#txtEndTime").val();
+
+                        var url = "?beginTime=" + encodeURI(begin)
+                            + "&endTime=" + encodeURI(end)
+                            + "&qualityId=" + encodeURI($("#txtQualityId").val())
+                            + "&qualityName=" + encodeURI($("#txtQualityName").val())
+                            + "&serialName=" + encodeURI($("#txtSerialName").val())
+                            + "&isSenior=" + encodeURI($("#hidIsSenior").val());
+                        location.href = url.urlstamp();
+                    },
+                    icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+                    });
+
+            $("#seniorSelect").click(function() {
+                var isSenior = $("#hidIsSenior").val();
+                if (isSenior == 1) {
+                    $("#hidIsSenior").val(0);
+                    $("tr[d-tyle='senior']").hide();
+                } else {
+                    $("#hidIsSenior").val(1);
+                    $("tr[d-tyle='senior']").show();
+                }
+            });
+
+            // 顶部导航
+            var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+            @if (Html.ChkAuth("DETAIL_BUSINESS_MISTAKE_VIW"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "DETAIL_BUSINESS_MISTAKE_VIW", 650, 300));
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+        });
+    </script>
+}

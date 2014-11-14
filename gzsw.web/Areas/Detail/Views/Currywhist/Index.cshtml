@@ -1,0 +1,165 @@
+﻿@{
+    ViewBag.Title = "当月2次办理明细";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.model.Enums
+@using gzsw.model.Subclasses
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model PetaPoco.Page<dynamic>
+
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:90px;">服务厅：</td>
+            <td style="width:150px;">
+                @Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)
+            </td>
+            <td style="width:90px;">开始时间</td>
+            <td style="width: 120px;">
+                <input type="text" name="txtBeginTime" id="txtBeginTime" value="@ViewBag.BeginTime" onclick="WdatePicker({ dateFmt: 'yyyy-MM' })" />
+            </td>
+            <td style="width:80px;">结束时间</td>
+            <td style="width: 120px;">
+                <input type="text" name="txtEndTime" id="txtEndTime" value="@ViewBag.EndTime" o onclick="WdatePicker({ dateFmt: 'yyyy-MM' })" />
+            </td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+            <td>
+                <span style="float: right;margin-right: 10px;"><a id="seniorSelect" href="javascript:void(0);">高级查询</a></span>
+            </td>
+        </tr>
+        <tr style="@(ViewBag.IsSenior != 0 ? "" : "display: none;") " d-tyle='senior'>
+            <td>纳税人识别码:</td>
+            <td>
+                <input type="text" id="txtNsrsbm" value="@ViewBag.Nsrsbm" />
+            </td>
+
+            <td>纳税人名称:</td>
+            <td colspan="5">
+                <input type="text" id="txtNsrmc" value="@ViewBag.Nsrmc" />
+                <input type="hidden" id="hidIsSenior" value="@ViewBag.IsSenior" />
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:30px;">
+                    <input id="chkAll" name="chkAll" type="checkbox" />
+                </th>
+                <th style="width:38px;">序号 </th>
+                <th>月份</th>
+                <th>纳税人识别码</th>
+                <th>纳税人名称</th>
+                <th>总办理次数</th>
+                <th>最后一次办理时间</th>
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.YW_STIME_MO" d-nsrsbm="@item.YW_NSRSBM" d-orgid="@item.YW_SYSNO" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>@( ((int)(int.Parse(item.YW_STIME_MO))).ToYearsMonthString() ) </td>
+                <td>@item.YW_NSRSBM</td>
+                <td>@item.YW_NSRMC</td>
+                <td>@item.TOTAL</td>
+                <td>@item.LASTTIME.ToString("yyyy-MM-dd HH:mm:ss") </td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head
+{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+}
+
+<script type="text/javascript">
+    $(function () {
+        // 查询
+        $("#btnSearch").ligerButton(
+                {
+                    text: " 查 询 ",
+                    click: function () {
+                        var begin = $("#txtBeginTime").val();
+                        var end = $("#txtEndTime").val();
+                        begin.length > 0 && (begin = begin.replace("-", ""));
+                        end.length > 0 && (end = end.replace("-", ""));
+                        var url = "?orgId=" + encodeURI($("#ddlORGID").val())
+                            + "&beginMo=" + encodeURI(begin)
+                            + "&endMo=" + encodeURI(end)
+                            + "&nsrsbm=" + encodeURI($("#txtNsrsbm").val())
+                            + "&nsrmc=" + encodeURI($("#txtNsrmc").val())
+                            + "&isSenior=" + encodeURI($("#hidIsSenior").val());
+                        location.href = url.urlstamp();
+                    },
+                    icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+                });
+        $("#seniorSelect").click(function () {
+            var isSenior = $("#hidIsSenior").val();
+            if (isSenior == 1) {
+                $("#hidIsSenior").val(0);
+                $("tr[d-tyle='senior']").hide();
+            } else {
+                $("#hidIsSenior").val(1);
+                $("tr[d-tyle='senior']").show();
+            }
+        });
+        // 顶部导航
+        var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+        @if (Html.ChkAuth("Detail_CHK_STAFF_USU_ACT_MARK"))
+        {
+            @:ligerToolBar.addItem({
+                @:        text: '查看',
+                @:        click: function () {
+                @:            if ($(".tablelist").getSelCount() != 1) {
+                @:                gzsw.dialog.alert("请选择需要操作的单个选项!");return false;
+                @:            }
+                @:            var begin = $("table.tablelist").getSelValue(), end = begin;
+                @:            var orgid = $("table.tablelist").getSelAttr("d-orgid");    
+                @:            var nsrsbm = $("table.tablelist").getSelAttr("d-nsrsbm");
+                @:            var url = '@Url.Action("DetailList")?orgId=' + encodeURI(orgid) + "&nsrsbm=" + encodeURI(nsrsbm) + "&beginMo=" + encodeURI(begin) + "&endMo=" + encodeURI(end);
+                @:            gzsw.dialog.open({
+                @:                    title: '办理明细',
+                @:                    url: url.urlstamp(),
+                @:                    width: 800,
+                @:                    height: 550,
+                @:                    isReload: false
+                @:             });
+                @:        },
+                @:        icon: 'view'
+                    @:});
+        }
+
+
+    });
+</script>

@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "创建质量类型";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.web
+@model gzsw.model.CHK_QUALITY_CON
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="width:100px;" class="tdLeft">质量类型编码：</td>
+            <td style="width:150px;">@Html.EditorFor(model => model.QUALITY_CD)</td>
+            <td>@Html.ValidationMessageFor(model => model.QUALITY_CD)</td>
+        </tr>
+        <tr>
+            <td class="tdLeft">质量类型名称：</td>
+            <td>@Html.EditorFor(model => model.QUALITY_NAM)</td>
+            <td>@Html.ValidationMessageFor(model => model.QUALITY_NAM)</td>
+        </tr>
+        <tr>
+            <td class="tdLeft">每笔扣分：</td>
+            <td>@Html.EditorFor(model => model.DEDUCT)</td>
+            <td>@Html.ValidationMessageFor(model => model.DEDUCT)</td>
+        </tr> 
+        <tr>
+            <td class="tdLeft"> &nbsp;  </td>
+            <td>
+                <input type="submit" class="l-button" value="提交" />
+            </td>
+            <td> </td>
+        </tr>
+    </table>
+} 
+@section Head{
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+}

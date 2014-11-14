@@ -1,0 +1,131 @@
+﻿@{
+    ViewBag.Title = "日常行为表现";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.model.Enums
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model PetaPoco.Page<gzsw.model.CHK_STAFF_USU_ACT_MARK>
+
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:60px;">服务厅：</td>
+            <td style="width:150px;">@Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)</td>
+            <td style="width:90px;">行为类型：</td>
+            <td style="width:120px;">
+                @*<input type="text" name="txtStaffNo" id="txtStaffNo" value="@ViewBag.StaffNo" />*@
+                @Html.DropDownList("ddlType", EnumHelper.GetCategorySelectList(typeof(USUACTTYPEENUM)), new { @style = "width: 120px;" })
+            </td>
+            <td style="width: 90px;"> 员工名称：</td>
+            <td style="width:120px;">
+                <input type="text" name="txtStaffName" id="txtStaffName" value="@ViewBag.StaffName" />
+            </td>
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+
+        </tr>
+    </table>
+
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:30px;">
+                    <input id="chkAll" name="chkAll" type="checkbox" />
+                </th>
+                <th style="width:38px;">序号 </th>
+                <th>月份</th>
+                <th>员工编码</th>
+                <th>员工名称</th>
+                <th>行为类型</th>
+                <th>扣分</th>
+                <th style="width: 140px;">打分时间</th>
+                <th style="width: 250px;">原因</th>
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.SEQ" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>@item.STAT_MO.ToString().Insert(4, "年")月</td>
+                <td>@item.STAFF_ID</td>
+                <td>@item.STAFF_NAM</td>
+                <td>@(((USUACTTYPEENUM)item.USU_ACT_TYP).GetDescription())</td>
+                <td>@item.DEDUCT</td>
+                <td>@(item.MARK_TIME!=null?((DateTime)item.MARK_TIME).ToString("yyyy-MM-dd HH:mm:ss"):"")</td>
+                <td>
+                    @item.REASON
+                </td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        // 查询
+        $("#btnSearch").ligerButton(
+                {
+                    text: " 查 询 ",
+                    click: function() {
+                        var url = "?staffNo="
+                            + '&orgId=' + encodeURI($("#ddlORGID").val())
+                            + '&type=' + encodeURI($("#ddlType").val())
+                            + "&staffName=" + encodeURI($("#txtStaffName").val());
+                        location.href = url.urlstamp();
+                    },
+                    icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+                });
+
+            // 顶部导航
+            var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+            @if (Html.ChkAuth("CHK_STAFF_USU_ACT_MARK_VIW"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "CHK_STAFF_USU_ACT_MARK_VIW", 550, 320));
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+            @if (Html.ChkAuth("CHK_STAFF_USU_ACT_MARK_ADD"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIAddButton(Url.Action("Create"), "增加", "CHK_STAFF_USU_ACT_MARK_ADD", 600, 400));
+                @:ligerToolBar.addItem({ line: true });
+            }
+            
+            @if (Html.ChkAuth("CHK_STAFF_USU_ACT_MARK_EDT"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "CHK_STAFF_USU_ACT_MARK_EDT", 600, 400));
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+            @if (Html.ChkAuth("CHK_STAFF_USU_ACT_MARK_DEL"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIDeleteButton(Url.Action("Delete"), "删除", "CHK_STAFF_USU_ACT_MARK_DEL"));
+            }
+    });
+</script>

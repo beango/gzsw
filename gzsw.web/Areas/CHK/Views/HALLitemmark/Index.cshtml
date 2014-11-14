@@ -1,0 +1,144 @@
+﻿@using gzsw.model
+@using gzsw.util
+@using gzsw.web;
+@model PetaPoco.Page<dynamic>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:100px;">服务厅：</td>
+            <td style="width:170px;">
+                @Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)
+            </td> 
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+
+        </tr>
+    </table>
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th>序号</th>
+                <th>
+                    服务厅
+                </th>
+                <th>服务厅编码</th>
+                <th>
+                    服务厅考核指标
+                </th> 
+                <th>扣分</th>
+                <th>
+                    原因
+                </th> 
+                <th>
+                    打分时间
+                </th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.SEQ" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @item.HALL_NAM
+                </td>
+                <td>
+                    @item.HALL_NO
+
+                     </td>
+                  <td>
+                    @item.HALL_CHKITEM_NAM
+                  </td> 
+                <td>
+                    @item.DEDUCT
+                </td>
+                <td>
+                    @item.REASON
+
+                     </td>
+                  <td>
+                    @item.MARK_TIME
+                </td> 
+            </tr>
+        }
+
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    <script type="text/javascript">
+        $(function () {
+            // 注册事件
+            $("#btnSearch").ligerButton(
+                  {
+                      text: " 查 询 ",
+                      click: function () {
+                          var url = "?orgId=" + encodeURI($("#ddlORGID").val());
+                          location.href = url.urlstamp();
+                      },
+                      icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+                });
+
+
+             
+            // 顶部导航
+            var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+            @if (Html.ChkAuth("CHK_STAT_STAFF_SVRSTAT_M_VIW"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Detail"), "查看", "CHK_STAT_STAFF_SVRSTAT_M_VIW", 450, 400));
+                                        @:ligerToolBar.addItem({ line: true });
+                                    }
+            
+            @if (Html.ChkAuth("CHK_STAT_STAFF_SVRSTAT_M_ADD"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIAddButton(Url.Action("Create"), "增加", "CHK_STAT_STAFF_SVRSTAT_M_ADD", 600, 500,"orgId", "@:$('#ddlORGID').val()"));
+                                        @:ligerToolBar.addItem({ line: true });
+                                    } 
+            
+             @if (Html.ChkAuth("CHK_STAT_STAFF_SVRSTAT_M_EDT"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "CHK_STAT_STAFF_SVRSTAT_M_EDT", 600, 500));
+                                        @:ligerToolBar.addItem({ line: true });
+                        }
+            @if (Html.ChkAuth("CHK_STAT_STAFF_SVRSTAT_M_DEL"))
+            { 
+
+                @:ligerToolBar.addItem(@Html.LigerUIcancelButton(Url.Action("Delete"), "删除", "CHK_STAT_STAFF_SVRSTAT_M_DEL"));
+                               @:ligerToolBar.addItem({ line: true });
+                        }
+            
+            
+
+ 
+        });
+    </script>
+}

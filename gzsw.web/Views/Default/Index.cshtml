@@ -6,18 +6,17 @@
 @model IEnumerable<gzsw.model.SYS_MENU>
 @section Head{
     @Html.StyleSheet("cotide/css/main.css")
-    @Html.StyleSheet("cotide/css/bootstrap.min.css") 
+    @Html.StyleSheet("cotide/css/bootstrap.min.css")
     @Html.StyleSheet("cotide/css/rest.css")
     @Html.StyleSheet("lib/ligerUI/skins/Aqua/css/ligerui-all.css")
     @Html.StyleSheet("lib/ligerUI/skins/ligerui-icons.css")
-    @Html.JavaScript("lib/ligerUI/js/ligerui.all.js")
-
+    @Html.JavaScript("lib/ligerUI/js/ligerui.all.js") 
     <script type="text/javascript">
         // Tab初始化
         var tabItems = [];
         var tab = null;
 
-// 动态高度
+        // 动态高度
         function resize() {
             var height = $("#gzsw_LeftMenu").height();
             // 控制高度
@@ -32,13 +31,13 @@
             $("#middlePanel").css("height", height - 5);
             $("#middlePanel img").css("padding-top", (height / 2));
             $("#gzsw_LeftMenu").css("height", height - 13);
-            $(".gzsw_LeftMenu").css("min-height", height - 13);
+         /*   $(".gzsw_LeftMenu").css("min-height", height - 13);*/
             $("#treePanel").css("min-height", height - 45);
         }
 
-        $(function() {
+        $(function () {
             // 主菜单注册
-            $("#mainNavPanel").find("li").click(function() {
+            $("#mainNavPanel").find("li").click(function () {
                 $("#mainNavPanel").find("li").attr("class", "");
                 $(this).attr("class", "sel");
                 // 加载左菜单
@@ -46,13 +45,13 @@
                 layer.load('菜单中加载...');
                 $.ajax({
                     url: url.urlstamp(),
-                    success: function(result) {
+                    success: function (result) {
                         $("#gzsw_LeftMenu").html(result);
                         SetMiddlePanelState(true);
                         resize();
                         layer.closeAll();
                     },
-                    error: function() {
+                    error: function () {
                         gzsw.dialog.alert("加载菜单失败，请联系管理员!");
                         layer.closeAll();
                     }
@@ -64,11 +63,11 @@
             $("#framecenter").ligerTab({
                 showSwitchInTab: false,
                 showSwitch: true,
-                onAfterAddTabItem: function(tabdata) {
+                onAfterAddTabItem: function (tabdata) {
                     tabItems.push(tabdata);
                     /*  saveTabStatus();*/
                 },
-                onAfterRemoveTabItem: function(tabid) {
+                onAfterRemoveTabItem: function (tabid) {
                     for (var i = 0; i < tabItems.length; i++) {
                         var o = tabItems[i];
                         if (o.tabid == tabid) {
@@ -78,14 +77,14 @@
                         }
                     }
                 },
-                onReload: function(tabdata) {
+                onReload: function (tabdata) {
 
                 }
             });
             tab = liger.get("framecenter");
 
 
-            $(window).resize(function() {
+            $(window).resize(function () {
                 resize();
             });
             resize();
@@ -107,7 +106,7 @@
             }
 
             // 中间栏控制
-            $("#middlePanel img").click(function() {
+            $("#middlePanel img").click(function () {
                 if ($("#leftMenu").is(":hidden")) {
                     SetMiddlePanelState(true);
                 } else {
@@ -117,19 +116,50 @@
             SetMiddlePanelState(false);
 
             //修改密码
-            $("#btnChange").click(function() {
+            $("#btnChange").click(function () {
                 var url = $(this).attr("href");
 
                 gzsw.dialog.open({
-                    title:"修改密码",
+                    title: "修改密码",
                     url: url,
-                    width: 480,
-                    height: 250,
-                    isReload:false
+                    width: 380,
+                    height: 200,
+                    isReload: false
                 });
 
                 return false;
             });
+        });
+    </script>
+    <script type="text/javascript">
+        var sendinfo_detail_tips;
+        function warnLoadUnRead() {
+            $.ajax({
+                url: "@Url.Content("/Warn/WarnInfo/SendInfoTip")",
+                data: {},
+                success: function (res) {
+                    if (res == "")
+                    {
+                        if (sendinfo_detail_tips)
+                            sendinfo_detail_tips.hide();
+                        return;
+                    }
+                    if (!sendinfo_detail_tips) {
+                        sendinfo_detail_tips = $.ligerDialog.tip({
+                            title: '提示信息', content: res, height: 250,width:300
+                        });
+                    }
+                    else {
+                        var visabled = sendinfo_detail_tips.get('visible');
+                        if (!visabled) sendinfo_detail_tips.show();
+                        sendinfo_detail_tips.set('content', res);
+                    }
+                }
+            });
+            //setTimeout("warnLoadUnRead()", 1000);
+        }
+        $(function () {
+            warnLoadUnRead();
         });
     </script>
 }
@@ -148,7 +178,7 @@
             <div class="row gzsw_TopMenu">
                 <ul>
                     <li style=" padding-right: 40px; "><a href="@Url.Action("LogOff", "Account")">退出</a></li>
-                    <li><a id="btnChange" href="@Url.Action("Change","Account")" >修改密码</a> </li>
+                    <li><a id="btnChange" href="@Url.Action("Change","Account")">修改密码</a> </li>
                     <li> 欢迎您 <span style="color: #002780;font-weight:bold; "> [ @ViewBag.UserName ]</span></li>
                     <li>@DateTime.Now.ToString("yyyy年MM月dd日") @DateTime.Now.DayOfWeek.ToWeekString()   </li>
                 </ul>
@@ -171,8 +201,8 @@
     </div>
 </div>
 <!-- 左 -->
-<div id="leftMenu" class="sidebar-nav">
-    <div id="gzsw_LeftMenu" style="width:225px; /*background-color:#fff;*/">
+<div id="leftMenu" class="sidebar-nav" >
+    <div id="gzsw_LeftMenu" style="width: 225px; overflow-y: auto; /*background-color:#fff;*/">
         &nbsp;
     </div>
 </div>
@@ -190,5 +220,5 @@
     </div>
 </div>
 <div class="footer">
-    <p>  Copyright  广州艾科森信息技术有限公司  版权所有 </p>
+    <p>  ©2014  南昌县地方税务局  版权所有 </p>
 </div>

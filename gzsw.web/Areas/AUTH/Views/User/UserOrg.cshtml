@@ -44,10 +44,36 @@
     @Html.StyleSheet("lib/ztree/zTreeStyle.css")
     @Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
     @Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
-    @Html.JavaScript("lib/utility/ext.js")
 
     <script type="text/javascript">
 		<!--
+        function showIconForTree(treeId, treeNode) {
+            return !treeNode;
+        };
+
+        /* ztree树 */
+        var ztree_settings = {
+            check: {
+                enable: true,
+                nocheckInherit: false,
+                chkboxType: { "Y": "s", "N": "s" }
+            },
+            async: {
+                enable: false
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pId",
+                    rootPId: 0
+                }
+            },
+            view: {
+                showIcon: showIconForTree
+            }
+        };
+
 		var zNodes;
 		$(function () {
 		    $.ajax({
@@ -63,7 +89,7 @@
 		});
 
         $(document).ready(function () {
-            checkboxTreeYN2("#treeOrg", zNodes);
+            $.fn.zTree.init($("#treeOrg"), ztree_settings, zNodes);
         });
 		//-->
     </script>

@@ -1,0 +1,133 @@
+﻿@using gzsw.model
+@using gzsw.util
+@using gzsw.web;
+@model PetaPoco.Page<dynamic>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<!-- 查询菜单 -->
+
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th>序号</th>
+                <th>
+                    纳税人/企业编码
+                </th>
+                <th>
+                    纳税人/企业名称
+                </th>
+                <th>
+                    服务厅名称
+                </th>
+                <th>
+                    投诉问题描述
+                </th>
+                <th>
+                    投诉类型名
+                </th>
+                <th>
+                    投诉时间
+                </th>
+                <th>
+                    投诉状态
+                </th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@(item.SEQ)" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @item.NSR_SBM
+                </td>
+                <td>
+                    @item.NSR_NAME
+                </td>
+                <td>
+                    @item.HALL_NAM
+                </td>
+                <td>
+                    @item.COMPLAIN_PRO
+                </td>
+                <td>
+                    @item.COMPLAIN_NAM
+                </td>
+                <td>
+                    @item.COMPLAIN_TIME.ToString("yyyy-MM-dd")
+                </td>
+                <td>
+
+                    @(EnumHelper.ConvertToE<gzsw.model.ext.WARN_COMPLAIN_DETAIL.DETAIL_STATUS_ENUM>(item.STATE.ToString()))
+                </td>
+            </tr>
+        }
+
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    <script type="text/javascript">
+    $(function () {
+
+        // 顶部导航
+        // 顶部导航
+        var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+        @if (Html.ChkAuth("WARN_COMPLAIN_DETAIL_VIW"))
+            {
+                @*@:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Detail"), "查看", "WARN_COMPLAIN_DETAIL_VIW", 450, 400));*@
+                 <text>
+                    ligerToolBar.addItem({
+                        text: '查看',
+                        click: function () {
+                            if ($(".tablelist").getSelCount() != 1) {
+                                gzsw.dialog.alert("请选择需要操作的单个选项!"); return false;
+
+                            }
+                            var url = '@Url.Action("Detail")?id=' + $(".tablelist").getSelValue();
+                            gzsw.dialog.openFull({
+                                title:'查看',
+                                url: url.urlstamp(),
+                                width: 800,
+                                height: 450,
+                                isReload: false
+
+                            });
+
+                        },
+                        icon: 'archives'
+
+                    });
+                </text>
+
+                @:ligerToolBar.addItem({ line: true });
+                                            }
+
+
+    });
+    </script>
+}

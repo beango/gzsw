@@ -32,6 +32,6 @@ namespace gzsw.controller.MyAuth
         }
 
         [ScriptIgnore]    //在序列化的时候忽略该属性
-        public IIdentity Identity { get { throw new NotImplementedException(); } }
+        public IIdentity Identity { get { return null; } }
     }
 }

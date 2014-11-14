@@ -1,0 +1,142 @@
+﻿<!---- 监控预警内容信息 ---->
+@using gzsw.util.Extensions
+@model List<gzsw.model.dto.Virtual_Mon_Dto>
+
+<table class="tablelist">
+    <thead>
+        <tr>
+            <th colspan="9">管理情况</th>
+        </tr>
+        <tr>
+            <td>总窗口数</td>
+            <td>在线窗口数</td>
+            <td>开启率</td>
+            <td>正在办理业务窗口数</td>
+            <td>在办业务窗口比率</td>
+            <td>窗口突发情况与报警</td>
+            <td>投诉次数</td>
+            <td>当月二次办理人次</td>
+            <td>同城通办人次</td>
+        </tr>
+    </thead>
+    <tr>
+        <td><a href="javascript:void(0);" d-open="hall" d-type="0" >@ViewBag.Management.TotalNum</a></td>
+        <td><a href="javascript:void(0);" d-open="hall" d-type="1">@ViewBag.Management.OnlineNum</a></td>
+        <td>@ViewBag.Management.OpenRate.ToString("P")</td>
+        <td><a href="javascript:void(0);" d-open="hall" d-type="2">@ViewBag.Management.HandleNum</a></td>
+        <td>@ViewBag.Management.HandleRate.ToString("P")</td>
+        <td><a href="javascript:void(0);" d-open="Warnalarminfo">@ViewBag.Management.PoliceNum</a></td>
+        <td><a href="javascript:void(0);" d-open="Warncomplaindatail">@ViewBag.Management.ComplaintsNum</a></td>
+        <td><a href="javascript:void(0);" d-open="CurrywhistTwiceDeal">@ViewBag.Management.SecondaryHandleNum</a></td>
+        <td><a href="javascript:void(0);" d-open="CurrywhistSameCityDeal">@ViewBag.Management.CityNum</a></td>
+    </tr>
+</table>
+
+<table class="tablelist" style="margin-top: 20px;">
+    <thead>
+        <tr>
+            <th colspan="9">大厅排队情况</th>
+        </tr>
+        <tr>
+            <td>总出票数</td>
+            <td>正在等候人次</td>
+            <td>等候达标率</td>
+            <td>窗口饱和度</td>
+            <td>大厅饱和度</td>
+            <td>等候超时率</td>
+            <td>等候超时率预警</td>
+            <td>当前平均等候时间</td>
+        </tr>
+    </thead>
+    <tr>
+        <td><a href="javascript:void(0);" d-open="CurrqueuehistDealState" d-type="0">@ViewBag.QueuingSituation.Total</a></td>
+        <td><a href="javascript:void(0);" d-open="CurrqueuehistDealState" d-type="1">@ViewBag.QueuingSituation.WaitingNum</a></td>
+        <td>@ViewBag.QueuingSituation.WaitingRate.ToString("P")</td>
+        <td style="@PageHelper.SaturationColor(ViewBag.QueuingSituation.WindowPate)">
+            @(((gzsw.controller.MON.Models.SaturationEnum)ViewBag.QueuingSituation.WindowPate).GetDescription())
+        </td>
+        <td style="@PageHelper.SaturationColor(ViewBag.QueuingSituation.HallPate)">
+            @(((gzsw.controller.MON.Models.SaturationEnum)ViewBag.QueuingSituation.HallPate).GetDescription())
+        </td>
+        <td>
+            <a href="javascript:void(0);" d-open="TimeoutWait">
+                @ViewBag.QueuingSituation.WaitingTimeoutPate.ToString("P")
+            </a>
+        </td>
+        <td style="@PageHelper.AlarmColor(ViewBag.QueuingSituation.WaitingTimeout)">
+            @(((gzsw.controller.MON.Models.AlarmLevelEnum)ViewBag.QueuingSituation.WaitingTimeout).GetDescription())
+        </td>
+        <td>@(((int)ViewBag.QueuingSituation.AverageTime * 60).ToTimeString())</td>
+    </tr>
+</table>
+
+
+<table class="tablelist" style="margin-top: 20px;">
+    <thead>
+        <tr>
+            <th colspan="10">服务情况</th>
+        </tr>
+        <tr>
+            <td>已受理人次</td>
+            <td>已受理业务笔数</td>
+            <td>超时办结率</td>
+            <td>按时办结率</td>
+            <td>超时业务笔数预警</td>
+            <td>弃号数</td>
+            <td>弃号率</td>
+            <td>弃号预警</td>
+            <td>一票多业务号数</td>
+        </tr>
+    </thead>
+    <tr>
+        <td><a href="javascript:void(0);" d-open="CurrqueuehistDealState" d-type="2">@ViewBag.Service.AcceptedNum</a></td>
+        <td>
+            <a href="javascript:void(0);" d-open='OnService'>@ViewBag.Service.OnServiceNum</a>
+        </td>
+        <td>
+            <a href="javascript:void(0);" d-open='TimeoutDealFinsh'>@ViewBag.Service.TimeoutRate.ToString("P")</a>
+</td>
+        <td>
+            <a href="javascript:void(0);" d-open='OnTimeRate'>@ViewBag.Service.OnTimeRate.ToString("P")</a>
+        </td>
+        <td style="@PageHelper.AlarmColor(ViewBag.Service.TimeoutServiceWarning)">
+            @(((gzsw.controller.MON.Models.AlarmLevelEnum)ViewBag.Service.TimeoutServiceWarning).GetDescription())
+        </td>
+        <td><a href="javascript:void(0);" d-open="CurrqueuehistDealState" d-type="3">@ViewBag.Service.LeaveNum</a></td>
+        <td>@ViewBag.Service.LeaveRate.ToString("P")</td>
+        <td style="@PageHelper.AlarmColor(ViewBag.Service.LeaveWarning)">
+            @(((gzsw.controller.MON.Models.AlarmLevelEnum)ViewBag.Service.LeaveWarning).GetDescription())
+        </td>
+        <td>
+            <a href="javascript:void(0);"  d-open='oneMoreService'>@ViewBag.Service.OneMoreServiceNum</a>
+        </td>
+    </tr>
+</table>
+
+<table class="tablelist" style="margin-top: 20px;">
+    <thead>
+        <tr>
+            <th colspan="8">纳税人评价情况</th>
+        </tr>
+        <tr>
+            <td>评价总数</td>
+            <td>未评价总数</td>
+            <td>差评数</td>
+            <td>未评价率</td>
+            <td>满意率</td>
+            <td>差评率</td>
+            <td>差评预警</td>
+        </tr>
+    </thead>
+    <tr>
+        <td><a href="javascript:void(0);" d-open="CurrqueuehistEvaluation" d-type="1">@ViewBag.EvaluationSituation.Total</a></td>
+        <td><a href="javascript:void(0);" d-open="CurrqueuehistEvaluation" d-type="2">@ViewBag.EvaluationSituation.UnTotal</a></td>
+        <td><a href="javascript:void(0);" d-open="CurrqueuehistEvaluation" d-type="3">@ViewBag.EvaluationSituation.PoorNum</a></td>
+        <td><a href="javascript:void(0);" d-open="CurrqueuehistEvaluation" d-type="4">@ViewBag.EvaluationSituation.UnEvaluationRate.ToString("P")</a></td>
+        <td><a href="javascript:void(0);" d-open="CurrqueuehistEvaluation" d-type="5">@ViewBag.EvaluationSituation.SatisfactionRate.ToString("P")</a></td>
+        <td><a href="javascript:void(0);" d-open="CurrqueuehistEvaluation" d-type="6">@ViewBag.EvaluationSituation.BadRate.ToString("P")</a></td>
+        <td style="@PageHelper.AlarmColor(ViewBag.EvaluationSituation.BadWarning)">
+            @(((gzsw.controller.MON.Models.AlarmLevelEnum)ViewBag.EvaluationSituation.BadWarning).GetDescription())
+        </td>
+    </tr>
+</table>

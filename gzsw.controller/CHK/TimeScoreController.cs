@@ -25,8 +25,8 @@ namespace gzsw.controller.CHK
         [UserAuth("CHK_TIMESCORE_PARAM_VIW")]
         public ActionResult Index(string orgId, string orgName, int pageIndex = 1, int pageSize = 20)
         {
-            ViewBag.OrgId = orgId;
-            ViewBag.OrgName = orgName;
+
+            SetViewBagOrgData(orgId);
 
             var timescoreDal = new CHK_TIMESCORE_PARAM_DAL();
             var list = timescoreDal.GetPageList(orgId, UserState.UserID);
@@ -46,6 +46,7 @@ namespace gzsw.controller.CHK
         [UserAuth("CHK_TIMESCORE_PARAM_ADD")]
         public ActionResult Create()
         {
+            SetViewBagOrgData();
             return View();
         }
 
@@ -53,6 +54,7 @@ namespace gzsw.controller.CHK
         [HttpPost]
         public ActionResult Create(TimeScoreCreateModel model)
         {
+            SetViewBagOrgData(model.ORG_ID);
             if (ModelState.IsValid)
             {
                 try
@@ -61,15 +63,9 @@ namespace gzsw.controller.CHK
                     {
                         ORG_ID=model.ORG_ID,
                         A_BEGIN_TIME=model.A_BEGIN_TIME,
-                        ABS_SCORE = model.ABS_SCORE,
                         A_END_TIME = model.A_END_TIME,
                         EAR_LAST_MIN=model.EAR_LAST_MIN,
-                        EAR_SCORE=model.EAR_SCORE,
-                        ILL_SCORE=model.ILL_SCORE,
                         LAT_LAST_MIN=model.LAT_LAST_MIN,
-                        LAT_SCORE=model.LAT_SCORE,
-                        NEG_SCORE=model.NEG_SCORE,
-                        NONSIGN_SCORE=model.NONSIGN_SCORE,
                         P_BEGIN_TIME=model.P_BEGIN_TIME,
                         P_END_TIME=model.P_END_TIME
                     };
@@ -101,14 +97,8 @@ namespace gzsw.controller.CHK
                 {
                     A_BEGIN_TIME = param.A_BEGIN_TIME,
                     A_END_TIME=param.A_END_TIME,
-                    ABS_SCORE=param.ABS_SCORE,
                     EAR_LAST_MIN=param.EAR_LAST_MIN,
-                    EAR_SCORE=param.EAR_SCORE,
-                    ILL_SCORE=param.ILL_SCORE,
                     LAT_LAST_MIN=param.LAT_LAST_MIN,
-                    LAT_SCORE=param.LAT_SCORE,
-                    NEG_SCORE=param.NEG_SCORE,
-                    NONSIGN_SCORE=param.NONSIGN_SCORE,
                     ORG_ID=param.ORG_ID,
                     ORG_NAM=param.HALL_NAM,
                     P_BEGIN_TIME=param.P_BEGIN_TIME,
@@ -136,15 +126,9 @@ namespace gzsw.controller.CHK
                     {
                         ORG_ID = model.ORG_ID,
                         A_BEGIN_TIME = model.A_BEGIN_TIME,
-                        ABS_SCORE = model.ABS_SCORE,
                         A_END_TIME = model.A_END_TIME,
                         EAR_LAST_MIN = model.EAR_LAST_MIN,
-                        EAR_SCORE = model.EAR_SCORE,
-                        ILL_SCORE = model.ILL_SCORE,
                         LAT_LAST_MIN = model.LAT_LAST_MIN,
-                        LAT_SCORE = model.LAT_SCORE,
-                        NEG_SCORE = model.NEG_SCORE,
-                        NONSIGN_SCORE = model.NONSIGN_SCORE,
                         P_BEGIN_TIME = model.P_BEGIN_TIME,
                         P_END_TIME = model.P_END_TIME,
                         MODIFY_DTIME=DateTime.Now,
@@ -202,14 +186,8 @@ namespace gzsw.controller.CHK
                 {
                     A_BEGIN_TIME = param.A_BEGIN_TIME,
                     A_END_TIME = param.A_END_TIME,
-                    ABS_SCORE = param.ABS_SCORE,
                     EAR_LAST_MIN = param.EAR_LAST_MIN,
-                    EAR_SCORE = param.EAR_SCORE,
-                    ILL_SCORE = param.ILL_SCORE,
                     LAT_LAST_MIN = param.LAT_LAST_MIN,
-                    LAT_SCORE = param.LAT_SCORE,
-                    NEG_SCORE = param.NEG_SCORE,
-                    NONSIGN_SCORE = param.NONSIGN_SCORE,
                     ORG_ID = param.ORG_ID,
                     ORG_NAM = param.HALL_NAM,
                     P_BEGIN_TIME = param.P_BEGIN_TIME,

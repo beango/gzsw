@@ -94,6 +94,8 @@ namespace gzsw.controller.MyAuth
     /// </summary>
     public enum ActionEnum
     {
+        NON,
+
         /// <summary>
         /// 所有
         /// </summary>
@@ -113,8 +115,6 @@ namespace gzsw.controller.MyAuth
         /// <summary>
         /// 删除
         /// </summary>
-        DEL,
-
-        NON
+        DEL
     }
 }

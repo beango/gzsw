@@ -1,0 +1,164 @@
+﻿@using gzsw.model
+@using gzsw.web;
+@model PetaPoco.Page<dynamic>
+
+    @{
+    ViewBag.Title = "预警处置明细";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    }
+
+
+    <!-- 查询菜单 -->
+    <div class="l-panel-search">
+        <table class="tabSearchList">
+            <tr>
+                <td style="width:80px;">开始时间:</td>
+                <td style="width: 120px;">
+                    <input type="text" name="txtBeginTime" id="txtBeginTime" value="@ViewBag.BeginTime" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
+                </td>
+                <td style="width:80px;">结束时间:</td>
+                <td style="width: 120px;">
+                    <input type="text" name="txtEndTime" id="txtEndTime" value="@ViewBag.EndTime" o onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
+                </td>
+                <td style="width:80px;">
+                    <div id="btnSearch"></div>
+                </td>
+                <td>
+                    <span style="float: right;margin-right: 10px;">
+                        <input type="hidden" id="hidIsSenior" value="@ViewBag.IsSenior" />
+                        <a id="seniorSelect" href="javascript:void(0);">高级查询</a>
+                    </span>
+                </td>
+            </tr>
+            <tr style="@(ViewBag.IsSenior != 0 ? "" : "display: none;") " d-tyle='senior'>
+                <td>预警类型：</td>
+                <td>@Html.DropDownList("WARNTYPQ", @ViewBag.WARN_TYP_SELECTLIST as IEnumerable<SelectListItem>)</td>
+                <td>预警级别：</td>
+                <td>@Html.DropDownList("WARNLVLQ", @ViewBag.WARN_LVL_SELECTLIST as IEnumerable<SelectListItem>)</td>
+                <td> 组织机构：</td>
+                <td>@Html.DropDownList("ddlORGID", ViewBag.UserORG as SelectList, "--请选择--")</td>
+            </tr>
+        </table>
+
+    </div>
+    <div id="toptoolbar"></div>
+
+    <div class="tablePanel">
+        <table class="tablelist" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                    <th>序号</th>
+                    <th>
+                        预警类型
+                    </th>
+                    <th>
+                        预警级别
+                    </th>
+                    <th>
+                        预警值
+                    </th>
+                    <th>
+                        实际值
+                    </th>
+                    <th>
+                        处理人
+                    </th>
+                    <th>
+                        处理时间
+                    </th>
+                </tr>
+            </thead>
+            @{
+            var i = 1;
+            }
+            @foreach (var item in Model.Items)
+            {
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.WARN_INFO_DETAIL_ID" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @(((WARN_INFO_DETAIL.WARN_TYP_ENUM)item.WARN_TYP).ToString())
+                </td>
+                <td>
+                    @(((WARN_INFO_DETAIL.WARN_LVL_ENUM)item.WARN_LEVEL).ToString())
+                </td>
+                <td>
+                    @item.CRITICAL_VALUE
+                </td>
+                <td>
+                    @item.REAL_VALUE
+                </td>
+                <td>
+                    @item.HANDLE_USERNAME
+                </td>
+                <td>
+                    @item.HANDLE_TIME
+                </td>
+            </tr>
+            }
+
+        </table>
+        @if (Model.Items.Count < 1)
+        {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+        }
+        @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+    </div>
+
+
+    @section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    <script type="text/javascript">
+    $(function () {
+
+        // 查询
+        $("#btnSearch").ligerButton(
+                {
+                    text: " 查 询 ",
+                    click: function () {
+                        var begin = $("#txtBeginTime").val();
+                        var end = $("#txtEndTime").val();
+
+                        var url = "?beginTime=" + encodeURI(begin)
+                            + "&endTime=" + encodeURI(end)
+                            + "&warnType=" + encodeURI($("#WARNTYPQ").val())
+                            + "&warnLevel=" + encodeURI($("#WARNLVLQ").val())
+                            + "&orgId=" + encodeURI($("#ddlORGID").val())
+                            + "&isSenior=" + encodeURI($("#hidIsSenior").val());
+                        location.href = url.urlstamp();
+                    },
+                    icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+                });
+
+        $("#seniorSelect").click(function () {
+            var isSenior = $("#hidIsSenior").val();
+            if (isSenior == 1) {
+                $("#hidIsSenior").val(0);
+                $("tr[d-tyle='senior']").hide();
+            } else {
+                $("#hidIsSenior").val(1);
+                $("tr[d-tyle='senior']").show();
+            }
+        });
+
+        // 顶部导航
+        var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+        @if (Html.ChkAuth("DETAIL_WARN_DISPOSAL_VIW"))
+        {
+            @:ligerToolBar.addItem(@Html.AuthViewButton("DETAIL_WARN_DISPOSAL_VIW", "../WARN/WarnInfo/Details", "查看", 600, 400));
+            @:ligerToolBar.addItem({ line: true });
+            @:ligerToolBar.addItem(@Html.AuthViewButton("DETAIL_WARN_DISPOSAL_VIW", "../WARN/WarnInfo/SendDetails", "信息发送明细", 800, 400));
+            @:ligerToolBar.addItem({ line: true });
+        }
+
+    });
+    </script>
+    }

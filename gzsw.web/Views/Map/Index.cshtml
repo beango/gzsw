@@ -14,12 +14,10 @@
             -moz-opacity: 0.8; /*Firefox私有，透明度50%*/
             opacity: 0.8; /*其他，透明度50%*/
         }
-    </style>
-
+    </style> 
     <!--  图表插件 --> 
 @Html.JavaScript("lib/highcharts/js/highcharts.js")
-@Html.JavaScript("lib/highcharts/js/modules/exporting.src.js")
- 
+@Html.JavaScript("lib/highcharts/js/modules/exporting.src.js") 
     <script  type="text/javascript">
         $(function(){
             /* 初始化 */
@@ -65,8 +63,9 @@
             }
 
         
+            
         });
     </script> 
 } 
-<div style="border: #ccc 1px solid; text-align: center;cursor:pointer; background-color: #e5ff69; line-height: 28px; font-size: 14px; ">@ViewData["MapName"] - 监控分布地图</div>
+<div style="z-index:9999; width:100%;position : absolute; border: #ccc 1px solid; text-align: center;cursor:pointer; background-color: #e5ff69; line-height: 28px; font-size: 14px; ">@ViewData["MapName"] - 监控分布地图</div>
 <div id="map_canvas"></div> 

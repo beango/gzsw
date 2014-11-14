@@ -8,6 +8,7 @@ using gzsw.dal;
 using gzsw.dal.dao;
 using gzsw.model;
 using gzsw.web.Areas.SYS.Models;
+using gzsw.controller.MyAuth;
 
 namespace gzsw.controller.MON
 {
@@ -33,6 +34,7 @@ namespace gzsw.controller.MON
         /// <param name="orgId">组织结构ID</param>
         /// <param name="hallNo">服务厅编号</param>
         /// <returns></returns>
+         [UserAuth("MON_VirtualMonitor_VIW")]
         public ActionResult Index(string orgId, string hallNo)
         {
             var hall = new SYS_HALL();
@@ -53,6 +55,7 @@ namespace gzsw.controller.MON
             var monHallService = new MON_HALL_DAL();
             var tabDefs = monHallService.GetHallTabDefs(hallNo);
             var cameraDefs = monHallService.GetHallCameraDefs(hallNo);
+
             var tabList= tabDefs.Select(m => new HallTabConfig()
             {
                 HallNo = m.HALL_NO,
@@ -60,7 +63,8 @@ namespace gzsw.controller.MON
                 Id = m.COUNTER_ID,
                 Type = 1,
                 X = m.HORIZ_SIGN,
-                Y = m.VERTI_SIGN
+                Y = m.VERTI_SIGN,
+                CameraConfig = getCameraConfig(cameraDefs, m.COUNTER_ID)
             }).ToList();
 
             var cameraList = cameraDefs.Where(m=>!m.MON_SHOW_IND).Select(m => new HallCameraConfig()
@@ -99,6 +103,20 @@ namespace gzsw.controller.MON
             return View(virtualHall);
         }
 
+        private HallCameraConfig getCameraConfig(List<MON_HALL_CAMERA_DEF> cameraDefs, int counterId)
+        {
+            var camera = cameraDefs.FirstOrDefault(c => c.MON_COUNTER!=null && c.MON_COUNTER.Split('|').Contains(counterId.ToString()));
+            if (camera == null)
+            {
+                return null;
+            }
+            return new HallCameraConfig()
+                   {
+                       Id=camera.SEQ,
+                       CameraType=camera.CAMERA_TYP
+                   };
+        }
+
         /// <summary>
         /// 用户信息
         /// </summary>
@@ -106,6 +124,7 @@ namespace gzsw.controller.MON
         /// <param name="hallNo">服务厅编号</param>
         /// <param name="counterId">窗口Id</param>
         /// <returns></returns>
+        [UserAuth("MON_VirtualMonitor_VIW")]
         public ActionResult TabPanel(string staffId, string hallNo, string counterId)
         {
             var staff = StaffDao.GetEntity("STAFF_ID", staffId);
@@ -159,6 +178,77 @@ namespace gzsw.controller.MON
         {
             var item = hallCameraDefDao.GetEntity("SEQ", seq);
             return View(item);
+        }
+
+        /// <summary>
+        /// 播放视频 通过窗口ID
+        /// </summary>
+        /// <param name="hallNo">服务厅</param>
+        /// <param name="counterId">窗口</param>
+        /// <returns></returns>
+        public ActionResult CounterPlayVideo(string hallNo,int counterId)
+        {
+            var listCamera = hallCameraDefDao.FindList("SEQ", "HALL_NO", hallNo);
+            var camera = listCamera.FirstOrDefault(m => m.MON_COUNTER != null && m.MON_COUNTER.Split('|').Contains(counterId.ToString()));
+
+            return View("PlayVideo",camera);
+        }
+
+        /// <summary>
+        /// 获取窗口的视频信息
+        /// </summary>
+        /// <param name="hallNo"></param>
+        /// <param name="counterId"></param>
+        /// <returns></returns>
+        public ActionResult GetCounterCamera(string hallNo, int counterId)
+        {
+            var listCamera = hallCameraDefDao.FindList("SEQ", "HALL_NO", hallNo);
+            var camera = listCamera.FirstOrDefault(m => m.MON_COUNTER != null && m.MON_COUNTER.Split('|').Contains(counterId.ToString()));
+            return Json(camera, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 回放
+        /// </summary>
+        /// <param name="hallNo">服务厅</param>
+        /// <param name="counterId">ID</param>
+        /// <param name="beginTime">开始时间</param>
+        /// <param name="endTime">结束时间</param>
+        /// <returns></returns>
+        public ActionResult PlayBack(string hallNo, int? counterId, DateTime? beginTime, DateTime? endTime)
+        {
+            var listCamera = hallCameraDefDao.FindList("SEQ", "HALL_NO", hallNo).ToList();
+
+            if (beginTime == null)
+            {
+                beginTime = DateTime.Now.Date;
+            }
+            if (endTime == null)
+            {
+                endTime = DateTime.Now.Date.AddDays(1).AddSeconds(-1);
+            }
+
+            ViewBag.Seq = 0;
+            if (counterId != null)
+            {
+                var camera = listCamera.FirstOrDefault(m => m.MON_COUNTER != null && m.MON_COUNTER.Split('|').Contains(counterId.ToString()));
+                if (camera != null)
+                {
+                    ViewBag.Seq = camera.SEQ;
+                }
+            }
+
+            ViewBag.BeginTime = beginTime;
+            ViewBag.EndTime = endTime;
+
+            return View(listCamera);
+        }
+
+        public ActionResult GetCameraInfo(int seq)
+        {
+            var camera = hallCameraDefDao.GetEntity("SEQ", seq);
+
+            return Json(camera, JsonRequestBehavior.AllowGet);
         }
     }
 }

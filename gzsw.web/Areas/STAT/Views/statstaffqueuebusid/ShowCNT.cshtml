@@ -1,0 +1,40 @@
+﻿@using gzsw.util
+@using gzsw.web
+@{
+    ViewBag.Title = "排队业务分析";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@section Head{
+    <!-- 图表排序脚本 -->
+    @Html.JavaScript("lib/fusionchart/FusionCharts.js")
+    <script type="text/javascript">
+        $(function () {
+            $("#navtab1").ligerTab();
+        });
+        function showsingDialog(serid, title) {
+            var url = "/STAT/StatStaffQueue/ShowSingDialog?serid=" + serid;
+            url += "&beginTime=@Request["btime"]&endTime=@Request["etime"]&orgid=@Request["orgid"]";
+            gzsw.dialog.open({
+                url: url,
+                title: title,
+                width: 600,
+                height: 550
+            });
+            return false;
+        }
+    </script>
+}
+
+<div id="navtab1" style="overflow:hidden; ">
+    <div tabid="home" title="柱状图" lselected="true">
+       
+        @Html.Raw(ViewBag.ChartColumn3DXML)
+    </div>
+    <div title="曲线图">
+        @Html.Raw(ViewBag.ChartSplineXML)
+    </div>
+    <div title="饼图">
+        @Html.Raw(ViewBag.ChartPie3DXML)
+    </div>
+</div>

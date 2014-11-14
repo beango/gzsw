@@ -17,8 +17,8 @@
                 <input type="button" id="stopRealPlay" class="stopRealPlay" />
             </div>
             <div class="sound">
-                <input type="button" id="openSound" class="openSound" />
-                <input type="button" id="closeSound" class="closeSound hid" />
+                <input type="button" id="openSound" class="openSound hid" />
+                <input type="button" id="closeSound" class="closeSound " />
                 
                 <span class="Verticalslider" id="sliderSound">
                     <div class="Vertical-slider-range" id="divSliderSoundRange" style="width: 100%;">
@@ -122,6 +122,7 @@
 <script type="text/javascript">
     $(function () {
         var playVideo = function () {
+            var _Sound = 50;
 
             var _init = function() {
                 var bZeroChannel = false;
@@ -130,7 +131,7 @@
                         @:bZeroChannel = true;
                     }
 
-                video.init();
+                video.init({ downloadUrl:'@Url.Content("~/Content/lib/WebComponents.zip")' });
                 video.login({
                     szIP: $("#IP_ADDRESS").val(),
                     iPrototocol: $("#HTTP_PROTOCOL").val(),
@@ -138,13 +139,14 @@
                     szUserName: $("#USER_NAME").val(),
                     szPassword: $("#USER_PASSWORD").val()
                 });
-
+                video.closeSound();
                 video.startRealPlay({
                     iWndIndex: 0,
                     iStreamType: Number($("#STRING_TYP").val()),
                     iChannelID: Number($("#CHANNEL_ID").val()),
                     bZeroChannel: bZeroChannel
                 });
+                video.closeSound();
 
                 //恢复播放
                 $("#startRealPlay").click(function() {
@@ -170,12 +172,20 @@
                     $(this).hide();
                     $("#closeSound").show();
                     video.openSound();
+
+                    $("#sliderSound").slider({ value: 0 });
+                    $("#divSliderSoundRange").css("width",  "0%");
+                    video.setVolume(0);
                 });
                 //关声音
                 $("#closeSound").click(function() {
                     $(this).hide();
                     $("#openSound").show();
                     video.closeSound();
+
+                    $("#sliderSound").slider({ value: _Sound });
+                    $("#divSliderSoundRange").css("width", _Sound+"%");
+                    video.setVolume(_Sound);
                 });
                 //全屏
                 $("#fullScreen").click(function() {
@@ -306,13 +316,25 @@
             };
 
             var _setVolume = function () {
-
+                $("#divSliderSoundRange").css("width", "0%");
                 $("#sliderSound").slider({
-                    value: 100,
+                    value: 0,
                     min: 0,
                     max: 100,
                     slide: function (event, ui) {
                         $("#divSliderSoundRange").css("width", ui.value + "%");
+                        var index = Number(ui.value);
+                        _Sound = index;
+                        if (index == 0) {
+                            _Sound = 50;
+                            $("#closeSound").show();
+                            $("#openSound").hide();
+                            video.closeSound();
+                        } else {
+                            $("#closeSound").hide();
+                            $("#openSound").show();
+                            video.openSound();
+                        }
                         video.setVolume(Number(ui.value));
                     }
                 });

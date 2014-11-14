@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "个人考核评定-评价分";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.model.Enums
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model PetaPoco.Page<gzsw.model.Subclasses.STAT_STAFF_EVALSTAT_M_SUB>
+
+
+<!-- 查询菜单 -->
+
+<div class="tablePanel" style="margin-top: 5px;">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:38px;">序号 </th>
+                <th>员工名称</th>
+                <th>月份</th>
+                <th>评价很满意量</th>
+                <th>评价满意量</th>
+                <th>评价一般量</th>
+                <th>评价不满意量</th>
+                <th>未评价量</th>
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    @(i++)
+                </td>
+                <td>@item.STAFF_NAM</td>
+                <td>@item.STAT_MO.ToYearsMonthString()</td>
+                <td>@item.COR_VERY_SATISFY_CNT</td>
+                <td>@item.COR_SATISFY_CNT</td>
+                <td>@item.COR_COMMON_CNT</td>
+                <td>@item.COR_UNSATISFY_CNT</td>
+                <td>@item.COR_NON_EVAL_CNT</td>
+            </tr>
+        }
+    @if (Model.Items.Count > 0)
+    {
+        <tr class="total">
+            <td>合计</td>
+            <td></td>
+            <td></td>
+            <td>@ViewBag.Total.VERY_SATISFY_CNT_TOTAL</td>
+            <td>@ViewBag.Total.SATISFY_CNT_TOTAL</td>
+            <td>@ViewBag.Total.COMMON_CNT_TOTAL</td>
+            <td>@ViewBag.Total.UNSATISFY_CNT_TOTAL</td>
+            <td>@ViewBag.Total.NON_EVAL_CNT_TOTAL</td>
+        </tr>
+    }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+

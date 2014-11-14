@@ -58,7 +58,7 @@
                 备注：
             </td>
             <td>
-                @Html.EditorFor(model => model.NOTE)
+                @Html.TextAreaFor(model => model.NOTE, new { @style = "height:50px;width:300px;" })
                 @Html.HiddenFor(model => model.CREATE_ID)
                 @Html.HiddenFor(model => model.CREATE_DTIME)
                 @Html.ValidationMessageFor(model => model.NOTE)

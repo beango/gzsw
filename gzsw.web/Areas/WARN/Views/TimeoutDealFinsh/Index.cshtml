@@ -1,0 +1,129 @@
+﻿@using gzsw.util.Extensions
+@using gzsw.web
+@model PetaPoco.Page<dynamic>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+
+</div>
+<div id="toptoolbar"></div>
+
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th>序号</th>
+                <th>
+                    服务厅
+                </th>
+                <th>
+                    窗口
+                </th>
+                <th>
+                    排队号码
+                </th>
+                <th>
+                    明细业务
+                </th>
+                <th>
+                    纳税人识别码
+                </th>
+                <th>
+                    纳税人名称
+                </th>
+                <th>
+                    受理总时长
+                </th>
+                <th>
+                    是否超时
+                </th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@(item.TRANSCODEID)" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @item.HALLNAME
+                </td>
+                <td>
+                    @item.COUNTER
+                </td>
+                <td>
+                    @item.NUMBER
+                </td>
+                <td>
+                    @item.SERIALNAME
+                </td>
+                <td>
+                    @item.NSRSBM
+                </td>
+                <td>
+                    @item.NSRMC
+                </td>
+                <td>
+                    @(((int)item.BLTIME).ToTimeString())
+                </td>
+                <td>
+                    @Html.Raw(item.IsOvertime == 1 ? "<span style='color:red'>是</span>" : "否")
+                </td>
+            </tr>
+        }
+
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+
+@section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    <script type="text/javascript">
+    $(function () {
+
+        // 顶部导航
+        var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+        @if (Html.ChkAuth(""))
+            {
+                @*@:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "VIEW", 750, 300));*@
+                @:ligerToolBar.addItem({
+                @:        text: '查看',
+                @:        click: function () {
+                @:            if ($(".tablelist").getSelCount() != 1) {
+                @:                gzsw.dialog.alert("请选择需要操作的单个选项!");return false;
+                @:            }
+                @:            var url = '@Url.Action("Details")?id=' + $(".tablelist").getSelValue();
+                @:            gzsw.dialog.openFull({
+                @:                    url: url.urlstamp(),
+                @:                    width: 800,
+                @:                    height: 450,
+                @:                    isReload: false
+                @:             });
+                @:        },
+                @:        icon: 'archives'
+                    @:});
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+    });
+    </script>
+}

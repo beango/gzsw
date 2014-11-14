@@ -1,0 +1,82 @@
+﻿@{
+    ViewBag.Title = "日常行为表现";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.model.Enums
+@using gzsw.model.Subclasses
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model PetaPoco.Page<dynamic>
+
+<!-- 查询菜单 -->
+
+
+<div class="tablePanel" style="margin-top: 5px;">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:38px;">序号 </th>
+                <th>纳税人识别码</th>
+                <th>纳税人名称</th>
+                <th>业务大类名</th>
+                <th>明细业务名</th>
+                <th>受理员工名</th>
+                <th>受理时长</th>
+                <th>办理时间</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @item.YW_NSRSBM
+                </td>
+                <td>@item.YW_NSRMC</td>
+                <td>@item.DLS_SERIALNAME</td>
+                <td>@item.SERIALNAME </td>
+                <td>@item.STAFF_NAM </td>
+                <td>@(((int)item.YW_BLTIME).ToTimeString()) </td>
+                <td>@item.YW_STIME.ToString("yyyy-MM-dd HH:mm:ss") </td>
+                <td>
+                    <a href="javascript:void(0);" d-type='detail' code='@item.YW_TRANSCODEID'>查看</a>
+
+                </td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+<script type="text/javascript">
+    $(function() {
+        $("a[d-type='detail']").click(function () {
+            var url = '@Url.Action("Detail", "HistroyAccountDetail")';
+            url += "?id=" + $(this).attr("code");
+            parent.gzsw.dialog.open({
+                title: "业务明细",
+                url: url.urlstamp(),
+                width: 800,
+                height: 500,
+                isReload:false
+            });
+
+            return false;
+        });
+    });
+</script>

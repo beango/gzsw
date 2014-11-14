@@ -1,0 +1,123 @@
+﻿@using gzsw.web
+@model gzsw.model.WARN_COMPLAIN_DETAIL
+@{
+    ViewBag.Title = "修改窗口值班";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+    
+        
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="width:200px;" class="tdLeft">
+                纳税人身份证/企业识别码：
+            </td>
+            <td>
+                @Model.NSR_SBM
+            </td>
+        </tr>
+
+        <tr>
+            <td class="tdLeft">
+                投诉所属服务厅：
+            </td><td>
+                     @ViewBag.HallName 
+                 </td>
+        </tr>
+     
+        <tr>
+            <td class="tdLeft">
+                投诉员工：
+            </td><td>
+                     @ViewBag.StaffName 
+                 </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">
+                投诉问题描述：
+            </td><td>
+                     @Model.COMPLAIN_PRO
+                 </td>
+        </tr>
+
+        <tr>
+            <td class="tdLeft">
+                投诉类型名称：
+            </td><td>
+                     @Model.COMPLAIN_NAM
+
+                 </td>
+        </tr>
+
+        <tr>
+            <td class="tdLeft">
+                投诉时间：
+            </td><td>
+                     @Model.COMPLAIN_TIME</td>
+        </tr>
+      
+        <tr>
+            <td class="tdLeft">
+                处理时间：
+            </td><td>
+                     @Model.HANDLE_TIME</td>
+        </tr> 
+     
+        <tr>
+            <td class="tdLeft">
+                投诉处理：
+            </td><td>
+                     @Model.COMPLAIN_METHOD</td>
+        </tr>
+        <tr>
+            <td class="tdLeft">
+                录入人：
+            </td><td>
+                     @Model.INPUT_USER</td>
+        </tr>
+        <tr>
+            <td class="tdLeft">
+                录入时间：
+            </td><td>
+                     @Model.INPUT_TIME</td>
+        </tr>
+        
+       
+           <tr>
+            <td class="tdLeft">
+                投诉原因：
+            </td><td> 
+                   @Html.TextAreaFor(m => m.COMPLAIN_REASON, new { @style = "width: 250px;" })
+                     @Html.ValidationMessageFor(m => m.COMPLAIN_REASON)
+
+                 </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">
+                投诉处理：
+            </td><td> 
+                     @Html.TextAreaFor(m => m.COMPLAIN_METHOD, new { @style = "width: 250px;" })
+                     @Html.ValidationMessageFor(m => m.COMPLAIN_METHOD)
+                 </td>
+        </tr>
+    </table>
+    @Html.Hidden("INPUT_USER", Model.INPUT_USER);
+    @Html.Hidden("INPUT_TIME", Model.INPUT_TIME);
+     @Html.Hidden("SEQ", Model.SEQ); 
+    <div style="text-align: center;margin-top: 20px;">
+            <input type="submit" class="l-button" value="提交" />
+        </div>
+}
+
+
+@section Head{
+    @Html.JavaScript("lib/jqueryform/jquery.form.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+
+}

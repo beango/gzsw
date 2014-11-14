@@ -1,0 +1,50 @@
+﻿@using gzsw.web
+@model gzsw.model.WARN_PARAM_SEND_USER_CON
+@{
+    ViewBag.Title = "ParamSendusr";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <input type="hidden" name="HALL_NO" id="HALL_NO" value="@Request.QueryString["hallno"]" />
+    <input type="hidden" name="WARN_TYP" id="WARN_TYP" value="@Request.QueryString["id"]" />
+    <input type="hidden" name="WARN_LEVEL" id="WARN_LEVEL" value="1" />
+    <input type="hidden" name="MOB_NBR" id="MOB_NBR" value="1" />
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td></td>
+            <td>
+                <input type="checkbox" onclick="$('input[name=USER_ID]').attr('checked', $(this).attr('checked') == 'checked')" />全选
+                @Html.CheckBoxList("USER_ID", @ViewBag.USERLIST as IEnumerable<SelectListItem>, (ViewBag.USERSELELIST as IEnumerable<string>).ToArray())
+            </td>
+        </tr>
+        <tr><td></td>
+            <td>
+                <input type="submit" class="l-button" value="提交" />
+            </td>
+        </tr>
+    </table>
+    <div style="margin-top:5px;">
+
+    </div>
+}
+
+@section Head{
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+    <style type="text/css">
+        .tablelist textarea {
+            width: 200px;
+            height: 34px;
+        }
+
+        .tablelist input[type="text"], input[type="number"] {
+            width: 55px;
+        }
+    </style>
+}
+
+

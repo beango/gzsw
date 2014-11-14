@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using gzsw.model;
+using gzsw.model.dto;
 using PetaPoco;
 
 namespace gzsw.dal.dao
@@ -19,7 +20,7 @@ namespace gzsw.dal.dao
         /// <returns></returns>
         public List<CLI_COUNTERSTATE> GetListByHallNo(string hallNo)
         {
-            var db= new Database();
+            var db = gzswDB.GetInstance();
 
             var sql = Sql.Builder.Append(@"SELECT CC.[HALL_NO]
                                               ,CC.[COUNTER_ID]
@@ -52,7 +53,7 @@ namespace gzsw.dal.dao
         /// <param name="counterId">窗口ID</param>
         public int GetTabNumber(string hallNo, string counterId)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
             var sql = Sql.Builder.Append(@"SELECT dbo.CounterQueueWaitPersons(HALL_NO,COUNTER_ID) AS Number
                                         FROM  CLI_COUNTERSTATE 
                                         WHERE HALL_NO=@0 AND COUNTER_ID=@1 ",
@@ -67,7 +68,7 @@ namespace gzsw.dal.dao
         /// <returns></returns>
         public List<HallBusinessNum> GetOrganizeNumber(string hallNo)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
             var sql = Sql.Builder.Append(@"SELECT COUNT(*) AS NUMBER,QL.Q_SERIALNAME 
                                         FROM SYS_QUEUEING AS Q
                                         JOIN SYS_QUEUESERIAL AS QL 
@@ -75,6 +76,35 @@ namespace gzsw.dal.dao
                                         WHERE Q.QUEUE_SYSNO=@0
                                         GROUP BY QL.Q_SERIALNAME ", hallNo);
             return db.Fetch<HallBusinessNum>(sql);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="hallNo"></param>
+        /// <returns></returns>
+        public static List<CounterDto> GetCounterList(string hallNo)
+        {
+            var db = gzswDB.GetInstance();
+            var sql = Sql.Builder.Append(@"SELECT C.[HALL_NO]
+                                          ,C.[COUNTER_ID]
+                                          ,C.[STATE] AS COUNTER_STATE
+                                          ,CL.LOGIN_STATE
+                                          ,CL.[STATE] 
+                                          ,ST.STAFF_NAM
+                                          ,CL.LST_QUEUE_NUMBER
+                                          ,CL.LST_NSR_SBM
+                                          ,CL.SERIALNAME
+                                          ,CL.Q_SERIALNAME
+                                      FROM [SYS_COUNTER] AS C
+                                      LEFT JOIN CLI_COUNTERSTATE AS CL
+                                      ON C.COUNTER_ID=CL.COUNTER_ID
+                                      LEFT JOIN SYS_STAFF AS ST
+                                      ON CL.STAFF_ID=ST.STAFF_ID
+                                      WHERE 1=1     ");
+            sql.Append(@" AND C.HALL_NO = @0", hallNo);
+
+            return db.Fetch<CounterDto>(sql);
         }
     }
 }

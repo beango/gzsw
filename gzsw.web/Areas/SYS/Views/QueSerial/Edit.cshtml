@@ -35,7 +35,7 @@
                 <td class="tdLeft">
                     备注：
                 </td>
-                <td>@Html.EditorFor(model => model.SYS_BZ)</td>
+                <td>@Html.TextAreaFor(model => model.SYS_BZ, new { @style = "height:50px;width:300px;" })</td>
                 <td>
                     @Html.ValidationMessageFor(model => model.SYS_BZ)
                 </td>

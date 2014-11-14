@@ -1,0 +1,124 @@
+﻿@using gzsw.web
+@{
+    ViewBag.Title = "个人考核考勤扣分设置";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@model PetaPoco.Page<gzsw.model.Subclasses.CHK_STAFF_ATTEND_DEDUCT_CON_SUB>
+
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:100px;">组织机构：</td>
+            <td style="width:170px;">@Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList, "--请选择--")</td>
+
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+
+        </tr>
+    </table>
+
+</div>
+<div id="toptoolbar"></div>
+
+
+
+<div class="tablePanel">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:30px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th style="width:38px;">序号 </th>
+                <th>组织机构编号</th>
+                <th>组织机构名称</th>
+                <th>早退扣分</th>
+                <th>旷工扣分</th>
+                <th>迟到扣分</th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.ORG_ID" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @item.ORG_ID
+                </td>
+                <td>
+                    @item.ORG_NAM
+                </td>
+                <td>
+                    @item.EAR_SCORE
+                </td>
+                <td>
+                    @item.NEG_SCORE
+                </td>
+                <td>
+                    @item.LAT_SCORE
+                </td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head{
+    <script lang="javascript">
+
+        $(function() {
+            // 查询
+            $("#btnSearch").ligerButton(
+            {
+                text: " 查 询 ",
+                click: function() {
+                    var url = "?orgId=" + encodeURI($("#ddlORGID").val());
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+
+            // 顶部导航
+            var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+            @if (Html.ChkAuth("CHK_STAFF_ATTEND_DEDUCT_CON_VIW"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "CHK_STAFF_ATTEND_DEDUCT_CON_VIW", 450, 400));
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+            @if (Html.ChkAuth("CHK_STAFF_ATTEND_DEDUCT_CON_ADD"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIAddButton(Url.Action("Create"), "增加", "CHK_STAFF_ATTEND_DEDUCT_CON_ADD", 600, 400));
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+            @if (Html.ChkAuth("CHK_STAFF_ATTEND_DEDUCT_CON_EDT"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "CHK_STAFF_ATTEND_DEDUCT_CON_EDT", 600, 400));
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+
+            @if (Html.ChkAuth("CHK_STAFF_ATTEND_DEDUCT_CON_DEL"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIDeleteButton(Url.Action("Delete"), "删除", "CHK_STAFF_ATTEND_DEDUCT_CON_DEL"));
+            }
+
+
+        });
+    </script>
+}

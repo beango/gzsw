@@ -1,0 +1,210 @@
+﻿@using gzsw.web
+@model gzsw.controller.CHK.Models.CHK_HALL_STAR_SYSTEM_CON_Model
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="width:100px;" class="tdLeft">
+                星级：
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.STAR_LEVEL)
+                
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.STAR_LEVEL) 
+            </td>
+            
+        </tr>   
+         <tr>
+            <td style="width:100px;" class="tdLeft">
+                人员出勤率：
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.ATTEND_SCORE)  
+                <span>高于</span>
+                
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.ATTEND_SCORE)  
+            </td>
+            
+         </tr>   
+        <tr>
+            <td style="width:100px;" class="tdLeft">
+                排队滞留率：
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.QUEUE_DETAIN_SCORE)
+                <span>低于</span>
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.QUEUE_DETAIN_SCORE) 
+            </td>
+            
+        </tr>
+        <tr>
+            <td style="width:100px;" class="tdLeft">
+                按时办结率：
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.HANDLE_ONTIME_SCORE)
+                <span>高于</span>
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.HANDLE_ONTIME_SCORE) 
+            </td>
+            
+        </tr>
+             <tr>
+            <td style="width:100px;" class="tdLeft">
+                办税差错率：
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.QUALITY_SCORE)
+                <span>低于</span>
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.QUALITY_SCORE) 
+            </td>
+            
+             </tr>    
+        <tr>
+            <td style="width:100px;" class="tdLeft">
+                评价满意率：
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.EVAL_SATISFY_SCORE)
+                <span>高于</span>
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.EVAL_SATISFY_SCORE) 
+            </td>
+            
+        </tr>
+         <tr>
+            <td style="width:100px;" class="tdLeft">
+                综合投诉率：
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.COMPLAIN_SCORE)
+                <span>低于</span>
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.COMPLAIN_SCORE) 
+            </td>
+            
+        </tr>
+         <tr>
+            <td style="width:100px;" class="tdLeft">
+                环境建设分数：
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.ENVIRON_SCORE)
+                <span>高于</span>
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.ENVIRON_SCORE) 
+            </td>
+            
+        </tr>
+         <tr>
+            <td style="width:100px;" class="tdLeft">
+                制度建设分数：
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.SYSTEM_SCORE)
+                <span>高于</span>
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.SYSTEM_SCORE) 
+            </td>
+            
+        </tr>
+         <tr>
+            <td style="width:100px;" class="tdLeft">
+                规范建设分数：
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.NORM_SCORE)
+                <span>高于</span>
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.NORM_SCORE) 
+            </td>
+            
+        </tr>
+         <tr>
+            <td style="width:100px;" class="tdLeft">
+                行风建设分数：
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.PROFESS_SCORE)
+               <span> 高于 </span>
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.PROFESS_SCORE) 
+            </td>
+            
+        </tr>
+         <tr>
+            <td style="width:100px;" class="tdLeft">
+                第三方调查分数：
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.THIRD_SURVEY_SCORE)
+               <span> 高于</span>
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.THIRD_SURVEY_SCORE) 
+            </td>
+            
+        </tr>
+         <tr>
+            <td style="width:100px;" class="tdLeft">
+                其他项目分数：
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.OTHER_SCORE)
+              <span>  高于</span>
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.OTHER_SCORE) 
+            </td>
+            
+        </tr> 
+        <tr>
+            <td class="tdLeft"> &nbsp;  </td>
+            <td>
+                <input type="submit" class="l-button" value="提交" />
+            </td>
+            <td> </td>
+        </tr>
+    </table>
+}
+
+@section Head{
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+    @Html.JavaScript("lib/jqueryform/jquery.form.js")
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    @Html.JavaScript("lib/utility/ext.js")
+    <style type="text/css">
+        .radiobuttonlist .item {
+            float: left;
+            margin-right: 10px;
+        }
+    </style> 
+    
+}
+
+

@@ -17,8 +17,6 @@
             <td>
                 @Html.DisplayFor(model => model.STAFF_ID)
                 @Html.HiddenFor(m => m.STAFF_ID)
-            </td>
-            <td>
                 @Html.ValidationMessageFor(model => model.STAFF_ID)
             </td>
         </tr>
@@ -26,8 +24,6 @@
             <td class="tdLeft">员工姓名：</td>
             <td>
                 @Html.EditorFor(model => model.STAFF_NAM)
-            </td>
-            <td>
                 @Html.ValidationMessageFor(model => model.STAFF_NAM)
             </td>
         </tr>
@@ -35,8 +31,6 @@
             <td class="tdLeft">密码：</td>
             <td>
                 @Html.PasswordFor(model => model.STAFF_PASSWORD)
-            </td>
-            <td>
                 @Html.ValidationMessageFor(model => model.STAFF_PASSWORD)
             </td>
         </tr>
@@ -44,8 +38,6 @@
             <td class="tdLeft">组织机构：</td>
             <td>
                 @Html.DropDownList("ORG_ID", ViewBag.UserORG as SelectList, "--请选择--")
-            </td>
-            <td>
                 @Html.ValidationMessageFor(model => model.ORG_ID)
             </td>
         </tr>
@@ -53,8 +45,6 @@
             <td class="tdLeft">星级：</td>
             <td>
                 @Html.DropDownList("STAR_LEVEL", @ViewBag.STAR_LEVELLIST as IEnumerable<SelectListItem>)
-            </td>
-            <td>
                 @Html.ValidationMessageFor(model => model.STAR_LEVEL)
             </td>
         </tr>
@@ -73,18 +63,14 @@
                     </label>
                 </label>
                 @Html.HiddenFor(model => model.PHOTE_URL)
-                <input type="hidden" id="isup" value=""/>
-            </td>
-            <td>
-                @Html.ValidationMessageFor(model => model.STAR_LEVEL)
+                <input type="hidden" id="isup" name="isup" value="" />
+                @Html.ValidationMessageFor(model => model.PHOTE_URL)
             </td>
         </tr>
         <tr>
             <td class="tdLeft">员工类型：</td>
             <td>
                 @Html.DropDownList("STAFF_TYP", @ViewBag.STAFF_TYPLIST as IEnumerable<SelectListItem>)
-            </td>
-            <td>
                 @Html.ValidationMessageFor(model => model.STAFF_TYP)
             </td>
         </tr>
@@ -93,8 +79,6 @@
             <td>
                 @Html.RadioButtonFor(model => model.STAR_EVAL_TYP, 1) 是
                 @Html.RadioButtonFor(model => model.STAR_EVAL_TYP, 0) 否
-            </td>
-            <td>
                 @Html.ValidationMessageFor(model => model.STAR_EVAL_TYP)
             </td>
         </tr>
@@ -102,22 +86,18 @@
             <td class="tdLeft">星级评定备注：</td>
             <td>
                 @Html.EditorFor(model => model.STAR_EVAL_NOTE)
-            </td>
-            <td>
                 @Html.ValidationMessageFor(model => model.STAR_EVAL_NOTE)
             </td>
         </tr>
         <tr>
             <td class="tdLeft">备注：</td>
             <td>
-                @Html.EditorFor(model => model.NOTE)
-            </td>
-            <td>
+                @Html.TextAreaFor(model => model.NOTE, new { @style = "height:50px;width:300px;" })
                 @Html.ValidationMessageFor(model => model.NOTE)
             </td>
         </tr>
         <tr>
-            <td style="text-align: center;" colspan="3">
+            <td style="text-align: center;" colspan="2">
                 <input type="submit" class="l-button" value="提交" />
             </td>
         </tr>

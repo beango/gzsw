@@ -1,0 +1,145 @@
+﻿@using gzsw.web
+@model PetaPoco.Page<gzsw.model.dto.CHK_STAFF_QUALITY_MARKDto>
+@{
+    ViewBag.Title = "个人考核质量差错打分";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<script lang="javascript">
+    $(function () {
+        // 注册事件
+        // 查询
+        $("#btnSearch").ligerButton(
+        {
+            text: " 查 询 ",
+            click: function () {
+                var url = "?personNo=" + $("#txtPersonNo").val() + "&workNo=" + $("#txtWorkNo").val() + "&performanceTypeNo=" + $("#txtPerformanceTypeNo").val();
+                location.href = url.urlstamp();
+            },
+            icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+        });
+        // 顶部导航
+        var ligerToolBar = $("#toptoolbar").ligerToolBar();
+        @if (Html.ChkAuth("CHK_STAFF_QUALITY_MARK_VIW"))
+        {
+            @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details", "PerformanceEval"), "查看", "CHK_STAFF_QUALITY_MARK_VIW", 370, 400));
+            @:ligerToolBar.addItem({ line: true });
+        }
+        @if (Html.ChkAuth("CHK_STAFF_QUALITY_MARK_ADD"))
+        {
+            @:ligerToolBar.addItem(@Html.LigerUIAddButton(Url.Action("Create", "PerformanceEval"), "增加", "CHK_STAFF_QUALITY_MARK_ADD", 465, 330));
+            @:ligerToolBar.addItem({ line: true });
+        }
+        @if (Html.ChkAuth("CHK_STAFF_QUALITY_MARK_EDT"))
+        {
+            @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit", "PerformanceEval"), "修改", "CHK_STAFF_QUALITY_MARK_EDT", 465,380));
+            @:ligerToolBar.addItem({ line: true });
+        }
+        @if (Html.ChkAuth("CHK_STAFF_QUALITY_MARK_DEL"))
+        {
+            @:ligerToolBar.addItem(@Html.LigerUIDeleteButton(Url.Action("Delete", "PerformanceEval"), "删除", "CHK_STAFF_QUALITY_MARK_DEL"));
+        }
+          @if (Html.ChkAuth("CHK_QUALITY_CON"))
+          {
+              <text>
+              ligerToolBar.addItem({ line: true });
+              ligerToolBar.addItem({text: 'Excel导入',
+                  click: function(item) {
+                      var url= '@Url.Action("Excel","PerformanceEval")';
+                      gzsw.dialog.open({
+                          url: url.urlstamp(),
+                          title: 'Excel导入',
+                          width: 400,
+                          height:100
+                      });
+                  },
+                  icon: 'up'
+              });
+              </text>
+          }
+    });
+</script>
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width: 95px;">员工编码：</td>
+            <td style="width:170px;"><input type="text" name="txtPersonNo" id="txtPersonNo" value="@ViewBag.personNo" /></td>
+            <td style="width: 95px; "> 事项编码：</td>
+            <td style="width:170px;"><input type="text" name="txtWorkNo" id="txtWorkNo" value="@ViewBag.workNo" /></td>
+            <td style="width: 95px; "> 质量类型编码：</td>
+            <td style="width:170px;"><input type="text" name="txtPerformanceTypeNo" id="txtPerformanceTypeNo" value="@ViewBag.performanceTypeNo" /></td>
+             <td>
+                <div id="btnSearch"></div>
+            </td>
+        </tr>
+        
+    </table>
+</div>
+<div id="toptoolbar"></div>
+<!-- 内容 -->
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th style="width:40px;">序号</th>
+                <th>员工编码</th>
+                <th>员工名称</th>
+                <th>事项编码</th> 
+                <th>事项名称</th>
+                <th>质量类型编码</th> 
+                <th>质量类型名称</th>
+                <th>数量</th>
+                <th>差错发生日期</th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.SEQ" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.STAFF_ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PersonName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SERIALID)
+                </td> 
+                <td>
+                    @Html.DisplayFor(modelItem => item.SERIAL_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QUALITY_CD)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QUALITY_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AMOUNT)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OCCUR_DT)
+                </td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    <!--  分页 -->
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>

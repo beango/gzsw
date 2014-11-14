@@ -1,0 +1,76 @@
+﻿@using gzsw.web;
+@model List<gzsw.model.WARN_SENDINFO_DETAIL>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>
+                    用户名
+                </th>
+                <th>
+                    手机号码
+                </th>
+                <th style="width:150px;">
+                    预警发送实际信息
+                </th>
+                <th>
+                    发送时间
+                </th>
+                <th>
+                    手机发送状态
+                </th>
+                <th>
+                    客户端发送状态
+                </th>
+                <th>
+                    客户端已读状态
+                </th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @item.USER_ID
+                </td>
+                <td>
+                    @item.MOB_NBR
+                </td>
+                <td>
+                    @item.WARN_INFO
+                </td>
+                <td>
+                    @item.SEND_TIME
+                </td>
+                <td>
+                    @((item.MOB_SEND_STATE??0)==0?"否":"是")
+                </td>
+                <td>
+                    @((item.CLI_SEND_STATE ?? 0) == 0 ? "否" : "是")
+                </td>
+                <td>
+                    @((item.CLI_READ_IND ?? false) ? "是" : "否")
+                </td>
+            </tr>
+        }
+
+    </table>
+    @if (Model.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+</div>

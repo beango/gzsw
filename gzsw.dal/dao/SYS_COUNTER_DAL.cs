@@ -8,7 +8,7 @@ using PetaPoco;
 
 namespace gzsw.dal.dao
 {
-    public class SYS_COUNTER_DAL : Basedao
+    public class SYS_COUNTER_DAL 
     {
         /// <summary>
         /// 通过服务厅编号获取窗口信息
@@ -17,7 +17,7 @@ namespace gzsw.dal.dao
         /// <returns></returns>
         public List<SYS_COUNTER> GetListByHallNo(string hallNo)
         {
-            var db = new Database();
+            var db = gzswDB.GetInstance();
 
             var sql = Sql.Builder.Append(@"SELECT  [HALL_NO]
                                           ,[COUNTER_ID]

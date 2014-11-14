@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "个人考核评定-质量分";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.model.Enums
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model PetaPoco.Page<gzsw.model.Subclasses.STAT_STAFF_QUALITYSTAT_M_SUB>
+
+
+<!-- 查询菜单 -->
+
+<div class="tablePanel" style="margin-top: 5px;">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:38px;">序号 </th>
+                <th>员工名称</th>
+                <th>月份</th>
+                <th>质量类型</th>
+                <th>差错业务笔数</th>
+            </tr>
+        </thead>
+
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    @(i++)
+                </td>
+                <td>@item.STAFF_NAM</td>
+                <td>@item.STAT_MO.ToYearsMonthString()</td>
+                <td>@item.QUALITY_NAM</td>
+                <td>@item.COR_ERROR_SVR_CNT</td>
+            </tr>
+        }
+        @if (Model.Items.Count > 0)
+        {
+            <tr class="total">
+                <td>合计</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>@ViewBag.Total.ERROR_SVR_CNT_TOTAL</td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+

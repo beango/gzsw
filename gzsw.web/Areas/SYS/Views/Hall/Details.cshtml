@@ -9,80 +9,65 @@
     <tr>
         <td style="width:120px;" class="tdLeft"> 服务厅编码：</td>
         <td>@Html.DisplayFor(model => model.HALL_NO)</td>
-    </tr>
-    <tr>
         <td style="width:120px;" class="tdLeft"> 服务厅名称：</td>
         <td>@Html.DisplayFor(model => model.HALL_NAM)</td>
     </tr>
     <tr>
         <td style="width:120px;" class="tdLeft"> 组织机构：</td>
         <td>@(null != Model && Model.HALLORG != null ? Model.HALLORG.ORG_NAM : "")</td>
-    </tr>
-    <tr>
         <td style="width:120px;" class="tdLeft"> 地址：</td>
         <td>@Html.DisplayFor(model => model.ADDRESS)</td>
     </tr>
     <tr>
         <td style="width:120px;" class="tdLeft"> 经度：</td>
         <td>@Html.DisplayFor(model => model.LONGITUDE)</td>
-    </tr>
-    <tr>
         <td style="width:120px;" class="tdLeft"> 纬度：</td>
         <td>@Html.DisplayFor(model => model.DIMENSION)</td>
     </tr>
     <tr>
         <td style="width:120px;" class="tdLeft"> 柜台数量：</td>
         <td>@Html.DisplayFor(model => model.COUNTER_CNT)</td>
+        <td style="width:120px;" class="tdLeft"> 是否自动呼叫：</td>
+        <td>@((null != Model && Model.AUTO_CALL_IND) ? "是" : "否")</td>
+    </tr>
+    
+    <tr>
+        @*<td style="width:120px;" class="tdLeft"> 有无排队功能：</td>
+        <td>@((null != Model && Model.HAV_QUEUE_IND) ? "有" : "无")</td>*@
     </tr>
     <tr>
         <td style="width:120px;" class="tdLeft"> 自动顺呼时间（秒）：</td>
         <td>@Html.DisplayFor(model => model.AUTO_CALL_SEC)</td>
-    </tr>
-    <tr>
-        <td style="width:120px;" class="tdLeft"> 是否自动呼叫：</td>
-        <td>@((null != Model && Model.AUTO_CALL_IND) ? "是" : "否")</td>
-    </tr>
-    <tr>
         <td style="width:120px;" class="tdLeft"> 自动结束办理（秒）：</td>
         <td>@Html.DisplayFor(model => model.AUTO_END_SEC)</td>
     </tr>
     <tr>
         <td style="width:120px;" class="tdLeft"> 自动评价时间（秒）：</td>
         <td>@Html.DisplayFor(model => model.AUTO_EVAL_SEC)</td>
-    </tr>
-    <tr>
         <td style="width:120px;" class="tdLeft"> 评价停留时间（秒）：</td>
         <td>@Html.DisplayFor(model => model.EVAL_STAY_SEC)</td>
     </tr>
     <tr>
-        <td style="width:120px;" class="tdLeft"> 有无排队功能：</td>
-        <td>@((null != Model && Model.HAV_QUEUE_IND) ? "有" : "无")</td>
-    </tr>
-    <tr>
         <td style="width:120px;" class="tdLeft"> 取号数量限制类型：</td>
         <td>@(gzsw.util.EnumHelper.ConvertToE<gzsw.model.SYS_HALL.TICKETNUM_ENUM>(Model.TICKETNUM.ToString()))</td>
-    </tr>
-    <tr>
         <td style="width:120px;" class="tdLeft"> 容纳人数：</td>
         <td>@Html.DisplayFor(model => model.LIMIT_CNT)</td>
     </tr>
     <tr>
         <td style="width:120px;" class="tdLeft"> 负责人：</td>
         <td>@Html.DisplayFor(model => model.HEAD)</td>
-    </tr>
-    <tr>
         <td style="width:120px;" class="tdLeft"> 负责人电话：</td>
         <td>@Html.DisplayFor(model => model.HEAD_TEL)</td>
     </tr>
     <tr>
         <td style="width:120px;" class="tdLeft"> 备注：</td>
-        <td>@Html.DisplayFor(model => model.NOTE)</td>
+        <td colspan="3">@Html.DisplayFor(model => model.NOTE)</td>
     </tr>
     @if (Request.QueryString["FromOrg"]=="1")
     {
         @:<tr>
-        @:    <td style="width:120px;" class="tdLeft"> <a href="/SYS/Hall/Edit?FromOrg=1&orgid=@Request.QueryString["orgid"]">修改</a></td>
-        @:    <td></td>
+        @:    <td class="tdLeft"></td>
+        @:    <td colspan="3"><input type="button" class="l-button" onclick="location.href = '/SYS/Hall/Edit?FromOrg=1&orgid=@Request.QueryString["orgid"]'; return false;" value="修改" /></td>
         @:</tr>
     }
 </table>

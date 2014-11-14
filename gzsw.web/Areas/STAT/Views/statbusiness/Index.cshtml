@@ -1,0 +1,176 @@
+﻿@using System.Collections
+@using gzsw.model.Subclasses
+@using gzsw.util.Extensions
+@using gzsw.web
+@using NPOI.SS.Formula.Functions
+@model List<dynamic>
+@{
+    var i = 0;
+}
+@using gzsw.web
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@{
+    Html.RenderPartial("~/Areas/STAT/Views/Shared/SearchView.cshtml", new object());
+}
+<div class="divPanel">
+    <div id="navtabStat">
+        <div tabid="home" title="报表" lselected="true">
+            <div style="margin: 3px;">
+                <table id="datatable" class="stattablelist tablesorter tablesorter-default" cellpadding="0" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th style="width: 30px; background-image: none;">序号</th> 
+                            <th>业务大类</th>
+                            <th>
+                                <a href="javascript:void(0);" target="_blank" d-open='show' d-type="BUSI_CNT" d-title="业务办理分析-业务笔数">业务笔数</a>
+                            </th>
+                            <th>
+                                <a href="javascript:void(0);" target="_blank" d-open='show' d-type="CONVERT_BUSI_CNT" d-title="业务办理分析-业务折合量">业务折合量</a>
+                            </th>
+                            <th><a href="javascript:void(0);" target="_blank" d-open='show' d-type="HANDLE_DUR" d-title="业务办理分析-平均办理时间">平均办理时间</a></th>
+                            <th><a href="javascript:void(0);" target="_blank" d-open='show' d-type="OVERTIME_HANDLE_CNT" d-title="业务办理分析-超时办理笔数">超时办理笔数</a></th>
+                            <th>超时率</th>
+                            <th><a href="javascript:void(0);" target="_blank" d-open='show' d-type="LOCAL_CNT" d-title="业务办理分析-同城业务笔数">同城业务笔数</a></th>
+                            <th>同城办理率</th>
+                        </tr>
+                    </thead>
+                   
+                     @if (Model != null && Model.Count() > 0)
+                     {
+
+                         foreach (var item in Model)
+                         {
+                             <tr>
+                           
+                                 <td>@(++i)</td>
+                                 <td>@item.DLS_SERIALNAME</td>
+                                 <td><a href="javascript:void(0);" target="_blank" d-open='show' d-no='@item.DLS_SERIALID' d-type="BUSI_CNT" d-title="业务办理分析-业务笔数">@item.BUSI_CNT</a></td>
+                                 <td><a href="javascript:void(0);" target="_blank" d-open='show' d-no='@item.DLS_SERIALID'  d-type="CONVERT_BUSI_CNT" d-title="业务办理分析-业务折合量">@item.CONVERT_BUSI_CNT</a></td>
+                                 <td><a href="javascript:void(0);" target="_blank" d-open='show' d-no='@item.DLS_SERIALID'  d-type="HANDLE_DUR" d-title="业务办理分析-平均办理时间">@( ((int) (item.BUSI_CNT == 0 ? 0 : (item.HANDLE_DUR/item.BUSI_CNT))).ToTimeString()) </a></td>
+                                 <td><a href="javascript:void(0);" target="_blank" d-open='show'  d-no='@item.DLS_SERIALID' d-type="OVERTIME_HANDLE_CNT" d-title="业务办理分析-超时办理笔数">@item.OVERTIME_HANDLE_CNT</a></td>
+                                 <td>@( (item.BUSI_CNT == 0 ? 0 : (decimal)(item.OVERTIME_HANDLE_CNT/(decimal)item.BUSI_CNT)).ToString("P"))</td>
+                                 <td><a href="javascript:void(0);" target="_blank" d-open='show'  d-no='@item.DLS_SERIALID' d-type="LOCAL_CNT"  d-title="业务办理分析-同城业务笔数">@item.LOCAL_CNT</a></td>
+                                 <td>
+                                     @( (item.BUSI_CNT == 0 ? 0 : ((decimal) item.LOCAL_CNT/(decimal) item.BUSI_CNT)).ToString("P"))
+                                 </td>
+                             </tr>
+
+                         }
+
+
+
+                         <tr class="total">
+                             <td colspan="2">合计 
+                             
+                             </td>
+                             <td>
+                                 <a href="javascript:void(0);" target="_blank" d-open='show' d-type="BUSI_CNT" d-title="业务办理分析-业务笔数">
+                                 @Model.Sum(x => x.BUSI_CNT)
+                                     </a>
+                             </td>
+                             <td>
+                                  <a href="javascript:void(0);" target="_blank" d-open='show' d-type="CONVERT_BUSI_CNT" d-title="业务办理分析-业务折合量">
+                                 @Model.Sum(x => (decimal) x.CONVERT_BUSI_CNT)
+                                      </a>
+                             </td>
+                             <td>
+                                 <a href="javascript:void(0);" target="_blank" d-open='show' d-type="HANDLE_DUR" d-title="业务办理分析-平均办理时间">
+                                 @( ((int) (Model.Sum(x => x.BUSI_CNT) == 0 ? 0 : (Model.Sum(x => x.HANDLE_DUR)/Model.Sum(x => x.BUSI_CNT)))).ToTimeString()) 
+                                     </a>
+                             </td>
+                             <td>
+                                 <a href="javascript:void(0);" target="_blank" d-open='show' d-type="OVERTIME_HANDLE_CNT" d-title="业务办理分析-超时办理笔数">
+                                 @Model.Sum(x => x.OVERTIME_HANDLE_CNT)
+                                     </a>
+                             </td>
+                             <td>  
+                                 @( (Model.Sum(x => x.BUSI_CNT) == 0 ? 0 : ((decimal)Model.Sum(x => x.OVERTIME_HANDLE_CNT)/(decimal)Model.Sum(x => x.BUSI_CNT))).ToString("P"))
+                             </td>
+                         <td>
+                              <a href="javascript:void(0);" target="_blank" d-open='show' d-type="LOCAL_CNT" d-title="业务办理分析-同城业务笔数">
+                             @Model.Sum(x => x.LOCAL_CNT) </a>
+                         </td>
+                             <td> 
+                                 @(((Model.Sum(x => x.BUSI_CNT) == 0) || (Model.Sum(x => x.LOCAL_CNT) == 0) ? "0.00"
+                                        : ((decimal)Model.Sum(x => x.LOCAL_CNT)/(decimal)Model.Sum(x => x.BUSI_CNT)).ToString("P")))
+                              
+
+                             </td>
+                         </tr>
+
+                     }
+                </table>
+                @if (Model == null || Model.Count() <= 0)
+                {
+                    <div class="l-panel-notDATA">
+                        暂无数据
+                    </div>
+                }
+                  else
+            {
+                Html.RenderPartial("~/Areas/STAT/Views/Shared/PagerView.cshtml");
+            }
+            </div>
+        </div>
+    <div title="柱状图"  >
+        <div>
+            @Html.Raw(ViewBag.ChartColumn3DXML)
+        </div>
+    </div>
+        <div title="线状图" >
+    @Html.Raw(ViewBag.ChartSplineXML)
+</div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#datatable").tablesorterPager({ container: $("#pager") });
+
+    })
+</script>
+
+@section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    <!-- 图表排序脚本 -->
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.js")
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.widgets.min.js")
+    <!-- 图表排序 -->
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.pager.js")
+
+    @Html.JavaScript("lib/fusionchart/FusionCharts.js")
+}
+<script type="text/javascript">
+    $(function () {
+        $("#navtabStat").ligerTab();
+
+        $("a[d-open='show']").click(function () {
+            var that = $(this);
+            var type = that.attr("d-type");
+            var title = that.attr("d-title");
+            var dlsserialid = that.attr("d-no");
+            if (!dlsserialid) {
+                dlsserialid = '';
+            }
+            var param = {
+                dlsserialid: dlsserialid,
+                ct: type,
+                title: encodeURI(title),
+                beginTime: $("#beginTime").val(),
+                endTime: $("#endTime").val()
+            };
+            var url = "@Url.Action("ShowCNT")";
+            that.attr("target", "_blank");
+            that.attr("href", url.getUrl(param).urlstamp());
+        });
+        
+        // 打印报表
+        $("#btnOutPut").click(function () {
+            var url = "@Html.Raw(Request.Url.PathAndQuery)" + ("@Html.Raw(Request.Url.PathAndQuery)".indexOf('?') > -1 ? "&" : "?") + "export=true";
+                window.open(url);
+            });
+    });
+</script>

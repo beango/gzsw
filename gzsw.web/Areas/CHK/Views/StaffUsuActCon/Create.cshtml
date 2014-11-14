@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "添加日常行为表现";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.web
+@model gzsw.controller.CHK.Models.StaffUsuActConModel
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <table class="formTable" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="tdLeft">组织结构：</td>
+            <td>
+                @Html.DropDownListFor(m => m.ORG_ID, ViewBag.Orgs as SelectList, "--请选择--")
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.ORG_ID)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">工作纪律项占比：</td>
+            <td>
+                @Html.TextBoxFor(m=>m.WORK_DIS_RT)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.WORK_DIS_RT)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">办税服务项占比：</td>
+            <td>
+                @Html.TextBoxFor(m => m.TAX_SVR_RT)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.TAX_SVR_RT)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">税容税貌项占比：</td>
+            <td>
+                @Html.TextBoxFor(m => m.TAX_LOOK_RT)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.TAX_LOOK_RT)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">学习培训项占比：</td>
+            <td>
+                @Html.TextBoxFor(m => m.TRAIN_RT)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.TRAIN_RT)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">安全卫生项占比：</td>
+            <td>
+                @Html.TextBoxFor(m => m.SEC_HEAL_RT)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.SEC_HEAL_RT)
+            </td>
+        </tr>
+        <tr>
+            <td class="tdLeft">其他项占比：</td>
+            <td>
+                @Html.TextBoxFor(m => m.OTHER_RT)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(m => m.OTHER_RT)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: center">
+                <input id="btnSubmit" type="submit" class="l-button" value="提交" />
+            </td>
+        </tr>
+    </table>
+}
+
+@section Head
+{
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#btnSubmit").click(function() {
+            var WORK_DIS_RT = $("#WORK_DIS_RT").val();
+            var TAX_SVR_RT = $("#TAX_SVR_RT").val();
+            var TAX_LOOK_RT = $("#TAX_LOOK_RT").val();
+            var TRAIN_RT = $("#TRAIN_RT").val();
+            var SEC_HEAL_RT = $("#SEC_HEAL_RT").val();
+            var OTHER_RT = $("#OTHER_RT").val();
+
+            if (WORK_DIS_RT.length > 0 && TAX_SVR_RT.length > 0 && TAX_LOOK_RT.length > 0 && TRAIN_RT.length > 0 && SEC_HEAL_RT.length > 0 && OTHER_RT.length > 0) {
+                var num = Number(WORK_DIS_RT) + Number(TAX_SVR_RT) + Number(TAX_LOOK_RT) + Number(TRAIN_RT) + Number(SEC_HEAL_RT) + Number(OTHER_RT);
+                if (num != 100) {
+                    gzsw.dialog.alert('各项分数相加应等于100.', 4);
+                    return false;
+                }
+            }
+            $("form").submit();
+        });
+    });
+</script>

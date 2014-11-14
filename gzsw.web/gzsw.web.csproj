@@ -48,6 +48,9 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\WebGrease.1.3.0\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="FusionCharts">
+      <HintPath>..\lib\FusionCharts.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\log4net.dll</HintPath>
@@ -139,7 +142,16 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Areas\AUTH\AUTHAreaRegistration.cs" />
     <Compile Include="Areas\CHK\CHKAreaRegistration.cs" />
+    <Compile Include="Areas\Detail\DetailAreaRegistration.cs" />
+    <Content Include="Areas\CHK\Views\ApplyDetail\Edit.cshtml" />
+    <Content Include="Areas\CHK\Views\StaffAttendDeductCon\Index.cshtml" />
+    <Content Include="Areas\CHK\Views\StaffAttendDeductCon\Details.cshtml" />
+    <Content Include="Areas\CHK\Views\StaffAttendDeductCon\Create.cshtml" />
+    <Content Include="Areas\CHK\Views\StaffAttendDeductCon\Edit.cshtml" />
+    <Content Include="Areas\CHK\Views\DetailSvrCoefCon\OneCreate.cshtml" />
+    <None Include="Areas\Detail\Views\WarnDisposal\Index.cshtml" />
     <Compile Include="Areas\MON\MONAreaRegistration.cs" />
+    <Compile Include="Areas\STAT\STATAreaRegistration.cs" />
     <Compile Include="Areas\SYS\SYSAreaRegistration.cs" />
     <Compile Include="Areas\WARN\WARNAreaRegistration.cs" />
     <Compile Include="Extens\EnumExtensions.cs" />
@@ -150,6 +162,32 @@
     </Compile>
     <Compile Include="Helpers\HtmlHelperExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Areas\STAT\Views\statstaffqueuebusid\Index.cshtml" />
+    <Content Include="Areas\STAT\Views\SerivceHandle\ShowCNT.cshtml" />
+    <Content Include="Areas\STAT\Views\WarnAnalysis\Index.cshtml" />
+    <Content Include="Content\chartflash\FCExporter.swf" />
+    <Content Include="Content\chartflash\MSSpline.swf" />
+    <Content Include="Content\lib\fusionchart\export.js" />
+    <Content Include="Content\lib\fusionchart\FusionChartsExportComponent.js" />
+    <Content Include="Views\Statistics\TaxpayerEval.cshtml" />
+    <Content Include="Views\Statistics\TaxpayerEval_Node.cshtml" />
+    <Content Include="Areas\STAT\Views\statstaffqueuebusid\ShowCNT.cshtml" />
+    <Content Include="Areas\STAT\Views\statstaffqueuebusid\OtherIndex.cshtml" />
+    <Content Include="Views\Statistics\TaxpayerAction.cshtml" />
+    <Content Include="Views\Statistics\TaxpayerAction_Person.cshtml" />
+    <Content Include="Views\Statistics\ServiceSlipAnalysis.cshtml" />
+    <Content Include="Areas\STAT\Views\statbusiness\Index.cshtml" />
+    <Content Include="Areas\STAT\Views\WarnAnalysis\WarnAnalysisDetail.cshtml" />
+    <Content Include="Areas\STAT\Views\ServiceContrast\HallStat.cshtml" />
+    <Content Include="Areas\STAT\Views\statbusiness\ShowCNT.cshtml" />
+    <Content Include="Areas\STAT\Views\STATTemp\业务办理分析.xls" />
+    <Content Include="Areas\STAT\Views\ComplaintReport\Index.cshtml" />
+    <Content Include="Areas\STAT\Views\ComplaintReport\ComplaintReportDetail.cshtml" />
+    <Content Include="Areas\STAT\Views\ServiceContrast\StaffStat.cshtml" />
+    <Content Include="Views\Statistics\ServiceSlipAnalysis_Person.cshtml" />
+    <Content Include="Areas\WARN\Views\CurrqueuehistDealState\Index.cshtml" />
+    <Content Include="Areas\WARN\Views\CurrywhistTwiceDeal\Index.cshtml" />
+    <Content Include="Areas\STAT\Views\ComplaintReport\PersonalIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -180,6 +218,11 @@
     <Content Include="Content\bootstrap\images\logo_text.png" />
     <Content Include="Content\bootstrap\js\bootstrap.js" />
     <Content Include="Content\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Content\chartflash\Column3D.swf" />
+    <Content Include="Content\chartflash\MSColumn3D.swf" />
+    <Content Include="Content\chartflash\MSSpline_1.swf" />
+    <Content Include="Content\chartflash\Pie3D.swf" />
+    <Content Include="Content\chartflash\Spline.swf" />
     <Content Include="Content\cotide\css\bootstrap-responsive.css" />
     <Content Include="Content\cotide\css\bootstrap-responsive.min.css" />
     <Content Include="Content\cotide\css\bootstrap.css" />
@@ -239,6 +282,7 @@
     <Content Include="Content\cotide\img\gzsw_logo.gif" />
     <Content Include="Content\cotide\img\gzsw_logo.png" />
     <Content Include="Content\cotide\img\gzsw_main_bg.png" />
+    <Content Include="Content\cotide\img\gzsw_main_bg1.png" />
     <Content Include="Content\cotide\img\gzsw_main_btn.png" />
     <Content Include="Content\cotide\img\gzsw_main_btn_hover.png" />
     <Content Include="Content\cotide\img\gzsw_tab.png" />
@@ -380,7 +424,6 @@
     <Content Include="Content\layout\images\txt.png" />
     <Content Include="Content\layout\images\txtshort.png" />
     <Content Include="Content\layout\images\username.png" />
-    <Content Include="Content\lib\codebase\WebComponents.exe" />
     <Content Include="Content\lib\codebase\webVideoCtrl.js" />
     <Content Include="Content\layout\images\logo_text.png" />
     <Content Include="Content\lib\counter\orgTree.js" />
@@ -396,6 +439,7 @@
     <Content Include="Content\lib\datepicker\skin\whyGreen\datepicker.css" />
     <Content Include="Content\lib\datepicker\skin\whyGreen\img.gif" />
     <Content Include="Content\lib\datepicker\WdatePicker.js" />
+    <Content Include="Content\lib\fusionchart\FusionCharts.js" />
     <Content Include="Content\lib\hall\hall.css" />
     <Content Include="Content\layout\css\select.css" />
     <Content Include="Content\layout\css\style.css" />
@@ -572,8 +616,12 @@
     <Content Include="Content\lib\hall\images\minusSign.png" />
     <Content Include="Content\lib\hall\images\minusSign2.png" />
     <Content Include="Content\lib\hall\images\openSound.png" />
+    <Content Include="Content\lib\hall\images\playback.png" />
+    <Content Include="Content\lib\hall\images\playFast.png" />
+    <Content Include="Content\lib\hall\images\playSlow.png" />
     <Content Include="Content\lib\hall\images\plusSign.png" />
     <Content Include="Content\lib\hall\images\plusSign2.png" />
+    <Content Include="Content\lib\hall\images\reversePlayback.png" />
     <Content Include="Content\lib\hall\images\right.png" />
     <Content Include="Content\lib\hall\images\right2.png" />
     <Content Include="Content\lib\hall\images\rightDown.png" />
@@ -1302,7 +1350,9 @@
     <Content Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -1328,9 +1378,14 @@
     <Folder Include="Areas\CHK\Models\" />
     <Folder Include="Areas\CHK\Views\Shared\" />
     <Folder Include="Areas\Controllers\" />
+    <Folder Include="Areas\Detail\Controllers\" />
+    <Folder Include="Areas\Detail\Models\" />
+    <Folder Include="Areas\Detail\Views\Shared\" />
     <Folder Include="Areas\MON\Controllers\" />
     <Folder Include="Areas\MON\Models\" />
     <Folder Include="Areas\MON\Views\Shared\" />
+    <Folder Include="Areas\STAT\Controllers\" />
+    <Folder Include="Areas\STAT\Models\" />
     <Folder Include="Areas\SYS\Controllers\" />
     <Folder Include="Areas\SYS\Models\" />
     <Folder Include="Areas\SYS\Views\Shared\" />
@@ -1528,9 +1583,6 @@
     <Content Include="Areas\WARN\Views\WarnParam\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\WARN\Views\WarnParam\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Areas\WARN\Views\Release\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -1601,12 +1653,6 @@
     <Content Include="Areas\CHK\Views\ApplyDetail\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Statistics\STAT_DAYQUEUETJ.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Statistics\STAT_DAYYWTJ.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Content\lib\tablesorter\css\bootstrap.less" />
     <Content Include="Content\lib\tablesorter\css\metro.less" />
     <Content Include="Content\lib\tablesorter\css\psd\green-asc.psd" />
@@ -1617,6 +1663,482 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\Change.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MON\Views\VirtualMonitor\PlayBack.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffUsuActCon\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffUsuActCon\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffUsuActCon\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffUsuActCon\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\WarnParam\Create.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\DetailSvrCoefCon\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\DetailSvrCoefCon\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\DetailSvrCoefCon\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\DetailSvrCoefCon\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\SatisRtCon\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\SatisRtCon\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\SatisRtCon\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\SatisRtCon\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\WarnParam\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffSystemCon\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffSystemCon\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffSystemCon\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffSystemCon\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\WarnComplain\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\WarnComplain\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\WarnComplain\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\WarnComplainDetail\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\WarnComplainDetail\Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\WarnComplainDetail\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffStarSystemCon\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffStarSystemCon\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffStarSystemCon\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffStarSystemCon\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\Performance\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\Performance\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\Performance\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\Performance\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffUsuActMark\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffUsuActMark\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffUsuActMark\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffUsuActMark\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\WarnComplainDetail\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\WarnInfo\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\WarnInfo\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\WarnParam\ParamSendUsr.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\Sendusercon\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\Sendusercon\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\Sendusercon\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\Warnalarminfo\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\Warnalarminfo\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\Warnalarminfo\List.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffCompreSanMark\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffCompreSanMark\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffCompreSanMark\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffCompreSanMark\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\Warnalarminfo\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\Comprehensive\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StatStaffChkstatM\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StatStaffChkstatM\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StatStaffChkstatM\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\WarnInfo\SendDetails.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLchkitemcon\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLchkitemcon\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLchkitemcon\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\STARsystemcon\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\STARsystemcon\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\STARsystemcon\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\WarnInfo\SendInfoTip.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\PerformanceEval\Create.cshtml" />
+    <Content Include="Areas\CHK\Views\PerformanceEval\Details.cshtml" />
+    <Content Include="Areas\CHK\Views\PerformanceEval\Edit.cshtml" />
+    <Content Include="Areas\CHK\Views\PerformanceEval\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StatStaffSvrstatM\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StatStaffSvrstatM\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StatStaffSvrstatM\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffQualitystatM\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffQualitystatM\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffQualitystatM\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffEvalstatM\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffEvalstatM\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffEvalstatM\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\STAT\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLstatMark\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLstatMark\Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLstatMark\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\Currqueuehist\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\Currqueuehist\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\Currqueuehist\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\QueuingDetention\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\QueuingDetention\Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\QueuingDetention\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\RateCompletion\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\RateCompletion\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\RateCompletion\Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\RateError\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\RateError\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\RateError\Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\RateSatisfaction\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\RateSatisfaction\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\RateSatisfaction\Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\RateComplaint\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\RateComplaint\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\RateComplaint\Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\Warncomplaindatail\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\Warncomplaindatail\Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\STAT\Views\StatStaffCall\ShowCNT.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\Currqueuehist\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\HistroyAccountDetail\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\Currqueuehist\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\STAT\Views\StatStaffCall\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffCompreEvalM\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\StaffUsuActMark\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\StaffUsuActMark\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\Currywhist\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\Currywhist\DetailList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\STAT\Views\STATTemp\排队叫号分析.xls" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\StaffApplyDetail\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\HistroyAccountDetail\Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\StaffApplyDetail\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\TaxpayerEvaluation\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\CityDetail\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\HistroyAccountDetail\DetailList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffCompreEvalM\DetailSVR.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffCompreEvalM\DetailQUALITY.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffCompreEvalM\DetailEVAL.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffCompreEvalM\DetailATTEND.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffCompreEvalM\DetailUSUACTD.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\StaffCompreEvalM\DetailCOMPRESAN.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MON\Views\Warning\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MON\Views\Warning\WarningContent.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\STAT\Views\StatStaffCall\ShowSingDialog.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLitemmark\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLitemmark\Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLitemmark\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLitemmark\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MON\Views\Warning\TotalWindow.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\BusinessMistake\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Detail\Views\BusinessMistake\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Code\PageHelper.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MON\Views\Warning\OnAcceptService.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\TimeoutDealFinsh\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\TimeoutDealFinsh\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MON\Views\Warning\OneMoreService.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\STAT\Views\SerivceHandle\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\STAT\Views\Shared\SearchView.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLCompreEvalM\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLCompreEvalM\DetailOther.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLCompreEvalM\DetailAttend.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLCompreEvalM\DetailQueuedetain.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLCompreEvalM\DetailHandleontime.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLCompreEvalM\DetailQuality.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLCompreEvalM\DetailEvalsatisfy.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\HALLCompreEvalM\DetailComplain.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\CurrqueuehistEvaluation\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\CHK\Views\Bonus\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\Warnalarminfo\DetailListByHall.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\WarnComplainDetail\DetailListByHall.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\TimeoutWait\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\STAT\Views\SerivceHandle\HallStat.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\STAT\Views\Shared\PagerView.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\WARN\Views\CurrywhistSameCityDeal\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\STAT\Views\SerivceHandle\StaffStat.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Statistics\TaxpayerEval_Person.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

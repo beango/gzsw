@@ -8,6 +8,8 @@ using gzsw.model;
 using gzsw.util.Enum;
 using PetaPoco;
 using gzsw.util;
+using gzsw.dal.dao;
+using gzsw.model.Enums;
 
 namespace gzsw.controller.AUTH
 {
@@ -31,25 +33,65 @@ namespace gzsw.controller.AUTH
         [UserAuth("AUTH_USER_VIW")]
         public ActionResult Index(
             string userid,
-            string usernam, 
+            string usernam,
+            string orgid,
+            string orgnam,
             int pageIndex = 1,
-            int pageSize=20)
+            int pageSize = 20)
         {
             ViewBag.USERID = userid;
             ViewBag.USERNAM = usernam;
             ViewBag.PAGE = pageIndex;
+            ViewBag.ORGID = orgid;
+            ViewBag.ORGNAM = orgnam;
 
-            Page<SYS_USER> data = dao.GetList(
-                pageIndex,
-                pageSize, 
-                "CREATE_DTIME desc",
-                "USER_ID like", userid, 
-                "USER_NAM like", usernam);
+            //var orgsandchild = new SYS_USER_DAL().GetUserORG(UserState.UserID);//获取组织机构及其所有下级
+            Page<SYS_USER> data = new Page<SYS_USER>() { Items = new List<SYS_USER>(), ItemsPerPage = pageSize };
+            //if (orgsandchild != null && orgsandchild.Count > 0)
+            {
+                
+
+                //if (null != orgsuser && orgsuser.Count > 0)
+                {
+                    var param = new List<object>
+                    {
+                        "USER_ID like", userid,
+                        
+                        "USER_NAM like", usernam
+                    };
+                    if (!string.IsNullOrEmpty(orgid))
+                    {
+                        var orgsuser = DaoUSERORGANIZE.FindList("", "ORG_ID", orgid);
+                        if (orgsuser!=null&&orgsuser.Count>0)
+                        {
+                            param.Add("USER_ID in");
+                            param.Add(orgsuser.Select(o => o.USER_ID)); 
+                        }
+                        else
+                        {
+                             param.Add("USER_ID");
+                             param.Add(DateTime.Now.ToString("yyyyMMddHHmmss"));
+                        }
+                           
+
+                    }
+                    if (!isAdmin)
+                    {
+                        param.Add("CREATE_ID");
+                        param.Add(UserState.UserID);
+                    }
+
+                    data = dao.GetList(
+                        pageIndex, pageSize,
+                        "CREATE_DTIME desc",
+                        param.ToArray());
+                }
+            }
             return View(data);
         }
 
         [UserAuth("AUTH_USER_VIW")]
-        public ActionResult LoadIndex(string userid, string usernam,int pageIndex=1,int pageSize=20)
+        public ActionResult LoadIndex(string userid, string usernam, int pageIndex = 1, int pageSize = 20)
         {
             Page<SYS_USER> data = dao.GetList(pageIndex, pageSize, "CREATE_DTIME desc", "USER_ID like", userid, "USER_NAM like", usernam);
 
@@ -190,9 +232,14 @@ namespace gzsw.controller.AUTH
         [UserAuth("AUTH_USER_DEL")]
         public ActionResult Delete(string id)
         {
-            var deleteId = id.Split(','); 
+            var deleteId = id.Split(',');
             try
             {
+                if (deleteId.Contains("admin"))
+                {
+                    Alter("管理员账号不允许删除!", AlterTypeEnum.Error);
+                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                }
                 new SYS_USER_DAL().DeleteUser(deleteId);
                 Alter("删除成功!", AlterTypeEnum.Success);
                 return RedirectToAction("Index");
@@ -201,7 +248,7 @@ namespace gzsw.controller.AUTH
             {
                 LogHelper.ErrorLog("删除用户出错", ex);
                 return Redirect("/Home/Error");
-            } 
+            }
         }
 
         [UserAuth("AUTH_ROLE_VIW")]

@@ -1,4 +1,4 @@
-/* PetaPoco - A Tiny ORMish thing for your POCO's.
+﻿/* PetaPoco - A Tiny ORMish thing for your POCO's.
  * Copyright © 2011-2012 Topten Software.  All Rights Reserved.
  * 
  * Apache License 2.0 - http://www.toptensoftware.com/petapoco/license
@@ -35,20 +35,9 @@ namespace PetaPoco
     /// <summary>
     /// The main PetaPoco Database class.  You can either use this class directly, or derive from it.
     /// </summary>
-    public class Database : IDisposable
+    public partial class Database : IDisposable
     {
         #region Constructors
-
-        public Database()
-            : this("gzswEntities2", 1)
-        {
-        }
-
-        public Database(string connectionString)
-            : this(connectionString, 1)
-        {
-        }
-
         /// <summary>
         /// Construct a database using a supplied IDbConnection
         /// </summary>
@@ -97,7 +86,7 @@ namespace PetaPoco
         /// read from app/web.config.
         /// </summary>
         /// <param name="connectionStringName">The name of the connection</param>
-        public Database(string connectionStringName,int a)
+        public Database(string connectionStringName)
         {
             // Use first?
             if (connectionStringName == "")

@@ -93,10 +93,10 @@ namespace System.Web.Mvc.Html
                     if ($('.tablelist').getSelCount() != 1) {
                         gzsw.dialog.alert('请选择需要操作的单个选项!');
                     } else {
-                        var url = '" + url + @"?id=' + $('.tablelist').getSelValue();
+                        var url = '" + url + (url.IndexOf("?") > -1 ? "&" : "?") + @"id=' + $('.tablelist').getSelValue();
                         gzsw.dialog.open({
                             url: url.urlstamp(),
-                            title : '"+text+@"',
+                            title : '" +text+@"',
                             width: " + width + @",
                             height: " + height + @",
                             isReload: false
@@ -128,12 +128,12 @@ namespace System.Web.Mvc.Html
         }
 
         public static MvcHtmlString AuthEditButton(
-          this HtmlHelper html, string funcs, string url, int width = 450, int height = 360)
+          this HtmlHelper html, string funcs, string url, string text = "修改", int width = 450, int height = 360)
         {
             if (!ChkAuthorize(html, funcs))
                 return MvcHtmlString.Empty;
             return new MvcHtmlString(@"{
-                        text: '修改',
+                        text: '" + text + @"',
                         click: function () {
                             if ($('.tablelist').getSelCount() != 1) {
                                 gzsw.dialog.alert('请选择需要操作的单个选项!');
@@ -141,7 +141,7 @@ namespace System.Web.Mvc.Html
                                 var url = '" + url + @"?id=' + $('.tablelist').getSelValue();
                                 gzsw.dialog.open({
                                     url: url.urlstamp(),
-                                    title : '修改',
+                                    title : '" + text + @"',
                                     width: " + width + @",
                                     height: " + height + @",
                                 });
@@ -206,19 +206,25 @@ namespace System.Web.Mvc.Html
             if (whereType == 0)
             {
                 //不判断
-                sb.Append(openDiaog(url, isOpen, isReload, width, height, primaryKey));
+                sb.Append(openDiaog(url,linkText, isOpen, isReload, width, height, primaryKey));
             }
             else if (whereType == 1)
             {
                 //判断是否只选了一条
                 sb.Append("if ($(\".tablelist\").getSelCount() != 1) { gzsw.dialog.alert(\"请选择需要操作的单个选项!\"); return false; }");
-                sb.Append(openDiaog(url, isOpen, isReload, width, height, primaryKey));
+                sb.Append(openDiaog(url, linkText, isOpen, isReload, width, height, primaryKey));
             }
             else if (whereType == 2)
             {
                 //最少选择一项
                 sb.Append("if ($(\".tablelist\").getSelCount() <= 0) { gzsw.dialog.alert(\"请选择需要操作的项!\");return false; }");
                 sb.Append(confirm(url, primaryKey));
+            }
+            else if (whereType==3)
+            {
+                //撤销
+                sb.Append("if ($(\".tablelist\").getSelCount() <= 0) { gzsw.dialog.alert(\"请选择需要操作的项!\");return false; }");
+                sb.Append(confirmtype2(url, primaryKey)); 
             }
             sb.Append("}");
 
@@ -289,6 +295,22 @@ namespace System.Web.Mvc.Html
             return LigerUIButton(helper, url, linkText, funcs, "delete", 2, true, true, 0, 0, primaryKey);
         }
 
+        public static MvcHtmlString LigerUIcancelButton(this HtmlHelper helper, string url, string linkText, string funcs,
+             params string[] primaryKey)
+        {
+            if (primaryKey == null)
+            {
+                primaryKey = new string[] { "id", "@:$('.tablelist').getSelValue()" };
+            }
+            else
+            {
+                var list = primaryKey.ToList();
+                list.Add("id");
+                list.Add("@:$('.tablelist').getSelValue()");
+                primaryKey = list.ToArray();
+            }
+            return LigerUIButton(helper, url, linkText, funcs, "delete", 3, true, true, 0, 0, primaryKey);
+        }
         private static string confirm(string url, params string[] primaryKey)
         {
             var sb = new StringBuilder();
@@ -302,8 +324,20 @@ namespace System.Web.Mvc.Html
             sb.Append("});");
             return sb.ToString();
         }
-
-        private static string openDiaog(string url, bool isOpen = true, bool isReload = true, int width = 450, int height = 360, params string[] primaryKey)
+        private static string confirmtype2(string url, params string[] primaryKey)
+        {
+            var sb = new StringBuilder();
+            var param = getUrl(url, primaryKey);
+            sb.Append("gzsw.dialog.confirm({ \n");
+            sb.Append("msg: '是否撤销选中项？', \n");
+            sb.Append("yesFun: function () { \n");
+            sb.Append("var url='" + url + "'" + param + ";");
+            sb.Append("location.href = url.urlstamp();");
+            sb.Append("}");
+            sb.Append("});");
+            return sb.ToString();
+        }
+        private static string openDiaog(string url,string title, bool isOpen = true, bool isReload = true, int width = 450, int height = 360, params string[] primaryKey)
         {
             var sb = new StringBuilder();
             var param = getUrl(url, primaryKey);
@@ -312,6 +346,7 @@ namespace System.Web.Mvc.Html
                 sb.Append("var url='" + url + "'" + param + ";");
                 sb.Append("gzsw.dialog.open({");
                 sb.Append("url: url.urlstamp(),");
+                sb.Append("title: '" + title + "',");
                 sb.Append("width: " + width + ",");
                 sb.Append("height:" + height);
                 if (!isReload)

@@ -29,7 +29,6 @@ namespace gzsw.controller
         [UserAuth]
         public ActionResult Default()
         {
-
             return RedirectToAction("Index", "Default");
         }
 
@@ -51,7 +50,7 @@ namespace gzsw.controller
             var menuList = DaoMenu.FindList("MENU_ORD asc"); 
             var menuall = menuList.Where(obj =>
                               (obj.PAR_MENU_ID == 0 || obj.PAR_MENU_ID == null));
-            if (UserState.UserID != "admin")
+            if (!isAdmin)
             {
                 menuall = menuall.Where(obj =>
                     UserState.UserFuncs != null && UserState.UserFuncs.Any(obj2 => obj2.FUNCTION_ID == obj.FUNCTION_ID)
@@ -85,7 +84,7 @@ namespace gzsw.controller
             TempData["topMenu"] = sysMenu;
             var menuall = DaoMenu.FindList("MENU_ORD asc");
 
-            if (UserState.UserID != "admin")
+            if (!isAdmin)
             {
                 menuall = menuall.Where(obj =>
                         UserState.UserFuncs != null && UserState.UserFuncs.Any(obj2 => obj2.FUNCTION_ID == obj.FUNCTION_ID)
@@ -145,7 +144,7 @@ namespace gzsw.controller
                 return Json("", JsonRequestBehavior.AllowGet);
             var menuall = DaoMenu.FindList("MENU_ORD asc");
 
-            if (UserState.UserID != "admin")
+            if (!isAdmin)
             {
                 menuall = menuall.Where(obj =>
                         UserState.UserFuncs != null && UserState.UserFuncs.Any(obj2 => obj2.FUNCTION_ID == obj.FUNCTION_ID)
@@ -164,7 +163,7 @@ namespace gzsw.controller
                 return Json("", JsonRequestBehavior.AllowGet);
             var menuall = DaoMenu.FindList("MENU_ORD asc");
 
-            if (UserState.UserID != "admin")
+            if (!isAdmin)
             {
                 menuall = menuall.Where(obj =>
                         UserState.UserFuncs != null && UserState.UserFuncs.Any(obj2 => obj2.FUNCTION_ID == obj.FUNCTION_ID)

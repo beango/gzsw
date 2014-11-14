@@ -37,7 +37,7 @@ namespace gzsw.dal.dao
                 and ORG_ID in ( select ORG_ID from SYS_USERORGANIZE where USER_ID =@2)
                 group by Org_id,ORG_NAM
                  ", orgId, level, userId);
-            var db = new Database();
+            var db = gzswDB.GetInstance();
             return db.Fetch<OrganizeQueueingDto>(sql);
         }
 

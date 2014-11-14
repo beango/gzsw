@@ -73,13 +73,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Job\PRO_CHK_STAFF_COMPRE_EVAL_M_JOB.cs" />
+    <Compile Include="Job\PRO_MON_CONTIN_WORK_DUR_JOB.cs" />
+    <Compile Include="Job\PRO_MON_EVAL_UNSATISFY_CNT_JOB.cs" />
+    <Compile Include="Job\PRO_MON_ABAN_RT_JOB.cs" />
+    <Compile Include="Job\PRO_MON_COMPLETE_OVERTIME_CNT_JOB.cs" />
+    <Compile Include="Job\PRO_MON_COMPLETE_OVERTIME_RT_JOB.cs" />
+    <Compile Include="Job\PRO_MON_HALL_SATUR_RT _JOB.cs" />
+    <Compile Include="Job\PRO_MON_COUNTER_SATUR_RT_JOB.cs" />
+    <Compile Include="Job\PRO_MON_WAIT_OVERTIME_RT_JOB.cs" />
+    <Compile Include="Job\PRO_MON_WAIT_OVERTIME_TIME_JOB.cs" />
+    <Compile Include="Job\PRO_STAT_COMPLAIN_STAFF_STAT_D_JOB.cs" />
+    <Compile Include="Job\PRO_STAT_STAFF_QUALITY_STAT_D_JOB.cs" />
+    <Compile Include="Job\PRO_STAT_COMPLAIN_HALL_STAT_D_JOB.cs" />
+    <Compile Include="Job\PRO_STAT_WARN_HALL_STAT_D_JOB.cs" />
+    <Compile Include="Job\PRO_STAT_TAXPAYER_BEHAV_STAT_D_JOB.cs" />
+    <Compile Include="Job\PRO_STAT_STAFF_LARGE_BUSI_D_JOB.cs" />
+    <Compile Include="Job\PRO_STAT_STAFF_QUEUE_BUSI_D_JOB.cs" />
+    <Compile Include="Job\PRO_STAT_STAFF_BUSI_TOT_D_JOB.cs" />
+    <Compile Include="Job\PRO_STAT_STAFF_EVALSTAT_M_JOB.cs" />
+    <Compile Include="Job\PRO_STAT_STAFF_QUALITYSTAT_M_JOB.cs" />
+    <Compile Include="Job\PRO_CHK_HALL_STAT_M_JOB.cs" />
+    <Compile Include="Job\PRO_STAT_STAFF_SVRSTAT_M_JOB.cs" />
     <Compile Include="Job\PRO_CHK_STAFFCHK_EVENT_D_JOB.cs" />
-    <Compile Include="Job\PRO_REPORT_STAT_D.cs" />
+    <Compile Include="Job\PRO_REPORT_STAT_D_JOB.cs" />
     <Compile Include="Job\PRO_INIT_QUEUEDEAL_D_JOB.cs" />
     <Compile Include="Job\PRO_STAT_STAFF_CHKSTAT_M_JOB.cs" />
     <Compile Include="Job\PRO_WARN_MON_JOB.cs" />
-    <Compile Include="Job\TestJob2.cs" />
     <Compile Include="Job\TestJob1.cs" />
+    <Compile Include="Job\TestJob2.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
@@ -96,6 +118,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ReadMe.txt" />
     <None Include="App.config" />
     <None Include="install.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

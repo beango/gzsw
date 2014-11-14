@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "查看日常行为表现";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@using gzsw.model.Enums
+@using gzsw.util.Extensions
+@using gzsw.web
+@model gzsw.model.CHK_STAFF_USU_ACT_MARK
+
+
+<table class="formTable" cellpadding="0" cellspacing="0">
+    <tr>
+        <td class="tdLeft" style="width: 140px;">统计月份：</td>
+        <td>
+            @Model.STAT_MO.ToYearsMonthString()
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">员工名称：</td>
+        <td>
+            @Model.STAFF_NAM
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">行为项类型：</td>
+        <td>
+            @(((USUACTTYPEENUM)Model.USU_ACT_TYP).GetDescription())
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">扣分：</td>
+        <td>
+            @Model.DEDUCT
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">原因：</td>
+        <td>
+            @Model.REASON
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">打分时间：</td>
+        <td>
+            @( Model.MARK_TIME == null ? "" : Model.MARK_TIME.GetValueOrDefault().ToString("yyyy-MM-dd HH:mm:ss"))
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">录入人：</td>
+        <td>
+            @Model.MODIFY_NAM
+        </td>
+    </tr>
+</table>
+
+
+

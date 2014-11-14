@@ -1,0 +1,47 @@
+﻿@using gzsw.util
+@using gzsw.web
+@model IList<gzsw.model.dto.Statistics_DAYQUEUETJ_Person>
+@{
+    // 呼叫量总数
+    double TICKETNUMCountValue = Model.Select(x => x.STAFF_QDDTJ_TICKETNUM).Sum();
+    // 办理量总数
+    double RLLCountValue = Model.Select(x => x.STAFF_QDDTJ_RLL).Sum();
+    // 弃号量总数
+    double QHNUM = Model.Select(x => x.STAFF_QDDTJ_QHNUM).Sum();
+} 
+<table class="tablelist">
+    <thead>
+        <tr> 
+            <th>业务名称</th>
+            <th>呼叫量</th> 
+            <th>呼叫量占比</th>
+            <th>办理量</th> 
+            <th>办理量占比</th>
+            <th>弃号量</th>
+            <th>弃号量占比</th>
+        </tr>
+    </thead>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <tbody>
+            @foreach (var item in Model)
+{
+        <tr >
+            <td>@item.Q_SERIALNAME</td>
+            <td>@item.STAFF_QDDTJ_TICKETNUM </td>
+            <td>@((item.STAFF_QDDTJ_TICKETNUM / TICKETNUMCountValue).ToPercent())</td>
+            <td>@item.STAFF_QDDTJ_RLL</td>
+            <td>@((item.STAFF_QDDTJ_RLL / RLLCountValue).ToPercent())</td>
+            <td>@item.STAFF_QDDTJ_QHNUM</td>
+            <td>@((item.STAFF_QDDTJ_QHNUM / QHNUM).ToPercent())</td>
+        </tr>
+}
+        </tbody>
+    }else
+    {
+          <tr>
+              <th  colspan="5" style="text-align:center;">暂无数据</th> 
+        </tr>
+    }
+</table>

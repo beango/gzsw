@@ -19,11 +19,21 @@ namespace gzsw.dal.dao
    public  class SYS_ORGANIZE_DAL
     {
 
-       public SYS_ORGANIZE GetTopForUserId(string userId)
+       public SYS_ORGANIZE GetTopForUserId(string userId, int? level= null)
        {
-           var sql = PetaPoco.Sql.Builder.Append(@"   select  top 1 * from SYS_ORGANIZE where ORG_ID in ( select ORG_ID from SYS_USERORGANIZE where USER_ID =@0) order by ORG_LEVEL ", userId);
-           Database db = new Database();
-           return db.FirstOrDefault<SYS_ORGANIZE>(sql);
+           if (level!=null)
+           {
+               var sql = PetaPoco.Sql.Builder.Append(@"   select  top 1 * from SYS_ORGANIZE where ORG_ID in ( select ORG_ID from SYS_USERORGANIZE where USER_ID =@0) and ORG_LEVEL=@1 order by ORG_LEVEL ", userId,level);
+               Database db = gzswDB.GetInstance();
+               return db.FirstOrDefault<SYS_ORGANIZE>(sql);
+           }
+           else
+           {
+               var sql = PetaPoco.Sql.Builder.Append(@"   select  top 1 * from SYS_ORGANIZE where ORG_ID in ( select ORG_ID from SYS_USERORGANIZE where USER_ID =@0) order by ORG_LEVEL ", userId);
+               Database db = gzswDB.GetInstance();
+               return db.FirstOrDefault<SYS_ORGANIZE>(sql);
+           }
+        
        }
 
 
@@ -35,9 +45,23 @@ namespace gzsw.dal.dao
        public IList<SYS_ORGANIZE> GetListForUserId(string userId)
        {
            var sql = PetaPoco.Sql.Builder.Append(@" select * from SYS_ORGANIZE where ORG_ID in ( select ORG_ID from SYS_USERORGANIZE where USER_ID =@0)",userId);
-           Database db = new Database();
+           Database db = gzswDB.GetInstance();
            return db.Fetch<SYS_ORGANIZE>(sql);
        }
+
+        /// <summary>
+        /// 获取用户组织结构
+        /// </summary>
+        /// <param name="userId">用户ID</param>
+        /// <param name="level">级别</param>
+        /// <returns></returns>
+        public IList<SYS_ORGANIZE> GetListForUserId(string userId, string level)
+       {
+           var sql = PetaPoco.Sql.Builder.Append(@" select * from SYS_ORGANIZE where ORG_ID in ( select ORG_ID from SYS_USERORGANIZE where USER_ID =@0) and ORG_LEVEL =@1", userId,level);
+           Database db = gzswDB.GetInstance();
+           return db.Fetch<SYS_ORGANIZE>(sql);
+       }
+
 
 
 
@@ -52,7 +76,7 @@ namespace gzsw.dal.dao
        {
            var sql = PetaPoco.Sql.Builder.Append(@" SELECT * FROM SYS_ORGANIZE where (dbo.isParent(ORG_ID,@0)=1)
                  and ORG_ID in ( select ORG_ID from SYS_USERORGANIZE where USER_ID =@1)", orgId,userId);
-           Database db = new Database();
+           Database db = gzswDB.GetInstance();
            return db.Fetch<SYS_ORGANIZE>(sql);
        }
 
@@ -70,7 +94,7 @@ namespace gzsw.dal.dao
                 Delete SYS_ORGANIZE WHERE ORG_ID IN(SELECT ORG_ID from ORGInfo);
                 Delete SYS_HALL where ORG_ID=@0;"
                , orgid);
-           Database db = new Database();
+           Database db = gzswDB.GetInstance();
            db.Execute(sql);
        }
 
@@ -81,7 +105,7 @@ namespace gzsw.dal.dao
 
        public string Add(SYS_ORGANIZE org, SYS_HALL hal)
        {
-           Database db = new Database();
+           Database db = gzswDB.GetInstance();
            db.BeginTransaction();
 
            db.Insert(hal);

@@ -23,14 +23,6 @@ namespace gzsw.controller.SYS
         public ActionResult Index(string orgnam, int page = 1)
         {
             ViewBag.ORGNAM = orgnam;
-            //ViewBag.PAGE = page;
-
-            //Page<SYS_ORGANIZE> data = dao.GetList(page, PageSize, "", "ORG_NAM like", orgnam);
-            //var orgall = DaoOrg.FindList();
-            //foreach (var org in data.Items)
-            //{
-            //    org.Par_OrgList = orgall.Where(obj => obj.ORG_ID == org.PAR_ORG_ID).ToList();
-            //}
             return View();
         }
 
@@ -170,7 +162,7 @@ namespace gzsw.controller.SYS
             try
             {
                 var exists = DaoHall.GetEntity("ORG_ID", id);
-                if(exists!=null)
+                if (exists != null)
                     return JsonResult(false, "该机构还有服务大厅，不允许删除！", "SYS", "/", false);
                 new SYS_ORGANIZE_DAL().DeleteAndChildren(id);
                 return JsonResult(true, "删除成功！", "SYS", "/", false);
@@ -308,10 +300,17 @@ namespace gzsw.controller.SYS
         [UserAuth("AUTH_FUNC_VIW")]
         public ActionResult GetOrgsManagerTree(string id, string check, int? disabled, string searchNam)
         {
-            var all = dao.FindList();
+            var all = new SYS_USER_DAL().GetUserORG(UserState.UserID);
             foreach (var org in all.Where(obj => obj.PAR_ORG_ID == ""))
             {
                 org.PAR_ORG_ID = null;
+            }
+            bool rootHasAuth = true;
+            if(!all.Any(o=>o.ORG_LEVEL==1))//处理没有省权限的数据
+            {
+                rootHasAuth = false;
+                all.Where(o => o.ORG_LEVEL == (all.Min(o2 => o2.ORG_LEVEL)))
+                    .ToList().ForEach(o => o.PAR_ORG_ID = null);
             }
             var tree = new ZtreeNode_ORG
             {
@@ -321,6 +320,7 @@ namespace gzsw.controller.SYS
                 open = true,
                 isParent = true,
                 nocheck = true,
+                hasauth = rootHasAuth,
                 highlight = (!string.IsNullOrEmpty(searchNam) && "顶级机构".IndexOf(searchNam) > -1),
                 children = GenOrgsManagerTree(all, null, check, disabled, searchNam)
             };
@@ -349,6 +349,7 @@ namespace gzsw.controller.SYS
                     @checked = (check != null && check == obj.ORG_ID),
                     open = false,
                     Org_LV = obj.ORG_LEVEL,
+                    hasauth = true,
                     isParent = all.Any(obj2 => obj2.PAR_ORG_ID == obj.ORG_ID),
                     chkDisabled = (disabled != null && disabled.ToString() == obj.ORG_ID),
                     highlight = (!string.IsNullOrEmpty(searchNam) && obj.ORG_NAM.IndexOf(searchNam) > -1),
@@ -422,6 +423,112 @@ namespace gzsw.controller.SYS
                 GenOrgsTreeLeafOpen(item);
             }
         }
+        #endregion
+
+        #region 组织结构树3-只有市，市下面挂服务厅
+        /// <summary>
+        /// 获取权限树
+        /// </summary>
+        /// <returns></returns>
+        [UserAuth("AUTH_FUNC_VIW")]
+        public ActionResult GetOrgs2Tree(string id, string check, int? disabled, string searchNam)
+        {
+            var all = new SYS_USER_DAL().GetUserORG(UserState.UserID);
+            var hallall = DaoHall.FindList();
+            foreach (var org in all.Where(obj => obj.PAR_ORG_ID == ""))
+            {
+                org.PAR_ORG_ID = null;
+            }
+            var treelist = all.Where(obj => obj.ORG_LEVEL == 2)//市级
+                .Select(obj => new ZtreeNode_ORG
+                {
+                    id = obj.ORG_ID.ToString(),
+                    name = obj.ORG_NAM,
+                    @checked = (check != null && check == obj.ORG_ID),
+                    open = true,
+                    Org_LV = (byte)obj.ORG_LEVEL,
+                    isParent = all.Any(obj2 => obj2.PAR_ORG_ID == obj.ORG_ID),
+                    chkDisabled = (disabled != null && disabled.ToString() == obj.ORG_ID),
+                    highlight = (!string.IsNullOrEmpty(searchNam) && obj.ORG_NAM.IndexOf(searchNam) > -1)
+                }).ToList();
+            foreach (var leaf in treelist)
+            {
+                List<ZtreeNode_ORG> leafchild = new List<ZtreeNode_ORG>();
+                GenOrgs2Tree(all, hallall, ref leafchild, leaf.id, check, disabled, searchNam);
+                leaf.children = leafchild;
+            }
+            if (!string.IsNullOrEmpty(searchNam))
+            {
+                GenOrgs2TreeOpen(treelist);
+            }
+            return Json(treelist, JsonRequestBehavior.AllowGet);
+        }
+
+        private void GenOrgs2Tree(IEnumerable<SYS_ORGANIZE> all, IEnumerable<SYS_HALL> hallall,
+            ref List<ZtreeNode_ORG> leafchild,
+            string parid, string check, int? disabled, string searchNam)
+        {
+            var l = all.Where(obj => obj.PAR_ORG_ID == parid);
+            foreach (var obj in l)
+            {
+                var h_ = hallall.Where(obj2 => obj2.ORG_ID == obj.ORG_ID)
+                 .Select(obj2 => new ZtreeNode_ORG
+                 {
+                     id = obj2.HALL_NO,
+                     name = obj2.HALL_NAM,
+                     open = false,
+                     Org_LV = 5,
+                     isParent = false,
+                     highlight = (!string.IsNullOrEmpty(searchNam) && obj2.HALL_NAM.IndexOf(searchNam) > -1)
+                 }).ToList();
+                leafchild.AddRange(h_);
+                GenOrgs2Tree(all, hallall, ref  leafchild, obj.ORG_ID, check, disabled, searchNam);
+            }
+        }
+        private void GenOrgs2TreeOpen(List<ZtreeNode_ORG> tree)
+        {
+            foreach (var item in tree)
+            {
+                if (item.children != null && item.children.Any(obj => obj.highlight || obj.open))
+                {
+                    item.open = true;
+                }
+            }
+        }
+        #endregion
+
+        #region 组织结构树4-只有省和市，用于查询条件
+        /// <summary>
+        /// 获取权限树
+        /// </summary>
+        /// <returns></returns>
+        [UserAuth("AUTH_FUNC_VIW")]
+        public ActionResult GetSearchOrgsTree(string id)
+        {
+            var all = new SYS_USER_DAL().GetUserORG(UserState.UserID);
+            foreach (var org in all.Where(obj => obj.PAR_ORG_ID == ""))
+            {
+                org.PAR_ORG_ID = null;
+            }
+            var treelist = all.Where(obj => obj.ORG_LEVEL == 1)//省级
+                .Select(obj => new ZtreeNode_ORG
+                {
+                    id = obj.ORG_ID.ToString(),
+                    name = obj.ORG_NAM,
+                    open = true,
+                    isParent = true,
+                    children = all.Where(o => o.PAR_ORG_ID == obj.ORG_ID)
+                        .Select(obj2 => new ZtreeNode_ORG
+                        {
+                            id = obj2.ORG_ID.ToString(),
+                            name = obj2.ORG_NAM,
+                            open = true,
+                            isParent = true
+                        }).ToList()
+                }).ToList();
+            return Json(treelist, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
     }
 }

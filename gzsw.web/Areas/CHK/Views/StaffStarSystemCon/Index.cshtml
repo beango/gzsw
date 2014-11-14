@@ -1,0 +1,147 @@
+﻿@using gzsw.controller.CHK.Models
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@{
+    ViewBag.Title = "个人星级评定体系";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@model PetaPoco.Page<gzsw.model.CHK_STAFF_STAR_SYSTEM_CON>
+
+<!-- 查询菜单 -->
+<div class="l-panel-search">
+    <table class="tabSearchList">
+        <tr>
+            <td style="width:100px;">组织机构：</td>
+            <td style="width:170px;">@Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList, "--请选择--")</td>
+
+            <td>
+                <div id="btnSearch"></div>
+            </td>
+
+        </tr>
+    </table>
+
+</div>
+<div id="toptoolbar"></div>
+
+
+
+<div class="tablePanel">
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th style="width:30px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
+                <th style="width:38px;">序号 </th>
+                <th title="组织机构编号">组织编号</th>
+                <th title="组织机构名称">组织名称</th>
+                <th title="时间类型">评定时间类型</th>
+                <th title="评价最低分">评价最低分</th>
+                <th title="满足评定-业务表现最低分">业务表现最低分</th>
+                <th title="满足评定-业务质量最低分">业务质量最低分</th>
+                <th title="满足评定-业务效率最低分">业务效率最低分</th>
+                <th title="满足评定-考勤得分最低分">考勤得分最低分</th>
+                <th title="满足评定-日常表现最低分">日常表现最低分</th>
+                <th title="投诉次数上限">投诉次数上限</th>
+            </tr>
+        </thead>
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <input name="cbId" value="@item.ORG_ID" type='checkbox' />
+                </td>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    @item.ORG_ID
+                </td>
+                <td>
+                    @item.ORG_NAM
+                </td>
+                <td>
+                    @(((EvaluationTimeTypeEunm)item.TIME_DUR_TYP).GetDescription())
+                </td>
+                <td>
+                    @item.EVAL_MIN_SCORE
+                </td>
+                <td>
+                    @item.SVR_MIN_SCORE
+                </td>
+                <td>
+                    @item.QUALITY_MIN_SCORE
+                </td>
+                <td>
+                    @item.EFFIC_MIN_SCORE
+                </td>
+                <td>
+                    @item.ATTEND_MIN_SCORE
+                </td>
+                <td>
+                    @item.USU_ACT_MIN_SCORE
+                </td>
+                <td>
+                    @item.COMPLAIN_MAX_CNT
+                </td>
+            </tr>
+        }
+    </table>
+    @if (Model.Items.Count < 1)
+    {
+        <div class="l-panel-notDATA">
+            暂无数据
+        </div>
+    }
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+</div>
+
+@section Head{
+    <script lang="javascript">
+
+        $(function() {
+            // 查询
+            $("#btnSearch").ligerButton(
+            {
+                text: " 查 询 ",
+                click: function() {
+                    var url = "?orgId=" + encodeURI($("#ddlORGID").val());
+                    location.href = url.urlstamp();
+                },
+                icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
+            });
+
+            // 顶部导航
+            var ligerToolBar = $("#toptoolbar").ligerToolBar();
+
+            @if (Html.ChkAuth("CHK_STAFF_STAR_SYSTEM_CON_VIW"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "CHK_STAFF_STAR_SYSTEM_CON_VIW", 600, 500));
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+            @if (Html.ChkAuth("CHK_STAFF_STAR_SYSTEM_CON_ADD"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIAddButton(Url.Action("Create"), "增加", "CHK_STAFF_STAR_SYSTEM_CON_ADD", 800, 500));
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+            @if (Html.ChkAuth("CHK_STAFF_STAR_SYSTEM_CON_EDT"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "CHK_STAFF_STAR_SYSTEM_CON_EDT", 800, 500));
+                @:ligerToolBar.addItem({ line: true });
+            }
+
+
+            @if (Html.ChkAuth("CHK_STAFF_STAR_SYSTEM_CON_DEL"))
+            {
+                @:ligerToolBar.addItem(@Html.LigerUIDeleteButton(Url.Action("Delete"), "删除", "CHK_STAFF_STAR_SYSTEM_CON_DEL"));
+            }
+
+
+        });
+    </script>
+}

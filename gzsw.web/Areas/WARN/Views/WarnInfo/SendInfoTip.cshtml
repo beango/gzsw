@@ -1,0 +1,82 @@
+﻿@using gzsw.web
+@model List<gzsw.controller.WARN.TipModel>
+@{
+    ViewBag.Title = "SendInfoTip";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+
+<div class="tablePanel">
+    <table class="tablelist" cellpadding="0" cellspacing="0">
+        @{
+            var i = 1;
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="width:40px;text-indent:0; ">
+                    @(i++)
+                </td>
+                <td style="text-align: left; text-indent: 0;">
+                    @item.msg
+                </td>
+                <td style="width: 40px; text-indent: 0;"><a href='#' onclick="warnRead(this,'@item.typ',@item.id)">@(item.typ=="WARNSENDINFODETAIL"?"已读":"处置")</a></td>
+            </tr>
+        }
+
+    </table>
+</div>
+@section Head{
+    <script type="text/javascript">
+        function warnRead(row, typ, id) {
+            if (typ == 'WARNSENDINFODETAIL') {
+                handler_warnsendinfo(row, id); return;
+            }
+            //报警处置  /Warn/Warnalarminfo/Edit?id=x
+            //投诉处置  /WARN/WarnComplainDetail/Edit?id=x
+            if (typ == 'ALARMSENDINFODETAIL') {
+                url = '/Warn/Warnalarminfo/Edit?id=' + id;
+                tab.addTabItem({
+                    tabid: 'tipMenuWarnAlarmInfo',
+                    text: "报警处置",
+                    url: url.urlstamp(),
+                    callback: function () {
+                        resize();
+                    }
+                });
+                return;
+            }
+            if (typ == 'COMPLAINSENDINFODETAIL') {
+                url = '/Warn/WarnComplainDetail/Edit?id=' + id;
+                tab.addTabItem({
+                    tabid: 'tipWarnComplainDetail',
+                    text: "报警处置",
+                    url: url.urlstamp(),
+                    callback: function () {
+                        resize();
+                    }
+                });
+                return;
+            }
+        }
+        //处理预警信息发送明细
+        function handler_warnsendinfo(row, id) {
+            $.ajax({
+                url: "@Url.Content("/Warn/WarnInfo/ReadSendInfoDeail")" + "?id=" + id,
+                data: {},
+                dataType: 'json',
+                success: function (res) {
+                    hadlerend(row);
+                }
+            });
+        }
+        function hadlerend(row) {
+            setTimeout(function () {
+                $(row).parent().parent().remove();
+                if ($(".tablelist tr").length == 0) {
+                    sendinfo_detail_tips.hide();
+                }
+            }, 100);
+        }
+    </script>
+}

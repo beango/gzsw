@@ -26,14 +26,14 @@ namespace gzsw.controller.SYS
             ViewBag.HALLNO = hallno;
             ViewBag.ORGID = orgid;
             ViewBag.ORGNAM = orgnam;
-            ViewBag.UserORG = new SelectList(UserState.UserOrgs.Where(obj => obj.ORG_LEVEL == 4)
+            var orgall = new SYS_USER_DAL().GetUserORG(UserState.UserID);
+            if (string.IsNullOrEmpty(orgid) && orgall != null)
+                orgid = orgall.FirstOrDefault(obj => obj.ORG_LEVEL == 4).ORG_ID;
+            ViewBag.UserORG = new SelectList(orgall.Where(obj => obj.ORG_LEVEL == 4)
                 , "ORG_ID", "ORG_NAM", orgid);
 
-            var orgs = UserState.UserOrgs.Select(obj => obj.ORG_ID);
-            if (UserState.UserID == "admin")
-            {
-                orgs = DaoOrganize.FindList().Select(obj => obj.ORG_ID);
-            }
+            var orgs = orgall.Select(obj => obj.ORG_ID);
+           
             if (!string.IsNullOrEmpty(orgid))
             {
                 orgs = orgs.Where(obj => obj == orgid);
@@ -151,7 +151,8 @@ namespace gzsw.controller.SYS
                     ModelState.AddModelError("", "新增出错！");
                     return JsonResult(false, "新增出错！", "SYS");
                 }
-
+                info.CREATE_DTIME = DateTime.Now;
+                info.CREATE_ID = UserState.UserID;
                 var rst = dao.AddObject(info);
                 if (null != rst)
                 {
@@ -160,14 +161,14 @@ namespace gzsw.controller.SYS
                 else
                 {
                     ModelState.AddModelError("", "新增失败！");
-                    return JsonResult(false, "新增出错！", "SYS");
+                    return JsonResult(false, "新增错误！", "SYS");
                 }
             }
             catch (Exception ex)
             {
-                LogHelper.ErrorLog("系统出错！", ex);
-                ModelState.AddModelError("", "系统出错！");
-                return JsonResult(false, "新增出错！", "SYS");
+                LogHelper.ErrorLog("系统错误！", ex);
+                ModelState.AddModelError("", "系统错误！");
+                return JsonResult(false, "系统错误！", "SYS");
             }
         }
 
@@ -322,8 +323,8 @@ namespace gzsw.controller.SYS
             }
             catch (Exception ex)
             {
-                LogHelper.ErrorLog("系统出错！", ex);
-                ModelState.AddModelError("", "系统出错！" + ex.Message);
+                LogHelper.ErrorLog("系统错误！", ex);
+                ModelState.AddModelError("", "系统错误！" + ex.Message);
                 return Redirect("/Home/Error");
             }
         }
@@ -342,7 +343,7 @@ namespace gzsw.controller.SYS
             }
             catch (Exception ex)
             {
-                LogHelper.ErrorLog("删除排队机队列出错", ex);
+                LogHelper.ErrorLog("系统错误", ex);
                 return Redirect("/Home/Error");
             }
         }

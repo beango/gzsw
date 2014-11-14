@@ -1,0 +1,207 @@
+﻿@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model PetaPoco.Page<dynamic>
+@{
+    ViewBag.Title = "排队叫号分析";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var index = 0;
+}
+@section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+    @Html.JavaScript("lib/counter/orgTree.js")
+    <!-- 图表排序脚本 -->
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.js")
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.widgets.min.js")
+    @Html.JavaScript("lib/fusionchart/FusionCharts.js")
+    <style type="text/css">
+        .tablelist th {
+            background-image: none;
+            font-weight: normal;
+            text-indent: 0;
+        }
+
+        .tablelist td {
+            text-indent: 0;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            // 表格数据排序
+            $("#datatable").tablesorter({
+                headers: {
+                    0: { sorter: false },
+                    1: { sorter: false },
+                    2: { sorter: false },
+                    3: { sorter: false },
+                    4: { sorter: false },
+                    5: { sorter: false },
+                    6: { sorter: false },
+                    7: { sorter: false },
+                    8: { sorter: false },
+                    9: { sorter: false },
+                    10: { sorter: false }
+                }
+            });
+
+            // 打印报表
+            $("#btnOutPut").click(function () {
+                var url = "@Html.Raw(Request.Url.PathAndQuery)" + ("@Html.Raw(Request.Url.PathAndQuery)".indexOf('?') > -1 ? "&" : "?") + "export=true";
+                window.open(url);
+            });
+        });
+
+        function showCNT(ct, id) {
+            var url = "/STAT/StatStaffCall/ShowCNT";
+            url += "?ct=" + ct;
+            //var t = '@Request.QueryString["t"]';
+            url += "&orgid=" + id;
+            url += "&btime=@ViewBag.beginTime&etime=@ViewBag.endTime";
+            window.open(url);
+            return false;
+        }
+        function showCNT2(ct, id) {
+            var url = "/STAT/StatStaffCall/ShowCNT";
+            url += "?ct=" + ct;
+            var t = '@Request.QueryString["t"]';
+            if (t == '3')//员工报表
+                url += "&staffid=" + id;
+            else
+                url += "&orgid=" + id;
+            url += "&btime=@ViewBag.beginTime&etime=@ViewBag.endTime";
+            window.open(url);
+            return false;
+        }
+        $(function () {
+            $("#navtab1").ligerTab();
+        });
+    </script>
+}
+@{
+    Html.RenderPartial("SearchView", Model);
+}
+<div class="divPanel">
+    <div id="navtab1" style="overflow: hidden;">
+        <div tabid="home" title="报表" lselected="true">
+            <div class="tablePanel" style="padding-top: 5px;">
+                <table id="datatable" class="tablelist tablesorter tablesorter-default" cellpadding="0" cellspacing="0">
+                    <thead>
+                        <tr><th colspan="17" style="background-image: none;"><span style="font-size: 14px; font-weight: bold; ">@Html.Raw(ViewBag.MainTitle)</span></th></tr>
+                        <tr>
+                            <th style="text-align: center; background-image: none;" colspan="2">  </th>
+                            <th style="text-align: center; background-image: none;" colspan="2"> <a href="#" onclick="return showCNT('CALLCNT', '@Request.QueryString["orgid"]')" target="_blank">呼叫量</a> </th>
+                            <th style="text-align: center; background-image: none;" colspan="2"> <a href="#" onclick="return showCNT('HANDLECNT', '@Request.QueryString["orgid"]')" target="_blank">办理量</a> </th>
+                            <th style="text-align: center; background-image: none;" colspan="2"> <a href="#" onclick="return showCNT('ABANDONCNT', '@Request.QueryString["orgid"]')" target="_blank">弃号量</a> </th>
+                            <th style="text-align: center; background-image: none;" rowspan="2"> <a href="#" onclick="return showCNT('WAITPERCENT', '@Request.QueryString["orgid"]')" target="_blank">平均等候时间</a> </th>
+                            <th style="text-align: center; background-image: none;" colspan="2" class="OVERTIMECNT"> <a href="#" onclick="return showCNT('OVERTIMECNT', '@Request.QueryString["orgid"]')" target="_blank">超时等候量</a> </th>
+                            <th style="text-align: center; background-image: none;" colspan="2" class="SECONDCNT"> <a href="#" onclick="return showCNT('SECONDCNT', '@Request.QueryString["orgid"]')" target="_blank">二次办税量</a> </th>
+                            <th style="text-align: center; background-image: none;" colspan="2" class="LOCALCNT"> <a href="#" onclick="return showCNT('LOCALCNT', '@Request.QueryString["orgid"]')" target="_blank">同城受理</a> </th>
+                            <th style="text-align: center; background-image: none;" colspan="2" class="VOTECNT"> <a href="#" onclick="return showCNT('VOTECNT', '@Request.QueryString["orgid"]')" target="_blank">一票多业务量</a> </th>
+                        </tr>
+                        <tr>
+                            <th style="width:30px;background-image: none;">序号</th>
+                            <th style="width:40px;background-image: none;">@ViewBag.NAM</th>
+                            <th>呼叫量</th>
+                            <th>呼叫率</th>
+                            <th>办理量</th>
+                            <th>办理率</th>
+                            <th>弃号量</th>
+                            <th>弃号率</th>
+                            <th class="OVERTIMECNT">超时等候量</th>
+                            <th class="OVERTIMECNT">超时等候率</th>
+                            <th class="SECONDCNT">二次办税量</th>
+                            <th class="SECONDCNT">二次办税率</th>
+                            <th class="LOCALCNT">同城受理量</th>
+                            <th class="LOCALCNT">同城受理率</th>
+                            <th class="VOTECNT">一票多业务量</th>
+                            <th class="VOTECNT">一票多业务率</th>
+                        </tr>
+                    </thead>
+                    @if (Model != null && Model.Items.Count() > 0)
+                    {
+                        foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>@(++index)</td>
+                                <td>
+                                    @if (Request["t"] != "3")
+                                    {
+                                        <a href="@ViewBag.NAMTitle&orgid=@item.ID&beginTime=@ViewBag.beginTime&endTime=@ViewBag.endTime" target="_blank">@item.NAM</a>
+                                    }
+                                    else
+                                    {
+                                        @item.NAM
+                                    }
+                                </td>
+                                <td><a href="#" onclick="return showCNT2('CALLCNT','@item.ID')" target="_blank">@item.CALL_CNT</a></td>
+                                <td>@((item.CALL_CNT * 100.0 / Model.Items.Sum(obj => obj.CALL_CNT)).ToString("f2")) %</td>
+                                <td><a href="#" onclick="return showCNT2('HANDLECNT','@item.ID')" target="_blank">@item.HANDLE_CNT</a></td>
+                                <td>@((item.HANDLE_CNT * 100.0 / Model.Items.Sum(obj => obj.HANDLE_CNT)).ToString("f2")) %</td>
+                                <td><a href="#" onclick="return showCNT2('ABANDONCNT','@item.ID')" target="_blank">@item.ABANDON_CNT</a></td>
+                                <td>@((item.ABANDON_CNT * 100.0 / Model.Items.Sum(obj => obj.ABANDON_CNT)).ToString("f2")) %</td>
+                                <td><a href="#" onclick="return showCNT2('WAITPERCENT','@item.ID')" target="_blank">@(((int)(item.WAIT_DUR / item.CALL_CNT)).ToTimeString())</a></td>
+                                <td class="OVERTIMECNT"><a href="#" onclick="return showCNT2('OVERTIMECNT','@item.ID')" target="_blank">@item.OVERTIME_WAIT_CNT</a></td>
+                                <td class="OVERTIMECNT">@((item.OVERTIME_WAIT_CNT * 100.0 / Model.Items.Sum(obj => obj.OVERTIME_WAIT_CNT)).ToString("f2")) %</td>
+                                <td class="SECONDCNT"><a href="#" onclick="return showCNT2('SECONDCNT','@item.ID')" target="_blank">@item.SECOND_SVR_CNT</a></td>
+                                <td class="SECONDCNT">@((item.SECOND_SVR_CNT * 100.0 / Model.Items.Sum(obj => obj.SECOND_SVR_CNT)).ToString("f2")) %</td>
+                                <td class="LOCALCNT"><a href="#" onclick="return showCNT2('LOCALCNT','@item.ID')" target="_blank">@item.LOCAL_CNT</a></td>
+                                <td class="LOCALCNT">@((item.LOCAL_CNT * 100.0 / Model.Items.Sum(obj => obj.LOCAL_CNT)).ToString("f2")) %</td>
+                                <td class="VOTECNT"><a href="#" onclick="return showCNT2('VOTECNT','@item.ID')" target="_blank">@item.VOTE_MULTI_CNT</a></td>
+                                <td class="VOTECNT">@((item.VOTE_MULTI_CNT * 100.0 / Model.Items.Sum(obj => obj.VOTE_MULTI_CNT)).ToString("f2")) %</td>
+                            </tr>
+                        }
+                        <tfoot>
+                            <tr>
+                                <td colspan="2" style="text-align: center; font-weight: bold; font-size: 14px;">合计</td>
+                                <td><a href="#" onclick="return showCNT('CALLCNT', '@Request.QueryString["orgid"]')" target="_blank">@Model.Items.Sum(obj => obj.CALL_CNT)</a></td>
+                                <td>100%</td>
+                                <td><a href="#" onclick="return showCNT('HANDLECNT', '@Request.QueryString["orgid"]')" target="_blank">@Model.Items.Sum(obj => obj.HANDLE_CNT)</a></td>
+                                <td>100%</td>
+                                <td><a href="#" onclick="return showCNT('ABANDONCNT', '@Request.QueryString["orgid"]')" target="_blank">@Model.Items.Sum(obj => obj.ABANDON_CNT)</a></td>
+                                <td>100%</td>
+                                <td><a href="#" onclick="return showCNT('WAITPERCENT', '@Request.QueryString["orgid"]')" target="_blank">@(((int)(Model.Items.Sum(obj => (double)obj.WAIT_DUR) / Model.Items.Sum(obj => obj.CALL_CNT))).ToTimeString())</a></td>
+                                <td class="OVERTIMECNT"><a href="#" onclick="return showCNT('OVERTIMECNT', '@Request.QueryString["orgid"]')" target="_blank">@Model.Items.Sum(obj => obj.OVERTIME_WAIT_CNT)</a></td>
+                                <td class="OVERTIMECNT">100%</td>
+                                <td class="SECONDCNT"><a href="#" onclick="return showCNT('SECONDCNT', '@Request.QueryString["orgid"]')" target="_blank">@Model.Items.Sum(obj => obj.SECOND_SVR_CNT)</a></td>
+                                <td class="SECONDCNT">100%</td>
+                                <td class="LOCALCNT"><a href="#" onclick="return showCNT('LOCALCNT', '@Request.QueryString["orgid"]')" target="_blank">@Model.Items.Sum(obj => obj.LOCAL_CNT)</a></td>
+                                <td class="LOCALCNT">100%</td>
+                                <td class="VOTECNT"><a href="#" onclick="return showCNT('VOTECNT', '@Request.QueryString["orgid"]')" target="_blank">@Model.Items.Sum(obj => obj.VOTE_MULTI_CNT)</a></td>
+                                <td class="VOTECNT">100%</td>
+                            </tr>
+                        </tfoot>
+                    }
+                </table>
+
+                @if (Model == null || Model.Items.Count <= 0)
+                {
+                    <div class="l-panel-notDATA">
+                        暂无数据
+                    </div>
+                }
+                @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+
+            </div>
+        </div>
+        <div title="柱状图">
+            <div>
+                @Html.Raw(ViewBag.ChartColumn3DXML)
+            </div>
+        </div>
+        <div title="线状图">
+            <div>
+                @Html.Raw(ViewBag.ChartSplineXML)
+            </div>
+        </div>
+    </div>
+    <div id="divAdvance" style="display:none;">
+        <div style="margin-left:15px;margin-top:10px;">
+            <input type="checkbox" checked="checked" onclick="chk(this, 'OVERTIMECNT')" />超时等候
+            <input type="checkbox" checked="checked" onclick="chk(this, 'SECONDCNT')" />二次办税
+            <input type="checkbox" checked="checked" onclick="chk(this,'LOCALCNT')" />同城受理
+            <input type="checkbox" checked="checked" onclick="chk(this, 'VOTECNT')" />一票多业务
+        </div>
+    </div>
+    <!-- 内容 -->
+</div>
+

@@ -5,7 +5,7 @@
 @using gzsw.web
 @model gzsw.controller.MON.VirtualHall
     
-<div>
+<div class="b-content">
     
     <div class="innerbox">
         <div class="outbox">
@@ -19,6 +19,7 @@
     </div>
 
     <div style="position: relative; ">
+        <span><a target="_self" href="@Url.Action("Index", "Warning", new { hallNo=Model.HallNo })">监控预警</a></span>
         <span id="txtTitle" class="title_span">@Model.HallName</span>
     
         <div id="thermometer" style="width: 220px; float: right;margin-top: 10px;">
@@ -45,7 +46,9 @@
 
             foreach (var item in Model.HallTabConfigs)
             {
-                <span id="tab_@item.Id" class="hall-icon device" style="left:@item.X;top:@item.Y" d-type="device" d-open="0" d-state="0" d-Id="@item.Id" d-Hall="@item.HallNo" >
+                <span id="tab_@item.Id" class="hall-icon device" style="left:@item.X;top:@item.Y" d-type="device" d-open="0"
+                      d-state="0" d-id="@item.Id" d-hall="@item.HallNo" d-seq="@(item.CameraConfig!=null?item.CameraConfig.Id:0)"
+                      d-cameratype="@(item.CameraConfig!=null?item.CameraConfig.CameraType:0)">
                     <span class="hallNum">@item.Id</span>
                     <img class="imgSize" src="@item.IconUrl" />
                     <span d-type="name" class="userName"></span>
@@ -60,6 +63,8 @@
         }
     </div>
 </div>
+
+<input type="button" id="playback" class="playback" title="摄像回放" />
 
 <div style="display: none;">
     <div id="tip_panel"></div>
@@ -111,7 +116,23 @@
             $panel.delegate('span', 'mousedown', function(e) {
                 var $this = $(this);
                 if ($this.attr("d-open") == 0) {
-                    gzsw.dialog.alert('窗口已关闭.', 3);
+
+                    var seq = $this.attr("d-seq");
+
+                    if (seq && Number(seq)) {
+                        var cameratype = $this.attr("d-cameratype");
+                        var width = cameratype == 1 ? 685 : 500;
+                        gzsw.dialog.open({
+                            url: '@Url.Action("PlayVideo", "VirtualMonitor")?seq=' + seq + '&_=' + (new Date()).getTime(),
+                            title: '摄像窗口',
+                            width: width,
+                            height: 368,
+                            isReload: false
+                        });
+
+                    }else{
+                        gzsw.dialog.alert('窗口已关闭.', 3);
+                    }
                     return false;
                 }
                 var item = $this.data("data");
@@ -156,6 +177,19 @@
 
             $(window).on("resize", function () {
                 calculateWidth();
+            });
+
+            $("#playback").click(function() {
+
+                gzsw.dialog.open({
+                    url: '@Url.Action("PlayBack", "VirtualMonitor")?hallNo=@Model.HallNo&_=' + (new Date()).getTime(),
+                    title: '摄像窗口',
+                    width: 760,
+                    height: 368,
+                    isReload: false
+                });
+
+                return false;
             });
         };
 

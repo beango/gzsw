@@ -3,6 +3,7 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 @using gzsw.model
+@using gzsw.model.Enums
 @using gzsw.util
 @using gzsw.web
 @model PetaPoco.Page<gzsw.model.CHK_STAFF_APPLYDETAIL>
@@ -11,6 +12,8 @@
 <div class="l-panel-search">
     <table class="tabSearchList">
         <tr>
+            <td style="width:100px;">服务厅：</td>
+            <td style="width:150px;">@Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)</td>
             <td style="width:100px;">员工编码：</td>
             <td style="width:170px;">
                 <input type="text" name="txtStaffNo" id="txtStaffNo" value="@ViewBag.StaffNo" /> 
@@ -63,7 +66,7 @@
                 <td>@item.STAFF_NAM</td>
                 <td>@item.BEGIN_TIME.ToString("yyyy-MM-dd HH时")</td>
                 <td>@item.END_TIME.ToString("yyyy-MM-dd HH点时")</td>
-                <td>@(EnumHelper.ConvertToE<CHK_STAFF_APPLYDETAIL.HOLLI_TYPE_ENUM>(item.HOLLI_TYP.ToString()))</td>
+                <td>@(EnumHelper.ConvertToE<HOLLI_TYPE_ENUM>(item.HOLLI_TYP.ToString()))</td>
                 <td>@(EnumHelper.ConvertToE<CHK_STAFF_APPLYDETAIL.APPLY_STATE_ENUM>(item.APPLY_STATE.ToString()))</td>
             </tr>
         }
@@ -85,6 +88,7 @@
                     text: " 查 询 ",
                     click: function() {
                         var url = "?staffNo=" + encodeURI($("#txtStaffNo").val())
+                            + "&orgId=" + encodeURI($("#ddlORGID").val())
                             + "&staffName=" + encodeURI($("#txtStaffName").val());
                         location.href = url.urlstamp();
                     },
@@ -94,20 +98,39 @@
         // 顶部导航
         var ligerToolBar = $("#toptoolbar").ligerToolBar();
 
-            @if (Html.ChkAuth("CHK_STAFF_APPLYDETAIL_VIW"))
+        @if (Html.ChkAuth("CHK_STAFF_APPLYDETAIL_VIW"))
             {
                 @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "CHK_STAFF_APPLYDETAIL_VIW", 550, 320));
-                @:ligerToolBar.addItem({ line: true });
-            }
-            
-            @if (Html.ChkAuth("CHK_STAFF_APPLYDETAIL_ADD"))
+                                        @:ligerToolBar.addItem({ line: true });
+                                    }
+
+        @if (Html.ChkAuth("CHK_STAFF_APPLYDETAIL_ADD"))
             {
                 @:ligerToolBar.addItem(@Html.LigerUIAddButton(Url.Action("Create"), "增加", "CHK_STAFF_APPLYDETAIL_ADD", 600, 400));
-                @:ligerToolBar.addItem({ line: true });
-            }
-            @if (Html.ChkAuth("CHK_STAFF_APPLYDETAIL_DEL"))
+                                @:ligerToolBar.addItem({ line: true });
+                            }
+        @if (Html.ChkAuth("CHK_STAFF_APPLYDETAIL_EDT"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIDeleteButton(Url.Action("Delete"), "删除", "CHK_STAFF_APPLYDETAIL_DEL"));
+               <text>
+            ligerToolBar.addItem({
+                    text: '撤消',
+                    click: function(item) {
+                        if ($(".tablelist").getSelCount() != 1)
+                        { 
+                            gzsw.dialog.alert("请选择需要操作的单个选项!");
+                            return false; 
+                        }
+                        var url = '/CHK/ApplyDetail/Edit' + '?id=' + $('.tablelist').getSelValue();
+
+                        gzsw.dialog.open({ url: url.urlstamp(), title: '撤消', width: 550, height: 320, isReload: true });
+                    },
+                    icon: 'logout'
+            });
+            </text>
+            }
+        @if (Html.ChkAuth("CHK_STAFF_APPLYDETAIL_DEL"))
+            {
+        @:ligerToolBar.addItem(@Html.LigerUIDeleteButton(Url.Action("Delete"), "删除", "CHK_STAFF_APPLYDETAIL_DEL"));
             }
     });
 </script>

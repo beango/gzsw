@@ -1,0 +1,142 @@
+﻿@{
+    ViewBag.Title = "查看排队叫号明细";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.controller.CHK.Models
+@using gzsw.model
+@using gzsw.model.Subclasses
+@using gzsw.util
+@using gzsw.util.Extensions
+@using gzsw.web
+@model gzsw.model.Subclasses.SYS_CURRQUEUEHIST_SUB
+
+
+
+<table class="formTable" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="width: 160px;" class="tdLeft">服务厅:</td>
+        <td>
+            @Html.DisplayFor(m => m.HALL_NAM)
+        </td>
+        <td class="tdLeft">窗口:</td>
+        <td>
+            @Html.DisplayFor(m => m.CHQUEUE_COUNTER)
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">排队号码:</td>
+        <td>
+            @Html.DisplayFor(m => m.CHQUEUE_NUMBER)
+        </td>
+        <td class="tdLeft">取号时间:</td>
+        <td>
+            @Model.CHQUEUE_TICKETTIME.ToString("yyyy-MM-dd HH:mm:ss")
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">业务:</td>
+        <td>
+            @Html.DisplayFor(m => m.Q_SERIALNAME)
+        </td>
+        <td class="tdLeft">操作员工:</td>
+        <td>
+            @Html.DisplayFor(m => m.STAFF_NAM)
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">呼叫时间:</td>
+        <td>
+            @(Model.CHQUEUE_CALLTIME == null ? "" : Model.CHQUEUE_CALLTIME.GetValueOrDefault().ToString("yyyy-MM-dd HH:mm:ss") )
+        </td>
+        <td class="tdLeft">等候总时长:</td>
+        <td>
+            @Model.CHQUEUE_WAITTIME.ToTimeString()
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">开始受理业务的时间:</td>
+        <td>
+            @(Model.CHQUEUE_STIME == null ? "" : Model.CHQUEUE_STIME.GetValueOrDefault().ToString("yyyy-MM-dd HH:mm:ss"))
+        </td>
+        <td class="tdLeft">受理总时长:</td>
+        <td>
+            @Model.CHQUEUE_BLTIME.ToTimeString()
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">请评价时间:</td>
+        <td>
+            @(Model.CHQUEUE_ETIME == null ? "" : Model.CHQUEUE_ETIME.GetValueOrDefault().ToString("yyyy-MM-dd HH:mm:ss"))
+        </td>
+        <td class="tdLeft">评价结果:</td>
+        <td>
+            @(((SYS_CURRQUEUEHIST_SUB.PJRESULTENUM)Model.CHQUEUE_PJRESULT).GetDescription())
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">评价时间:</td>
+        <td>
+            @(Model.CHQQUEUE_PJTIME == null ? "" : Model.CHQQUEUE_PJTIME.GetValueOrDefault().ToString("yyyy-MM-dd HH:mm:ss"))
+        </td>
+        <td class="tdLeft">纳税人办理业务数:</td>
+        <td>
+            @Model.CHQUEUE_YWBS
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">纳税人识别码:</td>
+        <td>
+            @Model.CHQUEUE_NSRSBM
+        </td>
+        <td class="tdLeft">纳税人名称:</td>
+        <td>
+            @Model.CHQUEUE_NSRMC
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">纳税机构:</td>
+        <td>
+            @Model.CHQUEUE_HALL_NAM
+        </td>
+        <td class="tdLeft">取号方式:</td>
+        <td>
+            @(((SYS_CURRQUEUEHIST_SUB.TICKETTYPEEUNM)Model.CHQUEUE_TICKETTYPE).GetDescription())
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">状态:</td>
+        <td>
+            @(((SYS_CURRQUEUEHIST_SUB.STATUSENUM)Model.CHQUEUE_STATUS).GetDescription())
+        </td>
+        <td class="tdLeft">完成状态:</td>
+        <td>
+            @(Model.CHQUEUE_ISFINISHED ? "交易完结" : "未交易完结")
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">
+            <a id="palyBack" href="javascript:void(0);"> 录像回放 </a>
+        </td>
+        <td colspan="3"></td>
+    </tr>
+</table>
+
+
+<script type="text/javascript">
+    $(function() {
+        $("#palyBack").click(function() {
+
+            var url = "@Html.Raw(Url.Action("PlayBack", "VirtualMonitor", new { area = "MON", hallNo = Model.CHQUEUE_SYSNO, counterId = Model.CHQUEUE_COUNTER, beginTime = Model.CHQUEUE_CALLTIME, endTime = Model.CHQUEUE_ETIME }))";
+
+            gzsw.dialog.openFull({
+                title: '摄像窗口',
+                url: url.urlstamp(),
+                width: 760,
+                height: 368,
+                isReload: false
+            });
+
+            return false;
+        });
+    });
+</script>
