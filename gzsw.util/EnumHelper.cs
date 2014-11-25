@@ -37,6 +37,12 @@ namespace gzsw.util
             return e.ToString();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="strValue"></param>
+        /// <returns></returns>
         public static string ConvertToE<T>(string strValue) where T : struct , IConvertible
         {
             T t;
@@ -44,7 +50,7 @@ namespace gzsw.util
         }
 
         /// <summary>
-        /// 
+        /// 将字符串转换为枚举类型
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="strValue"></param>

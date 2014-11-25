@@ -29,7 +29,7 @@ namespace gzsw.dal
         /// </summary>
         /// <param name="priKey"></param>
         /// <param name="val"></param>
-        void Delete(string priKey,object val);
+        void Delete(string priKey, object val);
 
         /// <summary>
         /// 删除一个对象
@@ -80,6 +80,13 @@ namespace gzsw.dal
         /// <returns></returns>
         bool Exists(params object[] paras);
 
+        /// <summary>
+        /// 分页
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="paras"></param>
+        /// <returns></returns>
         Page<T> GetPage(int pageIndex, int pageSize, params object[] paras);
     }
 }

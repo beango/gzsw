@@ -9,7 +9,7 @@ namespace gzsw.dal.dao
 {
     public static class CHK_STAFF_SYSTEM_CON_DAL
     {
-        public static Page<CHK_STAFF_SYSTEM_CON> GetList(string orgId,string userId,int pageIndex,int pageSize)
+        public static Page<CHK_STAFF_SYSTEM_CON> GetList(string[] orgIds,string userId,int pageIndex,int pageSize)
         {
             var db = gzswDB.GetInstance();
             var sql = Sql.Builder.Append(@"SELECT S.[ORG_ID]
@@ -31,9 +31,18 @@ namespace gzsw.dal.dao
                                       ON S.ORG_ID=U.ORG_ID 
                                       WHERE U.[USER_ID]=@0  ", userId);
 
-            if (!string.IsNullOrEmpty(orgId))
+            if (orgIds.Length>0)
             {
-                sql.Append(@" AND S.ORG_ID = @0 ", orgId);
+                var s = "";
+                for (int i = 0; i < orgIds.Length; i++)
+                {
+                    s += orgIds[i];
+                    if (i != orgIds.Length - 1)
+                    {
+                        s += ",";
+                    }
+                }
+                sql.Append(@" AND S.ORG_ID IN (" + s + ") ");
             }
 
             return db.Page<CHK_STAFF_SYSTEM_CON>(pageIndex, pageSize, sql);

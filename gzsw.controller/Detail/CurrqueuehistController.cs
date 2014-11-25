@@ -63,7 +63,7 @@ namespace gzsw.controller.Detail
         }
 
 
-        [UserAuth("Detail_SYS_CURRQUEUEHIST_VIW,DETAIL_TAXPAYER_EVALUATION_VIW")]
+        [UserAuth("Detail_SYS_CURRQUEUEHIST_VIW,DETAIL_TAXPAYER_EVALUATION_VIW,MON_Warning_VIW")]
         public ActionResult Details(string id)
         {
             try

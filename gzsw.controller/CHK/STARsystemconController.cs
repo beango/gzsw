@@ -44,7 +44,11 @@ namespace gzsw.controller.CHK
         { 
             try
             {
-
+                if (info.STAR_LEVEL >= 5)
+                {
+                    ModelState.AddModelError("", "不能设置5级以上的星级评定。");
+                    return View(info);
+                }
                 if (!ModelState.IsValid)
                 {
                     ModelState.AddModelError("", "新增出错。");
@@ -112,16 +116,16 @@ namespace gzsw.controller.CHK
                     return View(info);
                 }
                 var temp = HallstarsystemconDao.GetEntity("STAR_LEVEL", info.STAR_LEVEL);
-                temp.ATTEND_SCORE = info.ATTEND_SCORE/100;
-                temp.COMPLAIN_SCORE = info.COMPLAIN_SCORE/100;
+                temp.ATTEND_SCORE = (decimal)info.ATTEND_SCORE/100;
+                temp.COMPLAIN_SCORE = (decimal)info.COMPLAIN_SCORE / 100;
                 temp.ENVIRON_SCORE = info.ENVIRON_SCORE;
-                temp.EVAL_SATISFY_SCORE = info.EVAL_SATISFY_SCORE/100;
-                temp.HANDLE_ONTIME_SCORE = info.HANDLE_ONTIME_SCORE/100;
+                temp.EVAL_SATISFY_SCORE = (decimal)info.EVAL_SATISFY_SCORE / 100;
+                temp.HANDLE_ONTIME_SCORE = (decimal)info.HANDLE_ONTIME_SCORE / 100;
                 temp.NORM_SCORE = info.NORM_SCORE;
                 temp.OTHER_SCORE = info.OTHER_SCORE;
                 temp.PROFESS_SCORE = info.PROFESS_SCORE;
-                temp.QUALITY_SCORE = info.QUALITY_SCORE/100;
-                temp.QUEUE_DETAIN_SCORE = info.QUEUE_DETAIN_SCORE/100;
+                temp.QUALITY_SCORE = (decimal)info.QUALITY_SCORE / 100;
+                temp.QUEUE_DETAIN_SCORE = (decimal)info.QUEUE_DETAIN_SCORE / 100;
                 temp.STAR_LEVEL = info.STAR_LEVEL;
                 temp.SYSTEM_SCORE = info.SYSTEM_SCORE;
                 temp.THIRD_SURVEY_SCORE = info.THIRD_SURVEY_SCORE;

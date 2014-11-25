@@ -30,7 +30,7 @@ namespace gzsw.controller.Detail
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        [UserAuth("MON_Warning")]
+        [UserAuth("Detail_SYS_CURRQUEUEHIST_VIW")]
         public ActionResult Index(string orgId, DateTime? beginTime, DateTime? endTime, string number, int? counter,
             string staffId, string nsrsbm, int? tickettype, string hywDetailserialid, int? isfinished, string transcodeid,
             int isSenior = 0, int pageIndex = 1, int pageSize = 20)
@@ -78,7 +78,7 @@ namespace gzsw.controller.Detail
             }
             return orgId;
         }
-        [UserAuth("MON_Warning")]
+        
         public ActionResult Detail(string id)
         {
             try

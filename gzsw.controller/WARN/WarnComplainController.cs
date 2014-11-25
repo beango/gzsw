@@ -65,7 +65,7 @@ namespace gzsw.controller.WARN
                 }
                 var data = WarncomplaintypedaoDao.GetEntity("COMPLAIN_TYP_ID", info.COMPLAIN_TYP_ID);
                 data.COMPLAIN_NAM = info.COMPLAIN_NAM;
-                WarncomplaintypedaoDao.AddObject(data); 
+                WarncomplaintypedaoDao.UpdateObject(data); 
                 Alter("修改成功！", util.Enum.AlterTypeEnum.Success, false, true);
                 return Redirect("/Home/Blank");
                 

@@ -100,7 +100,7 @@ from [WARN_ALARM_SENDINFO_DETAIL] w
 join SYS_HALL h  on w.hall_NO=h.hall_no
 left join SYS_USER u on w.user_id = u.user_id");
             sql.Append("where w.HALL_NO =@0 ", hallno);
-            sql.Append(" and  w.SEND_TIME >=@0 ",DateTime.Now.ToShortDateString());
+            sql.Append(" and  w.SEND_TIME >=@0 ", DateTime.Now.ToShortDateString());
             var data = db.Page<dynamic>(page, PageSize, sql);
             data.ItemsPerPage = PageSize;
             return data;
@@ -112,8 +112,21 @@ left join SYS_USER u on w.user_id = u.user_id");
 
             var sql = PetaPoco.Sql.Builder.Append(@"select t2.* from WARN_ALARM_INFO_DETAIL t1 join WARN_ALARM_SENDINFO_DETAIL t2 on t1.ALARM_SEQ=t2.ALARM_SEQ
               where t2.CLI_READ_IND=0 and t2.CLI_SEND_STATE=0 and t2.USER_ID=@0 and t1.STATE=1"
-                ,userid);
+                , userid);
             return db.Fetch<WARN_ALARM_SENDINFO_DETAIL>(sql);
+        }
+
+        /// <summary>
+        /// 修改为已发送
+        /// </summary>
+        /// <param name="id"></param>
+        public void UPDATE_WARN_ALARM_INFO_DETAIL(IEnumerable<long> id)
+        {
+            if (null!=id&&id.Count()>0)
+            {
+                var sql = Sql.Builder.Append("update WARN_ALARM_SENDINFO_DETAIL set CLI_SEND_STATE=1 where SENDINFO_DETAIL_ID in(@0)", id);
+                gzswDB.GetInstance().Execute(sql);
+            }
         }
     }
 }

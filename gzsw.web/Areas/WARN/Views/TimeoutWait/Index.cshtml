@@ -4,7 +4,7 @@
 @model PetaPoco.Page<dynamic>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "等候超时率明细";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 <!-- 查询菜单 -->
@@ -22,6 +22,7 @@
                 </th>
                 <th style="width:38px;">序号 </th>
                 <th>服务厅</th>
+                <th>窗口</th>
                 <th>排队号码</th>
                 <th>取号时间</th>
                 <th>排队业务</th>
@@ -44,6 +45,7 @@
                     @(i++)
                 </td>
                 <td>@item.HALL_NAM</td>
+                <td>@item.CHQUEUE_COUNTER</td>
                 <td>@item.CHQUEUE_NUMBER</td>
                 <td>@(item.CHQUEUE_TICKETTIME == null ? string.Empty : item.CHQUEUE_TICKETTIME.ToString("yyyy-MM-dd HH:mm:ss"))</td>
                 <td>@item.Q_SERIALNAME</td>

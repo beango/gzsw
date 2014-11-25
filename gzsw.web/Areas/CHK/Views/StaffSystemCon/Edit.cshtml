@@ -26,9 +26,11 @@
                 @Html.RadioButtonFor(model => model.COMPRE_SAN_TYP, 1) 综合评议额外奖罚与投诉分在１００分之外计入总分
                 <br />
                 @Html.RadioButtonFor(model => model.COMPRE_SAN_TYP, 2) 综合评议额外奖罚与投诉分在１００分之内计入总分，并设置额外分上限
+                @Html.TextBoxFor(m => m.COMPRE_SAN_100_MAX_SCORE, new { @style = "width:40px;" })
+                @Html.ValidationMessageFor(m => m.COMPRE_SAN_100_MAX_SCORE)
             </td>
         </tr>
-        <tr id="trCOMPRETYPE" style="@(Model.COMPRE_SAN_TYP == 2 ? "" : "display: none;")">
+        @*<tr id="trCOMPRETYPE" style="@(Model.COMPRE_SAN_TYP == 2 ? "" : "display: none;")">
             <td class="tdLeft">当综合考核设置为100分之内加的上限分数：</td>
             <td>
                 @Html.TextBoxFor(m => m.COMPRE_SAN_100_MAX_SCORE)
@@ -36,7 +38,7 @@
             <td>
                 @Html.ValidationMessageFor(m => m.COMPRE_SAN_100_MAX_SCORE)
             </td>
-        </tr>
+        </tr>*@
         <tr>
             <td class="tdLeft">评价所占考核比：</td>
             <td>
@@ -125,13 +127,38 @@
 
 <script type="text/javascript">
     $(function () {
-        $("input[name='COMPRE_SAN_TYP']").click(function () {
-            var type = $(this).val();
-            if (Number(type)==2) {
-                $("#trCOMPRETYPE").show();
+        $("#btnSubmit").click(function () {
+            var $type = $("input[name='COMPRE_SAN_TYP']");
+
+            var EVAL_CHK_RT = $("#EVAL_CHK_RT").val();
+            var SVR_CHK_RT = $("#SVR_CHK_RT").val();
+            var QUALITY_CHK_RT = $("#QUALITY_CHK_RT").val();
+            var EFFIC_CHK_RT = $("#EFFIC_CHK_RT").val();
+            //var EFFIC_AVOID_RT = $("#EFFIC_AVOID_RT").val();
+            var ATTEND_CHK_RT = $("#ATTEND_CHK_RT").val();
+            var USU_ACT_CHK_RT = $("#USU_ACT_CHK_RT").val();
+
+            var COMPRE_SAN_100_MAX_SCORE = $("#COMPRE_SAN_100_MAX_SCORE").val();
+
+
+            var total = Number(EVAL_CHK_RT) + Number(SVR_CHK_RT) + Number(QUALITY_CHK_RT) +
+                    Number(EFFIC_CHK_RT) +
+                    //Number(EFFIC_AVOID_RT) +
+                    Number(ATTEND_CHK_RT) +
+                    Number(USU_ACT_CHK_RT);
+
+            if ($($type[0]).prop("checked")) {
+                if (total != 100) {
+                    gzsw.dialog.alert('各项占比相加应等于100.', 4);
+                    return false;
+                }
             } else {
-                $("#trCOMPRETYPE").hide();
+                if (total + Number(COMPRE_SAN_100_MAX_SCORE) != 100) {
+                    gzsw.dialog.alert('各项占比和额外分相加应等于100.', 4);
+                    return false;
+                }
             }
+
         });
 
 

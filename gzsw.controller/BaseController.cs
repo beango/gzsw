@@ -105,24 +105,29 @@ namespace gzsw.controller
                 var user = requestContext.HttpContext.User as MyFormsPrincipal<MyUserDataPrincipal>;
                 if (null != user)
                     UserState = user.UserState.UserState;
-                var formkeys = requestContext.HttpContext.Request.Form.AllKeys;
-                var formvals = new List<string>();
-                foreach (var key in formkeys)
+
+                var action = requestContext.RouteData.Values["action"].ToString();
+                if (null != action && ",tree,getcode,leftmenu,index,details,SendInfoTip,".IndexOf("," + action.ToLower() + ",") == -1)
                 {
-                    formvals.Add(key + "：" + requestContext.HttpContext.Request.Form[key]);
+                    var formkeys = requestContext.HttpContext.Request.Form.AllKeys;
+                    var formvals = new List<string>();
+                    foreach (var key in formkeys)
+                    {
+                        formvals.Add(key + "：" + requestContext.HttpContext.Request.Form[key]);
+                    }
+                    var log = new SYS_LOG()
+                    {
+                        LOG_DTIME = DateTime.Now,
+                        MENU_NAM = requestContext.HttpContext.Request.Url.ToString(),
+                        USER_ID = null != UserState ? UserState.UserID : "",
+                        LOG_INFO = string.Join(",", formvals)
+                    };
+                    if (!string.IsNullOrEmpty(log.LOG_INFO) && log.LOG_INFO.Length > 1024)
+                    {
+                        log.LOG_INFO = log.LOG_INFO.Substring(0, 1024);
+                    }
+                    DaoLog.AddObject(log);
                 }
-                var log = new SYS_LOG()
-                {
-                    LOG_DTIME = DateTime.Now,
-                    MENU_NAM = requestContext.HttpContext.Request.Url.ToString(),
-                    USER_ID = null != UserState ? UserState.UserID : "",
-                    LOG_INFO = string.Join(",", formvals)
-                };
-                if (!string.IsNullOrEmpty(log.LOG_INFO) && log.LOG_INFO.Length > 1024)
-                {
-                    log.LOG_INFO = log.LOG_INFO.Substring(0, 1024);
-                }
-                DaoLog.AddObject(log);
             }
             catch (Exception ex)
             {
@@ -137,9 +142,36 @@ namespace gzsw.controller
         /// 多指标3D柱状图
         /// </summary>
         /// <returns></returns>
-        protected string CreateMSColumn3DChart(string titleName, DataSet ds, int h = 580, string subtitle = "",bool islink = false)
+        protected string CreateMSColumn3DChart(string titleName, DataTable dt, int h = 580, string subtitle = "", bool islink = false, bool isformatscale = false, string DefaultNumberScale = "", string NumberScaleValue = "", string NumberScaleUnit = "")
         {
             FusionChartHelper help = new FusionChartHelper(FusionChartType.MSColumn3D);
+            help.SetDataSource(dt);
+            help.ChartHeight = h;
+            help.ChartWidth = "100%";
+            help.Caption = titleName;//主标题，将显示在图形顶端
+            help.SubCaption = subtitle;//二级标题，将显示在主标题下方，没有不显示
+            help.BgColor = "ffffff";//背景色
+            help.CanvasBorderColor = "ffffff";
+            help.Decimals = 2;//显示小数位
+            help.IsFormatNumberScale = isformatscale;//是否格式化数字，如1000显示成1K；
+            help.DefaultNumberScale = DefaultNumberScale;
+            help.NumberScaleValue = NumberScaleValue;
+            help.NumberScaleUnit = NumberScaleUnit;
+            var cols = dt.Columns;
+            for (int i = 1; i < cols.Count; i++)
+            {
+                help.SetSeriesName(cols[i].ColumnName, cols[i].ColumnName, null, false, islink);
+            }
+            return help.ToString();
+        }
+
+        /// <summary>
+        /// 多指标3D柱状图
+        /// </summary>
+        /// <returns></returns>
+        protected string CreateMSColumn3DLineDYChart(string titleName, DataSet ds, int h = 580, string subtitle = "", bool islink = false)
+        {
+            FusionChartHelper help = new FusionChartHelper(FusionChartType.MSColumn3DLineDY);
             help.SetDataSource(ds);
             help.ChartHeight = h;
             help.ChartWidth = "100%";
@@ -153,30 +185,6 @@ namespace gzsw.controller
             for (int i = 1; i < cols.Count; i++)
             {
                 help.SetSeriesName(cols[i].ColumnName, cols[i].ColumnName, null, false, islink);
-            }
-            return help.ToString();
-        }
-
-        /// <summary>
-        /// 多指标3D柱状图
-        /// </summary>
-        /// <returns></returns>
-        protected string CreateMSColumn3DChart(string titleName, DataTable dt, int h = 580, string subtitle = "")
-        {
-            FusionChartHelper help = new FusionChartHelper(FusionChartType.MSColumn3D);
-            help.SetDataSource(dt);
-            help.ChartHeight = h;
-            help.ChartWidth = "100%";
-            help.Caption = titleName;//主标题，将显示在图形顶端
-            help.SubCaption = subtitle;//二级标题，将显示在主标题下方，没有不显示
-            help.BgColor = "ffffff";//背景色
-            help.CanvasBorderColor = "ffffff";
-            help.Decimals = 2;//显示小数位
-            help.IsFormatNumberScale = false;//是否格式化数字，如1000显示成1K；
-            var cols = dt.Columns;
-            for (int i = 1; i < cols.Count; i++)
-            {
-                help.SetSeriesName(cols[i].ColumnName, cols[i].ColumnName);
             }
             return help.ToString();
         }
@@ -204,14 +212,6 @@ namespace gzsw.controller
         }
 
         /// <summary>
-        /// 3D柱状图
-        /// </summary>
-        /// <returns></returns>
-        protected string CreateColumn3DChart(string caption, DataSet ds = null, string subCaption = "")
-        {
-            return CreateColumn3DChart(caption, ds.Tables[0], subCaption);
-        }
-        /// <summary>
         /// 单线性图
         /// </summary>
         /// <returns></returns>
@@ -226,7 +226,7 @@ namespace gzsw.controller
         /// <returns></returns>
         protected dynamic CreateSplineChart(string caption, DataTable dt, int h = 550, int? max = null, int? min = null, string subCaption = "", bool isformatscale = false, string DefaultNumberScale = "", string NumberScaleValue = "", string NumberScaleUnit = "")
         {
-            FusionChartHelper help = new FusionChartHelper(FusionChartType.Spline);
+            FusionChartHelper help = new FusionChartHelper(FusionChartType.Line);
             help.SetDataSource(dt);
             help.ChartHeight = h;
             help.ChartWidth = "100%";
@@ -261,12 +261,12 @@ namespace gzsw.controller
         /// <returns></returns>
         protected dynamic CreatePie3DChart(string caption, DataTable dt, int h = 550, string subtitle = "")
         {
-            FusionChartHelper help = new FusionChartHelper(FusionChartType.Pie3D);
+            FusionChartHelper help = new FusionChartHelper(FusionChartType.Pie2D);
             help.SetDataSource(dt);
             help.ChartHeight = h;
             help.ChartWidth = "100%";
             help.Caption = caption;//主标题，将显示在图形顶端
-            help.SubCaption = "";//二级标题，将显示在主标题下方，没有不显示
+            help.SubCaption = subtitle;//二级标题，将显示在主标题下方，没有不显示
             help.BgColor = "ffffff";//背景色
             help.CanvasBorderColor = "ffffff";
             help.Decimals = 2;//显示小数位
@@ -283,26 +283,7 @@ namespace gzsw.controller
         /// <returns></returns>
         protected string CreateMSSplineChart(string caption, DataSet ds, int h = 550, int? max = null, int? min = null, string subtitle = "")
         {
-            FusionChartHelper help = new FusionChartHelper(FusionChartType.MSSpline);
-            help.SetDataSource(ds);
-            help.ChartHeight = h;
-            help.ChartWidth = "100%";
-            help.Caption = caption;//主标题，将显示在图形顶端
-            help.SubCaption = subtitle;//二级标题，将显示在主标题下方，没有不显示
-            help.BgColor = "ffffff";//背景色
-            help.CanvasBorderColor = "ffffff";
-            help.Decimals = 2;//显示小数位
-            var cols = ds.Tables[0].Columns;
-            for (int i = 1; i < cols.Count; i++)
-            {
-                help.SetSeriesName(cols[i].ColumnName, cols[i].ColumnName);
-            }
-            help.IsFormatNumberScale = false;//是否格式化数字，如1000显示成1K；
-            if (max != null)
-                help.YMaxValue = max.Value;
-            if (min != null)
-                help.YMinValue = min.Value;
-            return help.ToString();
+            return CreateMSSplineChart(caption, ds.Tables[0], h, max, min, subtitle);
         }
 
         /// <summary>
@@ -312,9 +293,9 @@ namespace gzsw.controller
         /// <param name="dt"></param>
         /// <param name="h"></param>
         /// <returns></returns>
-        protected string CreateMSSplineChart(string caption, DataTable dt, int h = 550, int? max = null, int? min = null, string subtitle = "")
+        protected string CreateMSSplineChart(string caption, DataTable dt, int h = 550, int? max = null, int? min = null, string subtitle = "", bool isformatscale = false, string DefaultNumberScale = "", string NumberScaleValue = "", string NumberScaleUnit = "")
         {
-            FusionChartHelper help = new FusionChartHelper(FusionChartType.MSSpline);
+            FusionChartHelper help = new FusionChartHelper(FusionChartType.MSLine);
             help.SetDataSource(dt);
             help.ChartHeight = h;
             help.ChartWidth = "100%";
@@ -333,8 +314,13 @@ namespace gzsw.controller
                 help.YMaxValue = max.Value;
             if (min != null)
                 help.YMinValue = min.Value;
+            help.IsFormatNumberScale = isformatscale;//是否格式化数字，如1000显示成1K；
+            help.DefaultNumberScale = DefaultNumberScale;
+            help.NumberScaleValue = NumberScaleValue;
+            help.NumberScaleUnit = NumberScaleUnit;
             return help.ToString();
         }
+
         #endregion
 
         /// <summary>
@@ -398,19 +384,19 @@ namespace gzsw.controller
                 if (value != null && value == item)
                 {
                     list.Add(new SelectListItem()
-                             {
-                                 Value = item.ToString(),
-                                 Text = item.ToString(),
-                                 Selected = true
-                             });
+                    {
+                        Value = item.ToString(),
+                        Text = item.ToString(),
+                        Selected = true
+                    });
                 }
                 else
                 {
                     list.Add(new SelectListItem()
-                             {
-                                 Value = item.ToString(),
-                                 Text = item.ToString()
-                             });
+                    {
+                        Value = item.ToString(),
+                        Text = item.ToString()
+                    });
                 }
             }
             return list;
@@ -430,10 +416,10 @@ namespace gzsw.controller
             if (isAll)
             {
                 list.Add(new SelectListItem()
-                         {
-                             Text = "-请选择-",
-                             Value = ""
-                         });
+                {
+                    Text = "-请选择-",
+                    Value = ""
+                });
             }
 
             for (var i = 0; i < 12; i++)

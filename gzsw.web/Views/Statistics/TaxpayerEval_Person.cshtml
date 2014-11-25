@@ -5,13 +5,13 @@
     ViewBag.Title = "员工评价分析";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     var index = 0;
-    // 统计量总数 （很满意量+满意量+一般量+不满意量）
+    // 统计量总数 （很满意量+满意量+基本满意量+不满意量）
     double valueCount = Model.Select(
         x => x.VERY_SATISFY_CNT + x.SATISFY_CNT + x.COMMON_CNT + x.UNSATISFY_CNT).Sum();
-    // 统计量总数（很满意量+满意量+一般量+不满意量+未评价量）
+    // 统计量总数（很满意量+满意量+基本满意量+不满意量+未评价量）
     double valueCount1 = Model.Select(
         x => x.VERY_SATISFY_CNT + x.SATISFY_CNT + x.COMMON_CNT + x.UNSATISFY_CNT + x.NON_EVAL_CNT).Sum();
-    // 统计量总数（很满意量+满意量+一般量）
+    // 统计量总数（很满意量+满意量+基本满意量）
     double valueCount2 = Model.Select(
         x => x.VERY_SATISFY_CNT + x.SATISFY_CNT + x.COMMON_CNT).Sum();
 
@@ -19,7 +19,7 @@
     var value1 = (Model.Select(x => x.VERY_SATISFY_CNT).Sum());
     // 满意量
     var value2 = (Model.Select(x => x.SATISFY_CNT).Sum());
-    // 一般量
+    // 基本满意量
     var value3 = (Model.Select(x => x.COMMON_CNT).Sum());
     // 不满意量
     var value4 = (Model.Select(x => x.UNSATISFY_CNT).Sum());
@@ -71,11 +71,18 @@
             <table id="datatable" class="tablelist tablesorter tablesorter-default" cellpadding="0" cellspacing="0">
                 <thead>
                     <tr>
+                        <th colspan="14" style="background-image: none;">
+                            <span style="font-size: 14px; font-weight: bold; ">
+                                @Html.Raw(ViewBag.MainTitle)
+                            </span>
+                        </th>
+                    </tr>
+                    <tr>
                         <th style="text-align: center; background-image: none;" rowspan="2">序号  </th>
                         <th style="text-align: center; background-image: none;" colspan="2"> 员工</th>
                         <th style="text-align: center; background-image: none;" colspan="2"> 很满意</th>
                         <th style="text-align: center; background-image: none;" colspan="2"> 满意 </th>
-                        <th style="text-align: center; background-image: none;" colspan="2"> 一般 </th>
+                        <th style="text-align: center; background-image: none;" colspan="2"> 基本满意 </th>
                         <th style="text-align: center; background-image: none;" colspan="2"> 不满意 </th>
                         <th style="text-align: center; background-image: none;" colspan="2"> 未评价</th>
                         <th style="text-align: center; background-image: none;" rowspan="2">满意度 </th>
@@ -87,8 +94,8 @@
                         <th>很满意率</th>
                         <th>满意</th>
                         <th>满意率</th>
-                        <th>一般</th>
-                        <th>一般率</th>
+                        <th>基本满意</th>
+                        <th>基本满意率</th>
                         <th>不满意</th>
                         <th>不满意率</th>
                         <th>未评价</th>

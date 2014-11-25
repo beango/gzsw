@@ -206,6 +206,12 @@ namespace gzsw.controller.SYS
                 }
 
                 var rst = dao.UpdateObject(org, "ORG_ID");
+                var hall = DaoHall.GetEntity("HALL_NO", org.ORG_ID);
+                if (null != hall)
+                {
+                    hall.HALL_NAM = org.ORG_NAM;
+                    DaoHall.UpdateObject(hall, "HALL_NO", hall.HALL_NO);
+                }
                 if (rst > 0)
                 {
                     return JsonResult(true, "修改成功！", "SYS", "/", false);
@@ -306,7 +312,7 @@ namespace gzsw.controller.SYS
                 org.PAR_ORG_ID = null;
             }
             bool rootHasAuth = true;
-            if(!all.Any(o=>o.ORG_LEVEL==1))//处理没有省权限的数据
+            if (!all.Any(o => o.ORG_LEVEL == 1))//处理没有省权限的数据
             {
                 rootHasAuth = false;
                 all.Where(o => o.ORG_LEVEL == (all.Min(o2 => o2.ORG_LEVEL)))
@@ -451,11 +457,25 @@ namespace gzsw.controller.SYS
                     chkDisabled = (disabled != null && disabled.ToString() == obj.ORG_ID),
                     highlight = (!string.IsNullOrEmpty(searchNam) && obj.ORG_NAM.IndexOf(searchNam) > -1)
                 }).ToList();
-            foreach (var leaf in treelist)
+            if (null != treelist && treelist.Count > 0)
             {
-                List<ZtreeNode_ORG> leafchild = new List<ZtreeNode_ORG>();
-                GenOrgs2Tree(all, hallall, ref leafchild, leaf.id, check, disabled, searchNam);
-                leaf.children = leafchild;
+                foreach (var leaf in treelist)
+                {
+                    List<ZtreeNode_ORG> leafchild = new List<ZtreeNode_ORG>();
+                    GenOrgs2Tree(all, hallall, ref leafchild, leaf.id, check, disabled, searchNam);
+                    leaf.children = leafchild;
+                }
+            }
+            else
+            {
+                if (null != all && all.Count > 0)
+                    foreach (var item in all.Where(o => o.ORG_LEVEL == 4))
+                    {
+                        List<ZtreeNode_ORG> leafchild = new List<ZtreeNode_ORG>();
+                        GenOrgs2Tree(all, hallall, ref leafchild, item.PAR_ORG_ID, check, disabled, searchNam);
+                        treelist.AddRange(leafchild);
+                    }
+
             }
             if (!string.IsNullOrEmpty(searchNam))
             {
@@ -503,29 +523,31 @@ namespace gzsw.controller.SYS
         /// </summary>
         /// <returns></returns>
         [UserAuth("AUTH_FUNC_VIW")]
-        public ActionResult GetSearchOrgsTree(string id)
+        public ActionResult SearchOrgsTree(string id)
         {
             var all = new SYS_USER_DAL().GetUserORG(UserState.UserID);
             foreach (var org in all.Where(obj => obj.PAR_ORG_ID == ""))
             {
                 org.PAR_ORG_ID = null;
             }
-            var treelist = all.Where(obj => obj.ORG_LEVEL == 1)//省级
+            var treelist = all.Where(obj => obj.ORG_LEVEL == all.Min(obj2 => obj2.ORG_LEVEL)
+                && obj.ORG_LEVEL<=2)
                 .Select(obj => new ZtreeNode_ORG
-                {
-                    id = obj.ORG_ID.ToString(),
-                    name = obj.ORG_NAM,
-                    open = true,
-                    isParent = true,
-                    children = all.Where(o => o.PAR_ORG_ID == obj.ORG_ID)
-                        .Select(obj2 => new ZtreeNode_ORG
-                        {
-                            id = obj2.ORG_ID.ToString(),
-                            name = obj2.ORG_NAM,
-                            open = true,
-                            isParent = true
-                        }).ToList()
-                }).ToList();
+            {
+                id = obj.ORG_ID.ToString(),
+                name = obj.ORG_NAM,
+                open = true,
+                isParent = true,
+                children = all.Where(o => o.PAR_ORG_ID == obj.ORG_ID && o.ORG_LEVEL == 2)//只显示市，没有市不显示
+                    .Select(obj2 => new ZtreeNode_ORG
+                    {
+                        id = obj2.ORG_ID.ToString(),
+                        name = obj2.ORG_NAM,
+                        open = true,
+                        isParent = true
+                    }).ToList()
+            }).ToList();
+
             return Json(treelist, JsonRequestBehavior.AllowGet);
         }
 

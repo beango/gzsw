@@ -4,6 +4,7 @@
     ViewBag.Title = "个人考核质量差错打分";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
+    <script type="text/javascript" src="@Url.Content("~/Content/lib/jquery.uploadify/jquery.uploadify.js")"></script>
 
 <script lang="javascript">
     $(function () {
@@ -18,6 +19,12 @@
             },
             icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
         });
+        
+
+        var sitePath = '@Url.Content("~/")';
+        var auth = "@(Request.Cookies[FormsAuthentication.FormsCookieName] == null ? string.Empty : Request.Cookies[FormsAuthentication.FormsCookieName].Value)";
+        var sessionid = "@(Session.SessionID)";
+
         // 顶部导航
         var ligerToolBar = $("#toptoolbar").ligerToolBar();
         @if (Html.ChkAuth("CHK_STAFF_QUALITY_MARK_VIW"))
@@ -39,7 +46,7 @@
         {
             @:ligerToolBar.addItem(@Html.LigerUIDeleteButton(Url.Action("Delete", "PerformanceEval"), "删除", "CHK_STAFF_QUALITY_MARK_DEL"));
         }
-          @if (Html.ChkAuth("CHK_QUALITY_CON"))
+        @if (Html.ChkAuth("CHK_QUALITY_CON"))
           {
               <text>
               ligerToolBar.addItem({ line: true });
@@ -50,10 +57,28 @@
                           url: url.urlstamp(),
                           title: 'Excel导入',
                           width: 400,
-                          height:100
+                          height:180
                       });
                   },
                   icon: 'up'
+              });
+              </text>
+              
+               <text>
+        ligerToolBar.addItem({ line: true });
+        ligerToolBar.addItem({
+            text: 'Excel模板下载',
+            click: function (item) {
+                var url = '@Url.Content("~/Upload/质量考核分数管理模板.xls")';
+                      //gzsw.dialog.open({
+                      //    url: url.urlstamp(),
+                      //    title: 'Excel导入',
+                      //    width: 400,
+                      //    height: 200
+                //});
+                window.open(url);
+                  },
+                  icon: 'down'
               });
               </text>
           }
@@ -129,7 +154,8 @@
                     @Html.DisplayFor(modelItem => item.AMOUNT)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.OCCUR_DT)
+                    @* @Html.DisplayFor(modelItem => item.OCCUR_DT==null?"":item.OCCUR_DT.ToString("yyyy-MM-dd"))*@
+                    @(item.OCCUR_DT==null?"":Convert.ToDateTime(item.OCCUR_DT).ToString("yyyy-MM-dd"))
                 </td>
             </tr>
         }

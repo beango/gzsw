@@ -515,7 +515,10 @@ WHERE   1 = 1 ");
         C.[CHQUEUE_COUNTER] ,
         C.[CHQUEUE_SNO] ,
         C.[CHQUEUE_CALLTIME] ,
-        C.[CHQUEUE_WAITTIME] ,
+       case when C.CHQUEUE_STATUS=0 THEN 
+		datediff(second, C.CHQUEUE_TICKETTIME, getdate())
+							ELSE 
+       C.[CHQUEUE_WAITTIME]  END AS CHQUEUE_WAITTIME ,  
         C.[CHQUEUE_STIME] ,
         C.[CHQUEUE_ETIME] ,
         C.[CHQUEUE_BLTIME] ,
@@ -528,13 +531,17 @@ WHERE   1 = 1 ");
         C.[CHQUEUE_TICKETTYPE] ,
         C.[CHQUEUE_STATUS] ,
         C.[CHQUEUE_ISFINISHED] ,
+       case when C.CHQUEUE_STATUS=0 THEN 
+		( dbo.isWaitOuttime(C.CHQUEUE_SYSNO, C.CHQUEUE_QSERIALID,
+                            datediff(second, C.CHQUEUE_TICKETTIME, getdate())) )
+							ELSE 
         ( dbo.isWaitOuttime(C.CHQUEUE_SYSNO, C.CHQUEUE_QSERIALID,
-                            C.CHQUEUE_WAITTIME) ) AS IsOvertime ,
+                            C.CHQUEUE_WAITTIME) )  END AS IsOvertime ,
         Q.Q_SERIALNAME ,
         ST.STAFF_NAM ,
         H.HALL_NAM
 FROM    [SYS_CURRQUEUEHIST] AS C
-        JOIN SYS_STAFF AS ST ON C.CHQUEUE_SNO = ST.STAFF_ID
+        LEFT JOIN SYS_STAFF AS ST ON C.CHQUEUE_SNO = ST.STAFF_ID
         JOIN SYS_HALL AS H ON C.CHQUEUE_SYSNO = H.HALL_NO
         JOIN SYS_QUEUESERIAL AS Q ON C.CHQUEUE_QSERIALID = Q.Q_SERIALID
 WHERE   1 = 1 ");
@@ -567,7 +574,10 @@ WHERE   1 = 1 ");
         C.[CHQUEUE_COUNTER] ,
         C.[CHQUEUE_SNO] ,
         C.[CHQUEUE_CALLTIME] ,
-        C.[CHQUEUE_WAITTIME] ,
+        case when C.CHQUEUE_STATUS=0 THEN 
+		datediff(second, C.CHQUEUE_TICKETTIME, getdate())
+							ELSE 
+       C.[CHQUEUE_WAITTIME]  END AS CHQUEUE_WAITTIME ,  
         C.[CHQUEUE_STIME] ,
         C.[CHQUEUE_ETIME] ,
         C.[CHQUEUE_BLTIME] ,
@@ -584,9 +594,9 @@ WHERE   1 = 1 ");
         ST.STAFF_NAM ,
         H.HALL_NAM
 FROM    [SYS_CURRQUEUEHIST] AS C
-        JOIN SYS_STAFF AS ST ON C.CHQUEUE_SNO = ST.STAFF_ID
         JOIN SYS_HALL AS H ON C.CHQUEUE_SYSNO = H.HALL_NO
         JOIN SYS_QUEUESERIAL AS Q ON C.CHQUEUE_QSERIALID = Q.Q_SERIALID
+        LEFT JOIN SYS_STAFF AS ST ON C.CHQUEUE_SNO = ST.STAFF_ID
 WHERE   1 = 1 ");
 
             sql.Append(@" AND C.[CHQUEUE_SYSNO]= @0 ", orgId);

@@ -19,10 +19,15 @@ namespace gzsw.controller.CHK
     {
 
         [UserAuth("CHK_STAFF_SYSTEM_CON_VIW")]
-        public ActionResult Index(string orgid, int pageIndex = 1, int pageSize = 20)
+        public ActionResult Index(string orgId, int pageIndex = 1, int pageSize = 20)
         {
-            orgid = setOrgData(orgid);
-            var list = CHK_STAFF_SYSTEM_CON_DAL.GetList(orgid, UserState.UserID, pageIndex, pageSize);
+            var halllist = new List<string>();
+            if (!string.IsNullOrEmpty(orgId))
+            {
+                halllist = SYS_ORGANIZE_DAL.GetLevelListById(orgId, UserState.UserID);
+            }
+
+            var list = CHK_STAFF_SYSTEM_CON_DAL.GetList(halllist.ToArray(),UserState.UserID, pageIndex, pageSize);
             return View(list);
         }
 

@@ -28,7 +28,7 @@ namespace gzsw.controller.Detail
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        [UserAuth("Detail_CHK_STAFF_USU_ACT_MARK")]
+        [UserAuth("Detail_CHK_STAFF_USU_ACT_MARK_VIW")]
         public ActionResult Index(string orgId, int? beginMo, int? endMo,
             string staffId, int? type,
             int isSenior = 0, int pageIndex = 1, int pageSize = 20)
@@ -61,7 +61,7 @@ namespace gzsw.controller.Detail
             return View(list);
         }
 
-        [UserAuth("Detail_CHK_STAFF_USU_ACT_MARK")]
+        [UserAuth("Detail_CHK_STAFF_USU_ACT_MARK_VIW")]
         public ActionResult Details(int id)
         {
             try

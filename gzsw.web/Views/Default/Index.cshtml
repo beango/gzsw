@@ -31,43 +31,60 @@
             $("#middlePanel").css("height", height - 5);
             $("#middlePanel img").css("padding-top", (height / 2));
             $("#gzsw_LeftMenu").css("height", height - 13);
-         /*   $(".gzsw_LeftMenu").css("min-height", height - 13);*/
+            /*   $(".gzsw_LeftMenu").css("min-height", height - 13);*/
             $("#treePanel").css("min-height", height - 45);
         }
 
-        $(function () {
+        $(function() {
             // 主菜单注册
-            $("#mainNavPanel").find("li").click(function () {
+            $("#mainNavPanel").find("li").click(function() {
                 $("#mainNavPanel").find("li").attr("class", "");
+                $("#mainNavPanel").find("li a").css({ "color": "#fff" });
                 $(this).attr("class", "sel");
+               $(this).find("a").css({ "color": "#005580" }); 
+              
                 // 加载左菜单
                 var url = "@Url.Action("LeftMenu", "Default")?nid=" + $(this).attr("menuid");
                 layer.load('菜单中加载...');
                 $.ajax({
                     url: url.urlstamp(),
-                    success: function (result) {
+                    success: function(result) {
                         $("#gzsw_LeftMenu").html(result);
                         SetMiddlePanelState(true);
                         resize();
                         layer.closeAll();
                     },
-                    error: function () {
+                    error: function() {
                         gzsw.dialog.alert("加载菜单失败，请联系管理员!");
                         layer.closeAll();
                     }
                 });
 
+            }).hover(function() {
+
+                if ($(this).attr("class") != "sel") {
+                    $(this).find("a").css({
+                        "color": "#005580",
+                        "font-weight": "600"
+                    });
+                }
+            }, function() {
+                if ($(this).attr("class") != "sel") {
+                    $(this).find("a").css({
+                        "color": "#fff",
+                        "font-weight": "600"
+                    });
+                }
             });
-
-
+             
             $("#framecenter").ligerTab({
                 showSwitchInTab: false,
                 showSwitch: true,
-                onAfterAddTabItem: function (tabdata) {
+                onAfterAddTabItem: function(tabdata) {
                     tabItems.push(tabdata);
                     /*  saveTabStatus();*/
                 },
-                onAfterRemoveTabItem: function (tabid) {
+                onAfterRemoveTabItem: function(tabid) {
                     for (var i = 0; i < tabItems.length; i++) {
                         var o = tabItems[i];
                         if (o.tabid == tabid) {
@@ -77,14 +94,14 @@
                         }
                     }
                 },
-                onReload: function (tabdata) {
+                onReload: function(tabdata) {
 
                 }
             });
             tab = liger.get("framecenter");
 
 
-            $(window).resize(function () {
+            $(window).resize(function() {
                 resize();
             });
             resize();
@@ -106,7 +123,7 @@
             }
 
             // 中间栏控制
-            $("#middlePanel img").click(function () {
+            $("#middlePanel img").click(function() {
                 if ($("#leftMenu").is(":hidden")) {
                     SetMiddlePanelState(true);
                 } else {
@@ -116,7 +133,7 @@
             SetMiddlePanelState(false);
 
             //修改密码
-            $("#btnChange").click(function () {
+            $("#btnChange").click(function() {
                 var url = $(this).attr("href");
 
                 gzsw.dialog.open({
@@ -133,32 +150,35 @@
     </script>
     <script type="text/javascript">
         var sendinfo_detail_tips;
+
         function warnLoadUnRead() {
             $.ajax({
                 url: "@Url.Content("/Warn/WarnInfo/SendInfoTip")",
                 data: {},
-                success: function (res) {
-                    if (res == "")
-                    {
+                success: function(res) {
+                    if (res == "") {
                         if (sendinfo_detail_tips)
                             sendinfo_detail_tips.hide();
                         return;
                     }
                     if (!sendinfo_detail_tips) {
                         sendinfo_detail_tips = $.ligerDialog.tip({
-                            title: '提示信息', content: res, height: 250,width:300
+                            title: '提示信息',
+                            content: res,
+                            height: 250,
+                            width: 300
                         });
-                    }
-                    else {
+                    } else {
                         var visabled = sendinfo_detail_tips.get('visible');
                         if (!visabled) sendinfo_detail_tips.show();
                         sendinfo_detail_tips.set('content', res);
                     }
                 }
             });
-            //setTimeout("warnLoadUnRead()", 1000);
+            setTimeout("warnLoadUnRead()", 5000);
         }
-        $(function () {
+
+        $(function() {
             warnLoadUnRead();
         });
     </script>
@@ -177,15 +197,17 @@
         <div style="float: right; padding-right: 20px; ">
             <div class="row gzsw_TopMenu">
                 <ul>
-                    <li style=" padding-right: 40px; "><a href="@Url.Action("LogOff", "Account")">退出</a></li>
+                    <li class="end"> &nbsp;</li>
+                    <li><a href="@Url.Action("LogOff", "Account")">退出</a></li>
                     <li><a id="btnChange" href="@Url.Action("Change","Account")">修改密码</a> </li>
-                    <li> 欢迎您 <span style="color: #002780;font-weight:bold; "> [ @ViewBag.UserName ]</span></li>
-                    <li>@DateTime.Now.ToString("yyyy年MM月dd日") @DateTime.Now.DayOfWeek.ToWeekString()   </li>
+                    <li> 欢迎您 <span style="color: #002780;font-weight:bold; "> [@ViewBag.UserName - @ViewData["userOrgName"]]</span></li>
+                    <li >@DateTime.Now.ToString("yyyy年MM月dd日") @DateTime.Now.DayOfWeek.ToWeekString()   </li>
+                    <li class="first">&nbsp;</li>
                 </ul>
             </div>
             <div class="row gzsw_MainMenu">
                 <div class="col-md-12" style="padding-left:0px; padding-right:0px;height:50px;">
-                    <ul id="mainNavPanel" style="padding-top:23px;  float:right; ">
+                    <ul id="mainNavPanel" style="padding-top:15px;  float:right; ">
                         @if (Model != null)
                         {
                             foreach (var menu in Model)

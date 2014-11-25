@@ -25,6 +25,9 @@ namespace gzsw.controller.STAT
         [Inject]
         public IDao<SYS_STAFF> staffDao { get; set; }
 
+        [Inject]
+        public IDao<SYS_DLSERIAL> SysdlserialDao { get; set; }
+
         public ActionResult Index(DateTime? beginTime, DateTime? endTime,string orgid, int pageIndex = 1, int pageSize = 20, bool export = false)
         {
 
@@ -35,6 +38,18 @@ namespace gzsw.controller.STAT
             ViewBag.UserORG = new SelectList(orgall.Where(obj => obj.ORG_LEVEL == 4)
                 , "ORG_ID", "ORG_NAM", orgid);
             var orgs = orgall.Select(obj => obj.ORG_ID);
+
+
+
+            //var mainTielt = GetOrgName(null, null);
+            //ViewBag.MainTitle = GetTitleName(mainTielt, "业务大类分析", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault());
+            //var title = GetTitleName(mainTielt,"业务大类分析", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), false);
+
+            var mainTielt = GetOrgName(null, null);
+            ViewBag.MainTitle = GetTitleName(mainTielt, "业务大类分析", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault());
+            var subtitle = GetTitleName(mainTielt, "", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), false);
+            var exceltitle = GetTitleName(mainTielt, "业务大类分析", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), false);
+
 
             var halllist = base.UserHall.Select(x => x.HALL_NO).ToArray();
             var data = new STAT_STAFF_LARGE_BUSI_D_DAL().GetStatsInfo(halllist, beginTime, endTime);
@@ -55,7 +70,7 @@ namespace gzsw.controller.STAT
                     同城办理率 = ((x.LOCAL_CNT * 100.0 / x.BUSI_CNT)).ToString("f2") + "%",
                
                 }).ToList().ToDataTable();
-                return AsposeExcelHelper.OutFileToRespone(temp, "业务大类分析总表");
+                return AsposeExcelHelper.OutFileToRespone(temp, exceltitle);
             }
             else
             {
@@ -80,10 +95,10 @@ namespace gzsw.controller.STAT
                     r["同城业务量"] = item.LOCAL_CNT;
                     dt.Rows.Add(r);
                 }
-                         
-                ViewBag.ChartColumn3DXML = CreateMSColumn3DChart("业务大类分析总表", ds,430);
 
-                ViewBag.ChartSplineXML = CreateMSSplineChart("业务大类分析总表", ds, 430);
+                ViewBag.ChartColumn3DXML = CreateMSColumn3DChart("业务大类分析", ds.Tables[0], 430, subtitle);
+
+                ViewBag.ChartSplineXML = CreateMSSplineChart("业务大类分析", ds, 430, null, null, subtitle);
                 return View(data);
             }
             return null;
@@ -102,6 +117,9 @@ namespace gzsw.controller.STAT
 
             var relist = new List<STAT_STAFF_LARGE_BUSI_D>();
             var halllist = base.UserHall.Select(x => x.HALL_NO).ToArray();
+
+            string titleName = "业务大类分析";
+            string serialname = "";
             if (string.IsNullOrEmpty(dlsserialid))
             {
                 relist =
@@ -119,9 +137,12 @@ namespace gzsw.controller.STAT
                                                      ? beginTime.Value
                                                      : Convert.ToDateTime("2000-01-01"), "STAT_DT<=",
                                                  endTime.HasValue ? endTime.Value : DateTime.Now, "DLS_SERIALID", dlsserialid).ToList();
+                var ywdl = SysdlserialDao.GetEntity("DLS_SERIALID", dlsserialid);
+                serialname = ywdl.DLS_SERIALNAME;
             }
             relist = relist.Where(x => halllist.Contains(x.HALL_NO)).ToList();
-            string titleName = "业务大类分析";
+            
+            
             var lineTable = new DataTable();
             lineTable.Columns.Add("Y_Name", typeof(string));
 
@@ -136,7 +157,7 @@ namespace gzsw.controller.STAT
                     lineTable.Columns.Add("业务折合量", typeof(int));
                     break;
                 case "HANDLE_DUR":
-                    lineTable.Columns.Add("平均办理时长", typeof(int));
+                    lineTable.Columns.Add("平均办理时长", typeof(decimal));
 
                     titleName = titleName + "--平均办理时长";
                     break;
@@ -236,7 +257,8 @@ namespace gzsw.controller.STAT
                     case "HANDLE_DUR":
 
 
-                        lineTable.Rows[i]["平均办理时长"] = soureList.Count > 0 ? (((int)(soureList.Sum(x => x.BUSI_CNT) == 0 ? 0 : (soureList.Sum(x => x.HANDLE_DUR) / soureList.Sum(x => x.BUSI_CNT))))) : 0;
+                        lineTable.Rows[i]["平均办理时长"] = soureList.Count > 0 ?
+                            ((soureList.Sum(x => x.BUSI_CNT) == 0 ? 0 : (soureList.Sum(x => x.HANDLE_DUR) / (soureList.Sum(x => x.BUSI_CNT) )))) : 0;
                         break;
 
                     case "OVERTIME_HANDLE_CNT":
@@ -252,14 +274,29 @@ namespace gzsw.controller.STAT
             }
             DataSet dss = new DataSet();
             dss.Tables.Add(lineTable);
+            if (!string.IsNullOrEmpty(serialname))
+            {
+                titleName += "(" + serialname + ")";
+            }
+            //if (ct == "HANDLE_DUR")
+            //{
+            //    titleName = titleName + "  单位：秒";
+            //}
+            var mainTielt = GetOrgName(null, null);
+            ViewBag.MainTitle = GetTitleName(mainTielt, "业务大类分析", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault());
+            var subtitle = GetTitleName(mainTielt, "", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), false);
+            var exceltitle = GetTitleName(mainTielt, "业务大类分析", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), false);
+
+
+            ViewBag.ChartColumn3DXML = CreateColumn3DChart(titleName, lineTable, subtitle); 
+            ViewBag.ChartSplineXML = CreateMSSplineChart(titleName, lineTable, 550, null, null, subtitle);
+            ViewBag.ChartPie3DXML = CreatePie3DChart(titleName, dss, 430);
+
             if (ct == "HANDLE_DUR")
             {
-                titleName = titleName + "  (单位：秒)";
+                ViewBag.ChartColumn3DXML = CreateColumn3DChart(titleName, lineTable, "", true, "分", "60", "分");
+                ViewBag.ChartSplineXML = CreateMSSplineChart(titleName, lineTable, 550, null, null, "", true, "分", "60", "分");
             }
-
-            ViewBag.ChartColumn3DXML = CreateMSColumn3DChart(titleName, dss, 430);
-            ViewBag.ChartSplineXML = CreateMSSplineChart(titleName, dss, 430);
-            ViewBag.ChartPie3DXML = CreatePie3DChart(titleName, dss, 430);
             return View(lineTable);
             return null;
         }

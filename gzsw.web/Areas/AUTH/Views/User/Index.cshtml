@@ -55,87 +55,11 @@
             } 
         });
     </script>
-@Html.StyleSheet("lib/ztree/zTreeStyle.css")
-@Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
-@Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
-    <script type="text/javascript">
-        function showOrg() {
-            var orgObj = $("#txtORGNAM");
-            var orgOffset = $("#txtORGNAM").offset();
-            $("#orgTreeContent").css({ left: orgOffset.left + "px", top: orgOffset.top + orgObj.outerHeight() + "px" }).slideDown("fast");
-
-            $("body").bind("mousedown", onBodyDown);
-        }
-        function showIconForTree(treeId, treeNode) {
-            return false;
-        };
-        function onBodyDown(event) {
-            if (!(event.target.id == "orgTreeContent" || $(event.target).parents("#orgTreeContent").length > 0)) {
-                hideMenu();
-            }
-        }
-        function hideMenu() {
-            $("#orgTreeContent").fadeOut("fast");
-            $("body").unbind("mousedown", onBodyDown);
-        }
-        function onClick(e, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj("treeOrg"),
-			nodes = zTree.getSelectedNodes(),
-			v = "", id = "";
-            nodes.sort(function compare(a, b) { return a.id - b.id; });
-            for (var i = 0, l = nodes.length; i < l; i++) {
-                v += nodes[i].name + ",";
-                id += nodes[i].id + ",";
-            }
-            if (v.length > 0) v = v.substring(0, v.length - 1);
-            if (id.length > 0) id = id.substring(0, id.length - 1);
-            var orgid = $("#txtORGNAM");
-            orgid.attr("value", v);
-            $("#hidORGID").val(id);
-            hideMenu();
-        }
-        var ztree_setting_org = {
-            async: {
-                enable: false
-            },
-            data: {
-                simpleData: {
-                    enable: true,
-                    idKey: "id",
-                    pIdKey: "pId",
-                    rootPId: 0
-                }
-            },
-            view: {
-                dblClickExpand: false,
-                showIcon: showIconForTree
-            },
-            callback: {
-                onClick: onClick
-            }
-        };
-        var zNodes;
-        $(function () {
-            $.ajax({
-                async: false,
-                cache: false,
-                type: 'POST',
-                dataType: 'json',
-                url: "/SYS/Org/GetSearchOrgsTree?nRoot=1",
-                success: function (data) {
-                    zNodes = data;
-                }
-            });
-        });
-
-        $(document).ready(function () {
-            if (zNodes.length == 0)
-                $("#txtORGNAM").parent().hide();
-            else
-                $.fn.zTree.init($("#treeOrg"), ztree_setting_org, zNodes);
-        });
-    </script>
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+    @Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
+    @Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
 }
+
 <!-- 查询菜单 -->
 <div class="l-panel-search">
     <table class="tabSearchList">
@@ -144,8 +68,7 @@
             <td style="width:170px;"><input type="text" name="txtUSERID" id="txtUSERID" value="@ViewBag.USERID" /></td>
             <td style="width:80px;"> 用户名称：</td>
             <td style="width:170px;"><input type="text" name="txtUSERNAM" id="txtUSERNAM" value="@ViewBag.USERNAM" /></td>
-            <td>组织机构：<input type="text" readonly name="txtORGNAM" id="txtORGNAM" value="@ViewBag.ORGNAM" onclick="showOrg(); return false;" />
-                <input type="hidden" name="hidORGID" id="hidORGID" value="@ViewBag.ORGID" /></td>
+            <td>@Html.Partial("Partial/ORG1", new Dictionary<string, string> { { "ORGID", Request["orgid"] }, { "ORGNAM", Request["orgnam"] } })</td>
             <td>
                 <div id="btnSearch"></div>
             </td>
@@ -209,8 +132,4 @@
     }
     <!--  分页 --> 
      @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)  
-</div>
-<div id="orgTreeContent" style="display:none; position: absolute;">
-    <ul id="treeOrg" class="ztree" style="background: #f0f9fd;"></ul>
-    <div style="clear:both;"></div>
 </div>

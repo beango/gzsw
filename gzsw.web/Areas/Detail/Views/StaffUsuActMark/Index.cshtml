@@ -35,7 +35,7 @@
             </td>
         </tr>
         <tr style="@(ViewBag.IsSenior != 0 ? "" : "display: none;") " d-tyle='senior'>
-            <td>排队号码:</td>
+            <td>行为项类型:</td>
             <td>
                 @Html.DropDownList("ddlType", EnumHelper.GetCategorySelectList(typeof(USUACTTYPEENUM),true, (object)ViewBag.Type))
             </td>

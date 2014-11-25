@@ -149,6 +149,9 @@
     <Content Include="Areas\CHK\Views\StaffAttendDeductCon\Create.cshtml" />
     <Content Include="Areas\CHK\Views\StaffAttendDeductCon\Edit.cshtml" />
     <Content Include="Areas\CHK\Views\DetailSvrCoefCon\OneCreate.cshtml" />
+    <Content Include="Areas\AUTH\Views\Shared\Partial\ORG1.cshtml" />
+    <Content Include="Areas\AUTH\Views\Shared\Partial\ORG2.cshtml" />
+    <Content Include="Areas\CHK\Views\PerformanceEval\Excel.cshtml" />
     <None Include="Areas\Detail\Views\WarnDisposal\Index.cshtml" />
     <Compile Include="Areas\MON\MONAreaRegistration.cs" />
     <Compile Include="Areas\STAT\STATAreaRegistration.cs" />
@@ -164,15 +167,22 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Areas\STAT\Views\statstaffqueuebusid\Index.cshtml" />
     <Content Include="Areas\STAT\Views\SerivceHandle\ShowCNT.cshtml" />
-    <Content Include="Areas\STAT\Views\WarnAnalysis\Index.cshtml" />
+    <Content Include="Areas\STAT\Views\WarnAnalysis\HallIndex.cshtml" />
     <Content Include="Content\chartflash\FCExporter.swf" />
+    <Content Include="Content\chartflash\MSColumn2DLineDY.swf" />
+    <Content Include="Content\chartflash\MSColumn3DLineDY.swf" />
+    <Content Include="Content\chartflash\Line.swf" />
+    <Content Include="Content\chartflash\MSLine.swf" />
     <Content Include="Content\chartflash\MSSpline.swf" />
+    <Content Include="Content\chartflash\Pie2D.swf" />
+    <Content Include="Content\cotide\img\gzsw_topMenu_left.png" />
+    <Content Include="Content\cotide\img\gzsw_topMenu_right.png" />
     <Content Include="Content\lib\fusionchart\export.js" />
     <Content Include="Content\lib\fusionchart\FusionChartsExportComponent.js" />
     <Content Include="Views\Statistics\TaxpayerEval.cshtml" />
     <Content Include="Views\Statistics\TaxpayerEval_Node.cshtml" />
     <Content Include="Areas\STAT\Views\statstaffqueuebusid\ShowCNT.cshtml" />
-    <Content Include="Areas\STAT\Views\statstaffqueuebusid\OtherIndex.cshtml" />
+    <Content Include="Areas\STAT\Views\statstaffqueuebusid\OtherIndex1.cshtml" />
     <Content Include="Views\Statistics\TaxpayerAction.cshtml" />
     <Content Include="Views\Statistics\TaxpayerAction_Person.cshtml" />
     <Content Include="Views\Statistics\ServiceSlipAnalysis.cshtml" />
@@ -181,13 +191,21 @@
     <Content Include="Areas\STAT\Views\ServiceContrast\HallStat.cshtml" />
     <Content Include="Areas\STAT\Views\statbusiness\ShowCNT.cshtml" />
     <Content Include="Areas\STAT\Views\STATTemp\业务办理分析.xls" />
-    <Content Include="Areas\STAT\Views\ComplaintReport\Index.cshtml" />
+    <Content Include="Areas\STAT\Views\ComplaintReport\HallIndex.cshtml" />
     <Content Include="Areas\STAT\Views\ComplaintReport\ComplaintReportDetail.cshtml" />
     <Content Include="Areas\STAT\Views\ServiceContrast\StaffStat.cshtml" />
     <Content Include="Views\Statistics\ServiceSlipAnalysis_Person.cshtml" />
     <Content Include="Areas\WARN\Views\CurrqueuehistDealState\Index.cshtml" />
     <Content Include="Areas\WARN\Views\CurrywhistTwiceDeal\Index.cshtml" />
     <Content Include="Areas\STAT\Views\ComplaintReport\PersonalIndex.cshtml" />
+    <Content Include="Areas\MON\Views\Warning\All.cshtml" />
+    <Content Include="Areas\MON\Views\Warning\AllWarningContent.cshtml" />
+    <Content Include="Views\Statistics\ServiceSlipAnalysis_None.cshtml" />
+    <Content Include="Views\Default\NoImp.cshtml" />
+    <Content Include="Views\Statistics\TaxpayerAction_Node.cshtml" />
+    <Content Include="Upload\质量考核分数管理模板.xls" />
+    <Content Include="Areas\STAT\Views\statstaffqueuebusid\ShowQueueCNT.cshtml" />
+    <Content Include="Areas\STAT\Views\statstaffqueuebusid\OtherIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -1373,7 +1391,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\AUTH\Controllers\" />
     <Folder Include="Areas\AUTH\Models\" />
-    <Folder Include="Areas\AUTH\Views\Shared\" />
     <Folder Include="Areas\CHK\Controllers\" />
     <Folder Include="Areas\CHK\Models\" />
     <Folder Include="Areas\CHK\Views\Shared\" />

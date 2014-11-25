@@ -19,52 +19,60 @@
 @Html.JavaScript("lib/highcharts/js/highcharts.js")
 @Html.JavaScript("lib/highcharts/js/modules/exporting.src.js") 
     <script  type="text/javascript">
-        $(function(){
-            /* 初始化 */
-            gzsw.map.init({ id: "map_canvas",txt:"@ViewData["MapName"]" });
-                @foreach (var item in marker)
+    $(function(){
+        /* 初始化 */
+        gzsw.map.init({ id: "map_canvas",txt:"@ViewData["MapName"]" });
+        @foreach (var item in marker)
             {
                 if (item != null && !string.IsNullOrEmpty(item.LONGITUDE) && !string.IsNullOrEmpty(item.DIMENSION))
                 {
                     <text>
-                        gzsw.map.addMarker(
-                            {
-                               
-                                text:'@item.ORG_NAM',
-                                level:@item.ORG_LEVEL,
-                                x: "@item.DIMENSION", 
-                                y: "@item.LONGITUDE", 
-                                url: "@Html.Url("Mon/VirtualMonitor/index" + "?orgId=" + @item.ORG_ID) ", 
-                    mapDataUrl:"@Url.Action("GetChartData", "MapServer", new
-                    {
-                        @orgId = @item.ORG_ID
-                    })"  }); 
-                    </text>
+        gzsw.map.addMarker(
+            {
+
+                text:'@item.ORG_NAM',
+                level:@item.ORG_LEVEL,
+                x: "@item.DIMENSION",
+                y: "@item.LONGITUDE",
+                @if (item.ORG_LEVEL == 4)
+                {
+                    @:url: "@Html.Url("Mon/VirtualMonitor/index" + "?orgId=" + @item.ORG_ID)"
+                }
+                else
+                {
+                    @:url: "@Html.Url("Mon/Warning/All" + "?orgId=" + @item.ORG_ID)"
+                }
+               });
+        </text>
 
                 }
             }
 
-            @if (Model != null && !string.IsNullOrEmpty(Model.LONGITUDE) && !string.IsNullOrEmpty(Model.DIMENSION))
+        @if (Model != null && !string.IsNullOrEmpty(Model.LONGITUDE) && !string.IsNullOrEmpty(Model.DIMENSION))
             {
                   <text>
-                        gzsw.map.addMarker(
-                            {
-                                
-                                text:'@Model.ORG_NAM',
-                                level:@Model.ORG_LEVEL,
-                                x: "@Model.DIMENSION", 
-                                y: "@Model.LONGITUDE", 
-                                url: "@Html.Url("Mon/VirtualMonitor/index" + "?orgId=" + @Model.ORG_ID) ", 
-                                mapDataUrl:"@Url.Action("GetChartData", "MapServer", new
-                                            {
-                                                @orgId = @Model.ORG_ID
-                                            })"  }); 
-                        </text>
+        gzsw.map.addMarker(
+            {
+
+                text:'@Model.ORG_NAM',
+                level:@Model.ORG_LEVEL,
+                x: "@Model.DIMENSION",
+                y: "@Model.LONGITUDE",
+                @if (@Model.ORG_LEVEL == 4)
+                {
+                     @:url: "@Html.Url("Mon/VirtualMonitor/index" + "?orgId=" + @Model.ORG_ID)"
+                }
+                else
+                {
+                     @:url: "@Html.Url("Mon/Warning/All" + "?orgId=" + @Model.ORG_ID)"
+                }
+                });
+    </text>
             }
 
-        
-            
-        });
+
+
+    });
     </script> 
 } 
 <div style="z-index:9999; width:100%;position : absolute; border: #ccc 1px solid; text-align: center;cursor:pointer; background-color: #e5ff69; line-height: 28px; font-size: 14px; ">@ViewData["MapName"] - 监控分布地图</div>

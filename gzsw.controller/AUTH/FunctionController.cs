@@ -32,7 +32,6 @@ namespace gzsw.controller.AUTH
         }
 
         #region 生成权限树
-        [UserAuth("AUTH_FUNC_VIW")]
         public ActionResult GetRoleFuncsTree(int roleid, int? check, int? disabled, string searchNam)
         {
             var rolefunclist = DaoRolefunction.FindList("", "role_id", roleid);
@@ -119,7 +118,7 @@ namespace gzsw.controller.AUTH
             }
         }
 
-        [UserAuth("AUTH_FUNC_VIW")]
+        //[UserAuth("AUTH_FUNC_VIW")]
         public ActionResult GetFuncsTree(int? id, int? check, int? disabled, string searchNam)
         {
             var funcsall = DaoFunction.FindList();

@@ -26,7 +26,7 @@ namespace gzsw.controller.Detail
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        [UserAuth("Detail_SYS_CURRYWHIST")]
+        [UserAuth("Detail_SYS_CURRYWHIST_VIW")]
         public ActionResult Index(string orgId, int? beginMo, int? endMo,
             string nsrsbm, string nsrmc,
             int isSenior = 0, int pageIndex = 1, int pageSize = 20)
@@ -73,7 +73,7 @@ namespace gzsw.controller.Detail
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        [UserAuth("Detail_SYS_CURRYWHIST")]
+        [UserAuth("Detail_SYS_CURRYWHIST_VIW")]
         public ActionResult DetailList(string orgId,string nsrsbm, int? beginMo, int? endMo, int pageIndex = 1, int pageSize=20)
         {
             if (beginMo == null)

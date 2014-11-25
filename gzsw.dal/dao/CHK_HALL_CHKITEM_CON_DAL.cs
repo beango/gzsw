@@ -15,7 +15,7 @@ namespace gzsw.dal.dao
 
             var sql = PetaPoco.Sql.Builder.Append(@" select * from CHK_HALL_CHKITEM_CON");
             if (!string.IsNullOrEmpty(name))
-                sql.Append("where HALL_CHKITEM_NAM  like @0 ", "%" + name + "%", name);
+                sql.Append("where HALL_CHKITEM_CD  =@0 ", name);
             var data = db.Page<dynamic>(page, PageSize, sql);
             data.ItemsPerPage = PageSize;
             return data;

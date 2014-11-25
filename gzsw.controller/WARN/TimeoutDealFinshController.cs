@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
+using gzsw.controller.MyAuth;
 using gzsw.dal.dao;
 using gzsw.util;
 
@@ -17,6 +18,7 @@ namespace gzsw.controller.WARN
         /// <param name="pageIndex"></param>O
         /// <param name="pageSize"></param>
         /// <returns></returns>
+        [UserAuth("MON_Warning_VIW")]
         public ActionResult Index(string orgId, int pageIndex = 1, int pageSize = 20)
         {
             var list = SYS_CURRYWHIST_DAL.GetTimeoutDealFinshPager(orgId, pageIndex, pageSize);
@@ -29,6 +31,7 @@ namespace gzsw.controller.WARN
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [UserAuth("MON_Warning_VIW")]
         public ActionResult Details(string id)
         {
             try

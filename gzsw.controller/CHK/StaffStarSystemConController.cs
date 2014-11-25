@@ -104,9 +104,9 @@ namespace gzsw.controller.CHK
 
 
         [UserAuth("CHK_STAFF_STAR_SYSTEM_CON_ADD")]
-        public ActionResult ValidateOrgId(string ORG_ID)
+        public ActionResult ValidateOrgId(string ORG_ID, byte? TIME_DUR_TYP)
         {
-            var item = dao.GetEntity("ORG_ID", ORG_ID);
+            var item = dao.GetEntity("ORG_ID", ORG_ID, "TIME_DUR_TYP", TIME_DUR_TYP.Value);
             return Json(item == null, JsonRequestBehavior.AllowGet);
         }
 

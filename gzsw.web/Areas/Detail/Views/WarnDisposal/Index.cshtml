@@ -50,10 +50,16 @@
                     <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
                     <th>序号</th>
                     <th>
+                        服务厅
+                    </th>
+                    <th>
                         预警类型
                     </th>
                     <th>
                         预警级别
+                    </th>
+                    <th>
+                        预警时间
                     </th>
                     <th>
                         预警值
@@ -66,6 +72,9 @@
                     </th>
                     <th>
                         处理时间
+                    </th>
+                    <th>
+                        状态
                     </th>
                 </tr>
             </thead>
@@ -82,10 +91,16 @@
                     @(i++)
                 </td>
                 <td>
+                    @item.HALL_NAM
+                </td>
+                <td>
                     @(((WARN_INFO_DETAIL.WARN_TYP_ENUM)item.WARN_TYP).ToString())
                 </td>
                 <td>
                     @(((WARN_INFO_DETAIL.WARN_LVL_ENUM)item.WARN_LEVEL).ToString())
+                </td>
+                <td>
+                    @item.CREATE_DTIME
                 </td>
                 <td>
                     @item.CRITICAL_VALUE
@@ -98,6 +113,9 @@
                 </td>
                 <td>
                     @item.HANDLE_TIME
+                </td>
+                <td>
+                    @(((WARN_INFO_DETAIL.STATE_ENUM)item.STATE).ToString())
                 </td>
             </tr>
             }

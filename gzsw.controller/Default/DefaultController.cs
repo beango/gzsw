@@ -1,4 +1,4 @@
-﻿ 
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +25,7 @@ namespace gzsw.controller.Default
         [Ninject.Inject]
         public IDao<SYS_MENU> DaoMenu { get; set; }
 
-         
+
 
         public ActionResult LeftMenu(int? nid)
         {
@@ -55,7 +55,7 @@ namespace gzsw.controller.Default
                 {
                     // 读取省的菜单
                     var level4List = organizeList.Where(x => x.ORG_LEVEL == 4).ToList();
-                    if (level4List != null && level4List.Count()>0)
+                    if (level4List != null && level4List.Count() > 0)
                     {
                         foreach (var item in level4List)
                         {
@@ -67,13 +67,12 @@ namespace gzsw.controller.Default
                                 children = GetMenuTreeForOrganize(organizeList, item.ORG_ID)
                             });
                         } 
-                       
                     }
                 }
                 else
                 {
                     // 读取省的菜单
-                    var level1 = organizeList.FirstOrDefault(x => x.PAR_ORG_ID == null && x.ORG_LEVEL == 1);
+                    var level1 = organizeList.FirstOrDefault(x => x.ORG_LEVEL == 1);
                     if (level1 != null)
                     {
                         listTree.Add(new HomeController.MenuTree()
@@ -95,19 +94,19 @@ namespace gzsw.controller.Default
                             url = Url.Action("Index", "MapServer", new { @orgId = node.ORG_ID }),
                             children = GetMenuTreeForOrganize(organizeList, node.ORG_ID)
                         });
-                    } 
+                    }
                 }
 
-                
+
                 ViewData["MapServer"] = true;
 
-               /* listTree.AddRange(organizeList.Where(x => x.ORG_LEVEL == null).Select(node => new HomeController.MenuTree()
-                {
-                    id = node.ORG_ID,
-                    text = node.ORG_NAM,
-                    url = Url.Action("Index", "MapServer", new { @orgId = node.ORG_ID }),
-                    children = GetMenuTreeForOrganize(organizeList, node.ORG_ID)
-                })); */
+                /* listTree.AddRange(organizeList.Where(x => x.ORG_LEVEL == null).Select(node => new HomeController.MenuTree()
+                 {
+                     id = node.ORG_ID,
+                     text = node.ORG_NAM,
+                     url = Url.Action("Index", "MapServer", new { @orgId = node.ORG_ID }),
+                     children = GetMenuTreeForOrganize(organizeList, node.ORG_ID)
+                 })); */
                 return View(listTree);
             }
             else
@@ -115,8 +114,8 @@ namespace gzsw.controller.Default
                 menuall = menuall.OrderBy(obj => obj.MENU_ORD)
                     .ThenBy(obj => obj.MENU_ID).ToList();
 
-            } 
-            return View(GenMenuTree(menuall, nid)); 
+            }
+            return View(GenMenuTree(menuall, nid));
         }
 
         /// <summary>
@@ -126,6 +125,16 @@ namespace gzsw.controller.Default
         [UserAuth]
         public ActionResult Index()
         {
+
+            
+            var userOrgName = string.Empty;
+            var userOrg = base.UserState.UserOrgs.OrderBy(x=>x.ORG_LEVEL).FirstOrDefault(); 
+            if (userOrg != null)
+            {
+                userOrgName = userOrg.ORG_NAM;
+            }
+            ViewData["userOrgName"] = userOrgName;
+
             // 获取
             var menuList = DaoMenu.FindList("MENU_ORD asc");
             var menuall = menuList.Where(obj =>
@@ -133,19 +142,25 @@ namespace gzsw.controller.Default
             if (!isAdmin)
             {
                 menuall = menuall.Where(obj =>
-                    UserState.UserFuncs != null && UserState.UserFuncs.Any(obj2 => obj2.FUNCTION_ID == obj.FUNCTION_ID)
+                   UserState != null && UserState.UserFuncs != null && UserState.UserFuncs.Any(obj2 => obj2.FUNCTION_ID == obj.FUNCTION_ID)
                 ).ToList();
             }
             menuall = menuall.OrderBy(obj => obj.MENU_ORD).ThenBy(obj => obj.MENU_ID);
             ViewBag.UserID = UserState.UserID;
-            ViewBag.UserName = UserState.UserName; 
+            ViewBag.UserName = UserState.UserName;
             return View(menuall);
         }
 
         public ActionResult Welcome()
         {
-             return View();
+            return View();
         }
+
+        public ActionResult NoImp()
+        {
+            return View();
+        }
+
 
         #region Helper
 
@@ -161,7 +176,7 @@ namespace gzsw.controller.Default
         {
             if (soure != null && soure.Any() && !string.IsNullOrEmpty(id))
             {
-                return soure.Where(obj => obj.PAR_ORG_ID == id && obj.ORG_LEVEL==3).Select(obj => new HomeController.MenuTree()
+                return soure.Where(obj => obj.PAR_ORG_ID == id && obj.ORG_LEVEL == 3).Select(obj => new HomeController.MenuTree()
                 {
                     id = obj.ORG_ID,
                     text = obj.ORG_NAM,
@@ -192,16 +207,16 @@ namespace gzsw.controller.Default
                 }).ToList();
         }
 
-      /*  /// <summary>
-        /// 1省 2市 3县 4营业厅
-        /// </summary>
-        /// <param name="level"></param>
-        /// <returns></returns>
-        private string GetTreeIcon(int level)
-        {
-            icon
-        }*/
+        /*  /// <summary>
+          /// 1省 2市 3县 4营业厅
+          /// </summary>
+          /// <param name="level"></param>
+          /// <returns></returns>
+          private string GetTreeIcon(int level)
+          {
+              icon
+          }*/
 
-        #endregion 
+        #endregion
     }
 }

@@ -23,7 +23,7 @@ namespace gzsw.controller.CHK
         [Ninject.Inject]
         public IDao<SYS_HALL> Halldao { get; set; }
 
-        [UserAuth("CHK_HALL_STAT_M_VIW")]
+        [UserAuth("HALLstatMark_VIW")]
         public ActionResult Index(string statMo, string orgId, int pageIndex = 1, int pageSize = 20)
         {
 
@@ -54,7 +54,7 @@ namespace gzsw.controller.CHK
 
 
 
-        [UserAuth("CHK_STAT_STAFF_SVRSTAT_M_VIW")]
+       
         public ActionResult Detail(string id, string staffId)
         {
             try
@@ -71,7 +71,7 @@ namespace gzsw.controller.CHK
             }
         }
 
-        [UserAuth("CHK_STAT_STAFF_SVRSTAT_M_EDT")]
+      
         public ActionResult Edit(string id, string staffId)
         {
             ViewBag.HALL_NAM = Halldao.GetEntity("HALL_NO", staffId).HALL_NAM;
@@ -102,7 +102,7 @@ namespace gzsw.controller.CHK
         }
 
         [HttpPost]
-        [UserAuth("CHK_STAT_STAFF_SVRSTAT_M_EDT")]
+        
         public ActionResult Edit(PersonnelAttendanceViewModel model)
         {
             try
@@ -121,8 +121,13 @@ namespace gzsw.controller.CHK
 
 
                    CHK_HALL_STAT_M_DAL.UpdateObject(item);
-                  
-                        Alter("修改成功！", util.Enum.AlterTypeEnum.Success, false, true);
+                  //
+                    var mo = Convert.ToInt32(item.STAT_MO.ToString().Substring(4, 2));
+                    if (mo != DateTime.Now.Month)
+                    {
+                        Stored_DAL.UpdateDataByHall(item.STAT_MO,item.HALL_NO,UserState.UserID);
+                    }
+                    Alter("修改成功！", util.Enum.AlterTypeEnum.Success, false, true);
                         return Redirect("/Home/Blank"); 
                 }
 

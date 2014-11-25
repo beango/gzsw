@@ -49,5 +49,15 @@ namespace gzsw.dal.dao
                 return false;
             }
         }
+
+        /// <summary>
+        /// 获取预警信息发送列表（未读，未发送且是当天的预警信息）
+        /// </summary>
+        /// <param name="userid"></param>
+        public List<WARN_SENDINFO_DETAIL> GetNoSendInfoList(string userid)
+        {
+            var sql = Sql.Builder.Append("select t2.* from dbo.WARN_INFO_DETAIL t1 join dbo.WARN_SENDINFO_DETAIL t2 on t1.WARN_INFO_DETAIL_ID=t2.WARN_INFO_DETAIL_ID where CLI_READ_IND=0 and CLI_SEND_STATE=0 and t2.USER_ID=@0 and DATEDIFF(dd,t1.CREATE_DTIME,GETDATE())=0",userid);
+            return gzswDB.GetInstance().Fetch<WARN_SENDINFO_DETAIL>(sql);
+        }
     }
 }

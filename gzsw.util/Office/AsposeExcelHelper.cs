@@ -152,12 +152,13 @@ namespace gzsw.util.Office
         /// </summary>
         /// <param name="dt"></param>
         /// <param name="tableName"></param>
+        /// <param name="headTitle"></param>
         /// <returns></returns>
-        public static MemoryStream OutFileToStream(DataTable dt, string tableName)
+        public static MemoryStream OutFileToStream(DataTable dt, string tableName, string headTitle = null)
         {
             Workbook workbook = new Workbook(); //工作簿 
             Worksheet sheet = workbook.Worksheets[0]; //工作表
-            sheet.Name = tableName;
+            sheet.Name = "Sheet1";
             Cells cells = sheet.Cells;//单元格 
              
 
@@ -200,7 +201,7 @@ namespace gzsw.util.Office
 
             //生成行1 标题行    
             cells.Merge(0, 0, 1, Colnum);//合并单元格 
-            cells[0, 0].PutValue(tableName);//填写内容 
+            cells[0, 0].PutValue(headTitle ?? tableName);//填写内容 
             cells[0, 0].SetStyle(styleTitle);
             cells.SetRowHeight(0, 38);
 
@@ -236,10 +237,21 @@ namespace gzsw.util.Office
         /// <param name="tableName"></param>
         /// <returns></returns>
         public static ExcelFileResult OutFileToRespone(DataTable dt, string tableName)
-        { 
-            return new  ExcelFileResult(dt,tableName);
+        {
+            return OutFileToRespone(dt, tableName, null);
         }
 
+        /// <summary>
+        /// 输出文件流(用于报表展示)
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="tableName"></param>
+        /// <param name="headTitle"></param>
+        /// <returns></returns>
+        public static ExcelFileResult OutFileToRespone(DataTable dt, string tableName, string headTitle)
+        {
+            return new ExcelFileResult(dt, tableName, headTitle);
+        }
 
         /// <summary>
         /// Excel文件结果集
@@ -249,18 +261,19 @@ namespace gzsw.util.Office
         {
             protected DataTable datatable;
             protected string tableName;
-
-            public ExcelFileResult(DataTable dt, string _tableName)
+            protected string headTitle;
+            
+            public ExcelFileResult(DataTable dt, string _tableName, string _headTitle)
             {
                 datatable = dt;
                 tableName = _tableName;
-
+                headTitle = _headTitle;
             }
 
             public override void ExecuteResult(ControllerContext context)
             {
                 //下载
-                System.IO.MemoryStream ms = AsposeExcelHelper.OutFileToStream(datatable, tableName);
+                System.IO.MemoryStream ms = AsposeExcelHelper.OutFileToStream(datatable, tableName, headTitle);
                 byte[] bt = ms.ToArray();
                 string fileName = tableName + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls";//客户端保存的文件名  
 

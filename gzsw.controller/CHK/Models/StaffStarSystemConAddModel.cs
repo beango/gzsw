@@ -25,10 +25,11 @@ namespace gzsw.controller.CHK.Models
     public class StaffStarSystemConAddModel
     {
         [Required(ErrorMessage = "不能为空！")]
-        [Remote("ValidateOrgId", "StaffStarSystemCon", ErrorMessage = "该组织已存在设置.")]
+        [Remote("ValidateOrgId", "StaffStarSystemCon", AdditionalFields = "TIME_DUR_TYP", ErrorMessage = "该组织已存在评定时间类型设置.")]
         public string ORG_ID { get; set; }
 
         [Required(ErrorMessage = "不能为空！")]
+        [Remote("ValidateOrgId", "StaffStarSystemCon", AdditionalFields = "ORG_ID", ErrorMessage = "该组织已存在评定时间类型设置.")]
         public byte TIME_DUR_TYP { get; set; }
 
         [Required(ErrorMessage = "不能为空！")]

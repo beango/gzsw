@@ -32,8 +32,16 @@
 {
     @Html.StyleSheet("lib/hall/hall.css")
     <style type="text/css">
-         table.tablelist th{ font-weight: bold; }
-         table td { height: 30px; }
+        table.tablelist th { font-weight: bold; }
+        /*table thead tr {
+            background-image: none;
+            background-color: #F3F3F3;
+        }
+        table thead th {
+            background-image: none;
+            background-color: #F3F3F3;
+        }*/
+        table td { height: 30px; }
     </style>
 }
 
@@ -73,7 +81,7 @@
         $("#warningContent").delegate("a", "click", function () {
             var that = $(this);
             that.attr("target", "_blank");
-            var url = "javascript:void(0);";
+            var url = "#";
             var opentype = that.attr("d-open");
             if (opentype == 'hall') {
                 //窗口
@@ -120,8 +128,8 @@
             gzsw.dialog.openFull({
                 title:'查看',
                 url: url,
-                width: 800,
-                height: 450,
+                width: 1024,
+                height: 600,
                 isReload:false
             });
 

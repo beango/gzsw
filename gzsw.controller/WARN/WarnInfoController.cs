@@ -25,8 +25,14 @@ namespace gzsw.controller.WARN
 
         [HttpGet]
         [UserAuth("WARN_INFO_VIW")]
-        public ActionResult Index(int? typeq, int? lvlq, string orgid, int pageIndex = 1, int pageSize = 20)
+        public ActionResult Index(int? typeq, int? lvlq, string orgid,
+            DateTime? start, DateTime? end,
+            int pageIndex = 1, int pageSize = 20)
         {
+            if (null != start)
+                ViewBag.Start = start.Value.ToString("yyyy-MM-dd");
+            if (null != end)
+                ViewBag.End = end.Value.ToString("yyyy-MM-dd");
             var orgall = new SYS_USER_DAL().GetUserORG(UserState.UserID);
             ViewBag.UserORG = new SelectList(orgall.Where(obj => obj.ORG_LEVEL == 4)
                 , "ORG_ID", "ORG_NAM", orgid);
@@ -51,7 +57,9 @@ namespace gzsw.controller.WARN
                 }
             }
             var halllist = DaoHall.FindList("", "ORG_ID in", orgs);
-            var data = dao.GetList(pageIndex, pageSize, "CREATE_DTIME desc", "WARN_TYP", typeq, "WARN_LEVEL", lvlq, "HALL_NO in", null == halllist ? null : halllist.Select(obj => obj.HALL_NO));
+            var data = dao.GetList(pageIndex, pageSize, "CREATE_DTIME desc", "WARN_TYP", typeq, "WARN_LEVEL", lvlq, "HALL_NO in", null == halllist ? null : halllist.Select(obj => obj.HALL_NO),
+                "CREATE_DTIME>=", start == null ? "'1970-01-01'" : "'" + start.Value + "'",
+                "CREATE_DTIME<", end == null ? ("'" + DateTime.MaxValue.ToShortDateString() + "'") : ("'" + end.Value.AddDays(1) + "'"));
             foreach (var item in data.Items)
             {
                 var h = halllist.FirstOrDefault(obj => obj.HALL_NO == item.HALL_NO);
@@ -160,16 +168,20 @@ namespace gzsw.controller.WARN
             }
         }
 
+
         public ActionResult SendInfoTip()
         {
-            List<TipModel> unread = DaoSendInfoDetail.FindList("", "USER_ID", UserState.UserID, "CLI_READ_IND", 0, "CLI_SEND_STATE",0)
-                .Select(item => new TipModel { typ = "WARNSENDINFODETAIL", id = item.SENDINFO_DETAIL_ID, msg = item.WARN_INFO })
+            var dallist = new WARN_INFO_DETAIL_DAL().GetNoSendInfoList(UserState.UserID);
+            List<TipModel> unread = dallist
+                .Select(item => new TipModel { typ = "WARNSENDINFODETAIL", id = item.WARN_INFO_DETAIL_ID, msg = item.WARN_INFO })
                 .ToList();
+            new WARN_SENDINFO_DETAIL_DAL().UPDATE_WARN_SENDINFO_DETAIL(dallist.Select(o => o.SENDINFO_DETAIL_ID));
 
-            
-            var unreadalarm = new WARN_ALARM_INFO_DETAIL_DAL().GetALARMSendInfo(UserState.UserID)
-                .Select(item => new TipModel { typ = "ALARMSENDINFODETAIL", id = item.ALARM_SEQ, msg = item.ALARM_INFO })
+            var dal1 = new WARN_ALARM_INFO_DETAIL_DAL();
+            var unreadalarmlist = dal1.GetALARMSendInfo(UserState.UserID);
+            var unreadalarm = unreadalarmlist.Select(item => new TipModel { typ = "ALARMSENDINFODETAIL", id = item.ALARM_SEQ, msg = item.ALARM_INFO })
                 .ToList();
+            dal1.UPDATE_WARN_ALARM_INFO_DETAIL(unreadalarmlist.Select(o => o.SENDINFO_DETAIL_ID));
 
             var _hall = DAO_WARN_ALARM_SEND_USER_CON.FindList("", "ALARM_TYP", 4, "USER_ID", UserState.UserID);
             var unreadalarm2 = DaoComplainDetail.FindList("", "STATE", 1, "HALL_NO in", _hall.Select(o => o.HALL_NO))

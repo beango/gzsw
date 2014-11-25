@@ -33,7 +33,7 @@ namespace gzsw.controller
         /// 质量类型
         /// </summary>
         [Inject]
-        private IDao<CHK_QUALITY_CON> CHK_QUALITY_CON_Dao  { get; set; }
+        private IDao<CHK_QUALITY_CON> CHK_QUALITY_CON_Dao { get; set; }
 
         /// <summary>
         /// 事项大类
@@ -52,10 +52,10 @@ namespace gzsw.controller
         /// <param name="export">是否导出Excel</param>
         /// <returns></returns>
         [HttpGet]
-        [UserAuth("STAT_STAFF_QUALITY_STAT_D_VIW")] 
+        [UserAuth("STAT_STAFF_QUALITY_STAT_D_VIW")]
         public ActionResult ServiceSlipAnalysis(
             DateTime? beginTime,
-            DateTime? endTime, 
+            DateTime? endTime,
             bool export = false)
 
         {
@@ -73,15 +73,23 @@ namespace gzsw.controller
                         orgId = listOrgs[0].HALL_NO;
                     }
                     return RedirectToAction("ServiceSlipAnalysis_Person", new {orgId = orgId});
-                    break;
             }
 
             base.DateTimeInit(ref beginTime, ref endTime);
-            var data = new Statistics_DAL().GetStatistics_ServiceSlipAnalysis(beginTime, endTime, UserState.UserID);
 
             var mainTielt = GetOrgName(null, 2);
-            ViewBag.MainTitle = GetTitleName(mainTielt, "业务差错分析", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault());
+            ViewBag.MainTitle = GetTitleName(mainTielt, "业务差错分析", beginTime.GetValueOrDefault(),
+                endTime.GetValueOrDefault());
             var subtitle = GetTitleName(mainTielt, "", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), false);
+
+            if (export)
+            {
+                return ExportData(subtitle, "服务厅", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), null);
+            }
+
+            var data = new Statistics_DAL().GetStatistics_ServiceSlipAnalysis(beginTime, endTime, UserState.UserID);
+
+
             //var exceltitle = GetTitleName(mainTielt, "业务办理分析", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), false);
 
 
@@ -92,8 +100,7 @@ namespace gzsw.controller
             // 所有事项大类
             var itemTypeList = SYS_DLSERIAL_Dao.FindList();
             ViewData["itemTypeList"] = itemTypeList;
-
-            var list= data.GroupBy(m => m.HALL_NAM);
+            var list = data.GroupBy(m => m.HALL_NAM);
 
             SetChart(list, typeList, "服务厅业务差错分析", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), subtitle);
 
@@ -108,21 +115,31 @@ namespace gzsw.controller
         /// <param name="endTime">结束时间</param>
         /// <param name="export">是否导出Excel</param>
         /// <returns></returns>
+        [UserAuth("STAT_STAFF_QUALITY_STAT_D_VIW")]
         public ActionResult ServiceSlipAnalysis_Person(
             string orgId,
             DateTime? beginTime,
             DateTime? endTime,
-            bool export=false
+            bool export = false
             )
         {
+            ViewBag.HallNo = orgId;
             base.DateTimeInit(ref beginTime, ref endTime);
 
-            var listStatistics = new Statistics_DAL().GetStatistics_ServiceSlipAnalysisList(beginTime, endTime,
-               UserState.UserID, orgId);
-
-            var mainTielt = GetOrgName(null, 2);
-            ViewBag.MainTitle = GetTitleName(mainTielt, "业务差错分析", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault());
+            var mainTielt = GetOrgName(orgId, null);
+            ViewBag.MainTitle = GetTitleName(mainTielt, "业务差错分析", beginTime.GetValueOrDefault(),
+                endTime.GetValueOrDefault());
             var subtitle = GetTitleName(mainTielt, "", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), false);
+
+            if (export)
+            {
+                return ExportData(subtitle, "员工名称", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), orgId);
+            }
+
+            var listStatistics = new Statistics_DAL().GetStatistics_ServiceSlipAnalysisList(beginTime, endTime,
+                UserState.UserID, orgId, null);
+
+
             //var exceltitle = GetTitleName(mainTielt, "业务办理分析", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), false);
 
 
@@ -137,9 +154,123 @@ namespace gzsw.controller
             ViewData["itemTypeList"] = itemTypeList;
 
 
-            SetStaffChart(listStatistics, typeList, "员工业务差错分析", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), subtitle);
+            SetStaffChart(listStatistics, typeList, "员工业务差错分析", beginTime.GetValueOrDefault(),
+                endTime.GetValueOrDefault(), subtitle);
 
             return View(dic);
+        }
+
+        /// <summary>
+        /// 业务差错分析-项
+        /// </summary>
+        /// <param name="orgId">组织Id</param>
+        /// <param name="titleName"></param>
+        /// <param name="qId"></param>
+        /// <param name="ssId"></param>
+        /// <param name="staffId"></param>
+        /// <param name="beginTime">开始时间</param>
+        /// <param name="endTime">结束时间</param>
+        /// <returns></returns>
+        public ActionResult ServiceSlipAnalysis_None(
+            string orgId,
+            string titleName,
+            string qId,
+            string ssId,
+            string staffId,
+            DateTime? beginTime,
+            DateTime? endTime)
+        {
+            base.DateTimeInit(ref beginTime, ref endTime);
+
+            var mainTielt = GetOrgName(orgId, null);
+            ViewBag.MainTitle = GetTitleName(mainTielt, "业务差错分析", beginTime.GetValueOrDefault(),
+                endTime.GetValueOrDefault());
+            var subtitle = GetTitleName(mainTielt, "", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), false);
+
+            var listStatistics = new Statistics_DAL().GetStatistics_ServiceSlipAnalysisList(beginTime, endTime,
+                UserState.UserID, orgId, staffId);
+
+            if (!string.IsNullOrEmpty(staffId))
+            {
+                var item = listStatistics.FirstOrDefault();
+                if (item != null)
+                    subtitle = GetTitleName(item.STAFF_NAM, "", beginTime.GetValueOrDefault(),
+                        endTime.GetValueOrDefault(), false);
+            }
+
+            if (string.IsNullOrEmpty(titleName))
+            {
+                titleName = "Name";
+            }
+
+            var lineTable = new DataTable();
+
+            lineTable.Columns.Add("Y_NAME", typeof (string));
+            lineTable.Columns.Add(titleName, typeof (int));
+
+            beginTime = beginTime.GetValueOrDefault().AddHours(8);
+            endTime = endTime.GetValueOrDefault().AddHours(18);
+
+            TimeSpan timeSpan = endTime.GetValueOrDefault().Subtract(beginTime.GetValueOrDefault());
+            var tlist = new List<string>();
+            base.SetLineYName(timeSpan, beginTime.GetValueOrDefault(), lineTable, tlist, endTime.GetValueOrDefault());
+
+            for (var i = 0; i < lineTable.Rows.Count; i++)
+            {
+                var tempbtiem = Convert.ToDateTime(tlist[i]);
+                var tempetiem = i + 1 < lineTable.Rows.Count ? Convert.ToDateTime(tlist[i + 1]) : endTime;
+
+                var soureList = new List<STAT_STAFF_QUALITY_STAT_D_SUB>();
+                if (timeSpan.Days < 1)
+                {
+                    soureList = listStatistics.
+                        Where(x => x.TIME_QUANTUM_CD == Convert.ToByte(tempbtiem.Hour.ToString())).ToList();
+                }
+                else
+                {
+                    if (Convert.ToDateTime(tempbtiem.ToShortDateString()) ==
+                        Convert.ToDateTime(endTime.GetValueOrDefault().ToShortDateString()))
+                    {
+                        soureList =
+                            listStatistics.Where(
+                                x =>
+                                    x.STAT_DT >= Convert.ToDateTime(tempbtiem.ToShortDateString()) &&
+                                    x.STAT_DT <
+                                    Convert.ToDateTime(tempetiem.GetValueOrDefault().AddDays(1).ToShortDateString()))
+                                .ToList();
+                    }
+                    else
+                    {
+                        soureList =
+                            listStatistics.Where(
+                                x =>
+                                    x.STAT_DT >= Convert.ToDateTime(tempbtiem.ToShortDateString()) &&
+                                    x.STAT_DT < Convert.ToDateTime(tempetiem.GetValueOrDefault().ToShortDateString()))
+                                .ToList();
+                    }
+                }
+
+                if (string.IsNullOrEmpty(ssId))
+                {
+                    lineTable.Rows[i][titleName] = soureList.Where(m => m.QUALITY_CD == qId).Sum(m => m.AMOUNT);
+                }
+                else
+                {
+                    lineTable.Rows[i][titleName] =
+                        soureList.Where(m => m.QUALITY_CD == qId && m.DLS_SERIALID == ssId).Sum(m => m.AMOUNT);
+                }
+
+            }
+
+            var dss = new DataSet();
+            dss.Tables.Add(lineTable);
+
+
+            ViewBag.ChartColumn3DXML = CreateMSColumn3DChart(titleName, dss.Tables[0], 430, subtitle);
+            ViewBag.ChartSplineXML = CreateMSSplineChart(titleName, dss, 430, null, null, subtitle);
+            ViewBag.ChartPie3DXML = CreatePie3DChart(titleName, dss, 430, subtitle);
+
+            return View();
         }
 
         /// <summary>
@@ -180,17 +311,21 @@ namespace gzsw.controller
 
             var dss = new DataSet();
             dss.Tables.Add(lineTable);
-            ViewBag.ChartColumn3DXML = base.CreateMSColumn3DChart(title, dss, 430, subtitle);
+            ViewBag.ChartColumn3DXML = base.CreateMSColumn3DChart(title, dss.Tables[0], 430, subtitle);
 
             #endregion
 
             #region 线形图
+
             var lineTable2 = new DataTable();
-            lineTable2.Columns.Add("Y_Name", typeof(string));
+            lineTable2.Columns.Add("Y_Name", typeof (string));
             foreach (var item in typeList)
             {
-                lineTable2.Columns.Add(item.QUALITY_NAM, typeof(int));
+                lineTable2.Columns.Add(item.QUALITY_NAM, typeof (int));
             }
+
+            beginTime = beginTime.AddHours(8);
+            endTime = endTime.AddHours(18);
 
             TimeSpan timeSpan = endTime.Subtract(beginTime);
             var tlist = new List<string>();
@@ -240,9 +375,10 @@ namespace gzsw.controller
             }
             var dss2 = new DataSet();
             dss2.Tables.Add(lineTable2);
-            ViewBag.ChartSplineXML = base.CreateMSSplineChart(title, dss2, 430, null, null, subtitle); 
+            ViewBag.ChartSplineXML = base.CreateMSSplineChart(title, dss2, 430, null, null, subtitle);
+
             #endregion
-            
+
         }
 
         /// <summary>
@@ -257,12 +393,13 @@ namespace gzsw.controller
             IList<CHK_QUALITY_CON> typeList, string title, DateTime beginTime, DateTime endTime, string subtitle)
         {
             #region 柱图
+
             var lineTable = new DataTable();
-            lineTable.Columns.Add("Y_Name", typeof(string));
+            lineTable.Columns.Add("Y_Name", typeof (string));
 
             foreach (var item in typeList)
             {
-                lineTable.Columns.Add(item.QUALITY_NAM, typeof(int));
+                lineTable.Columns.Add(item.QUALITY_NAM, typeof (int));
             }
 
             var dic = list.GroupBy(m => m.STAFF_NAM);
@@ -284,17 +421,21 @@ namespace gzsw.controller
 
             var dss = new DataSet();
             dss.Tables.Add(lineTable);
-            ViewBag.ChartColumn3DXML = base.CreateMSColumn3DChart(title, dss, 430, subtitle); 
+            ViewBag.ChartColumn3DXML = base.CreateMSColumn3DChart(title, dss.Tables[0], 430, subtitle);
+
             #endregion
 
             #region 线形图
+
             var lineTable2 = new DataTable();
-            lineTable2.Columns.Add("Y_Name", typeof(string));
+            lineTable2.Columns.Add("Y_Name", typeof (string));
             foreach (var item in typeList)
             {
-                lineTable2.Columns.Add(item.QUALITY_NAM, typeof(int));
+                lineTable2.Columns.Add(item.QUALITY_NAM, typeof (int));
             }
 
+            beginTime = beginTime.AddHours(8);
+            endTime = endTime.AddHours(18);
             TimeSpan timeSpan = endTime.Subtract(beginTime);
             var tlist = new List<string>();
             base.SetLineYName(timeSpan, beginTime, lineTable2, tlist, endTime);
@@ -341,12 +482,256 @@ namespace gzsw.controller
             var dss2 = new DataSet();
             dss2.Tables.Add(lineTable2);
             ViewBag.ChartSplineXML = base.CreateMSSplineChart(title, dss2, 430, null, null, subtitle);
+
             #endregion
+        }
+
+        /// <summary>
+        /// 导出数据
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="fileName"></param>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public ActionResult ExportData(string title,
+            string Listname,
+            DateTime beginTime,
+            DateTime endTime,
+            string orgId)
+        {
+
+
+            var typeList = CHK_QUALITY_CON_Dao.FindList();
+            var itemTypeList = SYS_DLSERIAL_Dao.FindList();
+
+            var lineTable = new DataTable();
+            lineTable.Columns.Add("序号", typeof (string));
+            lineTable.Columns.Add(Listname, typeof (string));
+            lineTable.Columns.Add("事项大类", typeof (string));
+
+            foreach (var item in typeList)
+            {
+                lineTable.Columns.Add(item.QUALITY_NAM, typeof (int));
+            }
+
+
+            if (Listname == "服务厅")
+            {
+                var data = new Statistics_DAL().GetStatistics_ServiceSlipAnalysis(beginTime, endTime, UserState.UserID);
+                var dics = data.GroupBy(m => m.HALL_NAM);
+
+                var i = 1;
+                foreach (var dic in dics)
+                {
+                    var items = dic.ToList();
+                    var statistics = items.FirstOrDefault();
+
+                    for (var j = 1; j < itemTypeList.Count(); j++)
+                    {
+                        var r = lineTable.NewRow();
+                        r["序号"] = i;
+                        r[Listname] = statistics.HALL_NAM;
+                        r["事项大类"] = itemTypeList[j].DLS_SERIALNAME;
+                        foreach (var item in typeList)
+                        {
+                            var def =
+                                items.FirstOrDefault(
+                                    m =>
+                                        m.QUALITY_CD == item.QUALITY_CD &&
+                                        m.SSDLSERIALID == itemTypeList[j].DLS_SERIALID);
+                            r[item.QUALITY_NAM] = def == null ? 0 : def.AMOUNT;
+                        }
+                        lineTable.Rows.Add(r);
+
+                        i++;
+                    }
+                }
+            }
+            else
+            {
+                var listStatistics = new Statistics_DAL().GetStatistics_ServiceSlipAnalysisList(beginTime, endTime,
+                    UserState.UserID, orgId, null);
+                var dics = listStatistics.GroupBy(m => m.STAFF_NAM);
+                var i = 1;
+                foreach (var dic in dics)
+                {
+                    var items = dic.ToList();
+                    var statistics = items.FirstOrDefault();
+
+                    for (var j = 1; j < itemTypeList.Count(); j++)
+                    {
+                        var r = lineTable.NewRow();
+                        r["序号"] = i;
+                        r[Listname] = statistics.STAFF_NAM;
+                        r["事项大类"] = itemTypeList[j].DLS_SERIALNAME;
+                        foreach (var item in typeList)
+                        {
+                            var def =
+                                items.FirstOrDefault(
+                                    m =>
+                                        m.QUALITY_CD == item.QUALITY_CD &&
+                                        m.DLS_SERIALID == itemTypeList[j].DLS_SERIALID);
+                            r[item.QUALITY_NAM] = def == null ? 0 : def.AMOUNT;
+                        }
+                        lineTable.Rows.Add(r);
+                        i++;
+                    }
+                }
+            }
+
+            return AsposeExcelHelper.OutFileToRespone(lineTable, title);
         }
 
         #endregion
 
         #region 纳税人行为分析
+
+        /// <summary>
+        /// 获取纳税人行为数据
+        /// </summary>
+        /// <param name="beginTime">开始时间</param>
+        /// <param name="endTime">结束时间</param>
+        /// <param name="headType">类型</param>
+        /// <param name="personNo">员工ID</param>
+        /// <param name="columnType">业务类型</param>
+        /// <returns></returns>
+        [HttpGet]
+        [UserAuth("STAT_TAXPAYER_BEHAV_STAT_D_VIW")]
+        public ActionResult TaxpayerAction_Node(
+            DateTime? beginTime,
+            DateTime? endTime,
+            long headType,
+            string personNo,
+            string columnType)
+        {
+
+            var columnDisplayName = string.Empty;
+            // 标题 
+            switch (headType)
+            {
+                case 1:
+
+                    columnDisplayName = "同城业务量";
+                    break;
+                case 2:
+                    columnDisplayName = "二次办税业务量";
+                    break;
+
+            }
+
+            // 初始化日期
+            base.DateTimeInit(ref beginTime, ref endTime);
+
+            // 控制标题 
+            var MainTitle = base.GetOrgName(null, 3);
+            var nodeTitle = string.Empty;
+            MainTitle += "纳税人评价分析";
+            nodeTitle += "（" + beginTime.Value.ToString("yyyy年MM月dd日");
+            nodeTitle += " - " + endTime.Value.ToString("yyyy年MM月dd日") + "）";
+            MainTitle += "--" + columnDisplayName;
+
+            ViewBag.MainTitle = MainTitle;
+            ViewBag.NodeTitle = nodeTitle;
+
+
+            IList<STAT_TAXPAYER_BEHAV_STAT_D> result = null;
+
+            if (!string.IsNullOrEmpty(personNo))
+            {
+                result = new Statistics_DAL().GetStatistics_TaxpayerEvalChartByPerson_Node(beginTime, endTime, personNo);
+            }
+            else
+            {
+                result = new Statistics_DAL().GetStatistics_TaxpayerEvalChart_Node(beginTime, endTime, UserState.UserID);
+            }
+
+
+
+            var lineTable = new DataTable();
+
+            lineTable.Columns.Add("Y_NAME", typeof (string));
+            lineTable.Columns.Add(columnDisplayName, typeof (int));
+
+            beginTime = beginTime.GetValueOrDefault().AddHours(8);
+            endTime = endTime.GetValueOrDefault().AddHours(18);
+
+            TimeSpan timeSpan = endTime.GetValueOrDefault().Subtract(beginTime.GetValueOrDefault());
+            var tlist = new List<string>();
+            base.SetLineYName(timeSpan, beginTime.GetValueOrDefault(), lineTable, tlist, endTime.GetValueOrDefault());
+
+            for (var i = 0; i < lineTable.Rows.Count; i++)
+            {
+                var tempbtiem = Convert.ToDateTime(tlist[i]);
+                var tempetiem = i + 1 < lineTable.Rows.Count ? Convert.ToDateTime(tlist[i + 1]) : endTime;
+
+                var soureList = new List<STAT_TAXPAYER_BEHAV_STAT_D>();
+                if (timeSpan.Days < 1)
+                {
+                    soureList = result.
+                        Where(x => x.TIME_QUANTUM_CD == Convert.ToByte(tempbtiem.Hour.ToString())).ToList();
+                }
+                else
+                {
+                    if (Convert.ToDateTime(tempbtiem.ToShortDateString()) ==
+                        Convert.ToDateTime(endTime.GetValueOrDefault().ToShortDateString()))
+                    {
+                        soureList =
+                            result.Where(
+                                x =>
+                                    x.STAT_DT >= Convert.ToDateTime(tempbtiem.ToShortDateString()) &&
+                                    x.STAT_DT <
+                                    Convert.ToDateTime(tempetiem.GetValueOrDefault().AddDays(1).ToShortDateString()))
+                                .ToList();
+                    }
+                    else
+                    {
+                        soureList =
+                            result.Where(
+                                x =>
+                                    x.STAT_DT >= Convert.ToDateTime(tempbtiem.ToShortDateString()) &&
+                                    x.STAT_DT < Convert.ToDateTime(tempetiem.GetValueOrDefault().ToShortDateString()))
+                                .ToList();
+                    }
+                }
+
+
+                if (string.IsNullOrEmpty(columnType))
+                {
+                    if (headType == 1)
+                    {
+                        lineTable.Rows[i][columnDisplayName] = soureList.Sum(m => m.LOCAL_CNT);
+                    }
+                    else if (headType == 2)
+                    {
+                        lineTable.Rows[i][columnDisplayName] = soureList.Sum(m => m.SECOND_SVR_CNT);
+                    }
+                }
+                else
+                {
+                    if (headType == 1)
+                    {
+                        lineTable.Rows[i][columnDisplayName] =
+                            soureList.Where(x => x.DLS_SERIALID == columnType).Sum(m => m.LOCAL_CNT);
+                    }
+                    else if (headType == 2)
+                    {
+                        lineTable.Rows[i][columnDisplayName] =
+                            soureList.Where(x => x.DLS_SERIALID == columnType).Sum(m => m.SECOND_SVR_CNT);
+                    }
+                }
+
+            }
+
+
+            ViewBag.ChartColumn3DXML = CreateMSColumn3DChart(MainTitle, lineTable, 430, nodeTitle);
+            ViewBag.ChartSplineXML = CreateMSSplineChart(MainTitle, lineTable, 430, null, null, nodeTitle);
+            ViewBag.ChartPie3DXML = CreatePie3DChart(MainTitle, lineTable, 430, nodeTitle);
+
+            return View();
+        }
+
+
 
         /// <summary>
         /// 服务厅行为分析
@@ -357,7 +742,7 @@ namespace gzsw.controller
         /// <returns></returns>
 
         [HttpGet]
-        [UserAuth("STAT_TAXPAYER_BEHAV_STAT_D_VIW")] 
+        [UserAuth("STAT_TAXPAYER_BEHAV_STAT_D_VIW")]
         public ActionResult TaxpayerAction(
             DateTime? beginTime,
             DateTime? endTime,
@@ -367,38 +752,115 @@ namespace gzsw.controller
             base.DateTimeInit(ref beginTime, ref endTime);
             // 获取数据
             var bll = new Statistics_DAL();
-             var result = bll.GetStatistics_TaxpayerActionChat(beginTime, endTime, UserState.UserID);
-             if (export)
-             {
-                 var index = 0;
-                 var data = result.Select(x => new
-                 {
-                     序号 = ++index,
-                     营业厅编码 = x.HALL_NO,
-                     营业厅名称 = x.ORG_NAM,
-                     同城业务量 = x.LOCAL_CNT,
-                     二次办税业务量 = x.SECOND_SVR_CNT
-                 }).ToList().ToDataTable();
-                 return AsposeExcelHelper.OutFileToRespone(data, "服务厅行为分析报表");
-             }
-             var chartData = result.Select(x => new
-             {
-                 营业厅名称 = x.ORG_NAM,
-                 同城业务量 = x.LOCAL_CNT,
-                 二次办税业务量 = x.SECOND_SVR_CNT,
-             }).ToList().ToDataTable();
+            var result = bll.GetStatistics_TaxpayerActionChat(beginTime, endTime, UserState.UserID);
+            // 控制标题 
+            var MainTitle = base.GetOrgName(null, 3);
+            var nodeTitle = string.Empty;
+            MainTitle += "纳税人评价分析";
+            nodeTitle += "（" + beginTime.Value.ToString("yyyy年MM月dd日");
+            nodeTitle += " - " + endTime.Value.ToString("yyyy年MM月dd日") + "）";
+            ViewBag.MainTitle = MainTitle;
+            ViewBag.NodeTitle = nodeTitle;
 
-             // 输出图表
-             var chart1 = CreateMSColumn3DChart("服务厅行为分析", chartData);
-             chart1.SetSeriesName("同城业务量", "同城业务量", "8BBA00");
-             chart1.SetSeriesName("二次办税业务量", "二次办税业务量", "F6BD0F"); 
-             ViewBag.ChartColumn3DXML = chart1.ToString();
 
-             var chart2 = CreateSplineChart("服务厅行为分析", chartData);
-             chart2.SetSeriesName("同城业务量", "同城业务量", "8BBA00");
-             chart2.SetSeriesName("二次办税业务量", "二次办税业务量", "F6BD0F"); 
-             ViewBag.ChartSplineXML = chart2.ToString();
-             return View(result); 
+            if (export)
+            {
+                var index = 0;
+                var data = result.Select(x => new
+                {
+                    序号 = ++index,
+                    服务厅编码 = x.HALL_NO,
+                    服务厅名称 = x.HALL_NAM,
+                    同城业务量 = x.LOCAL_CNT,
+                    二次办税业务量 = x.SECOND_SVR_CNT
+                }).ToList().ToDataTable();
+                return AsposeExcelHelper.OutFileToRespone(data, MainTitle + "报表");
+            }
+
+            // 输出图表   
+            SetChart(result.GroupBy(x => x.HALL_NO), MainTitle, nodeTitle);
+
+            // 所有事项大类
+            var itemTypeList = SYS_DLSERIAL_Dao.FindList();
+            ViewData["itemTypeList"] = itemTypeList;
+
+            return View(result);
+        }
+
+        /// <summary>
+        /// 业务差错统计图形
+        /// </summary>
+        /// <param name="list"></param> 
+        /// <param name="title"></param> 
+        /// <param name="subtitle"></param>
+        private void SetChart_Person(
+            IEnumerable<IGrouping<string, gzsw.model.dto.Statistics_TaxpayerActionDto>> list,
+            string title,
+            string subtitle)
+        {
+            var lineTable = new DataTable();
+            lineTable.Columns.Add("Y_Name", typeof (string));
+            lineTable.Columns.Add("同城业务量", typeof (int));
+            lineTable.Columns.Add("二次办税业务量", typeof (int));
+
+            foreach (var item in list)
+            {
+                var items = item.ToList();
+                var dto = items.FirstOrDefault();
+                var r = lineTable.NewRow();
+                r["Y_Name"] = dto.PersonName;
+                var def = items.Sum(m => m.LOCAL_CNT);
+                var eef = items.Sum(m => m.SECOND_SVR_CNT);
+                r["同城业务量"] = def;
+                r["二次办税业务量"] = eef;
+                lineTable.Rows.Add(r);
+            }
+
+            ViewBag.ChartColumn3DXML = base.CreateMSColumn3DChart(title, lineTable, 430, subtitle);
+
+
+            // 多线图
+            ViewBag.ChartSplineXML = base.CreateMSSplineChart(title, lineTable, 430, null, null, subtitle);
+
+
+        }
+
+        /// <summary>
+        /// 业务差错统计图形
+        /// </summary>
+        /// <param name="list"></param> 
+        /// <param name="title"></param> 
+        /// <param name="subtitle"></param>
+        private void SetChart(
+            IEnumerable<IGrouping<string, gzsw.model.dto.Statistics_TaxpayerActionDto>> list,
+            string title,
+            string subtitle)
+        {
+            var lineTable = new DataTable();
+            lineTable.Columns.Add("Y_Name", typeof (string));
+            lineTable.Columns.Add("同城业务量", typeof (int));
+            lineTable.Columns.Add("二次办税业务量", typeof (int));
+
+            foreach (var item in list)
+            {
+                var items = item.ToList();
+                var dto = items.FirstOrDefault();
+                var r = lineTable.NewRow();
+                r["Y_Name"] = dto.HALL_NAM;
+                var def = items.Sum(m => m.LOCAL_CNT);
+                var eef = items.Sum(m => m.SECOND_SVR_CNT);
+                r["同城业务量"] = def;
+                r["二次办税业务量"] = eef;
+                lineTable.Rows.Add(r);
+            }
+
+            ViewBag.ChartColumn3DXML = base.CreateMSColumn3DChart(title, lineTable, 430, subtitle);
+
+
+            // 多线图
+            ViewBag.ChartSplineXML = base.CreateMSSplineChart(title, lineTable, 430, null, null, subtitle);
+
+
         }
 
         /// <summary>
@@ -410,7 +872,7 @@ namespace gzsw.controller
         /// <param name="export">是否导出</param>
         /// <returns></returns>
         [HttpGet]
-        [UserAuth("STAT_TAXPAYER_BEHAV_STAT_D_VIW")] 
+        [UserAuth("STAT_TAXPAYER_BEHAV_STAT_D_VIW")]
         public ActionResult TaxpayerAction_Person(
             DateTime? beginTime,
             DateTime? endTime,
@@ -423,6 +885,16 @@ namespace gzsw.controller
             // 获取数据
             var bll = new Statistics_DAL();
             var result = bll.GetStatistics_TaxpayerActionChat_Person(beginTime, endTime, orgId);
+
+            // 控制标题 
+            var MainTitle = base.GetOrgName(null, 3);
+            var nodeTitle = string.Empty;
+            MainTitle += "纳税人评价分析";
+            nodeTitle += "（" + beginTime.Value.ToString("yyyy年MM月dd日");
+            nodeTitle += " - " + endTime.Value.ToString("yyyy年MM月dd日") + "）)";
+            ViewBag.MainTitle = MainTitle;
+            ViewBag.NodeTitle = nodeTitle;
+
             if (export)
             {
                 var index = 0;
@@ -431,30 +903,21 @@ namespace gzsw.controller
                     序号 = ++index,
                     工号 = x.PersonNo,
                     姓名 = x.PersonName,
+                    业务大类 = x.DLS_SERIALNAME,
                     同城业务量 = x.LOCAL_CNT,
-                    二次办税业务量 = x.SECOND_SVR_CNT,
+                    二次办税业务量 = x.SECOND_SVR_CNT
                 }).ToList().ToDataTable();
-                return AsposeExcelHelper.OutFileToRespone(data, "员工行为分析报表");
+                return AsposeExcelHelper.OutFileToRespone(data, MainTitle + "报表");
             }
 
-            var chartData = result.Select(x => new
-            {
-                姓名 = x.PersonName,
-                同城业务量 = x.LOCAL_CNT,
-                二次办税业务量 = x.SECOND_SVR_CNT,
-            }).ToList().ToDataTable();
+            SetChart_Person(result.GroupBy(x => x.PersonNo), MainTitle, nodeTitle);
 
-            // 输出图表
-            var chart1 = CreateMSColumn3DChart("员工行为分析报表", chartData);
-            chart1.SetSeriesName("同城业务量", "同城业务量", "8BBA00");
-            chart1.SetSeriesName("二次办税业务量", "二次办税业务量", "F6BD0F"); 
-            ViewBag.ChartColumn3DXML = chart1.ToString();
+            // 所有事项大类
+            var itemTypeList = SYS_DLSERIAL_Dao.FindList();
+            ViewData["itemTypeList"] = itemTypeList;
 
-            var chart2 = CreateSplineChart("员工行为分析报表", chartData);
-            chart1.SetSeriesName("同城业务量", "同城业务量", "8BBA00");
-            chart1.SetSeriesName("二次办税业务量", "二次办税业务量", "F6BD0F");  
-            ViewBag.ChartSplineXML = chart2.ToString(); 
-            return View(result); 
+
+            return View(result);
         }
 
         #endregion
@@ -479,6 +942,7 @@ namespace gzsw.controller
             var bll = new Statistics_DAL();
             var columnName = "VERY_SATISFY_CNT";
             var columnDisplayName = "很满意量";
+            // 标题 
             switch (type)
             {
                 case 2:
@@ -487,12 +951,12 @@ namespace gzsw.controller
                     break;
                 case 3:
                     columnName = "COMMON_CNT";
-                    columnDisplayName = "一般量";
+                    columnDisplayName = "基本满意量";
                     break;
                 case 4:
                     columnName = "UNSATISFY_CNT";
                     columnDisplayName = "不满意量";
-                    break;  
+                    break;
                 case 5:
                     columnName = "NON_EVAL_CNT";
                     columnDisplayName = "未评价量";
@@ -510,24 +974,25 @@ namespace gzsw.controller
             }
             else
             {
-                result = bll.GetStatistics_TaxpayerEvalChart_Node("VERY_SATISFY_CNT", beginTime, endTime, UserState.UserID);
+                result = bll.GetStatistics_TaxpayerEvalChart_Node("VERY_SATISFY_CNT", beginTime, endTime,
+                    UserState.UserID);
 
             }
-           
-            var  chartData =new DataTable();
+
+            var chartData = new DataTable();
             if (beginTime == endTime)
             {
                 // 处理小时间隔
-                var resultList = new List<Statistics_KeyValueDto>(); 
-                for (var i = 8; i <= 18;i++)
+                var resultList = new List<Statistics_KeyValueDto>();
+                for (var i = 8; i <= 18; i++)
                 {
                     var obj = result.FirstOrDefault(x => x.Name == i.ToString());
                     if (obj != null)
                     {
                         resultList.Add(new Statistics_KeyValueDto()
                         {
-                            Name=i+ "时", 
-                            Value = obj.Value 
+                            Name = i + "时",
+                            Value = obj.Value
                         });
                     }
                     else
@@ -537,35 +1002,71 @@ namespace gzsw.controller
                             Name = i + "时",
                             Value = "0"
                         });
-                    } 
+                    }
                 }
-                
+
                 // 处理其他情况
-                chartData = resultList.ToDataTable(); 
+                chartData = resultList.ToDataTable();
             }
             else
             {
-                // 处理其他情况
-                chartData = result.Select(x => new
+
+                switch (type)
                 {
-                    日期 = x.Name,
-                    Value = x.Value
-                }).ToList().ToDataTable(); 
+                    case 1: 
+                         chartData = result.Select(x => new
+                        {
+                            日期 = x.Name,
+                            很满意 = x.Value
+                        }).ToList().ToDataTable(); 
+                        break;
+                    case 2:
+                        chartData = result.Select(x => new
+                        {
+                            日期 = x.Name,
+                            满意量 = x.Value
+                        }).ToList().ToDataTable(); 
+                        break;
+                    case 3:
+                        chartData = result.Select(x => new
+                        {
+                            日期 = x.Name,
+                            基本满意量 = x.Value
+                        }).ToList().ToDataTable();  
+                        break;
+                    case 4:
+                        chartData = result.Select(x => new
+                        {
+                            日期 = x.Name,
+                            不满意量 = x.Value
+                        }).ToList().ToDataTable();   
+                        break;
+                    case 5:
+                        chartData = result.Select(x => new
+                        {
+                            日期 = x.Name,
+                            未评价量 = x.Value
+                        }).ToList().ToDataTable();    
+                        break;
+                    case 6:
+                        chartData = result.Select(x => new
+                        {
+                            日期 = x.Name,
+                            满意度 = x.Value
+                        }).ToList().ToDataTable();     
+                        break;
+                }  
             }
-          
-
+            var title = "服务厅评价分析--" + columnDisplayName;
+            var nodeTitle = base.GetOrgName(null, 1);
+            nodeTitle += "（" + beginTime.Value.ToString("yyyy年MM月dd日");
+            nodeTitle += " - " + endTime.Value.ToString("yyyy年MM月dd日") + "）";
             // 输出图表
-            var chart1 = CreateMSColumn3DChart("服务厅评价分析", chartData);
-            chart1.SetSeriesName("Value", columnDisplayName, "8BBA00"); 
-            ViewBag.ChartColumn3DXML = chart1.ToString();
+            ViewBag.ChartColumn3DXML = CreateMSColumn3DChart(title, chartData, 430, nodeTitle);
 
-            var chart2 = CreateSplineChart("服务厅评价分析", chartData);
-            chart2.SetSeriesName("Value", columnDisplayName, "8BBA00");
-            ViewBag.ChartSplineXML = chart2.ToString();
+            ViewBag.ChartSplineXML = CreateMSSplineChart(title, chartData, 430, null, null, nodeTitle);
 
-            var chart3 = CreatePie3DChart("服务厅评价分析", chartData);
-            chart3.SetSeriesName("Value", columnDisplayName, "8BBA00");
-            ViewBag.ChartPie3DXML = chart3.ToString();
+            ViewBag.ChartPie3DXML = CreatePie3DChart(title, chartData, 430, nodeTitle);
 
             return View();
         }
@@ -580,7 +1081,7 @@ namespace gzsw.controller
         public ActionResult TaxpayerEval_Person(
             DateTime? beginTime,
             DateTime? endTime,
-            string orgId, 
+            string orgId,
             bool export = false)
         {
 
@@ -589,62 +1090,63 @@ namespace gzsw.controller
             // 获取数据
             var bll = new Statistics_DAL();
             var result = bll.GetStatistics_TaxpayerEvalChart_Person(beginTime, endTime, orgId);
-             if (export)
-             {
-                 var index = 0;
-                 var data = result.Select(x => new
-                 {
-                     序号 = ++index,
-                     工号 = x.PersonNo,
-                     姓名 = x.PersonName,
-                     很满意 = x.VERY_SATISFY_CNT,
-                     很满意率 = x.VERY_SATISFY_CNT_BFB + "%",
-                     满意 = x.SATISFY_CNT,
-                     满意率 = x.SATISFY_CNT_BFB + "%",
-                     一般 = x.COMMON_CNT,
-                     一般率 = x.COMMON_CNT_BFB + "%",
-                     不满意 = x.UNSATISFY_CNT,
-                     不满意率 = x.UNSATISFY_CNT_BFB + "%",
-                     未评价 = x.NON_EVAL_CNT,
-                     未评价率 = x.NON_EVAL_CNT_BFB + "%",
-                     满意度 = x.ManYiDu_BFB + "%"
-                 }).ToList().ToDataTable();
-                 return AsposeExcelHelper.OutFileToRespone(data, "员工评价分析报表");
-             }
 
-             var chartData = result.Select(x => new
-             {
-                 姓名 = x.PersonName,
-                 很满意 = x.VERY_SATISFY_CNT,
-                 满意 = x.SATISFY_CNT,
-                 一般 = x.COMMON_CNT,
-                 不满意 = x.UNSATISFY_CNT,
-                 未评价 = x.NON_EVAL_CNT,
-             }).ToList().ToDataTable();
 
-             // 输出图表
-             var chart1 = CreateMSColumn3DChart("员工评价分析报表", chartData);
-             chart1.SetSeriesName("很满意", "很满意", "8BBA00");
-             chart1.SetSeriesName("满意", "满意", "F6BD0F");
-             chart1.SetSeriesName("一般", "一般", "33efaf");
-             chart1.SetSeriesName("不满意", "不满意", "9ddc24");
-             chart1.SetSeriesName("未评价", "未评价", "e648f0");
-             ViewBag.ChartColumn3DXML = chart1.ToString();
+            // 控制标题 
+            const string titleName = "纳税人评价分析";
+            var mainTielt = GetOrgName(orgId, null);
+            ViewBag.MainTitle = GetTitleName(mainTielt, titleName, beginTime.GetValueOrDefault(),
+                endTime.GetValueOrDefault());
+            var subtitle = GetTitleName(mainTielt, "", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), false);
+            var exceltitle = GetTitleName(mainTielt, titleName, beginTime.GetValueOrDefault(),
+                endTime.GetValueOrDefault(), false);
 
-             var chart2 = CreateSplineChart("员工评价分析报表", chartData);
-             chart2.SetSeriesName("很满意", "很满意", "8BBA00");
-             chart2.SetSeriesName("满意", "满意", "F6BD0F");
-             chart2.SetSeriesName("一般", "一般", "33efaf");
-             chart2.SetSeriesName("不满意", "不满意", "9ddc24");
-             chart2.SetSeriesName("未评价", "未评价", "e648f0");
-             ViewBag.ChartSplineXML = chart2.ToString();
-             
-             return View(result); 
+            if (export)
+            {
+                var index = 0;
+                var data = result.Select(x => new
+                {
+                    序号 = ++index,
+                    工号 = x.PersonNo,
+                    姓名 = x.PersonName,
+                    很满意 = x.VERY_SATISFY_CNT,
+                    很满意率 = x.VERY_SATISFY_CNT_BFB + "%",
+                    满意 = x.SATISFY_CNT,
+                    满意率 = x.SATISFY_CNT_BFB + "%",
+                    基本满意 = x.COMMON_CNT,
+                    基本满意率 = x.COMMON_CNT_BFB + "%",
+                    不满意 = x.UNSATISFY_CNT,
+                    不满意率 = x.UNSATISFY_CNT_BFB + "%",
+                    未评价 = x.NON_EVAL_CNT,
+                    未评价率 = x.NON_EVAL_CNT_BFB + "%",
+                    满意度 = x.ManYiDu_BFB + "%"
+                }).ToList().ToDataTable();
+                return AsposeExcelHelper.OutFileToRespone(data, "纳税人评价分析报表-员工", exceltitle);
+            }
+
+            var chartData = result.Select(x => new
+            {
+                姓名 = x.PersonName,
+                很满意 = x.VERY_SATISFY_CNT,
+                满意 = x.SATISFY_CNT,
+                基本满意 = x.COMMON_CNT,
+                不满意 = x.UNSATISFY_CNT,
+                未评价 = x.NON_EVAL_CNT,
+            }).ToList().ToDataTable();
+
+            // 输出图表
+            ViewBag.ChartColumn3DXML = CreateMSColumn3DChart(titleName, chartData, 430, subtitle);
+
+
+            ViewBag.ChartSplineXML = CreateMSSplineChart(titleName, chartData, 420, null, null, subtitle);
+
+
+            return View(result);
         }
 
- 
+
         /// <summary>
-        /// 纳税人评价分析 - 营业厅
+        /// 纳税人评价分析 - 服务厅
         /// </summary>
         /// <param name="beginTime"></param>
         /// <param name="endTime"></param>
@@ -655,15 +1157,15 @@ namespace gzsw.controller
         public ActionResult TaxpayerEval(
             DateTime? beginTime,
             DateTime? endTime,
-            bool export = false) 
-        {  
+            bool export = false)
+        {
             // 判断当前用户组织结构
             var power = new SYS_HALL_DAL().GetList(UserState.UserID, "4");
             if (power.Count == 1)
             {
                 var hallNo = power.FirstOrDefault().HALL_NO;
 
-                return Redirect(Url.Action("TaxpayerEval_Person", "Statistics",  new
+                return Redirect(Url.Action("TaxpayerEval_Person", "Statistics", new
                 {
                     @beginTime = beginTime,
                     @endTime = endTime,
@@ -673,124 +1175,63 @@ namespace gzsw.controller
 
             // 初始化日期
             base.DateTimeInit(ref beginTime, ref endTime);
-             
-             // 获取数据
+
+            // 获取数据
             var bll = new Statistics_DAL();
             var result = bll.GetStatistics_TaxpayerEvalChart(beginTime, endTime, UserState.UserID);
+
+
+            // 控制标题 
+            const string titleName = "纳税人评价分析";
+            var mainTielt = base.GetOrgName(null, 3);
+            ViewBag.MainTitle = GetTitleName(mainTielt, titleName, beginTime.GetValueOrDefault(),
+                endTime.GetValueOrDefault());
+            var subtitle = GetTitleName(mainTielt, "", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), false);
+            var exceltitle = GetTitleName(mainTielt, titleName, beginTime.GetValueOrDefault(),
+                endTime.GetValueOrDefault(), false);
+
             if (export)
             {
                 var index = 0;
-                var data = result.Select(x =>new 
+                var data = result.Select(x => new
                 {
                     序号 = ++index,
-                    营业厅编码 = x.HALL_NO,
-                    营业厅名称 = x.ORG_NAM,
-                    很满意 = x.VERY_SATISFY_CNT, 
-                    很满意率 = x.VERY_SATISFY_CNT_BFB+"%",
-                    满意 =x.SATISFY_CNT,
+                    服务厅编码 = x.HALL_NO,
+                    服务厅名称 = x.ORG_NAM,
+                    很满意 = x.VERY_SATISFY_CNT,
+                    很满意率 = x.VERY_SATISFY_CNT_BFB + "%",
+                    满意 = x.SATISFY_CNT,
                     满意率 = x.SATISFY_CNT_BFB + "%",
-                    一般 = x.COMMON_CNT,
-                    一般率 = x.COMMON_CNT_BFB + "%",
-                    不满意 =x.UNSATISFY_CNT,
+                    基本满意 = x.COMMON_CNT,
+                    基本满意率 = x.COMMON_CNT_BFB + "%",
+                    不满意 = x.UNSATISFY_CNT,
                     不满意率 = x.UNSATISFY_CNT_BFB + "%",
                     未评价 = x.NON_EVAL_CNT,
                     未评价率 = x.NON_EVAL_CNT_BFB + "%",
                     满意度 = x.ManYiDu_BFB + "%"
                 }).ToList().ToDataTable();
-                return AsposeExcelHelper.OutFileToRespone(data, "服务厅评价分析报表"); 
+                return AsposeExcelHelper.OutFileToRespone(data, "纳税人评价分析报表-服务厅", exceltitle);
             }
 
             var chartData = result.Select(x => new
             {
-                营业厅名称 = x.ORG_NAM,
+                服务厅名称 = x.ORG_NAM,
                 很满意 = x.VERY_SATISFY_CNT,
                 满意 = x.SATISFY_CNT,
-                一般 = x.COMMON_CNT,
+                基本满意 = x.COMMON_CNT,
                 不满意 = x.UNSATISFY_CNT,
                 未评价 = x.NON_EVAL_CNT,
             }).ToList().ToDataTable();
 
+
             // 输出图表
-            var chart1 = CreateMSColumn3DChart("纳税人评价分析", chartData);
-            chart1.SetSeriesName("很满意", "很满意", "8BBA00");
-            chart1.SetSeriesName("满意", "满意", "F6BD0F");
-            chart1.SetSeriesName("一般", "一般", "33efaf");
-            chart1.SetSeriesName("不满意", "不满意", "9ddc24");
-            chart1.SetSeriesName("未评价", "未评价", "e648f0");
-            ViewBag.ChartColumn3DXML = chart1.ToString();
-             
-            var chart2 = CreateSplineChart("纳税人评价分析", chartData);  
-            chart2.SetSeriesName("很满意", "很满意", "8BBA00");
-            chart2.SetSeriesName("满意", "满意", "F6BD0F");
-            chart2.SetSeriesName("一般", "一般", "33efaf");
-            chart2.SetSeriesName("不满意", "不满意", "9ddc24");
-            chart2.SetSeriesName("未评价", "未评价", "e648f0"); 
-            ViewBag.ChartSplineXML = chart2.ToString(); 
+            ViewBag.ChartColumn3DXML = CreateMSColumn3DChart(titleName, chartData, 430, subtitle);
+
+            ViewBag.ChartSplineXML = CreateMSSplineChart(titleName, chartData, 430, null, null, subtitle);
+
             return View(result);
         }
 
         #endregion
-
-        #region Helper
-
-        /// <summary>
-        /// 3D饼图
-        /// </summary>
-        /// <returns></returns>
-        protected FusionChartHelper CreatePie3DChart(string title, DataTable dt)
-        {
-            FusionChartHelper help = new FusionChartHelper(FusionChartType.Pie3D);
-            help.SetDataSource(dt);
-            help.ChartHeight = 550;
-            help.ChartWidth = "100%";
-            help.Caption = title;//主标题，将显示在图形顶端
-            help.SubCaption = "";//二级标题，将显示在主标题下方，没有不显示
-            help.BgColor = "ffffff";//背景色
-            help.CanvasBorderColor = "ffffff";
-            help.Decimals = 2;//显示小数位
-            help.IsFormatNumberScale = false;//是否格式化数字，如1000显示成1K；
-            return help;
-        }
-
-        /// <summary>
-        /// 纳税人评价分析报表
-        /// </summary>
-        /// <returns></returns>
-        private FusionChartHelper CreateMSColumn3DChart( 
-            string title,
-            DataTable dt)
-        {
-            FusionChartHelper help = new FusionChartHelper(FusionChartType.MSColumn3D);
-            help.SetDataSource(dt);
-            help.ChartHeight = 580;
-            help.ChartWidth = "100%";
-            help.Caption = title;//主标题，将显示在图形顶端
-            help.SubCaption = "";//二级标题，将显示在主标题下方，没有不显示
-            help.BgColor = "e1f5ff";//背景色
-            help.Decimals = 2;//显示小数位
-            help.IsFormatNumberScale = false;//是否格式化数字，如1000显示成1K；
-
-           /* help.SetSeriesName("营业厅名称", "营业厅名称", "56B9F9");//多数据属性时使用*/
-           
-            return help;
-        }
-
-        private FusionChartHelper CreateSplineChart(string title, DataTable ds)
-        {
-            FusionChartHelper help = new FusionChartHelper(FusionChartType.MSSpline);
-            help.SetDataSource(ds);
-            help.ChartHeight = 550;
-            help.ChartWidth = "100%";
-            help.Caption = title;//主标题，将显示在图形顶端
-            help.SubCaption = "";//二级标题，将显示在主标题下方，没有不显示
-            help.BgColor = "e1f5ff";//背景色
-            help.Decimals = 2;//显示小数位
-            help.IsFormatNumberScale = false;//是否格式化数字，如1000显示成1K； 
-            return help;
-        } 
-        
-        #endregion
     }
-
-    
 }

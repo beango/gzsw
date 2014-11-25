@@ -16,17 +16,35 @@ namespace gzsw.model.dto
     /// </remark>
     public class Statistics_TaxpayerActionDto
     {
+
+       
+
         /// <summary>
         /// 营业厅编码
         /// </summary>
         [ResultColumn]
         public string HALL_NO { get; set; }
-
+         
         /// <summary>
         /// 营业厅名称
         /// </summary> 
         [ResultColumn]
-        public string ORG_NAM { get; set; }
+        public string HALL_NAM { get; set; }
+         
+
+        /// <summary>
+        /// 大类业务编码
+        /// </summary>
+        [ResultColumn]
+        public string DLS_SERIALID { get; set; }
+
+
+        /// <summary>
+        /// 大类业务名称
+        /// </summary>
+        [ResultColumn]
+        public string DLS_SERIALNAME { get; set; }
+
 
         /// <summary>
         /// 员工号

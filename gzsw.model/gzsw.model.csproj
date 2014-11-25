@@ -73,7 +73,9 @@
     <Compile Include="dto\ServiceAmountDto.cs" />
     <Compile Include="dto\ServiceSlipAnalysisDto.cs" />
     <Compile Include="dto\Statistics_ComplaintReportDto.cs" />
+    <Compile Include="dto\Virtual_Mon_Hall_Dto.cs" />
     <Compile Include="Enums\UserLV_ENUM.cs" />
+    <Compile Include="ext\CHK_HALL_STAT_M.ext.cs" />
     <Compile Include="Subclasses\STAT_STAFF_QUALITY_STAT_D_SUB.cs" />
     <Compile Include="ViewModel\ItemBigTypeViewModel.cs" />
     <Compile Include="dto\OrganizeQueueingDto.cs" />

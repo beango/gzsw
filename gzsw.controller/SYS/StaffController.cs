@@ -82,8 +82,10 @@ namespace gzsw.controller.SYS
 
         [HttpGet]
         [UserAuth("SYS_STAFF_ADD")]
-        public ActionResult Create()
+        public ActionResult Create(string orgid)
         {
+            var org = DaoOrganize.GetEntity("ORG_ID", orgid);
+            ViewBag.ORG = org;
             GetCreateDT();
             return View();
         }

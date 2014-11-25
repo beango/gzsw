@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
+using gzsw.controller.MyAuth;
 using gzsw.dal.dao;
 
 namespace gzsw.controller.WARN
@@ -16,6 +17,7 @@ namespace gzsw.controller.WARN
         /// <param name="pageIndex"></param>O
         /// <param name="pageSize"></param>
         /// <returns></returns>
+        [UserAuth("MON_Warning_VIW")]
         public ActionResult Index(string orgId, int pageIndex = 1, int pageSize = 20)
         {
             var list = SYS_CURRQUEUEHIST_DAL.GetTimeoutWaitPager(orgId, pageIndex, pageSize);

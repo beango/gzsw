@@ -38,7 +38,7 @@
             <td>
                 <input type="text" id="txtNumber" value="@ViewBag.Number" />
             </td>
-            <td>窗口编号:</td>
+            <td>窗口:</td>
             <td>
                 <input type="text" id="txtCounter" value="@ViewBag.Counter" />
             </td>
@@ -71,6 +71,7 @@
                     <input id="chkAll" name="chkAll" type="checkbox" />
                 </th>
                 <th style="width:38px;">序号 </th>
+                <th>窗口</th>
                 <th>排队号码</th>
                 <th>取号时间</th>
                 <th>排队业务</th>
@@ -93,6 +94,7 @@
                 <td>
                     @(++i)
                 </td>
+                <td>@item.CHQUEUE_COUNTER</td>
                 <td>@item.CHQUEUE_NUMBER</td>
                 <td>@item.CHQUEUE_TICKETTIME.ToString("yyyy-MM-dd HH:mm:ss")</td>
                 <td>@item.Q_SERIALNAME</td>

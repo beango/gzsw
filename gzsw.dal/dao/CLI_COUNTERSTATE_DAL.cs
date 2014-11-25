@@ -98,7 +98,7 @@ namespace gzsw.dal.dao
                                           ,CL.Q_SERIALNAME
                                       FROM [SYS_COUNTER] AS C
                                       LEFT JOIN CLI_COUNTERSTATE AS CL
-                                      ON C.COUNTER_ID=CL.COUNTER_ID
+                                      ON C.COUNTER_ID=CL.COUNTER_ID and CL.HALL_NO=C.HALL_NO
                                       LEFT JOIN SYS_STAFF AS ST
                                       ON CL.STAFF_ID=ST.STAFF_ID
                                       WHERE 1=1     ");

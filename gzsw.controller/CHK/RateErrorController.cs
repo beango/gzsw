@@ -22,7 +22,7 @@ namespace gzsw.controller.CHK
         [Ninject.Inject]
         public IDao<SYS_HALL> Halldao { get; set; }
 
-        [UserAuth("CHK_HALL_STAT_M_VIW")]
+        [UserAuth("RateError_VIW")]
         public ActionResult Index(string statMo, string orgId, int pageIndex = 1, int pageSize = 20)
         {
 
@@ -53,7 +53,6 @@ namespace gzsw.controller.CHK
 
 
 
-        [UserAuth("CHK_STAT_STAFF_SVRSTAT_M_VIW")]
         public ActionResult Detail(string id, string staffId)
         {
             try
@@ -70,7 +69,6 @@ namespace gzsw.controller.CHK
             }
         }
 
-        [UserAuth("CHK_STAT_STAFF_SVRSTAT_M_EDT")]
         public ActionResult Edit(string id, string staffId)
         {
             ViewBag.HALL_NAM = Halldao.GetEntity("HALL_NO", staffId).HALL_NAM;
@@ -98,7 +96,6 @@ namespace gzsw.controller.CHK
         }
 
         [HttpPost]
-        [UserAuth("CHK_STAT_STAFF_SVRSTAT_M_EDT")]
         public ActionResult Edit(RateErrorViewModel model)
         {
             try
@@ -113,12 +110,15 @@ namespace gzsw.controller.CHK
                     item.COR_VALID_SVR_CNT = model.COR_VALID_SVR_CNT;
 
 
-                    var rst = dao.UpdateObject(item);
-                    if (rst > 0)
-                    {
+                    CHK_HALL_STAT_M_DAL.UpdateObject(item);
+                    var mo = Convert.ToInt32(item.STAT_MO.ToString().Substring(4, 2));
+                        if (mo != DateTime.Now.Month)
+                        {
+                            Stored_DAL.UpdateDataByHall(item.STAT_MO, item.HALL_NO, UserState.UserID);
+                        }
                         Alter("修改成功！", util.Enum.AlterTypeEnum.Success, false, true);
                         return Redirect("/Home/Blank");
-                    }
+                    
                 }
 
                 ModelState.AddModelError("", "修改失败。");

@@ -47,12 +47,30 @@
                 var url = "@Html.Raw(Request.Url.PathAndQuery)" + ("@Html.Raw(Request.Url.PathAndQuery)".indexOf('?') > -1 ? "&" : "?") + "export=true";
                 window.open(url);
             });
-            $("a[type]").click(function() {
-                var url = '@Url.Action("TaxpayerEval_Node", "Statistics")';
+            $("a[type]").click(function () {
+                var url = '@Url.Action("ServiceSlipAnalysis_None", "Statistics")';
+
+                var ssid = $(this).attr("ssid");
+                if (!ssid) {
+                    ssid = '';
+                }
+                var orgId = $(this).attr("orgid");
+                if (!orgId) {
+                    orgId = '';
+                }
+                var staffId = $(this).attr("staffid");
+                if (!staffId) {
+                    staffId = '';
+                }
+
                 var param = {
-                    type: $(this).attr("type"),
                     beginTime: $("#beginTime").val(),
                     endTime: $("#endTime").val(),
+                    qId: $(this).attr("qid"),
+                    ssId: ssid,
+                    orgId: orgId,
+                    staffId:staffId,
+                    titleName: encodeURI($(this).attr("titlename")),
                     _t: Date.parse(new Date())
                 };
                 url = url.getUrl(param);
@@ -75,13 +93,15 @@
                     <tr><th colspan="@thcolspan" style="background-image: none;"><span style="font-size: 14px; font-weight: bold; ">@Html.Raw(ViewBag.MainTitle)</span></th></tr>
                     <tr>
                         <th style="text-align: center; background-image: none;">序号  </th>
-                        <th style="text-align: center; background-image: none;"> 营业厅</th>
+                        <th style="text-align: center; background-image: none;"> 员工名称</th>
                         <th style="text-align: center; background-image: none;"> 事项大类</th>
                         @if (typeList != null)
                         {
                             foreach (var item in typeList)
                             {
-                                <th style="text-align: center; background-image: none;"> @item.QUALITY_NAM </th>
+                                <th style="text-align: center; background-image: none;">
+                                    <a type="0" orgid="@ViewBag.HallNo" qid="@item.QUALITY_CD" titlename="@item.QUALITY_NAM" href="javascript:void(0);">@item.QUALITY_NAM</a>
+                                </th>
                             }
                         }
                     </tr>
@@ -93,6 +113,7 @@
                         ++i;
                         var index = i;
                         var items = dic.ToList();
+                        var staffid = items.FirstOrDefault().STAFF_ID;
 
                         for (var j = 1; j < itemTypeList.Count(); j++)
                         {
@@ -110,8 +131,11 @@
                                     <td>
                                         @{
                                     var def = items.FirstOrDefault(m => m.QUALITY_CD == item.QUALITY_CD && m.DLS_SERIALID == itemTypeList[j].DLS_SERIALID);
+                                    var ssid = itemTypeList[j].DLS_SERIALID;
                                         }
-                                        @(def == null ? 0 : def.AMOUNT)
+                                        <a type="0" staffid="@staffid" orgid="@ViewBag.HallNo" qid="@item.QUALITY_CD" ssid="@ssid" titlename="@item.QUALITY_NAM" href="javascript:void(0);">
+                                            @(def == null ? 0 : def.AMOUNT)
+                                        </a>
                                     </td>
                                 }
 

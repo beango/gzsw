@@ -19,6 +19,14 @@ namespace gzsw.controller.STAT
     public class StatController:BaseController
     {
         /// <summary>
+        /// 获取用户的最高权限
+        /// </summary>
+        protected byte OrgHighLevel
+        {
+            get { return Convert.ToByte(GetHighLV); }
+        }
+
+        /// <summary>
         /// 获取报表标题组织的名称
         /// </summary>
         /// <param name="orgId"></param>
@@ -31,17 +39,29 @@ namespace gzsw.controller.STAT
 
             if (!string.IsNullOrEmpty(orgId))
             {
-                MainTitle = orgall.FirstOrDefault((o => o.ORG_ID == orgId)).ORG_NAM;
+                var obj = orgall.FirstOrDefault((o => o.ORG_ID == orgId));
+                if(obj!=null)
+                {
+                    MainTitle = obj.ORG_NAM;
+                }
             }
             else
             {
                 if (level!=null)
                 {
-                    MainTitle = orgall.Where(m=>m.ORG_LEVEL==2).OrderBy(o => o.ORG_LEVEL).FirstOrDefault().ORG_NAM;
+                    var obj = orgall.Where(m => m.ORG_LEVEL == level).OrderBy(o => o.ORG_LEVEL).FirstOrDefault();
+                     if (obj != null)
+                     {
+                         MainTitle = obj.ORG_NAM;
+                     }
                 }
                 else
                 {
-                    MainTitle = orgall.OrderBy(o => o.ORG_LEVEL).FirstOrDefault().ORG_NAM;
+                     var obj = orgall.OrderBy(o => o.ORG_LEVEL).FirstOrDefault();
+                     if (obj != null)
+                     {
+                         MainTitle = obj.ORG_NAM;
+                     }
                 }
             }
 
@@ -61,13 +81,13 @@ namespace gzsw.controller.STAT
         {
             if (isHeadings)
             {
-                orgName +=serviceName+ "<span style='font-size:12px;'>（" + beginTime.ToString("yyyy年MM月dd");
-                orgName += " - " + endTime.ToString("yyyy年MM月dd") + "）</span>";
+                orgName +=serviceName+ "<span style='font-size:12px;'>（" + beginTime.ToString("yyyy年MM月dd日");
+                orgName += " - " + endTime.ToString("yyyy年MM月dd日") + "）</span>";
             }
             else
             {
-                orgName +=serviceName+ "（" + beginTime.ToString("yyyy年MM月dd");
-                orgName += " - " + endTime.ToString("yyyy年MM月dd") + "）";
+                orgName += serviceName + "（" + beginTime.ToString("yyyy年MM月dd日");
+                orgName += " - " + endTime.ToString("yyyy年MM月dd日") + "）";
             }
 
             return orgName;

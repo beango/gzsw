@@ -167,6 +167,8 @@ namespace gzsw.controller.WARN
                    // WarncomplaindetailDao.Delete("SEQ", int.Parse(_id.Split('-')[0]));
                     var data = WarncomplaindetailDao.GetEntity("SEQ", _id);
                     data.STATE = 3;
+                    data.INPUT_USER = UserState.UserID;
+                    data.INPUT_TIME = DateTime.Now;
                     var rst = WarncomplaindetailDao.UpdateObject(data);
                      
                 }
@@ -224,6 +226,8 @@ namespace gzsw.controller.WARN
                 var data = WarncomplaindetailDao.GetEntity("SEQ", model.SEQ);
                 data.COMPLAIN_METHOD = model.COMPLAIN_METHOD;
                 data.COMPLAIN_REASON = model.COMPLAIN_REASON;
+                data.INPUT_USER = UserState.UserID;
+                data.INPUT_TIME = DateTime.Now;
                 data.STATE =2;//默认状态为已处理
                     var rst = WarncomplaindetailDao.UpdateObject(data);
                     if (rst > 0)

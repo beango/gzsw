@@ -47,4 +47,13 @@
             </td><td>
                 @Html.DisplayFor(model => model.NSR_FRPHONE)</td>
         </tr>
+
+        <tr>
+            <td class="tdLeft">
+                排队级别：：
+            </td>
+            <td>
+                @(Model.NSR_GRADE==1?"优先":"不优先")
+            </td>
+        </tr>
     </table>

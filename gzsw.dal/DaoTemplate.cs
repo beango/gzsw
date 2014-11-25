@@ -156,6 +156,9 @@ namespace gzsw.dal
                         continue;
                     if (paras[i].ToString().EndsWith(" like"))
                         sql.Append("and " + paras[i] + " @0 ", "%" + paras[i + 1] + "%");
+                    else if (paras[i].ToString().EndsWith(">") || paras[i].ToString().EndsWith(">=") ||
+                        paras[i].ToString().EndsWith("<") || paras[i].ToString().EndsWith("<="))
+                        sql.Append("and " + paras[i] + paras[i + 1]);
                     else if (paras[i].ToString().EndsWith(" in"))
                     {
                         int parcount = 0;
@@ -167,7 +170,7 @@ namespace gzsw.dal
                                 parcount++;
                         }
 
-                        if (null != paras[i + 1] && parcount>0)
+                        if (null != paras[i + 1] && parcount > 0)
                             sql.Append("and " + paras[i] + " (@0) ", paras[i + 1]);
                         else
                             sql.Append("and 1=2 ");
@@ -277,6 +280,13 @@ namespace gzsw.dal
             return db.ExecuteScalar<int>(sql) > 0;
         }
 
+        /// <summary>
+        /// 分页
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="paras"></param>
+        /// <returns></returns>
         public Page<T> GetPage(int pageIndex, int pageSize, params object[] paras)
         {
             var db = gzswDB.GetInstance();

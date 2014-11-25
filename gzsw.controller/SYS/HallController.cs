@@ -235,11 +235,11 @@ namespace gzsw.controller.SYS
             }
             if (info.AUTO_EVAL_SEC > 0 && info.AUTO_EVAL_SEC <= 10)
             {
-                ModelState.AddModelError("AUTO_EVAL_SEC", "必须大于0，或等于0！");
+                ModelState.AddModelError("AUTO_EVAL_SEC", "必须大于10，或等于0！");
             }
             if (info.EVAL_STAY_SEC > 0 && info.EVAL_STAY_SEC <= 10)
             {
-                ModelState.AddModelError("EVAL_STAY_SEC", "必须大于0，或等于0！");
+                ModelState.AddModelError("EVAL_STAY_SEC", "必须大于等于5！");
             }
         }
 

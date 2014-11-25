@@ -15,6 +15,6 @@ namespace gzsw.model
 
         public Nullable<int> PAR_FUNCTION_ID { get; set; }
 
-        public byte FUNCTION_TYP { get; set; }
+        public byte? FUNCTION_TYP { get; set; }
     }
 }

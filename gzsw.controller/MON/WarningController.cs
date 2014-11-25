@@ -26,6 +26,30 @@ namespace gzsw.controller.MON
         public IDao<SYS_COUNTER> counterDao { get; set; }
 
         /// <summary>
+        /// 总监控预警主页面
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <returns></returns>
+        [UserAuth("MON_Warning_VIW")]
+        public ActionResult All(string orgId)
+        {
+            ViewBag.Name = GetOrgName(orgId, null);
+            return View((object)orgId);
+        }
+
+        /// <summary>
+        /// 总监控预警主页面-内容
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <returns></returns>
+        [UserAuth("MON_Warning_VIW")]
+        public ActionResult AllWarningContent(string orgId)
+        {
+            var list = Warning_DAL.VirtualMonHall(orgId);
+            return View(list);
+        }
+
+        /// <summary>
         /// 监控预警主页面
         /// </summary>
         /// <param name="orgId"></param>
@@ -194,7 +218,7 @@ namespace gzsw.controller.MON
             ev.PoorNum = getVirtualMonDto(list, 4, 3).VALUE.ToInt();
             //未评价率=未评价总数/(评价总数+未评价总数)
             var tt = (getVirtualMonDto(list, 4, 2).VALUE + getVirtualMonDto(list, 4, 1).VALUE);
-            ev.UnEvaluationRate = tt == 0 ? 0 : getVirtualMonDto(list, 4, 3).VALUE/tt;
+            ev.UnEvaluationRate = tt == 0 ? 0 : getVirtualMonDto(list, 4, 2).VALUE/tt;
             //满意率=（评价总数-差评数）/评价总数
             ev.SatisfactionRate = getVirtualMonDto(list, 4, 1).VALUE == 0
                 ? 0
@@ -300,6 +324,36 @@ namespace gzsw.controller.MON
         private Virtual_Mon_Dto getVirtualMonDto(IList<Virtual_Mon_Dto> list, int table, int listId)
         {
             return list.FirstOrDefault(m => m.TABLELIST_ID == table && m.LIST_ID == listId);
+        }
+
+        /// <summary>
+        /// 获取报表标题组织的名称
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <param name="level"></param>
+        /// <returns></returns>
+        public string GetOrgName(string orgId, byte? level)
+        {
+            var orgall = new SYS_USER_DAL().GetUserORG(UserState.UserID);
+            var MainTitle = string.Empty;
+
+            if (!string.IsNullOrEmpty(orgId))
+            {
+                MainTitle = orgall.FirstOrDefault((o => o.ORG_ID == orgId)).ORG_NAM;
+            }
+            else
+            {
+                if (level != null)
+                {
+                    MainTitle = orgall.Where(m => m.ORG_LEVEL == level).OrderBy(o => o.ORG_LEVEL).FirstOrDefault().ORG_NAM;
+                }
+                else
+                {
+                    MainTitle = orgall.OrderBy(o => o.ORG_LEVEL).FirstOrDefault().ORG_NAM;
+                }
+            }
+
+            return MainTitle;
         }
     }
 }

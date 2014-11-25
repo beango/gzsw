@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
+using gzsw.controller.MyAuth;
 using gzsw.dal.dao;
 
 namespace gzsw.controller.WARN
@@ -17,9 +18,30 @@ namespace gzsw.controller.WARN
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
+        [UserAuth("MON_Warning_VIW")]
         public ActionResult Index(string orgId, int dealStateType, int pageIndex = 1, int pageSize = 20)
         {
             var list = SYS_CURRQUEUEHIST_DAL.GetPagerByDealStateType(orgId, dealStateType, pageIndex, pageSize);
+
+            var indexTitle = string.Empty;
+
+            switch (dealStateType)
+            {
+                case 0:
+                    indexTitle = "总出票数";
+                    break;
+                case 1:
+                    indexTitle = "正在等候人次";
+                    break;
+                case 2:
+                    indexTitle = "已受理人次";
+                    break;
+                case 3:
+                    indexTitle = "弃号数";
+                    break;
+            }
+
+            ViewBag.IndexTitle = indexTitle;
 
             return View(list);
         }

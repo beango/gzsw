@@ -79,6 +79,18 @@
             </td>
         </tr>
         <tr>
+            <td class="tdLeft">
+                排队级别：
+            </td>
+            <td>
+                @Html.RadioButtonFor(model => model.NSR_GRADE,1)优先
+                @Html.RadioButtonFor(model => model.NSR_GRADE, 0, new { @checked="checked"})不优先
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.NSR_GRADE)
+            </td>
+        </tr>
+        <tr>
             <td class="tdLeft"> &nbsp;  </td>
             <td>
                 <input type="submit" class="l-button" value="提交" />

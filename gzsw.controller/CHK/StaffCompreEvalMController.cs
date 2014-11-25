@@ -25,6 +25,7 @@ namespace gzsw.controller.CHK
             {
                 years = DateTime.Now.Year;
                 stat = years.GetValueOrDefault();
+                endstat = years.GetValueOrDefault();
                 if (month == null)
                 {
                     month = DateTime.Now.Month;
@@ -77,7 +78,8 @@ namespace gzsw.controller.CHK
             ViewBag.Months = GetMonthSelectList(true,month);
             ViewBag.Years = GetYearsSelectList(years);
 
-
+            ViewBag.Stat = stat;
+            ViewBag.Endstat = endstat;
 
             var list = CHK_STAFF_COMPRE_EVAL_M_DAL.GetListSub(stat, endstat, orgId, pageIndex, pageSize);
 
@@ -88,22 +90,16 @@ namespace gzsw.controller.CHK
         /// <summary>
         /// 业务分 详细
         /// </summary>
-        /// <param name="mo">年月份</param>
+        /// <param name="stat">年月份</param>
+        /// <param name="endStat"></param>
         /// <param name="staffId"></param>
         /// <returns></returns>
         [UserAuth("CHK_STAFF_COMPRE_EVAL_M_VIW")]
-        public ActionResult DetailSVR(int mo,string staffId,int pageIndex=1,int pageSize=20)
+        public ActionResult DetailSVR(int stat,int endStat, string staffId, int pageIndex = 1, int pageSize = 20)
         {
-            var beginMo = mo;
-            var endMo = mo;
-            if (mo.ToString().Length == 4)
-            {
-                beginMo = int.Parse(mo.ToString() + "01");
-                endMo = int.Parse(mo.ToString() + "12");
-            }
-            var list=STAT_STAFF_SVRSTAT_M_DAL.GetListBub(beginMo, endMo,  staffId, pageIndex, pageSize);
+            var list = STAT_STAFF_SVRSTAT_M_DAL.GetListBub(stat, endStat, staffId, pageIndex, pageSize);
 
-            ViewBag.Total = STAT_STAFF_SVRSTAT_M_DAL.GetTotal(beginMo, endMo, staffId);
+            ViewBag.Total = STAT_STAFF_SVRSTAT_M_DAL.GetTotal(stat, endStat, staffId);
 
             return View(list);
         }
@@ -117,18 +113,11 @@ namespace gzsw.controller.CHK
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [UserAuth("CHK_STAFF_COMPRE_EVAL_M_VIW")]
-        public ActionResult DetailQUALITY(int mo, string staffId, int pageIndex = 1, int pageSize = 20)
+        public ActionResult DetailQUALITY(int stat, int endStat, string staffId, int pageIndex = 1, int pageSize = 20)
         {
-            var beginMo = mo;
-            var endMo = mo;
-            if (mo.ToString().Length == 4)
-            {
-                beginMo = int.Parse(mo.ToString() + "01");
-                endMo = int.Parse(mo.ToString() + "12");
-            }
-            var list = STAT_STAFF_QUALITYSTAT_M_DAL.GetListBub(beginMo, endMo, staffId, pageIndex, pageSize);
+            var list = STAT_STAFF_QUALITYSTAT_M_DAL.GetListBub(stat, endStat, staffId, pageIndex, pageSize);
 
-            ViewBag.Total = STAT_STAFF_QUALITYSTAT_M_DAL.GetTotal(beginMo, endMo, staffId);
+            ViewBag.Total = STAT_STAFF_QUALITYSTAT_M_DAL.GetTotal(stat, endStat, staffId);
 
             return View(list);
         }
@@ -156,18 +145,11 @@ namespace gzsw.controller.CHK
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [UserAuth("CHK_STAFF_COMPRE_EVAL_M_VIW")]
-        public ActionResult DetailEVAL(int mo, string staffId, int pageIndex = 1, int pageSize = 20)
+        public ActionResult DetailEVAL(int stat, int endStat, string staffId, int pageIndex = 1, int pageSize = 20)
         {
-            var beginMo = mo;
-            var endMo = mo;
-            if (mo.ToString().Length == 4)
-            {
-                beginMo = int.Parse(mo.ToString() + "01");
-                endMo = int.Parse(mo.ToString() + "12");
-            }
-            var list=STAT_STAFF_EVALSTAT_M_DAL.GetListSub(beginMo, endMo, staffId, pageIndex, pageSize);
+            var list = STAT_STAFF_EVALSTAT_M_DAL.GetListSub(stat, endStat, staffId, pageIndex, pageSize);
 
-            ViewBag.Total = STAT_STAFF_EVALSTAT_M_DAL.GetTotal(beginMo, endMo, staffId);
+            ViewBag.Total = STAT_STAFF_EVALSTAT_M_DAL.GetTotal(stat, endStat, staffId);
             return View(list);
         }
 
@@ -180,17 +162,10 @@ namespace gzsw.controller.CHK
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [UserAuth("CHK_STAFF_COMPRE_EVAL_M_VIW")]
-        public ActionResult DetailATTEND(int mo, string staffId, int pageIndex = 1, int pageSize = 20)
+        public ActionResult DetailATTEND(int stat, int endStat, string staffId, int pageIndex = 1, int pageSize = 20)
         {
-            var beginMo = mo;
-            var endMo = mo;
-            if (mo.ToString().Length == 4)
-            {
-                beginMo = int.Parse(mo.ToString() + "01");
-                endMo = int.Parse(mo.ToString() + "12");
-            }
-            var list=STAT_STAFF_CHKSTAT_M_DAL.GetListSub(beginMo, endMo, staffId, pageIndex, pageSize);
-            ViewBag.Total = STAT_STAFF_CHKSTAT_M_DAL.GetTotal(beginMo, endMo, staffId);
+            var list = STAT_STAFF_CHKSTAT_M_DAL.GetListSub(stat, endStat, staffId, pageIndex, pageSize);
+            ViewBag.Total = STAT_STAFF_CHKSTAT_M_DAL.GetTotal(stat, endStat, staffId);
             return View(list);
         }
 
@@ -203,17 +178,10 @@ namespace gzsw.controller.CHK
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [UserAuth("CHK_STAFF_COMPRE_EVAL_M_VIW")]
-        public ActionResult DetailUSUACTD(int mo, string staffId, int pageIndex = 1, int pageSize = 20)
+        public ActionResult DetailUSUACTD(int stat, int endStat, string staffId, int pageIndex = 1, int pageSize = 20)
         {
-             var beginMo = mo;
-            var endMo = mo;
-            if (mo.ToString().Length == 4)
-            {
-                beginMo = int.Parse(mo.ToString() + "01");
-                endMo = int.Parse(mo.ToString() + "12");
-            }
-            var list = CHK_STAFF_USU_ACT_MARK_DAL.GetList(beginMo, endMo, staffId, pageIndex, pageSize);
-            ViewBag.Total = CHK_STAFF_USU_ACT_MARK_DAL.GetTotal(beginMo, endMo, staffId);
+            var list = CHK_STAFF_USU_ACT_MARK_DAL.GetList(stat, endStat, staffId, pageIndex, pageSize);
+            ViewBag.Total = CHK_STAFF_USU_ACT_MARK_DAL.GetTotal(stat, endStat, staffId);
             return View(list);
         }
 
@@ -226,17 +194,10 @@ namespace gzsw.controller.CHK
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [UserAuth("CHK_STAFF_COMPRE_EVAL_M_VIW")]
-        public ActionResult DetailCOMPRESAN(int mo, string staffId, int pageIndex = 1, int pageSize = 20)
+        public ActionResult DetailCOMPRESAN(int stat, int endStat, string staffId, int pageIndex = 1, int pageSize = 20)
         {
-            var beginMo = mo;
-            var endMo = mo;
-            if (mo.ToString().Length == 4)
-            {
-                beginMo = int.Parse(mo.ToString() + "01");
-                endMo = int.Parse(mo.ToString() + "12");
-            }
-            var list=CHK_STAFF_COMPRE_SAN_MARK_DAL.GetList(beginMo, endMo, staffId, pageIndex, pageSize);
-            ViewBag.Total = CHK_STAFF_COMPRE_SAN_MARK_DAL.GetTotal(beginMo, endMo, staffId);
+            var list = CHK_STAFF_COMPRE_SAN_MARK_DAL.GetList(stat, endStat, staffId, pageIndex, pageSize);
+            ViewBag.Total = CHK_STAFF_COMPRE_SAN_MARK_DAL.GetTotal(stat, endStat, staffId);
             return View(list);
         }
     }

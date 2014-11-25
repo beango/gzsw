@@ -13,7 +13,7 @@
 <div class="l-panel-search">
     <table class="tabSearchList">
         <tr>
-            <td style="width:100px;">服务厅:</td>
+            <td style="width:90px;">服务厅:</td>
             <td style="width:150px;">
                 @Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)
             </td>
@@ -21,7 +21,7 @@
             <td style="width: 120px;">
                 <input type="text" name="txtBeginTime" id="txtBeginTime" value="@ViewBag.BeginTime" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
             </td>
-            <td style="width:80px;">结束时间:</td>
+            <td style="width:90px;">结束时间:</td>
             <td style="width: 120px;">
                 <input type="text" name="txtEndTime" id="txtEndTime" value="@ViewBag.EndTime" o onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
             </td>
@@ -35,11 +35,11 @@
             </td>
         </tr>
         <tr style="@(ViewBag.IsSenior != 0 ? "" : "display: none;") " d-tyle='senior'>
-            <td>交易业务流水号:</td>
+            <td>交易流水号:</td>
             <td>
                 <input type="text" id="txtNumber" value="@ViewBag.Number" />
             </td>
-            <td>窗口编号:</td>
+            <td>窗口:</td>
             <td>
                 <input type="text" id="txtCounter" value="@ViewBag.Counter" />
             </td>
@@ -70,6 +70,9 @@
             <tr>
                 <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
                 <th>序号</th>
+                <th>
+                    窗口
+                </th>
                 <th>
                     排队业务
                 </th>
@@ -105,6 +108,9 @@
                 </td>
                 <td>
                     @(i++)
+                </td>
+                <td>
+                    @item.COUNTER
                 </td>
                 <td>
                     @item.SERIALNAME

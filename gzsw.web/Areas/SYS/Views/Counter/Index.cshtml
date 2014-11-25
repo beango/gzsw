@@ -98,7 +98,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.PRI5_BUSI_SER_NAM)
                     </td>
-                    
+
                 </tr>
             }
 
@@ -118,7 +118,7 @@
 
     <script type="text/javascript" lang="javascript">
 
-        $(function() {
+        $(function () {
             // 查询
             $("#btnSearch").ligerButton(
                     {
@@ -136,28 +136,29 @@
             @if (Html.ChkAuth("SYS_COUNTER_VIW"))
             {
                 @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "SYS_COUNTER_VIW", 550, 420));
-                @:ligerToolBar.addItem({ line: true });
-            }
-            
+                                    @:ligerToolBar.addItem({ line: true });
+                                }
+
             @if (Html.ChkAuth("SYS_COUNTER_ADD"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIAddButton(Url.Action("Create"), "增加", "SYS_COUNTER_ADD", 600, 500));
-                @:ligerToolBar.addItem({ line: true });
-            }
+                @:ligerToolBar.addItem({ text: '增加', click: function (item) { var url = '/SYS/COUNTER/Create?orgid=' + $("#ddlORGID").val(); gzsw.dialog.open({ url: url.urlstamp(), title: '增加', width: 600, height: 500 }); }, icon: 'add' });
+
+                        @:ligerToolBar.addItem({ line: true });
+                                }
 
             @if (Html.ChkAuth("SYS_COUNTER_EDT"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "SYS_COUNTER_EDT", 600, 500));
-                @:ligerToolBar.addItem({ line: true });
-            }
-            
-            
+                @:ligerToolBar.addItem({ text: '修改', click: function (item) { if ($(".tablelist").getSelCount() != 1) { gzsw.dialog.alert("请选择需要操作的单个选项!"); return false; } var url = '/SYS/COUNTER/Edit' + '?hallno=' + $("#ddlORGID").val() + '&id=' + $('.tablelist').getSelValue(); gzsw.dialog.open({ url: url.urlstamp(), title: '修改', width: 600, height: 500 }); }, icon: 'modify' });
+                                    @:ligerToolBar.addItem({ line: true });
+                                }
+
+
             @if (Html.ChkAuth("SYS_COUNTER_DEL"))
             {
                 @:ligerToolBar.addItem(@Html.LigerUIDeleteButton(Url.Action("Delete"), "删除", "SYS_COUNTER_DEL"));
-            }
+                                }
         });
 
-        
+
     </script>
 }

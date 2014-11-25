@@ -22,6 +22,7 @@ namespace gzsw.controller.CHK
             {
                 years = DateTime.Now.Year;
                 stat = years.GetValueOrDefault();
+                endstat = years.GetValueOrDefault();
                 if (month == null)
                 {
                     month = DateTime.Now.Month;
@@ -76,6 +77,9 @@ namespace gzsw.controller.CHK
 
             ViewBag.Sonus = sonus.ToString("N");
             ViewBag.SonusNum = sonus;
+
+            ViewBag.Stat = stat;
+            ViewBag.Endstat = endstat;
 
 
             var list = CHK_STAFF_COMPRE_EVAL_M_DAL.GetListSub(stat, endstat, orgId, pageIndex, pageSize);

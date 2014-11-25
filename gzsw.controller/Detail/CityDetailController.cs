@@ -28,7 +28,7 @@ namespace gzsw.controller.Detail
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        [UserAuth("MON_Warning")]
+        [UserAuth("CITY_SYS_CURRYWHIST_VIW")]
         public ActionResult Index(string orgId, DateTime? beginTime, DateTime? endTime, string number, int? counter,
             string staffId, string nsrsbm, int? tickettype, int? status, int? isfinished,
             int isSenior = 0, int pageIndex = 1, int pageSize = 20)

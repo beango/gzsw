@@ -1,0 +1,148 @@
+﻿@using System.Data
+@using gzsw.util.Extensions
+@using gzsw.web
+          
+@model DataTable
+@{
+    ViewBag.Title = "投诉举报分析";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var index = 0;
+    var complaints = (ViewBag.Complaints as Dictionary<int, string>) ?? new Dictionary<int, string>();
+}
+
+@section Head{
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
+
+    <!-- 图表排序脚本 -->
+    @*@Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.js")
+        @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.widgets.min.js")*@
+    <!-- 图表排序 -->
+    @*@Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.pager.js")*@
+    @Html.JavaScript("lib/fusionchart/FusionCharts.js")
+    <style type="text/css">
+        .tablelist th {
+            background-image: none;
+            font-weight: normal;
+            text-indent: 0;
+        }
+
+        .tablelist td {
+            text-indent: 0;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            //// 表格数据排序
+            //$("#datatable").tablesorter({});
+            //  初始化TAB
+            $("#navtab1").ligerTab();
+            // 打印报表
+            $("#btnOutPut").click(function () {
+                var url = "@Html.Raw(Request.Url.PathAndQuery)" + ("@Html.Raw(Request.Url.PathAndQuery)".indexOf('?') > -1 ? "&" : "?") + "export=true";
+                window.open(url);
+            });
+        });
+    </script>
+}
+@{
+    Html.RenderPartial("~/Areas/STAT/Views/Shared/SearchView.cshtml", new object());
+}
+
+<div id="navtab1" style="margin: 3px 3px 0 3px; overflow: hidden; border: 1px solid #A3C0E8; ">
+    <div tabid="home" title="报表" lselected="true">
+        <div class="tablePanel" style="padding-top: 5px;">
+            <table id="datatable" class="tablelist tablesorter tablesorter-default" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr><th colspan="@(3 + complaints.Count)" style="background-image: none;"><span style="font-size: 14px; font-weight: bold; ">@Html.Raw(ViewBag.MainTitle)</span></th></tr>
+                    <tr>
+                        @if (Model != null && Model.Columns.Count > 0)
+                        {
+                            <th style="text-align: center; background-image: none;">
+                                序号
+                            </th>
+                            <th style="text-align: center; background-image: none;">
+                                服务厅
+                            </th>
+                            <th style="text-align: center; background-image: none;">
+                                处理情况
+                            </th>
+                            foreach (var complaint in complaints)
+                            {
+                                <th style="text-align: center; background-image: none;">
+                                    <a href="@Url.Action("ComplaintReportDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, complaintType = complaint.Key, complaintTypeName = complaint.Value, complaintLevel = 0, complaintLevelName = "", hallNo = "" })" target="_blank">
+                                        @complaint.Value
+                                    </a>
+                                </th>
+                            }
+                        }
+                    </tr>
+                </thead>
+                
+                @if (Model != null && Model.Rows != null && Model.Rows.Count > 0)
+                {
+                    foreach (DataRow row in Model.Rows)
+                    {
+                        var hallNo1 = row["服务厅编号"].ToStringForSimple();
+                        var complaintLevel1 = 0;
+                        int.TryParse(row["处理情况类型"].ToStringForSimple(), out complaintLevel1);
+                        var complaintLevelName1 = row["处理情况"].ToStringForSimple();
+                        <tr>
+                            @if (row["处理情况"].ToString() == "未处理")
+                            {
+                                <td rowspan="4">
+                                    @(++index)
+                                </td>
+
+                                <td rowspan="4">
+                                    <a href="@Url.Action("PersonalIndex", new { beginTime = ViewBag.beginTime, endTime = ViewBag.endTime, ddlMonth = ViewBag.ddlMonth, hallNo = hallNo1 })" target="_blank">
+                                        @row["服务厅"]
+                                    </a>
+                                </td>
+                            }
+                            @if (complaintLevel1 == 0)
+                            {
+                                <td style="font-weight: bold; font-size: 12px;">@complaintLevelName1</td>
+                            }
+                            else
+                            {
+                                <td>@complaintLevelName1</td>
+                            }
+                            @foreach (var complaint in complaints)
+                            {
+                                if (row["处理情况"].ToString() == "合计" && complaint.Value == "处理情况")
+                                {
+                                    <td style="font-weight: bold; font-size: 12px;">@row[complaint.Value]</td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <a href="@Url.Action("ComplaintReportDetail", new { beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, complaintType = complaint.Key, complaintTypeName = complaint.Value, complaintLevel = complaintLevel1, complaintLevelName = complaintLevelName1, hallNo = hallNo1 })" target="_blank">
+                                            @row[complaint.Value]
+                                        </a>
+                                    </td>
+                                }
+                            }
+                        </tr>
+                    }
+                }
+            </table>
+
+            @if (Model == null || Model.Rows == null || Model.Rows.Count <= 0)
+            {
+                <div class="l-panel-notDATA">
+                    暂无数据
+                </div>
+            }
+        </div>
+    </div>
+    <div title="柱状图">
+        <div>
+            @Html.Raw(ViewBag.ChartColumn3DXML)
+        </div>
+    </div>
+    <div title="线状图">
+        <div>
+            @Html.Raw(ViewBag.ChartSplineXML)
+        </div>
+    </div>
+</div>

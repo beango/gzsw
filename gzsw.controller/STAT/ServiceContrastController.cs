@@ -86,7 +86,7 @@ namespace gzsw.controller.STAT
                 return ExportData(exceltitle, "业务办理分析报表-服务厅", "服务厅", dic);
             }
 
-            SetChart(null, beginTime, endTime, title);
+            SetMainChart(null, beginTime, endTime, title);
 
             return View(plist);
         }
@@ -132,7 +132,8 @@ namespace gzsw.controller.STAT
                 return ExportData(exceltitle, "业务办理分析报表-员工", "员工名称", dic);
             }
 
-            SetChart(orgId, beginTime, endTime, title);
+            SetMainChart(orgId, beginTime, endTime, title);
+
 
             return View(plist);
         }
@@ -140,6 +141,53 @@ namespace gzsw.controller.STAT
         public ActionResult ShowCNT()
         {
             return View();
+        }
+
+        public void SetMainChart(string orgId, DateTime? beginTime, DateTime? endTime, string subtitle)
+        {
+            var list2 = STAT_STAFF_LARGE_BUSI_D_DAL.GetStatList(orgId, UserState.UserID, beginTime, endTime);
+            string titleName = "业务量对比分析";
+            var lineTable = new DataTable();
+
+            lineTable.Columns.Add("X_Name", typeof(string));
+            lineTable.Columns.Add("业务笔数", typeof(int));
+            lineTable.Columns.Add("业务折合量", typeof(int));
+            lineTable.Columns.Add("平均办理时间", typeof(string));
+            lineTable.Columns.Add("超时办理笔数", typeof(int));
+            lineTable.Columns.Add("超时率", typeof(string));
+            lineTable.Columns.Add("同城业务笔数", typeof(int));
+            lineTable.Columns.Add("同城办理率", typeof(string));
+
+            //有服务厅编码按服务厅统计，否则按员工统计
+            var halls =
+                list2.GroupBy(r => string.IsNullOrEmpty(orgId) ? r.HALL_NAM : r.STAFF_NAM).OrderBy(m => m.Key).ToList();
+            foreach (var hall in halls)
+            {
+                var itmes = hall.ToList();
+
+                var busiTotal = itmes.Sum(m => m.BUSI_CNT);
+                var convertTotal = itmes.Sum(m => m.CONVERT_BUSI_CNT);
+                var handleTotal = itmes.Sum(m => m.HANDLE_DUR);
+                var overTimeTotal = itmes.Sum(m => m.OVERTIME_HANDLE_CNT);
+                var localTotal = itmes.Sum(m => m.LOCAL_CNT);
+
+                var dr = lineTable.NewRow();
+                dr["X_Name"] = hall.Key;
+                dr["业务笔数"] = busiTotal;
+                dr["业务折合量"] = convertTotal;
+                dr["平均办理时间"] = (busiTotal == 0 ? 0 : handleTotal / busiTotal).ToTimeString();
+                dr["超时办理笔数"] = overTimeTotal;
+                dr["超时率"] = (busiTotal == 0 ? 0 : (decimal)overTimeTotal / (decimal)busiTotal).ToString("P");
+                dr["同城业务笔数"] = localTotal;
+                dr["同城办理率"] = (busiTotal == 0 ? 0 : (decimal)localTotal / (decimal)busiTotal).ToString("P");
+
+                lineTable.Rows.Add(dr);
+            }
+
+
+
+            ViewBag.ChartColumn3DXML = CreateMSColumn3DChart(titleName, lineTable, 430, subtitle);
+            ViewBag.ChartSplineXML = CreateMSSplineChart(titleName, lineTable, 430, null, null, subtitle);
         }
 
         /// <summary>
@@ -161,6 +209,9 @@ namespace gzsw.controller.STAT
             {
                 lineTable.Columns.Add(item.DLS_SERIALNAME, typeof(int));
             }
+
+            beginTime = beginTime.GetValueOrDefault().AddHours(8);
+            endTime = endTime.GetValueOrDefault().AddHours(18);
 
             TimeSpan timeSpan = endTime.GetValueOrDefault().Subtract(beginTime.GetValueOrDefault());
             var tlist = new List<string>();
@@ -206,13 +257,10 @@ namespace gzsw.controller.STAT
                 }
             }
 
-            var dss = new DataSet();
-            dss.Tables.Add(lineTable);
 
-
-            ViewBag.ChartColumn3DXML = CreateMSColumn3DChart(titleName, dss, 430, subtitle);
-            ViewBag.ChartSplineXML = CreateMSSplineChart(titleName, dss, 430, null, null, subtitle);
-            ViewBag.ChartPie3DXML = CreatePie3DChart(titleName, dss, 430, subtitle);
+            ViewBag.ChartColumn3DXML = CreateMSColumn3DChart(titleName, lineTable, 430, subtitle);
+            ViewBag.ChartSplineXML = CreateMSSplineChart(titleName, lineTable, 430, null, null, subtitle);
+            ViewBag.ChartPie3DXML = CreatePie3DChart(titleName, lineTable, 430, subtitle);
         }
 
         #region 导出

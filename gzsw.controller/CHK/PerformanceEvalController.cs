@@ -1,8 +1,11 @@
 ﻿ 
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using gzsw.controller.MyAuth;
 using gzsw.dal;
@@ -336,5 +339,203 @@ namespace gzsw.controller.CHK
 
         #endregion
 
+        [HttpPost]
+        public ActionResult ImportExcel(string filename)
+        {
+            try
+            {
+
+
+                var filepath = Request.MapPath(filename);
+                var dt = NPOIHelper.ImportToDataTable(filename);
+                //if (dt.Rows.Count > 15 || dt.Rows.Count < 10)
+                //{
+                //    return Json(new {success = -1, message = "文件模板错误"}, JsonRequestBehavior.AllowGet)
+                //}
+                string errormsg = "";
+                for(int i=1;i<dt.Rows.Count;i++)
+                {
+                     if (string.IsNullOrEmpty(dt.Rows[i]["员工工号"].ToString()))
+                     {
+                         errormsg += dt.Rows[i]["序号"].ToString() + "员工工号不能为空;<br/>";
+                         continue;
+                     }
+                if (string.IsNullOrEmpty(dt.Rows[i]["事项编码"].ToString()))
+                {
+                   
+                     if (string.IsNullOrEmpty(dt.Rows[i]["事项编码"].ToString()))
+                     {
+                         errormsg += dt.Rows[i]["序号"].ToString() + "事项编码不能为空;<br/>";
+                         continue;
+                     }
+                }
+                if (string.IsNullOrEmpty(dt.Rows[i]["质量类型"].ToString()))
+                {
+                  
+                       if (string.IsNullOrEmpty(dt.Rows[i]["质量类型"].ToString()))
+                     {
+                         errormsg += dt.Rows[i]["序号"].ToString() + "质量类型不能为空;<br/>";
+                         continue;
+                     }
+                }
+                if (string.IsNullOrEmpty(dt.Rows[i]["差错发生日期"].ToString()))
+                {
+                
+                       if (string.IsNullOrEmpty(dt.Rows[i]["差错发生日期"].ToString()))
+                     {
+                         errormsg += dt.Rows[i]["序号"].ToString() + "差错发生日期不能为空;<br/>";
+                         continue;
+                     }
+                }
+
+                CHK_STAFF_QUALITY_MARKBll.AddObject(new CHK_STAFF_QUALITY_MARK()
+                {
+                    AMOUNT =Convert.ToInt32(dt.Rows[i]["数量"].ToString()),
+                    MODIFY_DTIME = DateTime.Now,
+                    MODIFY_ID = UserState.UserID,
+                    OCCUR_DT =Convert.ToDateTime(dt.Rows[i]["差错发生日期"].ToString()),
+                    QUALITY_CD = dt.Rows[i]["质量类型编码"].ToString(),
+                   // SEQ = viewModel.SEQ,
+                    SERIALID = dt.Rows[i]["员工编码"].ToString(),
+                    STAFF_ID = dt.Rows[i]["事项编码"].ToString()
+                }); 
+              
+                }
+                Alter("删除成功!", AlterTypeEnum.Success);
+                return Json(new {success = 0, message = "上传文件成功."}, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+
+                return Json(new {success = -1, message = "导入文件失败，请稍后再试"}, JsonRequestBehavior.AllowGet);
+
+            }
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult ImportStaffPHOTE(HttpPostedFileBase fileData)
+        {
+            try
+            {
+                if (fileData != null)
+                {
+                    try
+                    {
+                        // 文件上传后的保存路径
+                        string filePath = Server.MapPath("~/Uploads/StaffPhoto/");
+                        if (!Directory.Exists(filePath))
+                        {
+                            Directory.CreateDirectory(filePath);
+                        }
+                        string fileName = Path.GetFileName(fileData.FileName);// 原始文件名称
+                        string fileExtension = Path.GetExtension(fileName); // 文件扩展名
+                        string saveName = Guid.NewGuid() + fileExtension; // 保存文件名称
+
+                        fileData.SaveAs(filePath + saveName);
+
+                        var dt = NPOIHelper.GetDataTable(filePath + saveName);
+                        //if (dt.Rows.Count > 15 || dt.Rows.Count < 10)
+                        //{
+                        //    return Json(new {success = -1, message = "文件模板错误"}, JsonRequestBehavior.AllowGet)
+                        //}
+                        string errormsg = "";
+                        for (int i = 0; i < dt.Rows.Count; i++)
+                        {
+                            if (string.IsNullOrEmpty(dt.Rows[i]["序号"].ToString()))
+                            {
+                                continue;
+                            }
+                            if (string.IsNullOrEmpty(dt.Rows[i]["员工工号"].ToString()))
+                            {
+                                errormsg += dt.Rows[i]["序号"].ToString() + "员工工号不能为空;<br/>";
+                                continue;
+                            }
+                          
+                                if (string.IsNullOrEmpty(dt.Rows[i]["业务编码"].ToString()))
+                                {
+                                    errormsg += dt.Rows[i]["序号"].ToString() + "业务编码不能为空;<br/>";
+                                    continue;
+                                }
+                          
+                            
+
+                                if (string.IsNullOrEmpty(dt.Rows[i]["质量类型编码"].ToString()))
+                                {
+                                    errormsg += dt.Rows[i]["序号"].ToString() + "质量类型编码不能为空;<br/>";
+                                    continue;
+                                }
+
+
+
+                            if (string.IsNullOrEmpty(dt.Rows[i]["差错日期"].ToString()))
+                            {
+                                errormsg += dt.Rows[i]["序号"].ToString() + "差错日期不能为空;<br/>";
+                                continue;
+                            }
+                            else
+                            {
+                                DateTime time;
+                                if (!DateTime.TryParse(dt.Rows[i]["差错日期"].ToString(), out time))
+                                {
+                                    errormsg += dt.Rows[i]["序号"].ToString() + "差错日期格式错误;<br/>";
+                                    continue;
+
+                                }
+                            }
+                            var amount = 0;
+                            if (string.IsNullOrEmpty(dt.Rows[i]["数量"].ToString()))
+                            {
+                                errormsg += dt.Rows[i]["序号"].ToString() + "数量不能为空;<br/>";
+                                continue;
+                          
+                               
+                            }
+                            else
+                            {
+                                if (!int.TryParse(dt.Rows[i]["数量"].ToString(), out amount))
+                                {
+                                    errormsg += dt.Rows[i]["序号"].ToString() + "数量格式错误;<br/>";
+                                    continue;
+                                }
+                            }
+                            CHK_STAFF_QUALITY_MARKBll.AddObject(new CHK_STAFF_QUALITY_MARK()
+                            {
+                                AMOUNT =amount,
+                                MODIFY_DTIME = DateTime.Now,
+                                MODIFY_ID = UserState.UserID,
+                                OCCUR_DT = Convert.ToDateTime(dt.Rows[i]["差错日期"].ToString()),
+                                QUALITY_CD = dt.Rows[i]["质量类型编码"].ToString(),
+                                // SEQ = viewModel.SEQ,
+                                SERIALID = dt.Rows[i]["业务编码"].ToString(),
+                                STAFF_ID =dt.Rows[i]["员工工号"].ToString()
+                            });
+
+                        }
+                        if (string.IsNullOrEmpty(errormsg))
+                        {
+                            return Json(new {success = 0, message = "上传文件成功."}, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(new { success = 1, message =errormsg }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHelper.ErrorLog("上传失败！", ex);
+                        return Json(new { success = 1, message = "上传失败." }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { success = 1, message = "上传失败." }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLog("系统出错！", ex);
+                return Json(new { success = 1, message = "上传失败." }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

@@ -98,6 +98,7 @@ namespace gzsw.controller.CHK
                     var rst = dao.UpdateObject(item);
                     if (rst > 0)
                     {
+                        Stored_DAL.UpdateData(item.STAT_MO, item.STAFF_ID, UserState.UserID, 1);
                         Alter("修改成功！", util.Enum.AlterTypeEnum.Success, false, true);
                         return Redirect("/Home/Blank");
                     }

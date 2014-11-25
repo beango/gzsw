@@ -33,7 +33,7 @@ namespace gzsw.winservice.Job
                     log.PAR_INFO = "";
                     log.ERROR_INFO = "";
                     ExecuteProd(log);
-                    db.Insert(log);//写日志
+                    db.Insert("SVR_TIM_EVENT_LOG", "SEQ", log);//写日志
                 }
             }
             catch (Exception ex)

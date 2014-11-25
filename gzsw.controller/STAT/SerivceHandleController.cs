@@ -215,8 +215,9 @@ namespace gzsw.controller.STAT
             dss.Tables.Add(lineTable);
 
 
-            ViewBag.ChartColumn3DXML = CreateMSColumn3DChart(titleName, dss, 430, subtitle);
-            ViewBag.ChartSplineXML = CreateMSSplineChart(titleName, SetLin(list, beginTime.GetValueOrDefault(), endTime.GetValueOrDefault()), 430,null,null, subtitle);
+            ViewBag.ChartColumn3DXML = CreateMSColumn3DChart(titleName, lineTable, 430, subtitle);
+            //ViewBag.ChartSplineXML = CreateMSSplineChart(titleName, SetLin(list, beginTime.GetValueOrDefault(), endTime.GetValueOrDefault()), 430,null,null, subtitle);
+            ViewBag.ChartSplineXML = CreateMSSplineChart(titleName, dss, 430, null, null, subtitle);
             ViewBag.ChartPie3DXML = CreatePie3DChart(titleName, dss, 430, subtitle);
         }
 
@@ -394,7 +395,15 @@ namespace gzsw.controller.STAT
             base.DateTimeInit(ref beginTime, ref endTime);
             var list  = STAT_STAFF_LARGE_BUSI_D_DAL.GetDataStatList(orgId, UserState.UserID,serialId,staffId, beginTime, endTime);
 
-            SetShowChart(list, type, beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), title);
+            var StaffName = string.Empty;
+            if (!string.IsNullOrEmpty(staffId))
+            {
+                var item = list.FirstOrDefault();
+                if (item != null)
+                    StaffName = item.STAFF_NAM;
+            }
+
+            SetShowChart(list, type, beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), title, orgId, StaffName);
             return View();
         }
 
@@ -406,8 +415,10 @@ namespace gzsw.controller.STAT
         /// <param name="beginTime"></param>
         /// <param name="endTime"></param>
         public void SetShowChart(List<STAT_STAFF_LARGE_BUSI_D_Handle_SUB> list,string ct,
-            DateTime beginTime, DateTime endTime, string title)
+            DateTime beginTime, DateTime endTime, string title, string orgId, string staffName=null)
         {
+            
+
             string titleName;
             switch (ct)
             {
@@ -428,13 +439,36 @@ namespace gzsw.controller.STAT
                     break;
                 default:
                     titleName = "业务笔数";
-                    break;    
+                    break;
+            }
+
+            var mainTielt = GetOrgName(orgId, null);
+            ViewBag.MainTitle = GetTitleName(mainTielt, titleName, beginTime, endTime);
+            string subtitle = string.Empty;
+            if (!string.IsNullOrEmpty(staffName))
+            {
+                subtitle = GetTitleName(staffName, "", beginTime, endTime, false);
+            }
+            else
+            {
+                subtitle = GetTitleName(mainTielt, "", beginTime, endTime, false);
             }
 
             var lineTable = new DataTable();
 
             lineTable.Columns.Add("Y_NAME", typeof(string));
-            lineTable.Columns.Add(titleName, typeof(int));
+            if (ct == "AverageHANDLE")
+            {
+                lineTable.Columns.Add(titleName, typeof (decimal));
+            }
+            else
+            {
+                lineTable.Columns.Add(titleName, typeof(int));
+            }
+
+
+            beginTime = beginTime.AddHours(8);
+            endTime = endTime.AddHours(18);
 
             TimeSpan timeSpan = endTime.Subtract(beginTime);
             var tlist = new List<string>();
@@ -482,7 +516,8 @@ namespace gzsw.controller.STAT
                     case "AverageHANDLE":
                         var soure = soureList.Sum(m => m.HANDLE_DUR);
                         var busi = soureList.Sum(m => m.BUSI_CNT);
-                        lineTable.Rows[i][titleName] = busi == 0 ? 0 : soure / busi;
+                        var value = busi == 0 ? 0 : (decimal)soure / (decimal)busi;
+                        lineTable.Rows[i][titleName] = value;
                         break;
                     case "OVERTIME_HANDLE_CNT":
                         lineTable.Rows[i][titleName] = soureList.Sum(m => m.OVERTIME_HANDLE_CNT);
@@ -499,10 +534,18 @@ namespace gzsw.controller.STAT
             var dss = new DataSet();
             dss.Tables.Add(lineTable);
 
-
-            ViewBag.ChartColumn3DXML = CreateMSColumn3DChart(title, dss, 430);
-            ViewBag.ChartSplineXML = CreateMSSplineChart(title, dss, 430);
-            ViewBag.ChartPie3DXML = CreatePie3DChart(title, dss, 430);
+            if (ct == "AverageHANDLE")
+            {
+                ViewBag.ChartColumn3DXML = CreateColumn3DChart(titleName, lineTable, subtitle, true, "分", "60", "分");
+                ViewBag.ChartSplineXML = CreateMSSplineChart(titleName, lineTable, 550, null, null, subtitle, true, "分", "60", "分");
+                ViewBag.ChartPie3DXML = CreatePie3DChart(title, dss, 430, subtitle);
+            }
+            else
+            {
+                ViewBag.ChartColumn3DXML = CreateMSColumn3DChart(title, dss.Tables[0], 430, subtitle);
+                ViewBag.ChartSplineXML = CreateMSSplineChart(title, dss, 430, null,null,subtitle);
+                ViewBag.ChartPie3DXML = CreatePie3DChart(title, dss, 430, subtitle);
+            }
         }
 
         public DataSet SetLin(List<STAT_STAFF_LARGE_BUSI_D_Handle_SUB> list, 
@@ -515,6 +558,9 @@ namespace gzsw.controller.STAT
             lineTable.Columns.Add("业务折合量", typeof(int));
             lineTable.Columns.Add("超时办理笔数", typeof(int));
             lineTable.Columns.Add("同城业务笔数", typeof(int));
+
+            beginTime = beginTime.AddHours(8);
+            endTime = endTime.AddHours(18);
 
             TimeSpan timeSpan = endTime.Subtract(beginTime);
             var tlist = new List<string>();

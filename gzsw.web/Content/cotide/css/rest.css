@@ -30,11 +30,24 @@ border-radius: 10px;
 }
 
     .gzsw_TopMenu ul {
-        float: right;
-        width: 460px;
+        float: right; 
         height: 24px;
         background: url('../img/gzsw_topMenu.png') repeat-x;
     }
+
+    
+        .gzsw_TopMenu  ul .end {
+            width: 26px; 
+               height: 20px; 
+            background: url(../img/gzsw_topMenu_right.png) no-repeat right;
+        }
+
+             .gzsw_TopMenu  ul .first {
+                 width: 26px; 
+               height: 20px;
+
+            background: url(../img/gzsw_topMenu_left.png) no-repeat right;
+        }
 
         .gzsw_TopMenu ul li {
             list-style: none;
@@ -44,13 +57,8 @@ border-radius: 10px;
             background: url(../img/line.gif) no-repeat right;
         }
 
-            .gzsw_TopMenu ul li:last-child {
-                background: none;
-            }
-
-            .gzsw_TopMenu ul li:first-child {
-                background: none;
-            }
+          
+           
 
 
 /* 主菜单 */
@@ -64,17 +72,21 @@ border-radius: 10px;
         background: url('../img/gzsw_main_btn.png') repeat-x;
         list-style: none;
         float: left;
-        padding: 5px 5px 4px 5px;
+        padding: 9px 5px 0px 5px;
         width: 98px;
         margin-right: 4px;
-        font-size: 14px;
+        font-size: 16px;
         cursor: pointer;
         text-align: center;
+        height: 25px
     }
 
-    .gzsw_MainMenu ul .sel {
-     
-        background: url('../img/gzsw_main_btn_hover.png') repeat-x;
+ 
+  
+    .gzsw_MainMenu ul .sel { 
+         background: url('../img/gzsw_main_btn_hover.png') repeat-x;
+        color:#005580;
+        font-weight: bold;
     }
    #mainNavPanel .sel a{ 
        color:#005580;
@@ -82,14 +94,14 @@ border-radius: 10px;
     }
     
 
-    .gzsw_MainMenu ul li:hover {
+  .gzsw_MainMenu ul li:hover {
         background: url('../img/gzsw_main_btn_hover.png') repeat-x;
     }
 
+  
 
 
-    /* 左菜单 */
- 
+    /* 左菜单 */ 
     .gzsw_LeftMenu {
     width: 225px;  
     border-radius: 10px;
@@ -101,9 +113,8 @@ border-radius: 10px;
         background: url('../img/gzsw_LeftMenu_Title.png') repeat-x;
         height: 22px;
         line-height: 25px;
-        width: 215px;
-        background-color: #bfd4ff; 
-        padding: 3px 5px 5px 5px;
+        width: 215px; 
+        padding: 3px 5px 15px 5px;
         text-align: center;
         font-size: 16px; 
     }
@@ -113,28 +124,26 @@ border-radius: 10px;
         background: url('../img/gzsw_LeftMenu_MainTitle_On.png') repeat-x;
         height: 28px;
         width: 196px;
-        margin: 12px;
+        margin: 5px 12px 5px 12px;
         cursor: pointer;
-        padding: 2px;
-        text-align: center;
+        padding: 2px;  
         font-size: 14px; 
         line-height: 21px;
 
     }
 
-    .gzsw_LeftMenu .gzsw_LeftMenu_MainTitle_On  a,.gzsw_LeftMenu .gzsw_LeftMenu_MainTitle_Off{
+    .gzsw_LeftMenu .gzsw_LeftMenu_MainTitle_On  a,.gzsw_LeftMenu .gzsw_LeftMenu_MainTitle_Off a{
         color: #063f60;
-         
+        margin-left: 38px;
     }
 
     .gzsw_LeftMenu .gzsw_LeftMenu_MainTitle_Off {
         background: url('../img/gzsw_LeftMenu_MainTitle_Off.png') repeat-x;
         height: 28px;
         width: 196px;
-        margin: 12px;
+        margin:5px 12px 5px 12px;
         cursor: pointer;
-        padding: 2px;
-        text-align: center;
+        padding: 2px; 
         font-size: 14px; 
         line-height: 21px;
     }

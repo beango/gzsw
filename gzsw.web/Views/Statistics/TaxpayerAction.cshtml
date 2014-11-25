@@ -1,16 +1,14 @@
-﻿@using gzsw.util
+﻿@using gzsw.model
+@using gzsw.util
 @using gzsw.web
 @model IList<gzsw.model.dto.Statistics_TaxpayerActionDto>
 @{
     ViewBag.Title = "服务厅评价分析";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
-    var index = 0;
-    // 统计量总数 （同城业务量+二次办税业务量 ）
-    double valueCount = Model.Select(  x => x.LOCAL_CNT + x.SECOND_SVR_CNT ).Sum(); 
-    // 同城业务量
-    var value1 = (Model.Select(x => x.LOCAL_CNT).Sum());
-    // 二次办税业务量
-    var value2 = (Model.Select(x => x.SECOND_SVR_CNT).Sum()); 
+    Layout = "~/Views/Shared/_MainLayout.cshtml"; 
+    // 事项大类
+    var itemTypeList = ViewData["itemTypeList"] as List<SYS_DLSERIAL>;
+    var cloRow = itemTypeList.Count();
+    var i = 0;
 }
 
 @section Head{
@@ -31,11 +29,13 @@
         .tablelist td {
             text-indent: 0;
         }
+        .tablelist tbody tr:hover {
+            background: none;
+        } 
     </style>
     <script type="text/javascript">
         $(function () {
-            // 表格数据排序
-            $("#datatable").tablesorter({}).tablesorterPager({ container: $("#pager") });
+            // 表格数据排序 
             //  初始化TAB
             $("#navtab1").ligerTab();
             // 打印报表
@@ -44,13 +44,23 @@
                 window.open(url);
             });
             $("a[type]").click(function () {
-                var url = '@Url.Action("TaxpayerEval_Node", "Statistics")';
+                var columnType = $(this).attr("clotype");
+                var url = '@Url.Action("TaxpayerAction_Node", "Statistics")';
                 var param = {
-                    type: $(this).attr("type"),
+                    headType: $(this).attr("type"),
                     beginTime: $("#beginTime").val(),
                     endTime: $("#endTime").val(),
                     _t: Date.parse(new Date())
-                };
+                }; 
+                if (columnType != undefined && columnType != null) {
+                    param = {
+                        headType: $(this).attr("type"),
+                        beginTime: $("#beginTime").val(),
+                        endTime: $("#endTime").val(),
+                        columnType: columnType,
+                        _t: Date.parse(new Date())
+                    };
+                }
                 url = url.getUrl(param);
                 window.open(url); 
             });
@@ -68,32 +78,73 @@
             <table id="datatable" class="tablelist tablesorter tablesorter-default" cellpadding="0" cellspacing="0">
                 <thead>
                     <tr>
+                        <th colspan="5" style="background-image: none;">
+                            <span style="font-size: 14px; font-weight: bold; ">
+                                @ViewBag.MainTitle @ViewBag.NodeTitle
+                            </span>
+                        </th>
+                    </tr> 
+                    <tr>
                         <th style="text-align: center; background-image: none;" >序号  </th>
-                        <th style="text-align: center; background-image: none;"> 营业厅</th>
+                        <th style="text-align: center; background-image: none;"> 服务厅</th>
+                        <th style="text-align: center; background-image: none;"> 业务大类</th>
                         <th style="text-align: center; background-image: none;" > <a type="1" href="#">同城业务量 </a></th>
                         <th style="text-align: center; background-image: none;"><a type="2" href="#"> 二次办税业务量  </a></th> 
-                    </tr>
-                     
+                    </tr> 
                 </thead>
                 @if (Model != null && Model.Count() > 0)
-                {
-                    foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>@(++index)</td>
-                            <td> <a ref="@Url.Action("TaxpayerAction_Person", "Statistics", new { @orgId = @item.HALL_NO })" href="#"> @item.ORG_NAM</a></td>
-                            <td>@item.LOCAL_CNT</td>
-                            <td>@item.SECOND_SVR_CNT </td> 
-                        </tr>
+                { 
+                    foreach (var dic in Model.GroupBy(x=>x.HALL_NO))
+                    {  
+                        for (var j = 0; j < itemTypeList.Count(); j++)
+                        {
+                            var item = dic.FirstOrDefault(x => x.DLS_SERIALID == itemTypeList[j].DLS_SERIALID);
+                                
+                            <tr>
+                                    @if (j == 0)
+                                    { 
+                                        <td rowspan="@cloRow"> @(++i) </td>
+                                        <td rowspan="@cloRow">
+                                            <a ref="@Url.Action("TaxpayerAction_Person", "Statistics", new { beginTime = ViewBag.beginTime, endTime = ViewBag.endTime, orgId = @dic.Key })" href="#">
+
+                                                @dic.FirstOrDefault().HALL_NAM
+                                            </a> 
+                                         </td>
+                                    }  
+                                <td>@itemTypeList[j].DLS_SERIALNAME</td>   
+                                @if (item!=null)
+                                    {
+                                        <td>
+                                            <a type="1" clotype="@itemTypeList[j].DLS_SERIALID" href="#">
+                                                @item.LOCAL_CNT
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a type="2" clotype="@itemTypeList[j].DLS_SERIALID" href="#">
+                                                @item.SECOND_SVR_CNT
+                                            </a>
+</td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <a type="1" clotype="@itemTypeList[j].DLS_SERIALID" href="#">
+                                                0
+                                            </a>
+</td>
+                                        <td>
+                                            <a type="2" clotype="@itemTypeList[j].DLS_SERIALID" href="#">
+                                                0
+                                            </a>
+</td> 
+                                    }
+                                
+                            </tr> 
+
+                        }
 
                     }
-                    <tfoot>
-                        <tr>
-                            <td colspan="2" style="text-align: center; font-weight: bold; font-size: 14px;">合计</td>
-                            <td> @value1</td> 
-                            <td> @value2</td> 
-                        </tr>
-                    </tfoot>
+                    
 
                 }
             </table>
@@ -104,10 +155,7 @@
                     暂无数据
                 </div>
             }
-            else
-            {
-                Html.RenderPartial("~/Areas/STAT/Views/Shared/PagerView.cshtml");
-            }
+           
         </div>
     </div>
     <div title="柱状图">

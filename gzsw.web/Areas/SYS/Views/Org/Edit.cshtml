@@ -23,7 +23,7 @@
                 </td>
                 <td>
                     @Html.HiddenFor(model => model.ORG_ID)
-                    @Html.EditorFor(model => model.ORG_NAM)
+                    <input name="ORG_NAM" id="ORG_NAM" type="text" style="width:240px;" value="@Model.ORG_NAM" />
                 </td>   
                 <td>
                     @Html.ValidationMessageFor(model => model.ORG_NAM)

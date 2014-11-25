@@ -1,20 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using gzsw.controller.MyAuth;
 using gzsw.dal.dao;
+using gzsw.model.dto;
+using gzsw.model.Enums;
 using gzsw.util;
 using gzsw.util.Extensions;
 using gzsw.util.Office;
 
 namespace gzsw.controller.STAT
 {
-    public class WarnAnalysisController : BaseController
+    public class WarnAnalysisController : StatController
     {
         /// <summary>
+        /// 预警分析
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [UserAuth("STAT_WARN_HALL_STAT_D_VIW")]
+        public ActionResult Index()
+        {
+            switch (GetHighLV)
+            {
+                default:
+                    return RedirectToAction("HallIndex");
+                    break;
+            }
+        }
+
+        /// <summary> = 
         /// 预警分析 - 服务厅
         /// </summary>
         /// <param name="beginTime"></param>
@@ -23,17 +42,24 @@ namespace gzsw.controller.STAT
         /// <returns></returns>
         [HttpGet]
         [UserAuth("STAT_WARN_HALL_STAT_D_VIW")]
-        public ActionResult Index(DateTime? beginTime, DateTime? endTime, bool export = false)
+        public ActionResult HallIndex(DateTime? beginTime, DateTime? endTime, bool export = false)
         {
             // 初始化日期
             DateTimeInit(ref beginTime, ref endTime);
-
+            
             // 获取数据
             var result = STAT_WARN_ANALYSIS_DAL.GetStatistics_WarnAnalysisChart(UserState.UserID, beginTime, endTime);
 
-            //导出
+            const string titleName = "预警分析";
+            var mainTielt = GetOrgName(null, OrgHighLevel);
+            ViewBag.MainTitle = GetTitleName(mainTielt, titleName, beginTime.GetValueOrDefault(), endTime.GetValueOrDefault());
+            var subtitle = GetTitleName(mainTielt, "", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), false);
+
+           //导出
             if (export)
             {
+                var exceltitle = GetTitleName(mainTielt, titleName, beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), false);
+                 
                 var index = 0;
                 var data = result == null
                     ? new DataTable()
@@ -52,7 +78,7 @@ namespace gzsw.controller.STAT
                         差评笔数预警 = x.Count_T8,
                         连续工作时长超界 = x.Count_T9,
                     }).ToList().ToDataTable();
-                return AsposeExcelHelper.OutFileToRespone(data, "服务厅预警分析报表");
+                return AsposeExcelHelper.OutFileToRespone(data, "预警分析报表-服务厅", exceltitle);
             }
 
 
@@ -71,8 +97,8 @@ namespace gzsw.controller.STAT
             ViewBag.EndTime = !endTime.HasValue ? DateTime.Now.ToString("yyyy-MM-dd") : endTime.Value.ToString("yyyy-MM-dd");
 
             // 输出图表
-            ViewBag.ChartColumn3DXML = CreateMSColumn3DChart("服务厅预警分析", chartData);
-            ViewBag.ChartSplineXML = CreateMSSplineChart("服务厅预警分析", chartData);
+            ViewBag.ChartColumn3DXML = CreateMSColumn3DChart(titleName, chartData, 420, subtitle);
+            ViewBag.ChartSplineXML = CreateMSSplineChart(titleName, chartData, 420, null, null, subtitle);
             
             return View(result);
         }
@@ -84,11 +110,13 @@ namespace gzsw.controller.STAT
         /// <param name="endTime"></param>
         /// <param name="hallNo"></param>
         /// <param name="warnType"></param>
+        /// <param name="warnTypeName"></param>
         /// <param name="warnLevel"></param>
+        /// <param name="warnLevelName"></param>
         /// <returns></returns>
         [HttpGet]
         [UserAuth("STAT_WARN_HALL_STAT_D_VIW")]
-        public ActionResult WarnAnalysisDetail(DateTime? beginTime, DateTime? endTime, string hallNo = "", int? warnType = 0, int? warnLevel = 0)
+        public ActionResult WarnAnalysisDetail(DateTime? beginTime, DateTime? endTime, string hallNo = "", int? warnType = 0, string warnTypeName = "", int? warnLevel = 0, string warnLevelName = "")
         {
             int detailType;
             string detailXValue;
@@ -98,7 +126,7 @@ namespace gzsw.controller.STAT
 
             // 获取数据
             var result = STAT_WARN_ANALYSIS_DAL.GetStatistics_WarnAnalysisDetailChart(UserState.UserID, beginTime, endTime, hallNo, detailType, detailXValue, warnType, warnLevel);
-
+            
             var chartData = default(DataTable);
             if (result == null)
             {
@@ -181,10 +209,26 @@ namespace gzsw.controller.STAT
                 }
             }
 
+            //预警类型名称
+            if (!string.IsNullOrEmpty(warnTypeName))
+            {
+                warnTypeName = string.Format("--{0}", warnTypeName);
+            }
+
+            //预警级别名称
+            if (!string.IsNullOrEmpty(warnLevelName))
+            {
+                warnLevelName = string.Format("（{0}）", warnLevelName);
+            }
+            
+            string titleName = string.Format("预警分析{0}{1}", warnTypeName, warnLevelName);
+            var mainTielt = GetOrgName(hallNo, OrgHighLevel);
+            var subtitle = GetTitleName(mainTielt, "", beginTime.GetValueOrDefault(), endTime.GetValueOrDefault(), false);
+            
             // 输出图表
-            ViewBag.ChartColumn3DXML = CreateMSColumn3DChart("服务厅预警分析", chartData);
-            ViewBag.ChartSplineXML = CreateMSSplineChart("服务厅预警分析", chartData);
-            ViewBag.ChartPie3DXML = CreatePie3DChart("服务厅预警分析", chartData);
+            ViewBag.ChartColumn3DXML = CreateMSColumn3DChart(titleName, chartData, 580, subtitle);
+            ViewBag.ChartSplineXML = CreateMSSplineChart(titleName, chartData, 580, null, null, subtitle);
+            ViewBag.ChartPie3DXML = CreatePie3DChart(titleName, chartData, 580, subtitle);
 
             return View();
         }

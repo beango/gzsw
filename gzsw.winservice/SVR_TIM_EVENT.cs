@@ -29,33 +29,28 @@ namespace gzsw.winservice
             {
                 ISchedulerFactory schedulerFactory = new StdSchedulerFactory();
                 scheduler = schedulerFactory.GetScheduler();
-                #region 事件29 to 8
+                #region group1
                 RegListener<PRO_REPORT_STAT_D_JOB, PRO_STAT_STAFF_BUSI_TOT_D_JOB>();
-                #endregion
-
-                #region 事件8 to 9
                 RegListener<PRO_STAT_STAFF_BUSI_TOT_D_JOB, PRO_STAT_STAFF_QUEUE_BUSI_D_JOB>();
-                #endregion
-
-                #region 事件9 to 10
                 RegListener<PRO_STAT_STAFF_QUEUE_BUSI_D_JOB, PRO_STAT_STAFF_LARGE_BUSI_D_JOB>();
-                #endregion
-
-                #region 事件10 to 11
                 RegListener<PRO_STAT_STAFF_LARGE_BUSI_D_JOB, PRO_STAT_TAXPAYER_BEHAV_STAT_D_JOB>();
-                #endregion
                 RegListener<PRO_STAT_TAXPAYER_BEHAV_STAT_D_JOB, PRO_CHK_STAFFCHK_EVENT_D_JOB>();
-                #region 事件11 to 初始化作业16
-                RegListener<PRO_CHK_STAFFCHK_EVENT_D_JOB, PRO_INIT_QUEUEDEAL_D_JOB>();
+				#endregion
 
+                #region group2
+                RegListener<PRO_CHK_STAFFCHK_EVENT_D_JOB, PRO_INIT_QUEUEDEAL_D_JOB>();
+				#endregion
+
+                #region group3
                 RegListener<PRO_INIT_QUEUEDEAL_D_JOB, PRO_STAT_STAFF_SVRSTAT_M_JOB>();//16-4
                 RegListener<PRO_STAT_STAFF_SVRSTAT_M_JOB, PRO_STAT_STAFF_EVALSTAT_M_JOB>();//4-6
                 RegListener<PRO_STAT_STAFF_EVALSTAT_M_JOB, PRO_STAT_STAFF_QUALITYSTAT_M_JOB>();//6-5
                 RegListener<PRO_STAT_STAFF_QUALITYSTAT_M_JOB, PRO_STAT_STAFF_CHKSTAT_M_JOB>();//5-3
-                RegListener<PRO_STAT_STAFF_CHKSTAT_M_JOB, PRO_CHK_STAFF_COMPRE_EVAL_M_JOB>();//3-19
+				#endregion
 
-                RegListener<PRO_STAT_STAFF_CHKSTAT_M_JOB, PRO_CHK_HALL_STAT_M_JOB>();
-                RegListener<PRO_INIT_QUEUEDEAL_D_JOB, PRO_STAT_STAFF_CHKSTAT_M_JOB>();
+				#region group4
+                RegListener<PRO_STAT_STAFF_CHKSTAT_M_JOB, PRO_CHK_STAFF_COMPRE_EVAL_M_JOB>();//3-19
+				RegListener<PRO_CHK_STAFF_COMPRE_EVAL_M_JOB, PRO_CHK_HALL_STAT_M_JOB>();
                 #endregion
             }
             catch (Exception ex)

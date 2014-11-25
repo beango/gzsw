@@ -127,7 +127,7 @@
 
             @if (Html.ChkAuth("SYS_STAFF_ADD"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIAddButton(Url.Action("Create"), "增加", "SYS_STAFF_ADD", 500, 500));
+                @:ligerToolBar.addItem({text: '增加',click: function(item) {var url='/SYS/STAFF/Create?orgid='+$("#ddlORGID").val();gzsw.dialog.open({url: url.urlstamp(),title: '增加',width: 500,height:500});},icon:'add'});
                 @:ligerToolBar.addItem({ line: true });
             }
 

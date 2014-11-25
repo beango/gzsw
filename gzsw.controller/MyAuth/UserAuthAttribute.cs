@@ -71,21 +71,16 @@ namespace gzsw.controller.MyAuth
             {
                 if (!this.AuthorizeCore(filterContext.HttpContext))
                 {
+                    var req = filterContext.ActionDescriptor.ActionName;
                     if (chktype == 0)
-                        filterContext.Result = new RedirectResult("/Account/Login?unauth");
+                        filterContext.Result = new RedirectResult("/Account/Login?redirect=" + req);
                     else
-                        filterContext.Result = new RedirectResult("/Account/NoAuth?unauth");
-                    //HttpCachePolicyBase cache = filterContext.HttpContext.Response.Cache;
-                    //cache.SetProxyMaxAge(new TimeSpan(0L));
-                    //cache.AddValidationCallback(new HttpCacheValidateHandler(this.CacheValidateHandler), null);
+                        filterContext.Result = new RedirectResult("/Account/NoAuth?redirect=" + req);
                 }
                 else
                 {
-                    // this.HandleUnauthorizedRequest(filterContext);
                 }
             }
-            //验证不通过,直接跳转到相应页面，注意：如果不使用以下跳转，则会继续执行Action方法
-            //filterContext.Result = new RedirectResult("/Account/Login?unauth");
         }
     }
 
@@ -94,27 +89,25 @@ namespace gzsw.controller.MyAuth
     /// </summary>
     public enum ActionEnum
     {
-        NON,
-
         /// <summary>
         /// 所有
         /// </summary>
-        ALL,
+        ALL=0,
         /// <summary>
         /// 查看
         /// </summary>
-        VIW,
+        VIW=1,
         /// <summary>
         /// 添加
         /// </summary>
-        ADD,
+        ADD=2,
         /// <summary>
         /// 修改
         /// </summary>
-        EDT,
+        EDT=3,
         /// <summary>
         /// 删除
         /// </summary>
-        DEL
+        DEL=4
     }
 }

@@ -27,7 +27,7 @@
                     组织机构名称：
                 </td>
                 <td>
-                    @Html.EditorFor(model => model.ORG_NAM)
+                    @Html.TextBoxFor(model => model.ORG_NAM, new { @style = "width:200px;" })
                 </td>
                 <td>
                     @Html.ValidationMessageFor(model => model.ORG_NAM)

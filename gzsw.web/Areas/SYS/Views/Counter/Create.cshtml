@@ -14,7 +14,8 @@
         <tr>
             <td class="tdLeft">服务厅：</td>
             <td>
-                @Html.DropDownList("HALL_NO", @ViewBag.HallList as IEnumerable<SelectListItem>)
+                @Html.Raw((ViewBag.ORG != null ? ViewBag.ORG.ORG_NAM : ""))
+                <input type="hidden" name="HALL_NO" id="HALL_NO" value="@(ViewBag.ORG != null ? ViewBag.ORG.ORG_ID : "")" />
             </td>
             <td>
                 @Html.ValidationMessageFor(model => model.HALL_NO)
@@ -46,7 +47,7 @@
         <tr>
             <td class="tdLeft">最大的业务笔数：</td>
             <td colspan="2">
-                @Html.EditorFor(model => model.MAX_BUSI_CNT)
+                <input id="MAX_BUSI_CNT" name="MAX_BUSI_CNT" type="text" value="5" />
                 @Html.ValidationMessageFor(model => model.MAX_BUSI_CNT)
             </td>
         </tr>
@@ -132,6 +133,7 @@
     <script type="text/javascript">
 		<!--
         $(function () {
+            $("#STATE").val(1);
             InitAjaxForm();//异步提交
 
             $('.checkboxlist input').click(function () {

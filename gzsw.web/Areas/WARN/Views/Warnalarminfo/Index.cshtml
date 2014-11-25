@@ -150,19 +150,19 @@
 
             @if (Html.ChkAuth("WARN_ALARM_INFO_DETAIL_VIW"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看报警信息", "WARN_ALARM_INFO_DETAIL_VIW", 450, 400));
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看报警信息", "WARN_ALARM_INFO_DETAIL_VIW", 650, 400));
                             @:ligerToolBar.addItem({ line: true });
                         }
             
             @if (Html.ChkAuth("WARN_ALARM_INFO_DETAIL_VIW"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("List"), "报警发送详细", "WARN_ALARM_INFO_DETAIL_VIW", 600, 500));
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("List"), "报警发送详细", "WARN_ALARM_INFO_DETAIL_VIW", 800, 500));
                             @:ligerToolBar.addItem({ line: true });
                         }
 
             @if (Html.ChkAuth("WARN_ALARM_INFO_DETAIL_EDT"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "处理报警", "WARN_ALARM_INFO_DETAIL_EDT", 600, 500));
+                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "处理报警", "WARN_ALARM_INFO_DETAIL_EDT", 600, 400));
                             @:ligerToolBar.addItem({ line: true });
                         }
              

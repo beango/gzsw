@@ -1,0 +1,290 @@
+﻿@using gzsw.util.Extensions
+@model List<gzsw.model.dto.Virtual_Mon_Hall_Dto>
+
+<div id="warningContent">
+    <div tabid="home" title="大厅管理情况" lselected="true">
+        <div style="margin:3px;">
+            <table class="tablelist">
+                <thead>
+                    <tr>
+                        <td style="width: 20%;">服务厅</td>
+                        <td style="width: 7%;">总窗口数</td>
+                        <td style="width: 8%;">在线窗口数</td>
+                        <td style="width: 6%;">开启率</td>
+                        <td style="width: 11%;">正在办理业务窗口数</td>
+                        <td style="width: 10%">在办业务窗口比率</td>
+                        <td style="width: 11%;">窗口突发情况与报警</td>
+                        <td style="width: 7%">投诉次数</td>
+                        <td style="width: 10%">当月二次办理人次</td>
+                        <td style="width: 10%">同城通办人次</td>
+                    </tr>
+                </thead>
+                @foreach (var dto in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href="#" d-open="hallInfo" hall="@dto.HALL_NO" d-type="0">
+                                @dto.HALL_NAM
+                            </a>
+                        </td>
+                        <td>
+                            <a href="#" d-open="hall" hall="@dto.HALL_NO" d-type="0">
+                                @dto.TOT_COUNTER_CNT
+                            </a>
+                        </td>
+                        <td>
+                            <a href="#" d-open="hall" hall="@dto.HALL_NO" d-type="1">
+                                @dto.ONLINE_COUNTER_CNT
+                            </a>
+                        </td>
+                        <td>
+                            @dto.COUNTER_OPEN_RT.ToString("P")
+                        </td>
+                        <td>
+                            <a href="#" d-open="hall" hall="@dto.HALL_NO" d-type="2">
+                                @dto.SERVICE_COUNTER_CNT
+                            </a>
+                        </td>
+                        <td>
+                            @dto.SERVICE_COUNTER_RT.ToString("P")
+                        </td>
+                        <td>
+                            <a href="#" d-open="Warnalarminfo" hall="@dto.HALL_NO">
+                                @dto.COUNTER_ALARM_CNT
+                            </a>
+                        </td>
+                        <td>
+                            <a href="#" d-open="Warncomplaindatail" hall="@dto.HALL_NO">
+                                @dto.COMPLAIN_CNT
+                            </a>
+                        </td>
+                        <td>
+                            <a href="#" d-open="CurrywhistTwiceDeal" hall="@dto.HALL_NO">
+                                @dto.SECOND_SERVICE_CNT
+                            </a>
+                        </td>
+                        <td>
+                            <a href="#" d-open="CurrywhistSameCityDeal" hall="@dto.HALL_NO">
+                                @dto.LOCAL_SERVICE_CNT
+                            </a>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+            @if (Model.Count < 1)
+            {
+                <div class="l-panel-notDATA">
+                    暂无数据
+                </div>
+            }
+        </div>
+    </div>
+    <div title="大厅排队情况">
+        <div style="margin:3px;">
+            <table class="tablelist">
+                <thead>
+                    <tr>
+                        <td style="width: 20%">服务厅</td>
+                        <td style="width: 10%">总出票数</td>
+                        <td style="width: 10%">正在等候人次</td>
+                        <td style="width: 10%">等候达标率</td>
+                        <td style="width: 10%">窗口饱和度</td>
+                        <td style="width: 10%">大厅饱和度</td>
+                        <td style="width: 10%">等候超时率</td>
+                        <td style="width: 10%">等候超时率预警</td>
+                        <td style="width: 10%">当前平均等候时间</td>
+                        @*<td style="width: 10%"></td>*@
+                    </tr>
+                </thead>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href="#" d-open="hallInfo" hall="@item.HALL_NO" d-type="0" hall="@item.HALL_NO">
+                                @item.HALL_NAM
+                            </a>
+                        </td>
+                        <td>
+                            <a href="#" d-open="CurrqueuehistDealState" d-type="0" hall="@item.HALL_NO">
+                                @item.TOT_TICKET_CNT
+                            </a>
+                        </td>
+                        <td>
+                            <a href="#" d-open="CurrqueuehistDealState" d-type="1" hall="@item.HALL_NO">
+                                @item.CUR_WAITING_CNT
+                            </a>
+                        </td>
+                        <td>
+                            @item.WAITING_ONTIME_RT.ToString("P")
+                        </td>
+                        <td style="@PageHelper.SaturationColor((gzsw.controller.MON.Models.SaturationEnum)item.COUNTER_SATUR_RT_WARN)">
+                            @(((gzsw.controller.MON.Models.SaturationEnum)item.COUNTER_SATUR_RT_WARN).GetDescription())
+                        </td>
+                        <td style="@PageHelper.SaturationColor((gzsw.controller.MON.Models.SaturationEnum)item.HALL_SATUR_RT_WARN)">
+                            @(((gzsw.controller.MON.Models.SaturationEnum)item.HALL_SATUR_RT_WARN).GetDescription())
+                        </td>
+                        <td>
+                            <a href="#" d-open="TimeoutWait" hall="@item.HALL_NO">
+                                @item.WAITING_OVERTIME_RT.ToString("P")
+                            </a>
+                        </td>
+                        <td style="@PageHelper.AlarmColor((gzsw.controller.MON.Models.AlarmLevelEnum)item.WAITING_OVERTIME_RT_WARN)">
+                            @(((gzsw.controller.MON.Models.AlarmLevelEnum)item.WAITING_OVERTIME_RT_WARN).GetDescription())
+                        </td>
+                        <td>@(((int)item.CUR_AVG_WAIT_DUR * 60).ToTimeString())</td>
+                        @*<td></td>*@
+                    </tr>
+                }
+            </table>
+            @if (Model.Count < 1)
+            {
+                <div class="l-panel-notDATA">
+                    暂无数据
+                </div>
+            }
+        </div>
+    </div>
+    <div title="大厅服务情况">
+        <table class="tablelist" style="margin:3px;">
+            <thead>
+                <tr>
+                    <td style="width: 20%">服务厅</td>
+                    <td style="width: 9%">已受理人次</td>
+                    <td style="width: 10%">已受理业务笔数</td>
+                    <td style="width: 9%">超时办结率</td>
+                    <td style="width: 9%">按时办结率</td>
+                    <td style="width: 10%">超时业务笔数预警</td>
+                    <td style="width: 7%">弃号数</td>
+                    <td style="width: 7%">弃号率</td>
+                    <td style="width: 9%">弃号预警</td>
+                    <td style="width: 10%">一票多业务号数</td>
+                </tr>
+            </thead>
+            @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <a href="#" d-open="hallInfo" hall="@item.HALL_NO" d-type="0" hall="@item.HALL_NO">
+                    @item.HALL_NAM
+                </a>
+            </td>
+            <td>
+                <a href="#" d-open="CurrqueuehistDealState" d-type="2" hall="@item.HALL_NO">
+                    @item.SERVICE_TICKET_CNT
+                </a>
+            </td>
+            <td>
+                <a href="#" d-open='OnService' hall="@item.HALL_NO">
+                    @item.SERVICE_CNT
+                </a>
+            </td>
+            <td>
+                <a href="#" d-open='TimeoutDealFinsh' hall="@item.HALL_NO">
+                    @item.OVERTIME_SERVICE_RT.ToString("P")
+                </a>
+            </td>
+            <td>
+                <a href="#" d-open='OnTimeRate' hall="@item.HALL_NO">
+                    @item.ONTIME_SERVICE_RT.ToString("P")
+                </a>
+            </td>
+            <td style="@PageHelper.AlarmColor((gzsw.controller.MON.Models.AlarmLevelEnum)item.OVERTIME_SERVICE_CNT_WARN)">
+                @(((gzsw.controller.MON.Models.AlarmLevelEnum)item.OVERTIME_SERVICE_CNT_WARN).GetDescription())
+            </td>
+            <td>
+                <a href="#" d-open="CurrqueuehistDealState" d-type="3" hall="@item.HALL_NO">
+                    @item.ABANDON_CNT
+                </a>
+            </td>
+            <td>
+                @item.ABANDON_RT.ToString("P")
+            </td>
+            <td style="@PageHelper.AlarmColor((gzsw.controller.MON.Models.AlarmLevelEnum)item.ABANDON_WARN)">
+                @(((gzsw.controller.MON.Models.AlarmLevelEnum)item.ABANDON_WARN).GetDescription())
+            </td>
+            <td>
+                <a href="#" d-open='oneMoreService' hall="@item.HALL_NO">
+                    @item.ONE_TICKET_MUTSERVICE_CNT
+                </a>
+            </td>
+        </tr>
+    }
+        </table>
+        @if (Model.Count < 1)
+        {
+            <div class="l-panel-notDATA">
+                暂无数据
+            </div>
+        }
+    </div>
+    <div title="大厅评价情况">
+        <table class="tablelist" style="margin: 3px;">
+            <thead>
+                <tr>
+                    <td style="width: 20%">服务厅</td>
+                    <td style="width: 13%">评价总数</td>
+                    <td style="width: 13%">未评价总数</td>
+                    <td style="width: 10%">差评数</td>
+                    <td style="width: 12%">未评价率</td>
+                    <td style="width: 10%">满意率</td>
+                    <td style="width: 10%">差评率</td>
+                    <td style="width: 12%">差评预警</td>
+                    @*<td style="width: 10%"></td>
+                    <td style="width: 10%"></td>*@
+                </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a href="#" d-open="hallInfo" hall="@item.HALL_NO" d-type="0">
+                            @item.HALL_NAM
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" d-open="CurrqueuehistEvaluation" hall="@item.HALL_NO" d-type="1">
+                            @item.EVAL_CNT
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" d-open="CurrqueuehistEvaluation" hall="@item.HALL_NO" d-type="2">
+                            @item.NON_EVAL_CNT
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" d-open="CurrqueuehistEvaluation" hall="@item.HALL_NO" d-type="3">
+                            @item.UNSATISFY_CNT
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" d-open="CurrqueuehistEvaluation" hall="@item.HALL_NO" d-type="4">
+                            @item.NON_EVAL_RT.ToString("P")
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" d-open="CurrqueuehistEvaluation" hall="@item.HALL_NO" d-type="5">
+                            @item.SATISFY_RT.ToString("P")
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" d-open="CurrqueuehistEvaluation" hall="@item.HALL_NO" d-type="6">
+                            @item.UNSATISFY_RT.ToString("P")
+                        </a>
+                    </td>
+                    <td style="@PageHelper.AlarmColor((gzsw.controller.MON.Models.AlarmLevelEnum)item.UNSATISFY_WARN)">
+                        @(((gzsw.controller.MON.Models.AlarmLevelEnum)item.UNSATISFY_WARN).GetDescription())
+                    </td>
+                    @*<td></td>
+                    <td></td>*@
+                </tr>
+            }
+        </table>
+        @if (Model.Count < 1)
+        {
+            <div class="l-panel-notDATA">
+                暂无数据
+            </div>
+        }
+    </div>
+</div>

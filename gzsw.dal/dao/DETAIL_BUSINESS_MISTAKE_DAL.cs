@@ -14,13 +14,13 @@ namespace gzsw.dal.dao
         /// </summary>
         /// <param name="beginTime">开始时间</param>
         /// <param name="endTime">结束时间</param>
+        /// <param name="orgId">服务厅编码</param>
         /// <param name="qualityId">质量类型编码</param>
-        /// <param name="qualityName">质量类型名称</param>
-        /// <param name="serialName">明细业务名</param>
+        /// <param name="serialName">明细业务名称</param>
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public static object GetPager(DateTime? beginTime, DateTime? endTime, string qualityId, string qualityName, string serialName, int pageIndex, int pageSize)
+        public static object GetPager(DateTime? beginTime, DateTime? endTime, string orgId, string qualityId, string serialName, int pageIndex, int pageSize)
         {
 
             var db = gzswDB.GetInstance();
@@ -28,8 +28,11 @@ namespace gzsw.dal.dao
             var sql = Sql.Builder.Append(@"SELECT  CHK_STAFF_QUALITY_ALL.* ,
         SYS_USER.USER_NAM AS OUSERNAME ,
         SYS_DETAILSERIAL.SERIALNAME ,
-        CHK_QUALITY_CON.QUALITY_NAM
+        CHK_QUALITY_CON.QUALITY_NAM,
+		SYS_STAFF.STAFF_NAM,
+		(dbo.GetFwtNameForStaffno(CHK_STAFF_QUALITY_ALL.STAFF_ID)) AS HALL_NAM
 FROM    ( SELECT    SEQ ,
+					STAFF_ID,
                     QUALITY_CD ,
                     SERIALID ,
                     AMOUNT ,
@@ -40,6 +43,7 @@ FROM    ( SELECT    SEQ ,
           WHERE     1 = 1
           UNION ALL
           SELECT    IMPORT_SEQ AS SEQ ,
+					STAFF_ID,
                     QUALITY_CD ,
                     SERIALID ,
                     AMOUNT ,
@@ -50,12 +54,17 @@ FROM    ( SELECT    SEQ ,
           WHERE     1 = 1
                     AND IMPORT_STATE = 1
         ) AS CHK_STAFF_QUALITY_ALL
-        JOIN SYS_USER ON SYS_USER.[USER_ID] = CHK_STAFF_QUALITY_ALL.OUSER_ID
+		JOIN SYS_STAFF ON SYS_STAFF.STAFF_ID = CHK_STAFF_QUALITY_ALL.STAFF_ID
         JOIN SYS_DETAILSERIAL ON SYS_DETAILSERIAL.SERIALID = CHK_STAFF_QUALITY_ALL.SERIALID
         JOIN CHK_QUALITY_CON ON CHK_QUALITY_CON.QUALITY_CD = CHK_STAFF_QUALITY_ALL.QUALITY_CD
+        LEFT JOIN SYS_USER ON SYS_USER.[USER_ID] = CHK_STAFF_QUALITY_ALL.OUSER_ID
 WHERE   1 = 1");
 
 
+            if (!string.IsNullOrEmpty(orgId))
+            {
+                sql.Append(@" AND ( dbo.GetFwtIdforStaffno(CHK_STAFF_QUALITY_ALL.STAFF_ID) = @0) ", orgId);
+            }
             if (beginTime.HasValue)
             {
                 sql.Append(@" AND DATEDIFF(DAY, CHK_STAFF_QUALITY_ALL.OCCUR_DT, @0) <= 0 ", beginTime);
@@ -67,10 +76,6 @@ WHERE   1 = 1");
             if (!string.IsNullOrEmpty(qualityId))
             {
                 sql.Append(@" AND CHK_QUALITY_CON.QUALITY_CD = @0 ", qualityId);
-            }
-            if (!string.IsNullOrEmpty(qualityName))
-            {
-                sql.Append(@" AND CHK_QUALITY_CON.QUALITY_NAM LIKE @0 ", string.Format("%{0}%", qualityName));
             }
             if (!string.IsNullOrEmpty(serialName))
             {
@@ -95,7 +100,9 @@ WHERE   1 = 1");
         SYS_USER.USER_NAM AS OUSERNAME ,
         SYS_DETAILSERIAL.SERIALNAME ,
         CHK_QUALITY_CON.QUALITY_NAM ,
-        SYS_STAFF.STAFF_NAM
+        SYS_STAFF.STAFF_NAM,
+		dbo.GetFwtIdforStaffno(CHK_STAFF_QUALITY_ALL.STAFF_ID) AS HALL_NO,
+		(dbo.GetFwtNameForStaffno(CHK_STAFF_QUALITY_ALL.STAFF_ID)) AS HALL_NAM
 FROM    ( SELECT    SEQ ,
                     STAFF_ID ,
                     SERIALID ,
@@ -124,10 +131,10 @@ FROM    ( SELECT    SEQ ,
           FROM      CHK_STAFF_QUALITY_IMPORT
           WHERE     1 = 1
         ) AS CHK_STAFF_QUALITY_ALL
-        JOIN SYS_USER ON SYS_USER.[USER_ID] = CHK_STAFF_QUALITY_ALL.OUSER_ID
         JOIN SYS_DETAILSERIAL ON SYS_DETAILSERIAL.SERIALID = CHK_STAFF_QUALITY_ALL.SERIALID
         JOIN CHK_QUALITY_CON ON CHK_QUALITY_CON.QUALITY_CD = CHK_STAFF_QUALITY_ALL.QUALITY_CD
-        JOIN SYS_STAFF ON SYS_STAFF.STAFF_ID = CHK_STAFF_QUALITY_ALL.STAFF_ID
+        JOIN SYS_STAFF ON SYS_STAFF.STAFF_ID = CHK_STAFF_QUALITY_ALL.STAFF_ID		
+        LEFT JOIN SYS_USER ON SYS_USER.[USER_ID] = CHK_STAFF_QUALITY_ALL.OUSER_ID
 WHERE   1 = 1");
 
             sql.Append(@" AND CHK_STAFF_QUALITY_ALL.DATASOURCE = @0 AND CHK_STAFF_QUALITY_ALL.SEQ = @1 ", dataSource, seq);

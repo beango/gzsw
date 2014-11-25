@@ -26,5 +26,19 @@ namespace gzsw.dal.dao
 
             return db.Query<Virtual_Mon_Dto>(sql).ToList();
         }
+
+        /// <summary>
+        /// 获取监控预警服务厅信息
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <returns></returns>
+        public static List<Virtual_Mon_Hall_Dto> VirtualMonHall(string orgId)
+        {
+            var db = gzswDB.GetInstance();
+
+            var sql = Sql.Builder.Append(@" EXECUTE PRO_GET_VIRTUAL_MON_HALL_LIST @@ORG_ID=@0 ", orgId);
+
+            return db.Query<Virtual_Mon_Hall_Dto>(sql).ToList();
+        }
     }
 }

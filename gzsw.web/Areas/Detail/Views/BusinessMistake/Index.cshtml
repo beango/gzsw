@@ -11,6 +11,10 @@
 <div class="l-panel-search">
     <table class="tabSearchList">
         <tr>
+            <td style="width:90px;">服务厅:</td>
+            <td style="width:150px;">
+                @Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)
+            </td>
             <td style="width:90px;">开始时间:</td>
             <td style="width: 120px;">
                 <input type="text" name="txtBeginTime" id="txtBeginTime" value="@ViewBag.BeginTime" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
@@ -19,7 +23,7 @@
             <td style="width: 120px;">
                 <input type="text" name="txtEndTime" id="txtEndTime" value="@ViewBag.EndTime" o onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
             </td>
-            <td style="width:90px;">
+            <td>
                 <div id="btnSearch"></div>
             </td>
             <td>
@@ -30,16 +34,12 @@
             </td>
         </tr>
         <tr style="@(ViewBag.IsSenior != 0 ? "" : "display: none;") " d-tyle='senior'>
-            <td>质量类型编码:</td>
+            <td>质量类型:</td>
             <td>
-                <input type="text" id="txtQualityId" value="@ViewBag.QualityId" />
+                @Html.DropDownList("ddlQualityId", ViewBag.Qualitys as SelectList)
             </td>
-            <td>质量类型名称:</td>
-            <td>
-                <input type="text" id="txtQualityName" value="@ViewBag.QualityName" />
-            </td>
-            <td>明细业务名:</td>
-            <td>
+            <td>明细业务:</td>
+            <td colspan="3">
                 <input type="text" id="txtSerialName" value="@ViewBag.SerialName" />
             </td>
         </tr>
@@ -54,6 +54,12 @@
             <tr>
                 <th style="width:40px;"> <input id="chkAll" name="chkAll" type="checkbox" /></th>
                 <th>序号</th>
+                <th>
+                    服务厅
+                </th>
+                <th>
+                    员工姓名
+                </th>
                 <th>
                     质量类型编码
                 </th>
@@ -85,6 +91,12 @@
                 </td>
                 <td>
                     @(i++)
+                </td>
+                <td>
+                    @item.HALL_NAM
+                </td>
+                <td>
+                    @item.STAFF_NAM
                 </td>
                 <td>
                     @item.QUALITY_CD
@@ -131,10 +143,10 @@
                         var begin = $("#txtBeginTime").val();
                         var end = $("#txtEndTime").val();
 
-                        var url = "?beginTime=" + encodeURI(begin)
+                        var url = "?orgId=" + encodeURI($("#ddlORGID").val())
+                            + "&beginTime=" + encodeURI(begin)
                             + "&endTime=" + encodeURI(end)
-                            + "&qualityId=" + encodeURI($("#txtQualityId").val())
-                            + "&qualityName=" + encodeURI($("#txtQualityName").val())
+                            + "&qualityId=" + encodeURI($("#ddlQualityId").val())
                             + "&serialName=" + encodeURI($("#txtSerialName").val())
                             + "&isSenior=" + encodeURI($("#hidIsSenior").val());
                         location.href = url.urlstamp();

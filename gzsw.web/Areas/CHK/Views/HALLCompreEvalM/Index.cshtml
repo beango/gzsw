@@ -8,24 +8,26 @@
 @using gzsw.util
 @using gzsw.util.Extensions
 @using gzsw.web
-@model PetaPoco.Page<dynamic>
+@model List<dynamic>
 
 
 <!-- 查询菜单 -->
 <div class="l-panel-search">
     <table class="tabSearchList">
         <tr>
-            <td style="width:80px;">服务厅：</td>
-            <td style="width:150px;">
-                @Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)
+            <td style="width:250px;height:30px;" >  
+                 
+            @Html.Partial("~/Areas/AUTH/Views/Shared/Partial/ORG1.cshtml", new Dictionary<string, string> { { "ORGID", Request["orgid"] }, { "ORGNAM", Request["orgnam"] } })
             </td>
-            <td style="width: 60px;"> 年份：</td>
-            <td style="width:120px;">
+           <td style="width: 60px;"> 年份：</td>
+            <td style="width:80px;">
                 @Html.DropDownList("ddlYears", ViewBag.Years as List<SelectListItem>)
             </td>
-            <td style="width: 60px;"> 月份：</td>
-            <td style="width:120px;">
-                @Html.DropDownList("ddlMonth", ViewBag.Months as List<SelectListItem>)
+            <td style="width: 50px;"> 月份：</td>
+            <td style="width:220px;">
+               @Html.DropDownList("ddlMonth", ViewBag.Months as List<SelectListItem>)
+            -
+            @Html.DropDownList("ddlEndMonth", ViewBag.EndMonths as List<SelectListItem>)
             </td>
             <td>
                 <div id="btnSearch"></div>
@@ -40,24 +42,22 @@
     <table class="tablelist">
         <thead>
             <tr>
-                <th style="width:30px;">
-                    <input id="chkAll" name="chkAll" type="checkbox" />
-                </th>
+                 
                 <th style="width:38px;">序号 </th>
                 <th>服务厅编码</th>
                 <th>服务厅名称</th>
-                <th>人员出勤率分数</th>
-                <th>排队滞留率分数</th>
-                <th>按时办结率分数</th>
-                <th>办税差错率分数</th>
-                <th>评价满意率分数</th>
-                <th>综合投诉率分数</th>
-                <th>环境建设分数</th>
-                <th>制度建设分数</th>
-                <th>规范建设分数</th>
-                <th>行风建设分数</th>
-                <th>第三方调查分数</th>
-                <th>其他项目分数</th>
+                <th>人员出勤率</th>
+                <th>排队滞留率</th>
+                <th>按时办结率</th>
+                <th>办税差错率</th>
+                <th>评价满意率</th>
+                <th>综合投诉率</th>
+                <th>环境建设</th>
+                <th>制度建设</th>
+                <th>规范建设</th>
+                <th>行风建设</th>
+                <th>第三方调查</th>
+                <th>其他项目</th>
                 <th>星级</th>
             </tr>
         </thead>
@@ -65,12 +65,10 @@
         @{
             var i = 1;
         }
-        @foreach (var item in Model.Items)
+        @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    <input name="cbId" value="@item.STAT_MO" d-staffid="@item.HALL_NO" type='checkbox' />
-                </td>
+               
                 <td>
                     @(i++)
                 </td>
@@ -79,80 +77,125 @@
                 </td>
                 <td>@item.HALL_NAM</td>
                 <td>
-                    <a href="javascript:void(0);" d-type="ATTEND_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO" >@item.ATTEND_SCORE</a> 
+                    <a href="javascript:void(0);" d-type="ATTEND_SCORE"   d-staffid="@item.HALL_NO" >@item.ATTEND_SCORE.ToString("p")</a> 
                 </td>
                 <td>
-                    <a href="javascript:void(0);" d-type="QUEUE_DETAIN_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.QUEUE_DETAIN_SCORE</a> 
+                    <a href="javascript:void(0);" d-type="QUEUE_DETAIN_SCORE"   d-staffid="@item.HALL_NO">@item.QUEUE_DETAIN_SCORE.ToString("p")</a> 
                 </td> 
                 <td>
-                    <a href="javascript:void(0);" d-type="HANDLE_ONTIME_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.HANDLE_ONTIME_SCORE</a> 
+                    <a href="javascript:void(0);" d-type="HANDLE_ONTIME_SCORE"   d-staffid="@item.HALL_NO">@item.HANDLE_ONTIME_SCORE.ToString("p")</a> 
                 </td>
                 <td>
-                    <a href="javascript:void(0);" d-type="QUALITY_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.QUALITY_SCORE</a> 
+                    <a href="javascript:void(0);" d-type="QUALITY_SCORE"   d-staffid="@item.HALL_NO">@item.QUALITY_SCORE.ToString("p")</a> 
                 </td>
                 <td>
-                    <a href="javascript:void(0);" d-type="EVAL_SATISFY_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.EVAL_SATISFY_SCORE</a> 
+                    <a href="javascript:void(0);" d-type="EVAL_SATISFY_SCORE"   d-staffid="@item.HALL_NO">@item.EVAL_SATISFY_SCORE.ToString("p")</a> 
                 </td>
                 <td>
-                    <a href="javascript:void(0);" d-type="COMPLAIN_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.COMPLAIN_SCORE</a> 
+                    <a href="javascript:void(0);" d-type="COMPLAIN_SCORE"   d-staffid="@item.HALL_NO">@item.COMPLAIN_SCORE.ToString("p")</a> 
                 </td> 
                  <td>
-                    <a href="javascript:void(0);" d-type="ENVIRON_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.ENVIRON_SCORE</a> 
+                    <a href="javascript:void(0);" d-type="ENVIRON_SCORE"   d-staffid="@item.HALL_NO">@item.ENVIRON_SCORE</a> 
                 </td>  
                  <td>
-                    <a href="javascript:void(0);" d-type="SYSTEM_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.SYSTEM_SCORE</a> 
+                    <a href="javascript:void(0);" d-type="SYSTEM_SCORE"   d-staffid="@item.HALL_NO">@item.SYSTEM_SCORE</a> 
                 </td>  
                  <td>
-                    <a href="javascript:void(0);" d-type="NORM_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.NORM_SCORE</a> 
+                    <a href="javascript:void(0);" d-type="NORM_SCORE"   d-staffid="@item.HALL_NO">@item.NORM_SCORE</a> 
                 </td>  
                  <td>
-                    <a href="javascript:void(0);" d-type="PROFESS_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.PROFESS_SCORE</a> 
+                    <a href="javascript:void(0);" d-type="PROFESS_SCORE"   d-staffid="@item.HALL_NO">@item.PROFESS_SCORE</a> 
                 </td>  
                  <td>
-                    <a href="javascript:void(0);" d-type="THIRD_SURVEY_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.THIRD_SURVEY_SCORE</a> 
+                    <a href="javascript:void(0);" d-type="THIRD_SURVEY_SCORE"   d-staffid="@item.HALL_NO">@item.THIRD_SURVEY_SCORE</a> 
                 </td>   
                  <td>
-                    <a href="javascript:void(0);" d-type="OTHER_SCORE" d-mo="@item.STAT_MO" d-staffid="@item.HALL_NO">@item.OTHER_SCORE</a> 
+                    <a href="javascript:void(0);" d-type="OTHER_SCORE"   d-staffid="@item.HALL_NO">@item.OTHER_SCORE</a> 
                 </td>   
                 <td> @(((StarLevelEunm)item.STAR_LEVEL).GetDescription())</td>
             </tr>
         }
     </table>
-    @if (Model.Items.Count < 1)
+    @if (Model.Count < 1)
     {
         <div class="l-panel-notDATA">
             暂无数据
         </div>
     }
-    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
+    else
+    {
+          
+         Html.RenderPartial("~/Areas/STAT/Views/Shared/PagerView.cshtml");
+            
+    }
 </div>
 
 @section Head
 {
     @Html.JavaScript("lib/datepicker/WdatePicker.js")
+  @Html.JavaScript("lib/jqueryform/jquery.form.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.min.js")
+    @Html.JavaScript("lib/jquery.validate/jquery.validate.unobtrusive.min.js")
+    @Html.StyleSheet("lib/ztree/zTreeStyle.css")
+    @Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
+    @Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
+    @*@Html.JavaScript("lib/utility/ext.js")*@
+    @Html.JavaScript("lib/counter/orgTree.js")
+   <!-- 图表排序脚本 -->
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.js")
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.widgets.min.js")
+    <!-- 图表排序 -->
+    @Html.JavaScript("lib/tablesorter/js/jquery.tablesorter.pager.js") 
+
 }
 
 <script type="text/javascript">
     $(function () {
+
+        var orginfo = '@ViewBag.orgId';
+        var orgname = '@ViewBag.orgName';
+        
+        var stat = '@ViewBag.Stat';
+        var endstat='@ViewBag.Endstat';
+         
+        $("#txtORGNAM").val(orgname);
+        $("#hidORGID").val(orginfo);
         // 查询
         $("#btnSearch").ligerButton(
                 {
                     text: " 查 询 ",
                     click: function () {
                         var url = "?years=" + encodeURI($("#ddlYears").val())
-                            + "&month=" + encodeURI($("#ddlMonth").val())
-                            + "&orgId=" + encodeURI($("#ddlORGID").val());
+                                   + "&month=" + encodeURI($("#ddlMonth").val())
+                            + "&endMonth=" + encodeURI($("#ddlEndMonth").val())
+                            + "&orgId=" + encodeURI($("#hidORGID").val()); 
                         location.href = url.urlstamp();
                     },
                     icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
                 });
+        
+
+        $("#datatable").tablesorter({
+            headers: {
+                0: { sorter: false },
+                1: { sorter: false },
+                2: { sorter: false },
+                3: { sorter: false },
+                4: { sorter: false },
+                5: { sorter: false },
+                6: { sorter: false },
+                7: { sorter: false },
+                8: { sorter: false }
+            }
+        }).tablesorterPager({ container: $("#pager") });
+
 
         //人员出勤率分数
+        
         $("a[d-type='ATTEND_SCORE']").click(function () {
-            var $this = $(this);
-            var mo = $this.attr("d-mo");
+            var $this = $(this); 
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailATTEND")?mo=' + mo + "&hallno=" + encodeURI(staffId);
+            var url = '@Url.Action("DetailATTEND")?mo=' + stat + "&hallno=" + encodeURI(staffId) + "&endStat=" + endstat;
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -165,10 +208,9 @@
 
         //排队滞留率分数
         $("a[d-type='QUEUE_DETAIN_SCORE']").click(function () {
-            var $this = $(this);
-            var mo = $this.attr("d-mo");
+            var $this = $(this); 
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailQUEUEDETAIN")?mo=' + mo + "&hallno=" + encodeURI(staffId);
+            var url = '@Url.Action("DetailQUEUEDETAIN")?mo=' + stat + "&hallno=" + encodeURI(staffId) + "&endStat=" + endstat;
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -182,10 +224,9 @@
 
         //按时办结率分数
         $("a[d-type='HANDLE_ONTIME_SCORE']").click(function () {
-            var $this = $(this);
-            var mo = $this.attr("d-mo");
+            var $this = $(this); 
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailHANDLEONTIME")?mo=' + mo + "&hallno=" + encodeURI(staffId);
+            var url = '@Url.Action("DetailHANDLEONTIME")?mo=' + stat + "&hallno=" + encodeURI(staffId) + "&endStat=" + endstat;
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -198,10 +239,9 @@
 
         //差错
         $("a[d-type='QUALITY_SCORE']").click(function () {
-            var $this = $(this);
-            var mo = $this.attr("d-mo");
+            var $this = $(this); 
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailQUALITY")?mo=' + mo + "&hallno=" + encodeURI(staffId);
+            var url = '@Url.Action("DetailQUALITY")?mo=' + stat + "&hallno=" + encodeURI(staffId) + "&endStat=" + endstat;
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -214,10 +254,9 @@
 
         //不满意
         $("a[d-type='EVAL_SATISFY_SCORE']").click(function () {
-            var $this = $(this);
-            var mo = $this.attr("d-mo");
+            var $this = $(this); 
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailEVALSATISFY")?mo=' + mo + "&hallno=" + encodeURI(staffId);
+            var url = '@Url.Action("DetailEVALSATISFY")?mo=' + stat + "&hallno=" + encodeURI(staffId) + "&endStat=" + endstat;
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -229,10 +268,9 @@
 
         //不满意
         $("a[d-type='COMPLAIN_SCORE']").click(function () {
-            var $this = $(this);
-            var mo = $this.attr("d-mo");
+            var $this = $(this); 
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailCOMPLAIN")?mo=' + mo + "&hallno=" + encodeURI(staffId);
+            var url = '@Url.Action("DetailCOMPLAIN")?mo=' + stat + "&hallno=" + encodeURI(staffId) + "&endStat=" + endstat;
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -245,10 +283,9 @@
 
         //环境建设分数
         $("a[d-type='ENVIRON_SCORE']").click(function () {
-            var $this = $(this);
-            var mo = $this.attr("d-mo");
+            var $this = $(this); 
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailOTHER")?mo=' + mo + "&hallno=" + encodeURI(staffId) + "&type=1";
+            var url = '@Url.Action("DetailOTHER")?mo=' + stat + "&hallno=" + encodeURI(staffId) + "&endStat=" + endstat+ "&type=1";
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -259,10 +296,9 @@
         });
         //制度建设分数
         $("a[d-type='SYSTEM_SCORE']").click(function () {
-            var $this = $(this);
-            var mo = $this.attr("d-mo");
+            var $this = $(this); 
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailOTHER")?mo=' + mo + "&hallno=" + encodeURI(staffId) + "&type=2";
+            var url = '@Url.Action("DetailOTHER")?mo=' + stat + "&hallno=" + encodeURI(staffId) + "&endStat=" + endstat + "&type=2";
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -273,10 +309,9 @@
         });
         //规范建设分数
         $("a[d-type='NORM_SCORE']").click(function () {
-            var $this = $(this);
-            var mo = $this.attr("d-mo");
+            var $this = $(this); 
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailOTHER")?mo=' + mo + "&hallno=" + encodeURI(staffId) + "&type=3";
+            var url = '@Url.Action("DetailOTHER")?mo=' + stat + "&hallno=" + encodeURI(staffId) + "&endStat=" + endstat + "&type=3";
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -287,10 +322,9 @@
         });
         //行风建设分数
         $("a[d-type='PROFESS_SCORE']").click(function () {
-            var $this = $(this);
-            var mo = $this.attr("d-mo");
+            var $this = $(this); 
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailOTHER")?mo=' + mo + "&hallno=" + encodeURI(staffId) + "&type=4";
+            var url = '@Url.Action("DetailOTHER")?mo=' + stat + "&hallno=" + encodeURI(staffId) + "&endStat=" + endstat + "&type=4";
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -301,10 +335,9 @@
         });
         //第三方调查分数
         $("a[d-type='THIRD_SURVEY_SCORE']").click(function () {
-            var $this = $(this);
-            var mo = $this.attr("d-mo");
+            var $this = $(this); 
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailOTHER")?mo=' + mo + "&hallno=" + encodeURI(staffId) + "&type=5";
+            var url = '@Url.Action("DetailOTHER")?mo=' + stat + "&hallno=" + encodeURI(staffId) + "&endStat=" + endstat + "&type=5";
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -314,11 +347,10 @@
             });
         });
         //其他项目分数
-        $("a[d-type='OTHER_SCORE']").click(function () {
-            var $this = $(this);
-            var mo = $this.attr("d-mo");
+        $("a[d-type='OTHER_SCORE']").click(function () { 
+            var $this = $(this); 
             var staffId = $this.attr("d-staffid"); 
-            var url = '@Url.Action("DetailOTHER")?mo=' + mo + "&hallno=" + encodeURI(staffId) + "&type=6";
+            var url = '@Url.Action("DetailOTHER")?mo=' + stat + "&hallno=" + encodeURI(staffId) + "&endStat=" + endstat + "&type=6";
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -327,6 +359,7 @@
                 isReload: false
             });
         });
-         
+
+        
     });
 </script>

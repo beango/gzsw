@@ -3,25 +3,75 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
   
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    <table class="formTable" cellpadding="0" cellspacing="0">
+ 
+    <table class="formTable" cellpadding="0" cellspacing="0" >
         <tr>
             <td style="width:100px;" class="tdLeft">Excel文件：</td>
             <td style="width:150px;">
-                <input type="file" name="upLoadFile" id="upLoadFile" />
-
+                                 <div id="fileQueue"></div>
+                    <input type="file" name="uploadify" id="uploadify" />
             </td>
             <td> </td>
         </tr>
        
-        <tr>
+       @* <tr>
             <td class="tdLeft"> &nbsp;  </td>
             <td>
-                <input type="submit" class="l-button" value="提交" />
+                <input type="button" class="l-button" id="bt_upload" value="提交" /> 
             </td>
             <td> </td>
-        </tr>
+        </tr>*@
     </table>
+
+
+@section Head
+{
+    <link href="@Url.Content("~/Content/lib/hall/hall.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/lib/jquery.uploadify/uploadify.css")" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="@Url.Content("~/Content/lib/jquery.uploadify/jquery.uploadify.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/lib/json/json.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/lib/hall/hallEdit.js")"></script>
+
+    <script type="text/javascript">
+
+        $(function() {
+            var sitePath = '@Url.Content("~/")';
+            var auth = "@(Request.Cookies[FormsAuthentication.FormsCookieName] == null ? string.Empty : Request.Cookies[FormsAuthentication.FormsCookieName].Value)";
+            var sessionid = "@(Session.SessionID)";
+
+            $('#uploadify').uploadify({
+                uploader: sitePath + "Content/lib/jquery.uploadify/uploadify.swf",
+                script: '/CHK/PerformanceEval/ImportStaffPHOTE',
+                cancelImg: sitePath + "Content/lib/jquery.uploadify/cancel.png",
+                //folder: 'test',
+                //queueID: 'fileQueue',进度条
+
+                auto: true,
+                scriptData: { 'ASPSESSID': sessionid, 'AUTHID': auth },
+                buttonImg: sitePath + "Content/lib/jquery.uploadify/upload_new.png",
+                multi: false,
+                width: 82,
+                height: 25,
+                onComplete: function(event, queueID, fileObj, response, data) {
+                    var obj = eval('(' + response + ')');
+                    if (obj.success == 0) {
+                        //virtualConfig.setHallImg(obj.fileName);
+
+                        layer.alert('上传成功！', 1, function(index) {
+                            parent.layer.closeAll();
+                            layer.close(index);
+                        });
+                    } else {
+                        layer.alert('上传失败！', 1, function (index) {
+                          
+                            layer.close(index);
+                        });
+
+                    }
+                }
+            });
+
+        });
+
+    </script>
 }

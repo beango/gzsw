@@ -1,99 +1,106 @@
 ﻿@using gzsw.util
 @model gzsw.model.WARN_ALARM_INFO_DETAIL
-
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
- <table class="formTable" cellpadding="0" cellspacing="0">
-        <tr>
-            <td style="width:100px;" class="tdLeft">
+<table class="formTable" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="width: 15%;" class="tdLeft">
             员工编码：
-            </td>
-            <td>
-                @Model.STAFF_ID
-            </td>
-        </tr>
+        </td>
+        <td style="width:35%;">
+            @Model.STAFF_ID
+        </td>
 
-        <tr>
-            <td class="tdLeft">
-               员工名称：
-            </td><td>
-            @ViewBag.StaffName 
-            </td>
-        </tr>
-     
-        <tr>
-            <td class="tdLeft">
-               窗口号 ：
-            </td><td>
-            @Model.COUNTER_ID 
-            </td>
-        </tr>
-        <tr>
-            <td class="tdLeft">
-                报警类型：
-            </td><td>
-                
-                  @(EnumHelper.ConvertToE<gzsw.model.ext.WARN_ALARM_INFO_DETAIL.ALARM_TYP_ENUM>(Model.ALARM_TYP.ToString()))
-            </td>
-        </tr>
+        <td class="tdLeft" style="width:15%;">
+            员工名称：
+        </td>
+        <td style="width:35%;">
+            @ViewBag.StaffName
+        </td>
+    </tr>
 
-        <tr>
-            <td class="tdLeft">
-                生成时间：
-            </td><td>
-                @Model.CREATE_DTIME.ToString("yyyy-MM-dd HH:mm:ss")
+    <tr>
+        <td class="tdLeft">
+            窗口号 ：
+        </td>
+        <td>
+            @Model.COUNTER_ID
+        </td>
 
-                 </td>
-        </tr>
+        <td class="tdLeft">
+            报警类型：
+        </td>
+        <td>
 
-     <tr>
-         <td class="tdLeft">
-             服务厅编码：
-         </td><td>
-                  @Model.HALL_NO</td>
-     </tr>
-     
-      <tr>
-            <td class="tdLeft">
-                服务厅名称：
-            </td><td>
-                   @ViewBag.HallName 
+            @(EnumHelper.ConvertToE<gzsw.model.ext.WARN_ALARM_INFO_DETAIL.ALARM_TYP_ENUM>(Model.ALARM_TYP.ToString()))
+        </td>
+    </tr>
 
-                 </td>
-        </tr>
-     <tr>
-         <td class="tdLeft">
-             处理状态：
-         </td><td> 
-             @(EnumHelper.ConvertToE<gzsw.model.ext.WARN_ALARM_INFO_DETAIL.DETAIL_STATUS_ENUM>(Model.STATE.ToString()))
+    <tr>
+        <td class="tdLeft">
+            生成时间：
+        </td>
+        <td>
+            @Model.CREATE_DTIME.ToString("yyyy-MM-dd HH:mm:ss")
 
-              </td>
-     </tr> 
-     <tr>
-         <td class="tdLeft">
-             处理人：
-         </td><td>
-                  @Model.HANDLE_USER</td>
-     </tr>
-     <tr>
-         <td class="tdLeft">
-             处理时间：
-         </td><td>
-                  @Model.HANDLE_TIME</td>
-     </tr> 
-     <tr>
-         <td class="tdLeft">
-             报警原因：
-         </td><td>
-                  @Model.ALARM_REASON</td>
-     </tr>
-     <tr>
-         <td class="tdLeft">
-             报警处理：
-         </td><td>
-                  @Model.ALARM_METHOD</td>
-     </tr>
- 
-    </table>
+        </td>
+
+        <td class="tdLeft">
+            服务厅编码：
+        </td>
+        <td>
+            @Model.HALL_NO
+        </td>
+    </tr>
+
+    <tr>
+        <td class="tdLeft">
+            服务厅名称：
+        </td>
+        <td>
+            @ViewBag.HallName
+
+        </td>
+
+        <td class="tdLeft">
+            处理状态：
+        </td>
+        <td>
+            @(EnumHelper.ConvertToE<gzsw.model.ext.WARN_ALARM_INFO_DETAIL.DETAIL_STATUS_ENUM>(Model.STATE.ToString()))
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">
+            处理人：
+        </td>
+        <td>
+            @Model.HANDLE_USER
+        </td>
+
+        <td class="tdLeft">
+            处理时间：
+        </td>
+        <td>
+            @Model.HANDLE_TIME
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">
+            报警原因：
+        </td>
+        <td colspan="3">
+            @Model.ALARM_REASON
+        </td>
+    </tr>
+    <tr>
+        <td class="tdLeft">
+            报警处理：
+        </td>
+        <td colspan="3">
+            @Model.ALARM_METHOD
+        </td>
+    </tr>
+
+</table>

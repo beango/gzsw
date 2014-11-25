@@ -149,7 +149,7 @@ left join SYS_HALL h on  ch.HALL_NO=H.HALL_NO
 
             var sql = PetaPoco.Sql.Builder.Append(@"
 select  ch.STAT_MO,
-h.HALL_NO,   COR_EVAL_DISSATISFY_CNT,COR_VALID_SVR_CNT
+h.HALL_NO,   COR_EVAL_DISSATISFY_CNT,COR_VALID_EVAL_CNT
  from  
 CHK_HALL_STAT_M ch
 left join SYS_HALL h on  ch.HALL_NO=H.HALL_NO
@@ -165,7 +165,7 @@ WHERE CH.STAT_MO=" + stat + "   and ch.HALL_NO='" + orgId + "'");
             var db = gzswDB.GetInstance();
             var sql = Sql.Builder.Append(@"
 select  ch.STAT_MO,
-h.HALL_NO,    COR_EVAL_DISSATISFY_CNT,COR_VALID_SVR_CNT
+h.HALL_NO,    COR_EVAL_DISSATISFY_CNT,COR_VALID_EVAL_CNT
  from  
 CHK_HALL_STAT_M ch
 left join SYS_HALL h on  ch.HALL_NO=H.HALL_NO 
@@ -210,7 +210,7 @@ left join SYS_HALL h on  ch.HALL_NO=H.HALL_NO
             return db.FirstOrDefault<CHK_HALL_STAT_M>(sql);
         }
 
-        public static object GetListSub(int STAT_MO, string orgId, int pageIndex, int pageSize)
+        public static object GetListSub(int STAT_MO,   string[] orgId, int pageIndex, int pageSize)
         {
             var db = gzswDB.GetInstance();
             var sql = Sql.Builder.Append(@"
@@ -233,9 +233,10 @@ left join SYS_HALL h on  ch.HALL_NO=H.HALL_NO
                     HALL_NAM
                     from CHK_HALL_STAT_M ch,SYS_HALL h
                     where ch.HALL_NO=h.HALL_NO  ");
-
-            sql.Append(@" AND  CH.HALL_NO=@0 ", orgId);
-
+            if (orgId.Length > 0)
+            {
+                sql.Append(@" AND  CH.HALL_NO in(@hall) ", new { hall = orgId });
+            }
             var beginMo = STAT_MO;
             var endMo = STAT_MO;
             if (STAT_MO.ToString().Length == 4)
@@ -251,9 +252,33 @@ left join SYS_HALL h on  ch.HALL_NO=H.HALL_NO
 
 
             //return db.Page<dynamic>(pageIndex, pageSize, sql);
-            var data = db.Page<dynamic>(pageIndex, pageSize, sql);
-            data.ItemsPerPage = pageSize;
+            var data = db.Fetch<dynamic>(pageIndex, pageSize, sql);
+            ;
             return data;
+        }
+
+        public static object GetListSubByP(int sTime, int eTime, string orgid)
+        {
+            //PRO_GET_CHK_HALL
+            var db = gzswDB.GetInstance();
+            try
+            {
+ //               @ORG_ID              nvarchar(80),--组织机构ID
+ //   @HALL_NO              varchar(128) ,--服务厅编码,当服务厅编码不为空时,只返回这个服务厅的评定及星级信息
+ //@START_MO INT,   --开始月份     格式是 201409代表 2014年9月
+ //@END_MO  INT    --结束月份   格式是 201409代表 2014年9月
+
+                var sql = Sql.Builder.Append(@" EXECUTE PRO_GET_CHK_HALL  @@ORG_ID=@0, @@HALL_NO=@1 , @@START_MO=@2 ,@@END_MO=@3", orgid, "", sTime, eTime);
+
+                return db.Fetch<dynamic>(sql);
+
+            }
+            // ReSharper disable once EmptyGeneralCatchClause
+            catch (Exception)
+            {
+                return null;
+            }
+            
         }
 
         public static void UpdateObject(CHK_HALL_STAT_M item)

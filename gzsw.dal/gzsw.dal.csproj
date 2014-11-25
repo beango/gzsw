@@ -92,6 +92,7 @@
     <Compile Include="dao\STAT_STAFF_QUEUE_BUSI_D_DAL.cs" />
     <Compile Include="dao\STAT_STAFF_SVRSTAT_M_DAL.cs" />
     <Compile Include="dao\STAT_WARN_ANALYSIS_DAL.cs" />
+    <Compile Include="dao\Stored_DAL.cs" />
     <Compile Include="dao\SYS_COUNTER_DAL.cs" />
     <Compile Include="dao\SYS_CURRQUEUEHIST_DAL.cs" />
     <Compile Include="dao\SYS_CURRYWHIST_DAL.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="dao\WARN_INFO_DETAIL_DAL.cs" />
     <Compile Include="dao\WARN_PARAM_DAL.cs" />
     <Compile Include="dao\WARN_RELEASE_DAL.cs" />
+    <Compile Include="dao\WARN_SENDINFO_DETAIL_DAL.cs" />
     <Compile Include="IDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlHelper.cs" />

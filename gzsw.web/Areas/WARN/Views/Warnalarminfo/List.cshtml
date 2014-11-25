@@ -30,21 +30,21 @@
     <table class="tablelist" cellpadding="0" cellspacing="0">
         <thead>
             <tr> 
-                <th>序号</th>
-                <th>
+                <th style="width:30px;">序号</th>
+                <th style="width:100px;">
                     手机号码
                 </th>
-                <th>
+                <th style="width:80px;">
                     用户名称
                 </th>
                 <th>
                     预警发送实际信息 
                 </th>
-                <th>
+                <th style="width:140px;">
                     发送时间
                 </th>
-                <th>
-                    服务厅编码
+                <th style="width:120px;">
+                    服务厅名称
                 </th> 
             </tr>
         </thead>
@@ -67,7 +67,7 @@
                     @item.ALARM_INFO 
                 </td>
                 <td> 
-                       @item.SEND_TIME.ToString("yyyy-MM-dd") 
+                       @item.SEND_TIME.ToString("yyyy-MM-dd HH:mm:ss") 
                 </td> 
                 <td>
                     @item.HALL_NAM
@@ -82,6 +82,7 @@
             暂无数据
         </div>
     } 
+    @Html.Pager("pageIndex", Model.ItemsPerPage, Model.TotalItems)
 </div>
 
 @section Head{

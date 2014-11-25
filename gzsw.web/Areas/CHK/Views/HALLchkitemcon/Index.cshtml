@@ -10,7 +10,7 @@
 <div class="l-panel-search">
     <table class="tabSearchList">
         <tr>
-            <td style="width: 100px;">投诉类型名称：</td>
+            <td style="width: 100px;">投诉类型：</td>
             <td style="width: 170px;">
                 
                 @Html.DropDownList("CHKITEM_TYP", ViewBag.CHKITEM_TYP as SelectList, new { @style = "width: 150px;" })
@@ -85,7 +85,7 @@
             {
                 text: " 查 询 ",
                 click: function () {
-                    var url = "?Name=" + $("#txtTITLE").val();
+                    var url = "?Name=" + $("#CHKITEM_TYP").val();
                     location.href = url.urlstamp();
                 },
                 icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"

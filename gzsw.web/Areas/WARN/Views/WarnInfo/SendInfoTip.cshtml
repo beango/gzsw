@@ -20,7 +20,7 @@
                 <td style="text-align: left; text-indent: 0;">
                     @item.msg
                 </td>
-                <td style="width: 40px; text-indent: 0;"><a href='#' onclick="warnRead(this,'@item.typ',@item.id)">@(item.typ=="WARNSENDINFODETAIL"?"已读":"处置")</a></td>
+                <td style="width: 40px; text-indent: 0;"><a href='#' onclick="warnRead(this,'@item.typ',@item.id)">处置</a></td>
             </tr>
         }
 
@@ -30,7 +30,17 @@
     <script type="text/javascript">
         function warnRead(row, typ, id) {
             if (typ == 'WARNSENDINFODETAIL') {
-                handler_warnsendinfo(row, id); return;
+                //handler_warnsendinfo(row, id); return;
+                url = '/WARN/WarnInfo/Edit?id=' + id;
+                tab.addTabItem({
+                    tabid: 'tipMenuWarnAlarmInfo',
+                    text: "预警处置",
+                    url: url.urlstamp(),
+                    callback: function () {
+                        resize();
+                    }
+                });
+                return;
             }
             //报警处置  /Warn/Warnalarminfo/Edit?id=x
             //投诉处置  /WARN/WarnComplainDetail/Edit?id=x
@@ -50,7 +60,7 @@
                 url = '/Warn/WarnComplainDetail/Edit?id=' + id;
                 tab.addTabItem({
                     tabid: 'tipWarnComplainDetail',
-                    text: "报警处置",
+                    text: "投诉处置",
                     url: url.urlstamp(),
                     callback: function () {
                         resize();

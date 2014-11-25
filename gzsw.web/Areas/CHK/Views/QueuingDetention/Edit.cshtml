@@ -26,7 +26,8 @@
             <td class="tdLeft">月份:</td>
             <td>
                 @ViewBag.STAT_MO.ToString().Insert(4, "年")月
-             @Html.HiddenFor(m => m.STAT_MO)
+                @*@Html.HiddenFor(m => m.STAT_MO)*@
+                <input type="hidden" id="STAT_MO" name="STAT_MO" value="@ViewBag.STAT_MO"/>
             </td>
         </tr>
         <tr>

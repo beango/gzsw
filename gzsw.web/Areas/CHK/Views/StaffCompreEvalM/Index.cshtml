@@ -142,6 +142,10 @@
 
 <script type="text/javascript">
     $(function () {
+
+        var stat = @ViewBag.Stat;
+        var endstat=@ViewBag.Endstat;
+
         // 查询
         $("#btnSearch").ligerButton(
                 {
@@ -159,9 +163,9 @@
         //业务分
         $("a[d-type='SVR_SCORE']").click(function () {
             var $this = $(this);
-            var mo = $this.attr("d-mo");
+
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailSVR")?mo=' + mo + "&staffId=" + encodeURI(staffId);
+            var url = '@Url.Action("DetailSVR")?stat=' + stat+"&endStat="+endstat + "&staffId=" + encodeURI(staffId);
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -174,9 +178,8 @@
         //质量分
         $("a[d-type='QUALITY_SCORE']").click(function () {
             var $this = $(this);
-            var mo = $this.attr("d-mo");
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailQUALITY")?mo=' + mo + "&staffId=" + encodeURI(staffId);
+            var url = '@Url.Action("DetailQUALITY")?stat=' + stat+"&endStat="+endstat + "&staffId=" + encodeURI(staffId);
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -189,9 +192,8 @@
         //评价分
         $("a[d-type='EVAL_SCORE']").click(function () {
             var $this = $(this);
-            var mo = $this.attr("d-mo");
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailEVAL")?mo=' + mo + "&staffId=" + encodeURI(staffId);
+            var url = '@Url.Action("DetailEVAL")?stat=' + stat+"&endStat="+endstat + "&staffId=" + encodeURI(staffId);
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -204,9 +206,8 @@
         //考勤分
         $("a[d-type='ATTEND_SCORE']").click(function () {
             var $this = $(this);
-            var mo = $this.attr("d-mo");
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailATTEND")?mo=' + mo + "&staffId=" + encodeURI(staffId);
+            var url = '@Url.Action("DetailATTEND")?stat=' + stat+"&endStat="+endstat + "&staffId=" + encodeURI(staffId);
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -219,9 +220,8 @@
         //日常行为分
         $("a[d-type='USU_ACT_SCORE']").click(function () {
             var $this = $(this);
-            var mo = $this.attr("d-mo");
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailUSUACTD")?mo=' + mo + "&staffId=" + encodeURI(staffId);
+            var url = '@Url.Action("DetailUSUACTD")?stat=' + stat+"&endStat="+endstat + "&staffId=" + encodeURI(staffId);
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',
@@ -234,9 +234,8 @@
         //综合评定分
         $("a[d-type='COMPRE_SAN_SCORE']").click(function () {
             var $this = $(this);
-            var mo = $this.attr("d-mo");
             var staffId = $this.attr("d-staffid");
-            var url = '@Url.Action("DetailCOMPRESAN")?mo=' + mo + "&staffId=" + encodeURI(staffId);
+            var url = '@Url.Action("DetailCOMPRESAN")?stat=' + stat+"&endStat="+endstat + "&staffId=" + encodeURI(staffId);
             gzsw.dialog.open({
                 url: url.urlstamp(),
                 title: '查看',

@@ -9,9 +9,12 @@
 <div class="l-panel-search">
     <table class="tabSearchList">
         <tr>
-            <td style="width:100px;">组织机构：</td>
-            <td style="width:170px;">@Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)</td>
+            @*<td style="width:100px;">组织机构：</td>
+            <td style="width:170px;">@Html.DropDownList("ddlORGID", ViewBag.Orgs as SelectList)</td>*@
+            <td style="width:250px;height:30px;">
+                @Html.Partial("~/Areas/AUTH/Views/Shared/Partial/ORG1.cshtml", new Dictionary<string, string> { { "ORGID", Request["orgId"] }, { "ORGNAM", Request["orgNam"] } })
 
+            </td>
             <td>
                 <div id="btnSearch"></div>
             </td>
@@ -93,6 +96,9 @@
 </div>
 
 @section Head{
+@Html.StyleSheet("lib/ztree/zTreeStyle.css")
+@Html.JavaScript("lib/ztree/jquery.ztree.core-3.5.min.js")
+@Html.JavaScript("lib/ztree/jquery.ztree.excheck-3.5.min.js")
     <script lang="javascript">
 
         $(function() {
@@ -101,7 +107,8 @@
             {
                 text: " 查 询 ",
                 click: function() {
-                    var url = "?orgId=" + encodeURI($("#ddlORGID").val());
+                    var url = "?orgId=" + encodeURI($("#hidORGID").val())
+                                 + "&orgNam=" + encodeURI($("#txtORGNAM").val());
                     location.href = url.urlstamp();
                 },
                 icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"

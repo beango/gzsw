@@ -28,7 +28,7 @@ namespace gzsw.controller.MyAuth
             if (UserState.UserID == "admin")
                 return true;
             var funcs = func.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            return funcs.Any(r => UserState.UserFuncs.Any(obj => obj.FUNCTION_COD + "_" + ((ActionEnum)obj.FUNCTION_TYP).ToString() == r));
+            return funcs.Any(r => UserState.UserFuncs.Any(obj =>obj.FUNCTION_TYP!=null&& obj.FUNCTION_COD + "_" + ((ActionEnum)obj.FUNCTION_TYP).ToString() == r));
         }
 
         [ScriptIgnore]    //在序列化的时候忽略该属性

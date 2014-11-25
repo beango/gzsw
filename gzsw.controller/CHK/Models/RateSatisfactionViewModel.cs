@@ -17,6 +17,6 @@ namespace gzsw.controller.CHK.Models
         public int COR_EVAL_DISSATISFY_CNT { get; set; }
         [Required(ErrorMessage = "不能为空！")]
         [RegularExpression(@"^\d+$", ErrorMessage = @"应为正整数")]
-        public int COR_VALID_SVR_CNT { get; set; } 
+        public int COR_VALID_EVAL_CNT { get; set; } 
     }
 }

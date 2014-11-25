@@ -19,7 +19,6 @@ namespace gzsw.winservice.Job
         {
             try
             {
-                Console.WriteLine("PRO_REPORT_STAT_D_JOB");
                 LogHelper.WriteLog("PRO_REPORT_STAT_D_JOB");
                 var db = gzswDB.GetInstance();
 
@@ -35,7 +34,7 @@ namespace gzsw.winservice.Job
                     while (true)
                     {
                         bool continu = ExecuteProd(log);
-                        db.Insert(log);//写日志
+                        db.Insert("SVR_TIM_EVENT_LOG", "SEQ", log);//写日志
                         if (!continu)
                             break;
                     }

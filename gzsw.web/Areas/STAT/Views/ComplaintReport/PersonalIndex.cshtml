@@ -53,6 +53,7 @@
         <div class="tablePanel" style="padding-top: 5px;">
             <table id="datatable" class="tablelist tablesorter tablesorter-default" cellpadding="0" cellspacing="0">
                 <thead>
+                    <tr><th colspan="@(3 + complaints.Count)" style="background-image: none;"><span style="font-size: 14px; font-weight: bold; ">@Html.Raw(ViewBag.MainTitle)</span></th></tr>
                     <tr>
                         @if (Model != null && Model.Columns.Count > 0)
                         {
@@ -60,7 +61,7 @@
                                 序号
                             </th>
                             <th style="text-align: center; background-image: none;">
-                                服务厅
+                                员工姓名
                             </th>
                             <th style="text-align: center; background-image: none;">
                                 处理情况
@@ -68,7 +69,7 @@
                             foreach (var complaint in complaints)
                             {
                                 <th style="text-align: center; background-image: none;">
-                                    <a href="@Url.Action("ComplaintReportPersonalDetail", new {beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, complaintType = complaint.Key, complaintTypeName = complaint.Value, complaintLevel = 0, personalId = ""})" target="_blank">
+                                    <a href="@Url.Action("ComplaintReportPersonalDetail", new {beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, complaintType = complaint.Key, complaintTypeName = complaint.Value, complaintLevel = 0, complaintLevelName = "", personalId = "", personalName = ""})" target="_blank">
                                         @complaint.Value
                                     </a>
                                 </th>
@@ -82,35 +83,35 @@
                     foreach (DataRow row in Model.Rows)
                     {
                         var personalId1 = row["员工编码"].ToStringForSimple();
+                        var personalName1 = row["员工姓名"].ToStringForSimple();
                         var complaintLevel1 = 0;
                         int.TryParse(row["处理情况类型"].ToStringForSimple(), out complaintLevel1);
+                        var complaintLevelName1 = row["处理情况"].ToStringForSimple();
                         <tr>
-                            @if (row["处理情况"].ToString() == "未处理")
+                            @if (complaintLevelName1 == "未处理")
                             {
                                 <td rowspan="4">
                                     @(++index)
                                 </td>
                                 <td rowspan="4">
-                                    @row["员工姓名"]
+                                    @personalName1
                                 </td>
                             }
-                            <td>
-                                @row["处理情况"]
-                            </td>
+                            @if (complaintLevel1 == 0)
+                            {
+                                <td style="font-weight: bold; font-size: 12px;">@complaintLevelName1</td>
+                            }
+                            else
+                            {
+                                <td>@complaintLevelName1</td>
+                            }
                             @foreach (var complaint in complaints)
                             {
-                                if (row["处理情况"].ToString() == "合计" && complaint.Value == "处理情况")
-                                {
-                                    <td style="font-weight: bold; font-size: 12px;">@row[complaint.Value]</td>
-                                }
-                                else
-                                {
-                                    <td>
-                                        <a href="@Url.Action("ComplaintReportPersonalDetail", new {beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, complaintType = complaint.Key, complaintTypeName = complaint.Value, complaintLevel = complaintLevel1, personalId = personalId1})" target="_blank">
-                                            @row[complaint.Value]
-                                        </a>
-                                    </td>
-                                }
+                                <td>
+                                    <a href="@Url.Action("ComplaintReportPersonalDetail", new {beginTime = ViewBag.BeginTime, endTime = ViewBag.EndTime, complaintType = complaint.Key, complaintTypeName = complaint.Value, complaintLevel = complaintLevel1, complaintLevelName = complaintLevelName1, personalId = personalId1, personalName = personalName1})" target="_blank">
+                                        @row[complaint.Value]
+                                    </a>
+                                </td>
                             }
                         </tr>
                     }

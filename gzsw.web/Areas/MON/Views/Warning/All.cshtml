@@ -1,0 +1,152 @@
+﻿@{
+    ViewBag.Title = "实时监控预警";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@using gzsw.web
+@model dynamic
+<div style="margin:10px;">
+    <div class="tools">
+        &nbsp;
+        自动刷新时间:
+        <select id="updateTimeValue">
+            <option value="10000">10秒</option>
+            <option value="30000" selected="selected">30秒</option>
+            <option value="60000">1分钟</option>
+            <option value="120000">2分钟</option>
+            <option value="300000">5分钟</option>
+            <option value="600000">10分钟</option>
+        </select>
+        <input type="button" id="shouUpdate" class="l-button" value="手动刷新" />
+        <span>
+            <span class="title_span" style="margin-left: 130px;">@(ViewBag.Name)实时监控预警</span>
+        </span>
+    </div>
+    <div class="divPanel">
+        <div id="warningContentMain">
+            @Html.Action("AllWarningContent", new { hallNo = Model })
+        </div>
+    </div>
+    
+    <input type="hidden" id="hidHallNo" value="@Model" />
+</div>
+
+@section Head
+{
+    @Html.StyleSheet("lib/hall/hall.css")
+    <style type="text/css">
+        table.tablelist th {
+            font-weight: bold;
+            background-image: none;background-color: #F3F3F3;height: 28px;
+        }
+        table.tablelist thead td { 
+            background-image: none;background-color: #F3F3F3;height: 28px;
+        }
+        table td {
+            height: 30px;
+        }
+    </style>
+}
+
+<script type="text/javascript">
+    $(function () {
+
+        $("#warningContent").ligerTab();
+
+        var timeout;
+        var orgId = $("#hidHallNo").val();
+
+        var initTime = function() {
+            var time = $("#updateTimeValue").val();
+            timeout=window.setInterval(function () {
+                updateData();
+            },Number(time));
+        };
+
+        initTime();
+
+        var updateData = function () {
+            timeout && window.clearInterval(timeout);
+            var url = "@Url.Action("AllWarningContent")?orgId=" + orgId;
+            $("#warningContentMain").load(url.urlstamp(), function() {
+                $("#warningContent").ligerTab();
+                initTime();
+            });
+        };
+
+
+        $("#shouUpdate").click(function() {
+            updateData();
+            return false;
+        });
+
+        //打开信息
+        $("#warningContentMain").delegate("a", "click", function() {
+            var that = $(this);
+            that.attr("target", "_blank");
+            var url = "#";
+            var opentype = that.attr("d-open");
+
+            var hallNo = that.attr("hall");
+
+            if (opentype) {
+                if (opentype == 'hallInfo') {
+                    window.location.href = "@Url.Action("Index")?hallNo=" + hallNo;
+                    return false;
+                }
+                if (opentype == 'hall') {
+                    //窗口
+                    var type = that.attr("d-type");
+                    url = "@Url.Action("TotalWindow")?hallNo=" + hallNo + "&type=" + type;
+
+                } else if (opentype == 'OnService') {
+                    //已受理业务笔数
+                    url = "@Url.Action("OnAcceptService")?hallNo=" + hallNo;
+                } else if (opentype == 'oneMoreService') {
+                    //一票多业务号数
+                    url = "@Url.Action("OneMoreService")?hallNo=" + hallNo;
+                } else if (opentype == 'OnTimeRate') {
+                    //按时办结率
+                    url = "@Url.Action("Index", "TimeoutDealFinsh", new {area = "WARN"})?orgId=" + hallNo;
+                } else if (opentype == 'Warnalarminfo') {
+                    //窗口突发情况与报警
+                    url = "@Url.Action("DetailListByHall", "Warnalarminfo", new {area = "WARN"})?hallno=" + hallNo;
+                } else if (opentype == 'Warncomplaindatail') {
+                    //投诉次数
+                    url = "@Url.Action("DetailListByHall", "WarnComplainDetail", new {area = "WARN"})?hallno=" + hallNo;
+                } else if (opentype == 'TimeoutDealFinsh') {
+                    //超时办结率
+                    url = "@Url.Action("Index", "TimeoutDealFinsh", new {area = "WARN"})?orgId=" + hallNo;
+                } else if (opentype == 'TimeoutWait') {
+                    //等候超时率
+                    url = "@Url.Action("Index", "TimeoutWait", new {area = "WARN"})?orgId=" + hallNo;
+                } else if (opentype == 'CurrywhistTwiceDeal') {
+                    //当月二次办理人次
+                    url = "@Url.Action("Index", "CurrywhistTwiceDeal", new {area = "WARN"})?orgId=" + hallNo;
+                } else if (opentype == 'CurrywhistSameCityDeal') {
+                    //同城通办人次
+                    url = "@Url.Action("Index", "CurrywhistSameCityDeal", new {area = "WARN"})?orgId=" + hallNo;
+                } else if (opentype == 'CurrqueuehistDealState') {
+                    //总出票数
+                    var type = that.attr("d-type");
+                    url = "@Url.Action("Index", "CurrqueuehistDealState", new {area = "WARN"})?orgId=" + hallNo + "&dealStateType=" + type;
+                } else if (opentype == 'CurrqueuehistEvaluation') {
+                    //评价总数 未评价总数 差评数 未评价率 满意率 差评率 差评预警
+                    var type = that.attr("d-type");
+                    url = "@Url.Action("Index", "CurrqueuehistEvaluation", new {area = "WARN"})?orgId=" + hallNo + "&evaluationType=" + type;
+            }
+
+                gzsw.dialog.openFull({
+                    title:'查看',
+                    url: url,
+                    width: 1024,
+                    height: 610,
+                    isReload:false
+                });
+
+                return false;
+            }
+            //that.attr("href", url);
+        });
+
+    });
+</script>

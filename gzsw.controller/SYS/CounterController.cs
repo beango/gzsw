@@ -118,8 +118,12 @@ namespace gzsw.controller.SYS
 
         [HttpGet]
         [UserAuth("SYS_COUNTER_ADD")]
-        public ActionResult Create()
+        public ActionResult Create(string orgid)
         {
+            if (null != orgid)
+            {
+                ViewBag.ORG = DaoOrganize.GetEntity("ORG_ID", orgid);
+            }
             GetCreateData();
             return View();
         }
@@ -195,7 +199,7 @@ namespace gzsw.controller.SYS
             }
             else
             {
-                if (!isEdit && dao.GetEntity("COUNTER_ID", info.COUNTER_ID) != null)
+                if (!isEdit && dao.GetEntity("COUNTER_ID", info.COUNTER_ID,"HALL_NO", info.HALL_NO) != null)
                     ModelState.AddModelError("COUNTER_ID", "窗口ID已经存在！");
             }
             if (info.PRI1_BUSI_SER == null)
@@ -280,11 +284,11 @@ namespace gzsw.controller.SYS
         }
         [HttpGet]
         [UserAuth("SYS_COUNTER_EDT")]
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string hallno,int id)
         {
             try
             {
-                var info = dao.GetEntity("COUNTER_ID", id);
+                var info = dao.GetEntity("HALL_NO",hallno,"COUNTER_ID", id);
                 GetCreateData(info.STATE.ToString());
                 InitData(new List<SYS_COUNTER> { info });
                 return View(info);
@@ -305,13 +309,14 @@ namespace gzsw.controller.SYS
 
                 if (!ModelState.IsValid)
                 {
+                    Alter("修改出错！", util.Enum.AlterTypeEnum.Error, false, false);
                     ModelState.AddModelError("", "修改出错！");
                     return JsonResult(false, "修改出错！", "SYS");
                 }
 
                 info.MODIFY_DTIME = DateTime.Now;
                 info.MODIFY_ID = UserState.UserID;
-                var rst = dao.UpdateObject(info, "COUNTER_ID");
+                var rst = new SYS_COUNTER_DAL().Update(info);
                 if (rst > 0)
                 {
                     return JsonResult(true, "修改成功！", "AUTH", "", false);

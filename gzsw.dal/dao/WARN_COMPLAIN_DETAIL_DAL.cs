@@ -76,7 +76,7 @@ left join SYS_NSRINFO n on  w.NSR_SBM=n.NSR_SBM
 left join SYS_HALL h on  w.HALL_NO = h.HALL_NO");
 
 
-             sql.Append("where w.COMPLAIN_TIME >=@0 ", DateTime.Now.ToShortDateString());
+             sql.Append("where w.COMPLAIN_TIME >=@0 ", DateTime.Now.AddDays(-1).ToShortDateString());
 
 
              sql.Append("where  w.HALL_NO=@0", hallno);

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gzsw.model", "gzsw.model\gzsw.model.csproj", "{F4663DC8-A7E8-40BA-8D44-5ECC3BE73371}"
 EndProject
@@ -42,6 +42,38 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gzsw.winservicetest", "gzsw.winservicetest\gzsw.winservicetest.csproj", "{DEA62433-AC4E-4AFC-BDA2-612FA67A71F9}"
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 9
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://gzsw.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = gzsw.model\\gzsw.model.csproj
+		SccProjectName1 = gzsw.model
+		SccLocalPath1 = gzsw.model
+		SccProjectUniqueName2 = gzsw.controller\\gzsw.controller.csproj
+		SccProjectName2 = gzsw.controller
+		SccLocalPath2 = gzsw.controller
+		SccProjectUniqueName3 = gzsw.dal\\gzsw.dal.csproj
+		SccProjectName3 = gzsw.dal
+		SccLocalPath3 = gzsw.dal
+		SccProjectUniqueName4 = gzsw.test\\gzsw.test.csproj
+		SccProjectName4 = gzsw.test
+		SccLocalPath4 = gzsw.test
+		SccProjectUniqueName5 = gzsw.web\\gzsw.web.csproj
+		SccProjectName5 = gzsw.web
+		SccLocalPath5 = gzsw.web
+		SccProjectUniqueName6 = gzsw.util\\gzsw.util.csproj
+		SccProjectName6 = gzsw.util
+		SccLocalPath6 = gzsw.util
+		SccProjectUniqueName7 = gzsw.winservice\\gzsw.winservice.csproj
+		SccProjectTopLevelParentUniqueName7 = gzsw.sln
+		SccProjectName7 = gzsw.winservice
+		SccLocalPath7 = gzsw.winservice
+		SccProjectUniqueName8 = gzsw.winservicetest\\gzsw.winservicetest.csproj
+		SccProjectTopLevelParentUniqueName8 = gzsw.sln
+		SccProjectName8 = gzsw.winservicetest
+		SccLocalPath8 = gzsw.winservicetest
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

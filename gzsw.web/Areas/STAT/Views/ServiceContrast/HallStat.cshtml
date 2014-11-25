@@ -41,15 +41,16 @@
                     var handleTotal = itmes.Sum(m => m.HANDLE_DUR);
                     var overTimeTotal = itmes.Sum(m => m.OVERTIME_HANDLE_CNT);
                     var localTotal = itmes.Sum(m => m.LOCAL_CNT);
+                    var hallNo = itmes.FirstOrDefault().HALL_NO;
 
                     foreach (var item in itmes)
                     {
                         <tr>
                             @if (index == i)
                             {
-                                <td rowspan="@(itmes.Count+1)">@i</td>
-                                <td rowspan="@(itmes.Count+1)">
-                                    <a target="_blank" href="@Url.Action("StaffStat", new { orgId = item.HALL_NO })">@item.HALL_NAM</a>
+                                <td rowspan="@(itmes.Count + 1)">@i</td>
+                                <td rowspan="@(itmes.Count + 1)">
+                                    <a target="_blank" href="@Url.Action("StaffStat", new {orgId = item.HALL_NO, beginTime = ViewBag.beginTime, endTime = ViewBag.endTime, ddlMonth = ViewBag.ddlMonth})">@item.HALL_NAM</a>
                                 </td>
                             }
 
@@ -90,21 +91,36 @@
                     <tr class="total">
                         <td>合计</td>
                         <td>
-                            @busiTotal
+                            <a href="javascript:void(0);" target="_blank" d-open='show' d-type="BUSI_CNT" d-hallno="@hallNo" d-title="业务办理分析-业务笔数">
+                                @busiTotal
+                            </a>
                         </td>
                         <td>
-                            @convertTotal
+                            <a href="javascript:void(0);" target="_blank" d-open='show' d-type="CONVERT_BUSI_CNT" d-hallno="@hallNo" d-title="业务办理分析-业务折合量">
+                                @convertTotal
+                            </a>
                         </td>
                         <td>
-                            @( (busiTotal == 0 ? 0 : handleTotal / busiTotal).ToTimeString())
+                            <a href="javascript:void(0);" target="_blank" d-open='show' d-type="AverageHANDLE" d-hallno="@hallNo" d-title="业务办理分析-平均办理时间">
+                                @( (busiTotal == 0 ? 0 : handleTotal/busiTotal).ToTimeString())
+                            </a>
                         </td>
-                        <td>@overTimeTotal</td>
                         <td>
-                            @( (busiTotal == 0 ? 0 : (decimal)overTimeTotal / (decimal)busiTotal).ToString("P"))
+                            <a href="javascript:void(0);" target="_blank" d-open='show' d-type="OVERTIME_HANDLE_CNT" d-hallno="@hallNo" d-title="业务办理分析-超时办理笔数">
+                                @overTimeTotal
+                            </a>
                         </td>
-                        <td>@localTotal</td>
                         <td>
-                            @( (busiTotal == 0 ? 0 : (decimal)localTotal / (decimal)busiTotal).ToString("P"))
+                            @( (busiTotal == 0 ? 0 : (decimal) overTimeTotal/(decimal) busiTotal).ToString("P"))
+                        </td>
+                        <td>
+                            <a href="javascript:void(0);" target="_blank" d-open='show' d-type="LOCAL_CNT" d-hallno="@hallNo" d-title="业务办理分析-同城业务笔数">
+                                @localTotal
+                            </a>
+                        </td>
+                        <td>
+                            @( (busiTotal == 0 ? 0 : (decimal) localTotal/(decimal) busiTotal).ToString("P"))
+                            
                         </td>
                     </tr>
                 }

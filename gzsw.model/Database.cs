@@ -74,8 +74,7 @@ namespace gzsw.model
 				return new gzswDB();
         }
 
-        [ThreadStatic]
-        static gzswDB _instance;
+		[ThreadStatic] static gzswDB _instance;
 		
 		public override void OnBeginTransaction()
 		{
@@ -273,6 +272,13 @@ namespace gzsw.model
 		[Column]
 
 		public string NSR_LRR { get; set; }
+
+
+
+
+		[Column]
+
+		public byte? NSR_GRADE { get; set; }
 
 
 
@@ -511,113 +517,6 @@ namespace gzsw.model
 
 		[Required(ErrorMessage ="不能为空！")]
 		public string HALL_NO { get; set; }
-
-
-
-	}
-
-    
-	[TableName("SYS_QUEUEING")]
-
-
-	[PrimaryKey("QUEUE_ID")]
-
-
-
-	[ExplicitColumns]
-	[Serializable]
-    public partial class SYS_QUEUEING  
-    {
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public long QUEUE_ID { get; set; }
-
-
-
-
-		[Column]
-		[Display(Name=@"服务大厅编码+取号时间序列（精确到秒）+排队号码 方式生成，中间用-隔开，比如： 0200001-20140927115501-A001")]
-
-		[Required(ErrorMessage ="不能为空！")]
-		public string QUEUE_TRANSCODEID { get; set; }
-
-
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public string QUEUE_SYSNO { get; set; }
-
-
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public string QUEUE_NUMBER { get; set; }
-
-
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public DateTime QUEUE_TICKETTIME { get; set; }
-
-
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public string QUEUE_QSERIALID { get; set; }
-
-
-
-
-		[Column]
-		[Required(ErrorMessage ="不能为空！")]
-		public int QUEUE_TOCOUNTER { get; set; }
-
-
-
-
-		[Column]
-		[Display(Name=@"默认为0，产生超时等待时，置该标记为1，后台数据库作业中完成该操作")]
-
-		[Required(ErrorMessage ="不能为空！")]
-		public bool QUEUE_ISWCSSMS { get; set; }
-
-
-
-
-		[Column]
-
-		public string QUEUE_NSRSBM { get; set; }
-
-
-
-
-		[Column]
-
-		public string QUEUE_NSRMC { get; set; }
-
-
-
-
-		[Column]
-		[Display(Name=@"默认为0，是否远程取号（通过第三方取号，比如微信）")]
-
-		[Required(ErrorMessage ="不能为空！")]
-		public bool QUEUE_ISYCTICKET { get; set; }
-
-
-
-
-		[Column]
-		[Display(Name=@"是否预约取号（当排队号码来自于预约签到时，该标志为1）")]
-
-		[Required(ErrorMessage ="不能为空！")]
-		public bool QUEUE_ISYYTICKET { get; set; }
 
 
 
@@ -6258,6 +6157,123 @@ namespace gzsw.model
 		[Column]
 		[Required(ErrorMessage ="不能为空！")]
 		public int LOCAL_CNT { get; set; }
+
+
+
+	}
+
+    
+	[TableName("SYS_QUEUEING")]
+
+
+	[PrimaryKey("QUEUE_ID")]
+
+
+
+	[ExplicitColumns]
+	[Serializable]
+    public partial class SYS_QUEUEING  
+    {
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public long QUEUE_ID { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"服务大厅编码+取号时间序列（精确到秒）+排队号码 方式生成，中间用-隔开，比如： 0200001-20140927115501-A001")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public string QUEUE_TRANSCODEID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string QUEUE_SYSNO { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string QUEUE_NUMBER { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public DateTime QUEUE_TICKETTIME { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public string QUEUE_QSERIALID { get; set; }
+
+
+
+
+		[Column]
+		[Required(ErrorMessage ="不能为空！")]
+		public int QUEUE_TOCOUNTER { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"默认为0，产生超时等待时，置该标记为1，后台数据库作业中完成该操作")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public bool QUEUE_ISWCSSMS { get; set; }
+
+
+
+
+		[Column]
+
+		public string QUEUE_NSRSBM { get; set; }
+
+
+
+
+		[Column]
+
+		public string QUEUE_NSRMC { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"默认为0，是否远程取号（通过第三方取号，比如微信）")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public bool QUEUE_ISYCTICKET { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"是否预约取号（当排队号码来自于预约签到时，该标志为1）")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public bool QUEUE_ISYYTICKET { get; set; }
+
+
+
+
+		[Column]
+		[Display(Name=@"0：普通
+   1：优先")]
+
+		[Required(ErrorMessage ="不能为空！")]
+		public byte QUEUE_GRADE { get; set; }
 
 
 

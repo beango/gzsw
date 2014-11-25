@@ -26,7 +26,8 @@
         <tr>
             <td class="tdLeft">星级评定时间类型：</td>
             <td>
-                @Html.DropDownListFor(m => m.TIME_DUR_TYP, EnumHelper.GetCategorySelectList(typeof(EvaluationTimeTypeEunm), false))
+                @Html.HiddenFor(m => m.TIME_DUR_TYP)
+                @(EnumHelper.GetEnumDescription((EvaluationTimeTypeEunm)Model.TIME_DUR_TYP))
             </td>
             <td>
                 @Html.ValidationMessageFor(m => m.TIME_DUR_TYP)

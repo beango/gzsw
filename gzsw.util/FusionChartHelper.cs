@@ -21,7 +21,7 @@ namespace gzsw.util
         Line = 0, ScrollLine2D = 1, Column2D = 2, Column3D = 3, Bar2D = 4,
         Pie2D = 5, Pie3D = 6, Area2D = 7, Doughnut2D = 8, Doughnut3D = 9,
         MSStackedColumn2D = 10, MSStackedColumn2DLineDY = 11, MSColumn3D = 12,
-        Spline = 13, MSSpline = 14
+        Spline = 13, MSSpline = 14, MSLine = 15, MSColumn3DLineDY = 16
     }
 
     public enum FusionChartPalette
@@ -225,7 +225,7 @@ namespace gzsw.util
         /// </summary>
         private string _bgColor = string.Empty;
         /// <summary>
-        /// 是否显示边框,默认显示
+        /// 是否显示边框,默认不显示
         /// </summary>
         private bool _isShowBorder = false;
         /// <summary>
@@ -1291,7 +1291,7 @@ namespace gzsw.util
 
             //创建呈现Chart控件的字符串
             StringBuilder builder = new StringBuilder();
-            builder.AppendFormat("<div id='Div{0}' align='center'></div>" + Environment.NewLine, id);
+            builder.AppendFormat("<div id='Div{0}' class='fusionchartpanel' align='center'></div>" + Environment.NewLine, id);
             builder.Append("<script type=\"text/javascript\">" + Environment.NewLine);
             builder.Append("$(function(){");
             builder.AppendFormat("var chart_{0} = new FusionCharts(\"{1}\", \"{0}\", \"{2}\",", id, chartPath, chartWidth);
@@ -1345,7 +1345,7 @@ namespace gzsw.util
             string propertys = GetPropertys();
 
             //创建数据字符串的开始标记
-            _dataXML.AppendFormat("<chart {0} exportEnabled='1' exportAction='download' exportAtClient='0' exportShowMenuItem='1' exportHandler='/STAT/StatDown/Down' showExportDialog='1' exportDialogMessage='正在生成中，请稍候' exportCallback='FC_Exported' numberScaleUnit='min,hr' defaultNumberScale='s' numberScaleValue='60,60'>", propertys);
+            _dataXML.AppendFormat("<chart {0} exportEnabled='1' exportAction='download' exportAtClient='0' exportShowMenuItem='1' exportHandler='/STAT/StatDown/Down' showExportDialog='1' exportDialogMessage='正在生成中，请稍候' exportCallback='FC_Exported'>", propertys);
 
             //创建数据项
             _dataXML.Append(CreateItems());
@@ -1571,10 +1571,14 @@ namespace gzsw.util
                     return CreateItems_MultiSeries();
                 case FusionChartType.MSSpline:
                     return CreateItems_MultiSeries();
+                case FusionChartType.MSLine:
+                    return CreateItems_MultiSeries();
                 case FusionChartType.MSStackedColumn2D:
                     return CreateItems_Group();
                 case FusionChartType.MSStackedColumn2DLineDY:
                     return CreateItems_Group();
+                case FusionChartType.MSColumn3DLineDY:
+                    return CreateItems_MultiSeries();
                 //多组控件
                 default:
                     return CreateItems_MultiSeries();
@@ -1619,17 +1623,18 @@ namespace gzsw.util
             foreach (var keyValue in _seriesColumnMapping)
             {
                 //创建组开始标记
-                dataItems.AppendFormat("<dataset seriesName='{0}' {1}showValue='{2}'>", keyValue.seriesname,
+                dataItems.AppendFormat("<dataset seriesName='{0}' {1}showValue='{2}'{3}>", keyValue.seriesname.Replace(",P", "").Replace(",S", ""),
                     string.IsNullOrEmpty(keyValue.color) ? "" : "color='" + keyValue.color + "' ",
-                    keyValue.showValue ? 1 : 0);
+                    keyValue.showValue ? 1 : 0,
+                    (keyValue.seriesname.EndsWith(",P") || keyValue.seriesname.EndsWith(",S")) ? " parentYAxis='" + keyValue.seriesname.Substring(keyValue.seriesname.Length-1) + "'" : "");
                 //创建组的项
                 foreach (DataRow row in dt_DataSource.Rows)
                 {
                     var cellval = row[keyValue.colname].ToString();
                     string linkstr = "";
-                    if (keyValue.islink && cellval.Split(';').Length==2)
+                    if (keyValue.islink && cellval.Split(';').Length == 2)
                     {
-                        linkstr = " link='"+cellval.Split(';')[1]+"'";
+                        linkstr = " link='" + cellval.Split(';')[1] + "'";
                     }
                     dataItems.AppendFormat("<set value='{0}'{1}/>", cellval.Split(';')[0], linkstr);
                 }

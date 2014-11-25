@@ -28,31 +28,31 @@
             window.open(url);
         });
 
-        $("#ddlMonth").change(function() {
+        $("#ddlMonth").change(function () {
             var value = $(this).val();
-            var bt = $("#ddlMonth").find("option[value='" + value + "']").attr("bt"); 
-            var dt = $("#ddlMonth").find("option[value='" + value + "']").attr("dt"); 
+            var bt = $("#ddlMonth").find("option[value='" + value + "']").attr("bt");
+            var dt = $("#ddlMonth").find("option[value='" + value + "']").attr("dt");
             $("#beginTime").val(bt);
             $("#endTime").val(dt);
-            if (value == "4") {  
+            if (value == "4") {
                 $('#beginTime').attr("disabled", false);
                 $('#endTime').attr("disabled", false);
-            } else { 
-                $('#beginTime').attr("disabled", true); 
+            } else {
+                $('#beginTime').attr("disabled", true);
                 $('#endTime').attr("disabled", true);
             }
         });
-         
+
         $("#ddlMonth").val(@ViewData["ddlMonth"]);
 
         @if (ViewData["ddlMonth"] != null && ViewData["ddlMonth"].ToString().Trim() == "4")
         {
             
-            <text> 
-                $('#beginTime').attr("disabled", false);
-                $('#endTime').attr("disabled", false);
+            <text>
+        $('#beginTime').attr("disabled", false);
+        $('#endTime').attr("disabled", false);
               </text>
-        } 
+        }
 
         $("#btnSearch").ligerButton(
         {
@@ -60,11 +60,11 @@
             click: function () {
                 if ($("#beginTime").val() == "" || $("#endTime").val() == "") {
                     debugger;
-                    gzsw.dialog.alert('请选择开始/结束时间!', 5,function() {
+                    gzsw.dialog.alert('请选择开始/结束时间!', 5, function () {
                         $("#beginTime").val('@DateTime.Now.ToWeekForBeginTime()');
                         $("#endTime").val('@DateTime.Now.ToWeekForEndTime()');
                     });
-                   
+
                     return false;
                 } else {
                     var param = {
@@ -79,7 +79,7 @@
                     });
                     var url = location.href.getUrl(param);
                     location.href = url;
-                } 
+                }
             },
             icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
         });
@@ -97,11 +97,10 @@
                 return false;
             });
         }
-        else
-        {
+        else {
             $("#btnAdvance").hide();
         }
-        
+
     });
     function chk(obj, ct) {
         $("." + ct).toggle();

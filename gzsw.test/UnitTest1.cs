@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using gzsw.util;
 using gzsw.model.Enums;
 using gzsw.dal;
+using PetaPoco;
 
 namespace gzsw.test
 {
@@ -85,6 +86,14 @@ namespace gzsw.test
             if (!string.IsNullOrEmpty(log.LOG_INFO) && log.LOG_INFO.Length > 1024)
                 log.LOG_INFO = log.LOG_INFO.Substring(0, 1024);
             new DaoTemplate<SYS_LOG>().AddObject(log);
+        }
+
+        [TestMethod]
+        public void T4()
+        {
+            var sql = Sql.Builder.Append("From SYS_USER where USER_ID=@0", "admin or 1=1");
+            var admin = gzswDB.GetInstance().Fetch<SYS_USER>(sql);
+            Assert.AreEqual(1, admin.Count);
         }
     }
 }

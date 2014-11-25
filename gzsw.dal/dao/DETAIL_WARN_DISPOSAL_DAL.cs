@@ -39,8 +39,12 @@ namespace gzsw.dal.dao
                       AND WARN_PARAM.WARN_TYP = WARN_INFO_DETAIL.WARN_TYP
                     )
         ) AS CRITICAL_VALUE ,
-        SYS_USER.USER_NAM AS HANDLE_USERNAME
+        WARN_INFO_DETAIL.CREATE_DTIME ,
+        WARN_INFO_DETAIL.[STATE] ,
+        SYS_USER.USER_NAM AS HANDLE_USERNAME ,
+        dbo.SYS_HALL.HALL_NAM
 FROM    WARN_INFO_DETAIL
+        JOIN SYS_HALL ON SYS_HALL.HALL_NO = WARN_INFO_DETAIL.HALL_NO
         LEFT JOIN SYS_USER ON dbo.SYS_USER.[USER_ID] = WARN_INFO_DETAIL.HANDLE_USER
 WHERE   1 = 1");
 
@@ -64,6 +68,8 @@ WHERE   1 = 1");
             {
                 sql.Append(@" AND WARN_INFO_DETAIL.HALL_NO = @0 ", orgId);
             }
+
+            sql.Append("ORDER BY WARN_INFO_DETAIL_ID DESC");
             
             var data = db.Page<dynamic>(pageIndex, pageSize, sql);
             data.ItemsPerPage = pageSize;

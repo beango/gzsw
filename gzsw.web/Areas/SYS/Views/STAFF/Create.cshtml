@@ -35,7 +35,8 @@
         <tr>
             <td class="tdLeft">组织机构：</td>
             <td>
-                @Html.DropDownList("ORG_ID", ViewBag.UserORG as SelectList)
+                @(ViewBag.ORG == null ? "" : ViewBag.ORG.ORG_NAM)
+                <input type="hidden" name="ORG_ID" id="ORG_ID" value="@(ViewBag.ORG == null ? "" : ViewBag.ORG.ORG_ID)" />
                 @Html.ValidationMessageFor(model => model.ORG_ID)
             </td>
         </tr>

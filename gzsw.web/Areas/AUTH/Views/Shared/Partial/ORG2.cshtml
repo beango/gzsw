@@ -1,0 +1,83 @@
+﻿@*组织机构查询条件，参考权限管理>角色管理
+    可选省，市，服务厅*@
+<input type="text" readonly name="txtORGNAM" id="txtORGNAM" value="@Model["ORGNAM"]" onclick="showMenu(); return false;" />
+<input type="hidden" name="hidORGID" id="hidORGID" value="@Model["ORGID"]" />
+
+<div id="orgTreeContent" style="display: none; position: absolute; z-index: 999999;">
+    <ul id="treeOrg" class="ztree" style="background: #ffffff;border:1px solid black;font-size:12px;padding:4px;"></ul>
+</div>
+<script type="text/javascript">
+		<!--
+        var ztree_setting_org = {
+            async: {
+                enable: false
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pId",
+                    rootPId: 0
+                }
+            },
+            view: {
+                dblClickExpand: false,
+                showIcon: showIconForTree
+            },
+            callback: {
+                onClick: onClick
+            }
+        };
+
+		var zNodes;
+		$(function () {
+		    $.ajax({
+		        async: false,
+		        cache: false,
+		        type: 'POST',
+		        dataType: 'json',
+		        url: "/SYS/Org/GetOrgsTree?nRoot=1",
+		        success: function (data) {
+		            zNodes = data;
+		        }
+		    });
+		});
+
+		$(document).ready(function() {
+		    $.fn.zTree.init($("#treeOrg"), ztree_setting_org, zNodes);
+		});
+
+		function showMenu() {
+		    var orgObj = $("#txtORGNAM");
+		    var orgOffset = $("#txtORGNAM").offset();
+		    $("#orgTreeContent").css({ left: orgOffset.left + "px", top: orgOffset.top + orgObj.outerHeight() + "px" }).slideDown("fast");
+
+		    $("body").bind("mousedown", onBodyDown);
+		}
+		function hideMenu() {
+		    $("#orgTreeContent").fadeOut("fast");
+		    $("body").unbind("mousedown", onBodyDown);
+		}
+		function onBodyDown(event) {
+		    if (!(event.target.id == "orgTreeContent" || $(event.target).parents("#orgTreeContent").length > 0)) {
+		        hideMenu();
+		    }
+		}
+		function onClick(e, treeId, treeNode) {
+		    var zTree = $.fn.zTree.getZTreeObj("treeOrg"),
+			nodes = zTree.getSelectedNodes(),
+			v = "",id="";
+		    nodes.sort(function compare(a, b) { return a.id - b.id; });
+		    for (var i = 0, l = nodes.length; i < l; i++) {
+		        v += nodes[i].name + ",";
+		        id += nodes[i].id + ",";
+		    }
+		    if (v.length > 0) v = v.substring(0, v.length - 1);
+		    if (id.length > 0) id = id.substring(0, id.length - 1);
+		    var orgid = $("#txtORGNAM");
+		    orgid.attr("value", v);
+		    $("#hidORGID").val(id);
+		    hideMenu();
+		}
+		//-->
+</script>

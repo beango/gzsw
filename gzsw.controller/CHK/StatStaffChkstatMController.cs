@@ -134,6 +134,9 @@ namespace gzsw.controller.CHK
                     var rst = STAT_STAFF_CHKSTAT_M_DAL.Update(item);
                     if (rst > 0)
                     {
+
+                        Stored_DAL.UpdateData(item.STAT_MO,item.STAFF_ID,UserState.UserID,1);
+
                         Alter("修改成功！", util.Enum.AlterTypeEnum.Success, false, true);
                         return Redirect("/Home/Blank");
                     }

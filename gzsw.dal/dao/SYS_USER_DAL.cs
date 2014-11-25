@@ -23,7 +23,7 @@ namespace gzsw.dal
                       select t4.FUNCTION_ID,t4.FUNCTION_NAM,t4.FUNCTION_COD,t4.PAR_FUNCTION_ID,t3.FUNCTION_TYP 
                       from SYS_USEROLE t2
                       join SYS_ROLEFUNCTION t3 on t2.ROLE_ID=t3.ROLE_ID
-                      join SYS_FUNCTION t4 on t4.FUNCTION_ID=t3.FUNCTION_ID ");
+                      join SYS_FUNCTION t4 on t4.FUNCTION_ID=t3.FUNCTION_ID");
             sql.Append("where t2.USER_ID=@0 ", userid);
             return db.Fetch<UserFuncs>(sql);
         }

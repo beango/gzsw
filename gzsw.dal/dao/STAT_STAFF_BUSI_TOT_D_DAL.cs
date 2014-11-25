@@ -19,7 +19,7 @@ namespace gzsw.dal.dao
         /// <param name="beginTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public Page<dynamic> Q_STATDATA_GROUP_CITY(int pageIndex, int pageSize, string[] halllist, DateTime? beginTime, DateTime? endTime)
+        public List<dynamic> Q_STATDATA_GROUP_CITY(string[] halllist, DateTime? beginTime, DateTime? endTime)
         {
             Database db = gzswDB.GetInstance();
 
@@ -51,13 +51,7 @@ namespace gzsw.dal.dao
                 sql.Append("where t1.HALL_NO in (@hall)", new { hall = halllist });
             sql.Append("GROUP BY t4.ORG_ID, t4.ORG_NAM");
             sql.Append(")t");
-
-            var data = db.Page<dynamic>(pageIndex, pageSize, sql);
-            if (pageIndex == 0)
-            {
-                data.Items = db.Fetch<dynamic>(sql);
-            }
-            return data;
+            return db.Fetch<dynamic>(sql);
         }
 
         /// <summary>
@@ -69,7 +63,7 @@ namespace gzsw.dal.dao
         /// <param name="beginTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public Page<dynamic> Q_STATDATA_GROUP_STAFF(int pageIndex, int pageSize, string[] halllist, DateTime? beginTime, DateTime? endTime)
+        public List<dynamic> Q_STATDATA_GROUP_STAFF(string[] halllist, DateTime? beginTime, DateTime? endTime)
         {
             Database db = gzswDB.GetInstance();
 
@@ -95,12 +89,7 @@ namespace gzsw.dal.dao
             sql.Append("GROUP BY t1.STAFF_ID,t2.STAFF_NAM");
             sql.Append(")t");
 
-            var data = db.Page<dynamic>(pageIndex, pageSize, sql);
-            if (pageIndex == 0)
-            {
-                data.Items = db.Fetch<dynamic>(sql);
-            }
-            return data;
+            return db.Fetch<dynamic>(sql);
         }
 
         /// <summary>
@@ -112,7 +101,7 @@ namespace gzsw.dal.dao
         /// <param name="beginTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public Page<dynamic> Q_STATDATA_GROUP_HALL(int pageIndex, int pageSize, string[] halllist, DateTime? beginTime, DateTime? endTime)
+        public List<dynamic> Q_STATDATA_GROUP_HALL(string[] halllist, DateTime? beginTime, DateTime? endTime)
         {
             Database db = gzswDB.GetInstance();
 
@@ -136,12 +125,7 @@ namespace gzsw.dal.dao
             sql.Append("GROUP BY t1.HALL_NO,t2.HALL_NAM");
             sql.Append(")t");
 
-            var data = db.Page<dynamic>(pageIndex, pageSize, sql);
-            if (pageIndex == 0)
-            {
-                data.Items = db.Fetch<dynamic>(sql);
-            }
-            return data;
+            return db.Fetch<dynamic>(sql);
         }
 
         /// <summary>
@@ -156,11 +140,11 @@ namespace gzsw.dal.dao
         {
             Database db = gzswDB.GetInstance();
             string field = "convert(varchar(50),t1.STAT_DT,23)";
+            var d = (endTime.Value - beginTime.Value).Days;
             if (beginTime != null && endTime != null)
             {
                 if (beginTime.Value.ToShortDateString() == endTime.Value.ToShortDateString())//同一天
                     field = "RIGHT('0'+cast(TIME_QUANTUM_CD as varchar(50)),2)+'点'";
-                var d = (endTime.Value - beginTime.Value).Days;
                 if (d >= 31)//按月查询
                     field = "Replace(Left(convert(varchar(50),t1.STAT_DT,23),7),'-','年')+'月'";
                 if (d >= 365)//跨年查询
@@ -171,12 +155,12 @@ namespace gzsw.dal.dao
             var sql = Sql.Builder.Append(string.Format(@"select * from(
                 select {0} as ID,
                 SUM(isnull(t1.CALL_CNT,0)) AS 呼叫量,SUM(isnull(t1.HANDLE_CNT,0)) AS 办理量,
-                SUM(isnull(t1.ABANDON_CNT,0)) AS 弃号量,SUM(t1.LOCAL_CNT) AS LOCAL_CNT,
-                SUM(t1.VOTE_MULTI_CNT) AS VOTE_MULTI_CNT,SUM(t1.VERY_SATISFY_CNT) AS VERY_SATISFY_CNT,
+                SUM(isnull(t1.ABANDON_CNT,0)) AS 弃号量,SUM(t1.LOCAL_CNT) AS 同城受理量,
+                SUM(t1.VOTE_MULTI_CNT) AS 一票多业务量,SUM(t1.VERY_SATISFY_CNT) AS VERY_SATISFY_CNT,
                 SUM(t1.SATISFY_CNT) AS SATISFY_CNT,SUM(t1.COMMON_CNT) AS COMMON_CNT,
                 SUM(t1.UNSATISFY_CNT) AS UNSATISFY_CNT,SUM(t1.NON_EVAL_CNT) AS NON_EVAL_CNT,
-                SUM(t1.OVERTIME_WAIT_CNT) AS OVERTIME_WAIT_CNT,SUM(t1.SECOND_SVR_CNT) AS SECOND_SVR_CNT,
-                SUM(t1.WAIT_DUR) AS WAIT_DUR
+                SUM(t1.OVERTIME_WAIT_CNT) AS 超时等候量,SUM(t1.SECOND_SVR_CNT) AS 二次办税量,
+                SUM(t1.WAIT_DUR)*1.0/SUM(isnull(t1.CALL_CNT,0)) AS 平均等候时间
                 from STAT_STAFF_BUSI_TOT_D t1", field));
 
             if (!string.IsNullOrEmpty(staffid))
@@ -206,14 +190,14 @@ namespace gzsw.dal.dao
             {
                 endTime = Convert.ToDateTime(dt.Compute("MAX(ID)", ""));
                 beginTime = Convert.ToDateTime(dt.Compute("MIN(ID)", ""));
-                return GetSTATList_DT(staffid, ref beginTime,ref endTime, orgid);
+                return GetSTATList_DT(staffid, ref beginTime, ref endTime, orgid);
             }
             var e = dt.AsEnumerable().Select(o => o["ID"].ToString());
             if (beginTime == endTime)
             {
                 for (int i = 8; i <= 18; i++)
                 {
-                    if (!e.Contains(i.ToString().PadLeft(2,'0')+"点"))
+                    if (!e.Contains(i.ToString().PadLeft(2, '0') + "点"))
                     {
                         var newr = dt.NewRow();
                         newr[0] = i.ToString().PadLeft(2, '0') + "点";
@@ -224,29 +208,128 @@ namespace gzsw.dal.dao
                         dt.Rows.Add(newr);
                     }
                 }
-                
+
             }
             else
             {
-                while (beginTime<=endTime)
+                //while (beginTime<=endTime)
+                //{
+                //    if (!e.Contains(beginTime.Value.ToString("yyyy-MM-dd")))
+                //    {
+                //        var newr = dt.NewRow();
+                //        newr[0] = beginTime.Value.ToString("yyyy-MM-dd");
+                //        for (int j = 1; j < dt.Columns.Count; j++)
+                //        {
+                //            newr[j] = 0;
+                //        }
+                //        dt.Rows.Add(newr);
+                //    }
+                //    beginTime = beginTime.Value.AddDays(1);
+                //}
+            }
+            dt.DefaultView.Sort = "ID";
+            return dt.DefaultView.ToTable();
+        }
+        /// <summary>
+        /// 按时间统计
+        /// </summary>
+        /// <param name="staffid"></param>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <param name="orgid"></param>
+        /// <returns></returns>
+        public DataTable GetSTATList_FULLDT(string staffid, ref DateTime? beginTime, ref DateTime? endTime, string orgid)
+        {
+            Database db = gzswDB.GetInstance();
+            string field = "convert(varchar(50),t2.dt,23)";
+            var d = (endTime.Value - beginTime.Value).Days;
+            if (beginTime != null && endTime != null)
+            {
+                if (beginTime.Value.ToShortDateString() == endTime.Value.ToShortDateString())//同一天
+                    field = "RIGHT('0'+cast(TIME_QUANTUM_CD as varchar(50)),2)+'点'";
+                if (d >= 31)//按月查询
+                    field = "Replace(Left(convert(varchar(50),t2.dt,23),7),'-','年')+'月'";
+                if (d >= 365)//跨年查询
+                    field = "Left(convert(varchar(50),t2.dt,23),4)+'年'";
+            }
+
+            db.EnableAutoSelect = false;
+            var sql = Sql.Builder.Append(string.Format(@"select * from(
+                select {0} as ID,
+                SUM(isnull(t1.CALL_CNT,0)) AS 呼叫量,
+                SUM(isnull(t1.HANDLE_CNT,0)) AS 办理量,
+                SUM(isnull(t1.ABANDON_CNT,0)) AS 弃号量,
+                SUM(ISNULL(t1.LOCAL_CNT,0)) AS 同城受理量,
+                SUM(isnull(t1.VOTE_MULTI_CNT,0)) AS 一票多业务量,
+                SUM(isnull(t1.VERY_SATISFY_CNT,0)) AS VERY_SATISFY_CNT,
+                SUM(isnull(t1.SATISFY_CNT,0)) AS SATISFY_CNT,
+                SUM(isnull(t1.COMMON_CNT,0)) AS COMMON_CNT,
+                SUM(isnull(t1.UNSATISFY_CNT,0)) AS UNSATISFY_CNT,
+                SUM(isnull(t1.NON_EVAL_CNT,0)) AS NON_EVAL_CNT,
+                SUM(isnull(t1.OVERTIME_WAIT_CNT,0)) AS 超时等候量,
+                SUM(isnull(t1.SECOND_SVR_CNT,0)) AS 二次办税量,
+                SUM(t1.WAIT_DUR)*1.0/(case when SUM(t1.CALL_CNT)=0 then null else SUM(t1.CALL_CNT) end) AS 平均等候时间
+                from STAT_STAFF_BUSI_TOT_D t1 right join dbo.DTTable(@0,@1) t2
+                on t1.STAT_DT=t2.dt", field),
+                beginTime.Value.ToShortDateString(),
+                endTime.Value.ToShortDateString());
+
+            if (!string.IsNullOrEmpty(staffid))
+                sql.Append("and t1.STAFF_ID=@staffid", new { staffid = staffid });
+            if (beginTime == endTime)
+                sql.Append("and t1.TIME_QUANTUM_CD>=8 and TIME_QUANTUM_CD<=18");
+            if (!string.IsNullOrEmpty(orgid))
+            {
+                var sql2 = Sql.Builder.Append(@"WITH t AS(
+                      SELECT ORG_ID,ORG_NAM FROM dbo.SYS_ORGANIZE WHERE ORG_ID = @0
+                      UNION ALL
+                      SELECT a.ORG_ID,a.ORG_NAM FROM SYS_ORGANIZE AS a,t AS b WHERE a.PAR_ORG_ID = b.ORG_ID
+                    )
+                    SELECT t2.* FROM t JOIN dbo.SYS_HALL t2 ON t.ORG_ID=t2.ORG_ID", orgid);
+                var hlist = db.Fetch<SYS_HALL>(sql2);
+                sql.Append("and t1.HALL_NO in(@HALL_NO)", new { HALL_NO = hlist.Select(o => o.HALL_NO) });
+            }
+            sql.Append(string.Format("GROUP BY {0}", field));
+            sql.Append(string.Format(")t order by ID asc", field));
+            DataTable dt = db.Fill(sql.SQL, sql.Arguments);
+           
+            if ((null == beginTime || null == endTime) && dt != null && dt.Rows.Count > 0)
+            {
+                endTime = Convert.ToDateTime(dt.Compute("MAX(ID)", ""));
+                beginTime = Convert.ToDateTime(dt.Compute("MIN(ID)", ""));
+                return GetSTATList_DT(staffid, ref beginTime, ref endTime, orgid);
+            }
+            var e = dt.AsEnumerable().Select(o => o["ID"].ToString());
+            if (beginTime == endTime)
+            {
+                for (int i = 8; i <= 18; i++)
                 {
-                    if (!e.Contains(beginTime.Value.ToString("yyyy年MM月dd")))
+                    if (!e.Contains(i.ToString().PadLeft(2, '0') + "点"))
                     {
                         var newr = dt.NewRow();
-                        newr[0] = beginTime.Value.ToString("yyyy年MM月dd");
+                        newr[0] = i.ToString().PadLeft(2, '0') + "点";
                         for (int j = 1; j < dt.Columns.Count; j++)
                         {
                             newr[j] = 0;
                         }
                         dt.Rows.Add(newr);
                     }
-                    beginTime = beginTime.Value.AddDays(1);
                 }
             }
             dt.DefaultView.Sort = "ID";
             return dt.DefaultView.ToTable();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="halllist"></param>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <param name="serid"></param>
+        /// <returns></returns>
         public Page<dynamic> GetSTATDetails(int pageIndex, int pageSize, string[] halllist, DateTime? beginTime, DateTime? endTime, string serid)
         {
             Database db = gzswDB.GetInstance();
@@ -270,6 +353,15 @@ namespace gzsw.dal.dao
             return db.Page<dynamic>(pageIndex, pageSize, sql);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="beginMo"></param>
+        /// <param name="endMo"></param>
+        /// <param name="hallno"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public static Page<dynamic> GetListBubByHall(DateTime beginMo, DateTime endMo, string hallno, int pageIndex, int pageSize)
         {
             Database db = gzswDB.GetInstance();

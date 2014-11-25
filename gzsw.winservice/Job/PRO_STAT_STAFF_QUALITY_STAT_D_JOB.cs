@@ -34,7 +34,7 @@ namespace gzsw.winservice.Job
                     while(true)
                     {
                         bool continu = ExecuteProd(log);
-                        db.Insert(log);//写日志
+                        db.Insert("SVR_TIM_EVENT_LOG", "SEQ", log);//写日志
                         if (!continu)
                             break;
                     }

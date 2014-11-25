@@ -17,7 +17,25 @@ namespace gzsw.dal.dao
         public static Page<CHK_STAFF_COMPRE_EVAL_M_SUB> GetListSub(int STAT_MO,int endStatMo, string orgId, int pageIndex,int pageSize)
         {
             var db = gzswDB.GetInstance();
-            var sql = Sql.Builder.Append(@"SELECT * FROM (SELECT 
+            var sql = Sql.Builder.Append(@"");
+
+            if (STAT_MO != endStatMo)
+            {
+                sql.Append(@" EXECUTE PRO_GET_CHK_STAFF @@HALL_NO=@0 ,@@START_MO=@1,@@END_MO=@2 ",orgId, STAT_MO, endStatMo);
+
+                var list=db.Fetch<CHK_STAFF_COMPRE_EVAL_M_SUB>(sql);
+                return new Page<CHK_STAFF_COMPRE_EVAL_M_SUB>()
+                       {
+                           Items = list.Skip((pageIndex-1)*pageSize).Take(pageSize).ToList(),
+                           CurrentPage = pageIndex,
+                           TotalItems = list.Count,
+                           ItemsPerPage = pageSize
+                       };
+            }
+            else
+            {
+
+                sql.Append(@"SELECT * FROM (SELECT 
                                             C.[HALL_NO]
                                           ,C.[STAFF_ID]
                                           ,SUM(C.[COMPRE_SAN_SCORE])/ COUNT(*) as  COMPRE_SAN_SCORE
@@ -35,15 +53,12 @@ namespace gzsw.dal.dao
                                       ON C.STAFF_ID = ST.STAFF_ID 
                                       WHERE 1=1  ");
 
-            sql.Append(@" AND  C.HALL_NO=@0 ",orgId);
-
-            sql.Append(@" AND (( C.STAT_MO>=@0 AND C.STAT_MO<=@1 ) OR C.STAT_MO=@2 ) ", STAT_MO, endStatMo, STAT_MO);
-
-            sql.Append(@" group by C.[HALL_NO],C.[STAFF_ID],ST.STAFF_NAM");
-
-            sql.Append(@" ) T1 ");
-
-            return db.Page<CHK_STAFF_COMPRE_EVAL_M_SUB>(pageIndex, pageSize, sql);
+                sql.Append(@" AND  C.HALL_NO=@0 ", orgId);
+                sql.Append(@" AND (( C.STAT_MO>=@0 AND C.STAT_MO<=@1 ) OR C.STAT_MO=@2 ) ", STAT_MO, endStatMo, STAT_MO);
+                sql.Append(@" group by C.[HALL_NO],C.[STAFF_ID],ST.STAFF_NAM");
+                sql.Append(@" ) T1 ");
+                return db.Page<CHK_STAFF_COMPRE_EVAL_M_SUB>(pageIndex, pageSize, sql);
+            }
         }
 
         /// <summary>

@@ -42,7 +42,7 @@ namespace gzsw.winservice.Job
                         log.ERROR_INFO = ex.Message;
                         log.RUN_STATE = 2;
                     }
-                    db.Insert(log);
+                    db.Insert("SVR_TIM_EVENT_LOG", "SEQ", log);//写日志
                 }
             }
             catch (Exception ex)

@@ -1,0 +1,37 @@
+﻿@using gzsw.util
+@using gzsw.web
+@{
+    ViewBag.Title = "纳税人行为分析";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@section Head{
+    @Html.JavaScript("lib/fusionchart/FusionCharts.js")
+
+    <script type="text/javascript">
+        $(function () {
+            //  初始化TAB
+            $("#navtab1").ligerTab();
+            $("#navtab1").ligerTab();
+        });
+    </script>
+}
+<div id="navtab1" style="margin: 3px 3px 0 3px; overflow: hidden; border: 1px solid #A3C0E8; ">
+    <div title="柱状图">
+        <div>
+            @Html.Raw(ViewBag.ChartColumn3DXML)
+        </div>
+    </div>
+    <div title="线状图">
+        <div>
+            @Html.Raw(ViewBag.ChartSplineXML)
+        </div>
+    </div>
+    <div title="饼图">
+        <div>
+            @Html.Raw(ViewBag.ChartPie3DXML)
+        </div>
+    </div>
+
+</div>
+<!-- 内容 -->

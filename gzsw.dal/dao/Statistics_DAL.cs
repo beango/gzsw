@@ -82,7 +82,8 @@ namespace gzsw.dal.dao
             DateTime? beginTime,
             DateTime? endTime,
             string userId,
-            string orgId)
+            string orgId,
+            string staffId)
         {
             var sql = Sql.Builder.Append(@"SELECT
                                         Q.[STAT_DT]
@@ -103,9 +104,13 @@ namespace gzsw.dal.dao
                                        + GetSelectWhereTime(beginTime, endTime, "Q.STAT_DT")
                                        , userId);
 
-            if (string.IsNullOrEmpty(orgId))
+            if (!string.IsNullOrEmpty(orgId))
             {
-                sql.Append(@"");
+                sql.Append(@" AND Q.[HALL_NO] =@0 ", orgId);
+            }
+            if (!string.IsNullOrEmpty(staffId))
+            {
+                sql.Append(@" AND Q.[STAFF_ID]=@0", staffId);
             }
 
             var db = gzswDB.GetInstance();
@@ -114,7 +119,44 @@ namespace gzsw.dal.dao
 
         #endregion 
 
-        #region 纳税人评价分析
+        #region 纳税人行为分析
+
+
+        public IList<STAT_TAXPAYER_BEHAV_STAT_D> GetStatistics_TaxpayerEvalChart_Node( 
+            DateTime? beginTime,
+            DateTime? endTime,
+            string userId)
+        {
+
+            var sql = Sql.Builder.Append(@" SELECT * From STAT_TAXPAYER_BEHAV_STAT_D  AS A WHERE 1=1  
+            AND  A.HALL_NO in(select ORG_ID from SYS_ORGANIZE 
+            where ORG_ID in ( select ORG_ID from SYS_USERORGANIZE where USER_ID =@0 )   and ORG_LEVEL =4)  
+            and A.STAFF_ID is not null and A.STAFF_ID <>'' "
+            + GetSelectWhereTime(beginTime, endTime, "STAT_DT")
+            , userId); 
+            var db = gzswDB.GetInstance();
+            return db.Fetch<STAT_TAXPAYER_BEHAV_STAT_D>(sql);
+        }
+
+
+
+        public IList<STAT_TAXPAYER_BEHAV_STAT_D> GetStatistics_TaxpayerEvalChartByPerson_Node(
+            DateTime? beginTime,
+            DateTime? endTime,
+            string personNo)
+        {
+
+            var sql = Sql.Builder.Append(@" SELECT * From STAT_TAXPAYER_BEHAV_STAT_D  AS A WHERE 1=1  
+            AND A.STAFF_ID = @0 " 
+            + GetSelectWhereTime(beginTime, endTime, "STAT_DT")
+            , personNo);
+            var db = gzswDB.GetInstance();
+            return db.Fetch<STAT_TAXPAYER_BEHAV_STAT_D>(sql);
+        }
+
+ 
+
+
 
         /// <summary>
         /// 纳税人行为分析报表统计
@@ -128,7 +170,22 @@ namespace gzsw.dal.dao
             DateTime? endTime,
             string orgId)
         {
-            return new List<Statistics_TaxpayerActionDto>();
+            var sql = PetaPoco.Sql.Builder.Append(@" 
+            select 
+            A.HALL_NO 
+            ,A.DLS_SERIALID 
+            ,MAX(B.STAFF_ID) AS PersonNo 
+            ,B.STAFF_NAM AS PersonName
+            ,MAX(C.DLS_SERIALNAME) AS DLS_SERIALNAME 
+            ,SUM(LOCAL_CNT) AS LOCAL_CNT 
+            ,SUM(SECOND_SVR_CNT) AS SECOND_SVR_CNT 
+            from STAT_TAXPAYER_BEHAV_STAT_D A
+            JOIN SYS_DLSERIAL C ON C.DLS_SERIALID=A.DLS_SERIALID
+            JOIN SYS_STAFF B ON A.STAFF_ID=B.STAFF_ID  
+            where HALL_NO  = @0  and A.STAFF_ID is not null and A.STAFF_ID <>''  " + GetSelectWhereTime(beginTime, endTime, "STAT_DT"), orgId);
+            sql.Append(@" group by A.HALL_NO,A.DLS_SERIALID,B.STAFF_NAM ");
+            Database db = gzswDB.GetInstance();
+            return db.Fetch<Statistics_TaxpayerActionDto>(sql); 
         }
 
 
@@ -144,7 +201,21 @@ namespace gzsw.dal.dao
             DateTime? endTime,
             string userId)
         {
-            return new List<Statistics_TaxpayerActionDto>();
+            var sql = PetaPoco.Sql.Builder.Append(@" 
+            select A.HALL_NO,
+            A.DLS_SERIALID,
+            MAX(B.HALL_NAM) AS HALL_NAM ,
+            MAX(C.DLS_SERIALNAME) AS DLS_SERIALNAME ,
+            SUM(LOCAL_CNT) AS LOCAL_CNT,
+            SUM(SECOND_SVR_CNT) AS SECOND_SVR_CNT 
+            from STAT_TAXPAYER_BEHAV_STAT_D A
+            JOIN SYS_DLSERIAL C ON C.DLS_SERIALID=A.DLS_SERIALID
+            JOIN SYS_HALL B ON A.HALL_NO=B.HALL_NO 
+            WHERE A.HALL_NO in(select ORG_ID from SYS_ORGANIZE 
+            where ORG_ID in ( select ORG_ID from SYS_USERORGANIZE where USER_ID =@0 )   and ORG_LEVEL =4)  and A.STAFF_ID is not null and A.STAFF_ID <>'' " + GetSelectWhereTime(beginTime, endTime, "STAT_DT"), userId);
+            sql.Append(@" group by A.HALL_NO,A.DLS_SERIALID ");
+            Database db = gzswDB.GetInstance();
+            return db.Fetch<Statistics_TaxpayerActionDto>(sql);
         }
 
         #endregion

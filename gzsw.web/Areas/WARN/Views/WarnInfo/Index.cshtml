@@ -9,13 +9,23 @@
 <div class="l-panel-search">
     <table class="tabSearchList">
         <tr>
-            <td style="width:80px;">预警类型：</td>
+            <td style="width:55px;">预警类型：</td>
             <td style="width:170px;text-align:left;">@Html.DropDownList("WARNTYPQ", @ViewBag.WARN_TYP_SELECTLIST as IEnumerable<SelectListItem>)</td>
-            <td style="width: 80px;">预警级别：</td>
+            <td style="width: 55px;">预警级别：</td>
             <td style="width:170px;">@Html.DropDownList("WARNLVLQ", @ViewBag.WARN_LVL_SELECTLIST as IEnumerable<SelectListItem>)</td>
-            <td style="width:80px;"> 组织机构：</td>
+            <td style="width: 55px;"> 组织机构：</td>
             <td style="width:170px;">@Html.DropDownList("ddlORGID", ViewBag.UserORG as SelectList, "--请选择--")</td>
-            <td>
+        </tr>
+        <tr>
+            <td>开始时间:</td>
+            <td style="width:80px;">
+                <input type="text" readonly="readonly" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" value="@ViewBag.Start" style="width:80px;" name="txtBeginTime" id="txtBeginTime">
+            </td>
+            <td>结束时间:</td>
+            <td style="width:80px;">
+                <input type="text" readonly="readonly" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" value="@ViewBag.End" style="width: 80px;" name="txtEndTime" id="txtEndTime">
+            </td>
+            <td colspan="2">
                 <div id="btnSearch"></div>
             </td>
         </tr>
@@ -69,7 +79,7 @@
             <tr>
                 <td>
                     <input name="cbId" value="@(item.WARN_INFO_DETAIL_ID)" type='checkbox' />
-                    @Html.Hidden("HID_STATE",item.STATE)
+                    @Html.Hidden("HID_STATE", item.STATE)
                 </td>
                 <td>
                     @(i++)
@@ -90,7 +100,7 @@
                     @item.REAL_VALUE
                 </td>
                 <td>
-                    @item.CREATE_DTIME
+                    @item.CREATE_DTIME.ToString("yyyy-MM-dd HH:mm:ss")
                 </td>
                 <td>
                     @item.STATE_NAM
@@ -99,7 +109,7 @@
                     @item.HANDLE_USER
                 </td>
                 <td>
-                    @item.HANDLE_TIME
+                    @(item.HANDLE_TIME == null ? "" : item.HANDLE_TIME.Value.ToString("yyyy-MM-dd HH:mm:ss"))
                 </td>
                 <td>
                     @item.WARN_METHOD
@@ -119,6 +129,7 @@
 
 @section Head{
     @Html.JavaScript("lib/utility/ext.js")
+    @Html.JavaScript("lib/datepicker/WdatePicker.js")
     <script lang="javascript">
         $(function () {
             // 注册事件
@@ -127,7 +138,7 @@
             {
                 text: " 查 询 ",
                 click: function () {
-                    var url = "?typeq=" + $("#WARNTYPQ").val() + "&lvlq=" + $("#WARNLVLQ").val() + "&orgid=" + $("#ddlORGID").val();
+                    var url = "?typeq=" + $("#WARNTYPQ").val() + "&lvlq=" + $("#WARNLVLQ").val() + "&orgid=" + $("#ddlORGID").val() + "&start=" + $("#txtBeginTime").val() + "&end=" + $("#txtEndTime").val();
                     location.href = url.urlstamp();
                 },
                 icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
@@ -155,8 +166,7 @@
                     itemhandler.prev().hide();
                     itemhandler.hide();
                 }
-                else
-                {
+                else {
                     itemhandler.prev().show();
                     itemhandler.show();
                 }

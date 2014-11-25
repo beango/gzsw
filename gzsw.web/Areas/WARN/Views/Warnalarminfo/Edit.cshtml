@@ -1,4 +1,5 @@
-﻿@using gzsw.web
+﻿@using gzsw.util
+@using gzsw.web
 @model gzsw.model.WARN_ALARM_INFO_DETAIL
 @{
     ViewBag.Title = "修改窗口值班";
@@ -19,9 +20,6 @@
             <td>
                 @Model.STAFF_ID
             </td>
-        </tr>
-
-        <tr>
             <td class="tdLeft">
                员工名称：
             </td><td>
@@ -35,19 +33,17 @@
             </td><td>
             @Model.COUNTER_ID 
             </td>
-        </tr>
-        <tr>
             <td class="tdLeft">
                 报警类型：
-            </td><td>
-                @Model.ALARM_TYP
+            </td><td> 
+                @(EnumHelper.ConvertToE<gzsw.model.ext.WARN_ALARM_INFO_DETAIL.ALARM_TYP_ENUM>(Model.ALARM_TYP.ToString()))
             </td>
         </tr>
 
         <tr>
             <td class="tdLeft">
                 生成时间：
-            </td><td>
+            </td><td colspan="3">
                 @Model.CREATE_DTIME.ToString("yyyy-MM-dd HH:mm:ss")
 
                  </td>
@@ -58,9 +54,6 @@
              服务厅编码：
          </td><td>
                   @Model.HALL_NO</td>
-     </tr>
-     
-      <tr>
             <td class="tdLeft">
                 服务厅名称：
             </td><td>
@@ -72,21 +65,21 @@
              <tr>
          <td class="tdLeft">
              报警原因：
-         </td><td> 
-                   @Html.TextAreaFor(m => m.ALARM_REASON, new { @style = "width: 150px;" })
-                     @Html.ValidationMessageFor(m => m.ALARM_REASON)
+         </td><td colspan="3">
+    @Html.TextAreaFor(m => m.ALARM_REASON, new { @style = "width: 300px;height:60px;" })
+    @Html.ValidationMessageFor(m => m.ALARM_REASON)
 
-              </td>
+</td>
      </tr>
      <tr>
          <td class="tdLeft">
              报警处理：
-         </td><td> 
-             
-                 @Html.TextAreaFor(m => m.ALARM_METHOD, new { @style = "width: 150px;" })
-                     @Html.ValidationMessageFor(m => m.ALARM_METHOD)
+         </td><td colspan="3">
 
-              </td>
+    @Html.TextAreaFor(m => m.ALARM_METHOD, new { @style = "width: 300px;height:60px;" })
+    @Html.ValidationMessageFor(m => m.ALARM_METHOD)
+
+</td>
      </tr>
     </table>  
      @Html.Hidden("ALARM_SEQ", Model.ALARM_SEQ); 

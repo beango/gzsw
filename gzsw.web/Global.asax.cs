@@ -101,7 +101,7 @@ namespace gzsw.web
             if (formsIdentity != null && formsIdentity.IsAuthenticated && formsIdentity.AuthenticationType == "Forms")
             {
                 var principal = MyFormsAuthentication<MyUserDataPrincipal>.TryParsePrincipal(HttpContext.Current.Request);
-                if (null != principal && principal.UserState.UserState.UserFuncs==null)
+                if (null != principal && principal.UserState.UserState.UserFuncs == null)
                 {
                     principal.UserState.UserState.UserFuncs =
                         GetUserFuncsCache(principal.UserState.UserState.UserID);
@@ -157,6 +157,7 @@ namespace gzsw.web
                 return null;
             }
         }
+
     }
 
     public class NinjectDependencyResolver : IDependencyResolver
@@ -185,6 +186,5 @@ namespace gzsw.web
         {
             return _kernel.GetAll(serviceType);
         }
-
     }
 }

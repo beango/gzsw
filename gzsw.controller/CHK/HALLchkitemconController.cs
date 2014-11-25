@@ -47,7 +47,7 @@ namespace gzsw.controller.CHK
         {
             try
             { 
-
+                
                 if (!ModelState.IsValid)
                 {
                     ModelState.AddModelError("", "新增出错。");

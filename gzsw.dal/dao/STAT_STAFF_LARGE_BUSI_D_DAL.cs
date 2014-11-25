@@ -222,9 +222,11 @@ namespace gzsw.dal.dao
                                           ,LA.[HANDLE_DUR]
                                           ,LA.[OVERTIME_HANDLE_CNT]
                                           ,LA.[LOCAL_CNT]
+                                          ,ST.STAFF_NAM
                                       FROM [STAT_STAFF_LARGE_BUSI_D] AS LA
                                       JOIN SYS_USERORGANIZE AS UO
                                       ON LA.HALL_NO=UO.ORG_ID
+                                      JOIN SYS_STAFF AS ST ON ST.STAFF_ID=LA.STAFF_ID
                                       WHERE 1=1 ");
 
             sql.Append(@" AND UO.[USER_ID]=@0 ", userId);
@@ -351,7 +353,7 @@ namespace gzsw.dal.dao
             }
             if (endTime.HasValue)
             {
-                sql.Append(@" and ssd.STAT_DT<'"+endTime.Value+"'");
+                sql.Append(@" and ssd.STAT_DT<='"+endTime.Value+"'");
             }
             sql.Append(@" )t
                 group by t.DLS_SERIALID,DLS_SERIALNAME");

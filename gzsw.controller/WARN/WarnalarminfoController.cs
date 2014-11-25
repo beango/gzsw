@@ -122,7 +122,7 @@ namespace gzsw.controller.WARN
         }
 
         [UserAuth("WARN_ALARM_INFO_DETAIL_VIW")]
-        public ActionResult List(int id, string name, int pageIndex = 1, int pageSize = 20)
+        public ActionResult List(int id, string name, int pageIndex = 1, int pageSize = 10)
         {
             var data = WarnalarminfodetailDao.GetEntity("ALARM_SEQ", id);
             ViewBag.SENDINFO_DETAIL_ID = id;
