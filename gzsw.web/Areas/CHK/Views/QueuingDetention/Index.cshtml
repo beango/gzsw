@@ -90,32 +90,19 @@
                       icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
                 });
 
-
-
-            // 顶部导航
             // 顶部导航
             var ligerToolBar = $("#toptoolbar").ligerToolBar();
- @if (Html.ChkAuth("CHK_HALL_STAT_M_VIW"))
+            @if (Html.ChkAuth("CHK_HALL_STAT_M_VIW,QueuingDetention_VIW"))
             {
- 
-
-                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Detail"), "查看", "CHK_HALL_STAT_M_VIW", 450, 320, "staffId", "@:$('table.tablelist').getSelAttr('d-staffId')"));
-                            @:ligerToolBar.addItem({ line: true });
-                            
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Detail"), "查看", "CHK_HALL_STAT_M_VIW,QueuingDetention_VIW", 450, 320, "staffId", "@:$('table.tablelist').getSelAttr('d-staffId')"));
+                @:ligerToolBar.addItem({ line: true });
             }
             
-            
-
-            @if (Html.ChkAuth("CHK_HALL_STAT_M_EDT"))
+            @if (Html.ChkAuth("CHK_HALL_STAT_M_EDT,QueuingDetention_EDT"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修正", "CHK_HALL_STAT_M_EDT", 600, 500, "staffId", "@:$('table.tablelist').getSelAttr('d-staffId')"));
-                                        @:ligerToolBar.addItem({ line: true });
-                                    }
-            
-            
-            
-
- 
+                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修正", "CHK_HALL_STAT_M_EDT,QueuingDetention_EDT", 600, 500, "staffId", "@:$('table.tablelist').getSelAttr('d-staffId')"));
+                @:ligerToolBar.addItem({ line: true });
+            }
         });
     </script>
 }

@@ -235,7 +235,7 @@ namespace gzsw.controller.SYS
         /// 获取权限树
         /// </summary>
         /// <returns></returns>
-        [UserAuth("AUTH_FUNC_VIW")]
+        //[UserAuth("AUTH_FUNC_VIW")]
         public ActionResult GetOrgsTree(string id, string check, int? disabled, string searchNam)
         {
             var all = dao.FindList();
@@ -303,7 +303,7 @@ namespace gzsw.controller.SYS
         /// 获取权限树
         /// </summary>
         /// <returns></returns>
-        [UserAuth("AUTH_FUNC_VIW")]
+        //[UserAuth("AUTH_FUNC_VIW")]
         public ActionResult GetOrgsManagerTree(string id, string check, int? disabled, string searchNam)
         {
             var all = new SYS_USER_DAL().GetUserORG(UserState.UserID);
@@ -380,7 +380,7 @@ namespace gzsw.controller.SYS
         /// 获取权限树
         /// </summary>
         /// <returns></returns>
-        [UserAuth("AUTH_FUNC_VIW")]
+        //[UserAuth("AUTH_FUNC_VIW")]
         public ActionResult GetOrgsTreeLeafChk(string check, int? disabled, string searchNam)
         {
             var all = dao.FindList();
@@ -436,7 +436,7 @@ namespace gzsw.controller.SYS
         /// 获取权限树
         /// </summary>
         /// <returns></returns>
-        [UserAuth("AUTH_FUNC_VIW")]
+        //[UserAuth("AUTH_FUNC_VIW")]
         public ActionResult GetOrgs2Tree(string id, string check, int? disabled, string searchNam)
         {
             var all = new SYS_USER_DAL().GetUserORG(UserState.UserID);
@@ -522,7 +522,7 @@ namespace gzsw.controller.SYS
         /// 获取权限树
         /// </summary>
         /// <returns></returns>
-        [UserAuth("AUTH_FUNC_VIW")]
+        //[UserAuth("AUTH_FUNC_VIW")]
         public ActionResult SearchOrgsTree(string id)
         {
             var all = new SYS_USER_DAL().GetUserORG(UserState.UserID);

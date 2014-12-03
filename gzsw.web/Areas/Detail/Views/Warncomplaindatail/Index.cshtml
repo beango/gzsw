@@ -135,9 +135,9 @@
             // 顶部导航
             var ligerToolBar = $("#toptoolbar").ligerToolBar();
 
-            @if (Html.ChkAuth("WARN_COMPLAIN_DETAIL_VIW"))
+            @if (Html.ChkAuth("DETAIL_WARN_COMPLAIN_DETAIL_VIW"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Detail"), "查看", "WARN_COMPLAIN_DETAIL_VIW", 600, 400));
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Detail"), "查看", "DETAIL_WARN_COMPLAIN_DETAIL_VIW", 600, 400));
                             @:ligerToolBar.addItem({ line: true });
                         }
             

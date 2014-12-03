@@ -107,7 +107,6 @@ namespace gzsw.controller.STAT
                 ViewBag.ChartSplineXML = CreateMSSplineChart("排队业务报分析", ds, 430, null, null, subtitle);
                 return View(data);
             }
-            return null;
         }
 
         private string GetSubTitle(string orgid, DateTime? beginTime, DateTime? endTime)

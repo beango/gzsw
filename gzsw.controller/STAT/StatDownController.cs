@@ -329,7 +329,7 @@ namespace gzsw.controller.STAT
                 // check if the path is relative if so assign the actual path to path
                 path = Server.MapPath(path);
             }
-            catch (HttpException e)
+            catch
             {
                 //raise_error(e.Message);
             }

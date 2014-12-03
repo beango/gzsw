@@ -134,8 +134,8 @@ namespace gzsw.controller.CHK
             {
                 if (ModelState.IsValid)
                 {
-                    var item = dao.GetEntity("ORG_ID", model.ORG_ID);
-                    item.ATTEND_MIN_SCORE = item.ATTEND_MIN_SCORE;
+                    var item = dao.GetEntity("ORG_ID", model.ORG_ID, "TIME_DUR_TYP", model.TIME_DUR_TYP);
+                    item.ATTEND_MIN_SCORE = model.ATTEND_MIN_SCORE;
                     item.COMPLAIN_MAX_CNT = model.COMPLAIN_MAX_CNT;
                     item.DEFAULT_STAR = model.DEFAULT_STAR;
                     item.EFFIC_MIN_SCORE = model.EFFIC_MIN_SCORE;
@@ -151,10 +151,9 @@ namespace gzsw.controller.CHK
                     item.STAR_4_MIN_SCORE = model.STAR_4_MIN_SCORE;
                     item.STAR_5_MIN_SCORE = model.STAR_5_MIN_SCORE;
                     item.SVR_MIN_SCORE = model.SVR_MIN_SCORE;
-                    item.TIME_DUR_TYP = model.TIME_DUR_TYP;
                     item.USU_ACT_MIN_SCORE = model.USU_ACT_MIN_SCORE;
 
-                    var rst = dao.UpdateObject(item);
+                    var rst = CHK_STAFF_STAR_SYSTEM_CON_DAL.Update(item);
                     if (rst > 0)
                     {
                         Alter("修改成功！", util.Enum.AlterTypeEnum.Success, false, true);
@@ -180,9 +179,21 @@ namespace gzsw.controller.CHK
             {
                 var deleteId = id.Split(',');
 
-                foreach (var t in deleteId)
+                foreach (var tId in deleteId)
                 {
-                    dao.Delete("ORG_ID", t);
+                    var orgId = string.Empty;
+                    var durType = Convert.ToByte(0);
+                    if (!string.IsNullOrEmpty(id))
+                    {
+                        var ids = tId.Split('*');
+                        if (ids.Length == 2)
+                        {
+                            orgId = ids[0];
+                            durType = Convert.ToByte(ids[1]);
+                        }
+                    }
+
+                    CHK_STAFF_STAR_SYSTEM_CON_DAL.Delete(orgId, durType);
                 }
 
                 return RedirectToAction("Index");
@@ -197,7 +208,18 @@ namespace gzsw.controller.CHK
 
         private StaffStarSystemConModel getModel(string id)
         {
-            var item= CHK_STAFF_STAR_SYSTEM_CON_DAL.Get(id);
+            var orgId = string.Empty;
+            var durType = Convert.ToByte(0);
+            if (!string.IsNullOrEmpty(id))
+            {
+                var ids = id.Split('*');
+                if (ids.Length == 2)
+                {
+                    orgId = ids[0];
+                    durType = Convert.ToByte(ids[1]);
+                }
+            }
+            var item = CHK_STAFF_STAR_SYSTEM_CON_DAL.Get(orgId, durType);
             return new StaffStarSystemConModel()
                    {
                        ATTEND_MIN_SCORE=item.ATTEND_MIN_SCORE,

@@ -576,9 +576,10 @@ namespace gzsw.controller
                     var firstOrDefault = ModelState[key].Errors.FirstOrDefault();
                     if (firstOrDefault != null)
                         errlist.Add(new KeyValuePair<string, string>(key, firstOrDefault.ErrorMessage));
+                    LogHelper.ErrorLog(string.Join("\r\n", errlist.ToArray()));
                 }
             }
-            LogHelper.ErrorLog(string.Join("\r\n", errlist.ToArray()));
+            
             return Json(new { result = rst, desc = desc, reload = reload, url = redirecturl, validmsg = errlist }, "text/html");
         }
 

@@ -29,7 +29,7 @@ namespace gzsw.controller.STAT
         [Inject]
         public IDao<SYS_DLSERIAL>  dlDal { get; set; }
 
-        [UserAuth("STAT_SERVICEComparisonAnalysis")]
+        [UserAuth("STAT_SERVICEComparisonAnalysis_VIW")]
         public ActionResult Index()
         {
             switch (GetHighLV)
@@ -58,7 +58,7 @@ namespace gzsw.controller.STAT
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        [UserAuth("STAT_SERVICEComparisonAnalysis")]
+        [UserAuth("STAT_SERVICEComparisonAnalysis_VIW")]
         public ActionResult HallStat(DateTime? beginTime, DateTime? endTime,
             int pageIndex = 1, int pageSize = 20, bool export = false)
         {
@@ -82,7 +82,6 @@ namespace gzsw.controller.STAT
 
             if (export)
             {
-                var index = 0;
                 return ExportData(exceltitle, "业务办理分析报表-服务厅", "服务厅", dic);
             }
 
@@ -101,7 +100,7 @@ namespace gzsw.controller.STAT
         /// <param name="pageSize"></param>
         /// <param name="export"></param>
         /// <returns></returns>
-        [UserAuth("STAT_SERVICEComparisonAnalysis")]
+        [UserAuth("STAT_SERVICEComparisonAnalysis_VIW")]
         public ActionResult StaffStat(string orgId,DateTime? beginTime, DateTime? endTime,
             int pageIndex = 1, int pageSize = 20, bool export = false)
         {
@@ -128,7 +127,6 @@ namespace gzsw.controller.STAT
 
             if (export)
             {
-                var index = 0;
                 return ExportData(exceltitle, "业务办理分析报表-员工", "员工名称", dic);
             }
 

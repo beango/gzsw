@@ -132,7 +132,7 @@ namespace gzsw.controller.WARN
             return View(listdate);
         }
 
-        [UserAuth("WARN_ALARM_INFO_DETAIL_VIW")]
+        //[UserAuth("WARN_ALARM_INFO_DETAIL_VIW")]
         public ActionResult DetailListByHall(string hallno, int pageIndex = 1, int pageSize = 20)
         {
             ViewBag.HALL_NO = hallno;

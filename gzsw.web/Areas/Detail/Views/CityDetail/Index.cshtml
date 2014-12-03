@@ -156,9 +156,9 @@
         // 顶部导航
         var ligerToolBar = $("#toptoolbar").ligerToolBar();
 
-        @if (Html.ChkAuth("MON_Warning"))
+        @if (Html.ChkAuth("CITY_SYS_CURRYWHIST_VIW"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("DetailList","HistroyAccountDetail"), "查看", "MON_Warning", 800, 450));
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("DetailList","HistroyAccountDetail"), "查看", "CITY_SYS_CURRYWHIST_VIW", 800, 450));
                 @:ligerToolBar.addItem({ line: true });
              }
 

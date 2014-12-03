@@ -250,32 +250,35 @@ namespace gzsw.controller.WARN
             var USER_ID = Request.Form["USER_ID"];
             List<WARN_PARAM_SEND_USER_CON> models = new List<WARN_PARAM_SEND_USER_CON>();
 
-            var ARR_USER_ID = USER_ID.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            var hall = DaoHall.GetEntity("HALL_NO", hallno);
-            if (null != hall)
+            if (!string.IsNullOrEmpty(USER_ID))
             {
-                var USERLIST = new SYS_USER_DAL().GetORGUser(hall.ORG_ID);
-                foreach (var _USERID in ARR_USER_ID)
+                var ARR_USER_ID = USER_ID.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                var hall = DaoHall.GetEntity("HALL_NO", hallno);
+                if (null != hall)
                 {
-                    model.WARN_LEVEL = 1;
-                    model.USER_ID = _USERID;
-                    model.MOB_NBR = USERLIST.FirstOrDefault(obj => obj.USER_ID == _USERID).TEL;
-                    models.Add(model);
+                    var USERLIST = new SYS_USER_DAL().GetORGUser(hall.ORG_ID);
+                    foreach (var _USERID in ARR_USER_ID)
+                    {
+                        model.WARN_LEVEL = 1;
+                        model.USER_ID = _USERID;
+                        model.MOB_NBR = USERLIST.FirstOrDefault(obj => obj.USER_ID == _USERID).TEL;
+                        models.Add(model);
 
-                    var model2 = CommonHelper.DeepClone(model);
-                    model2.WARN_LEVEL = 2;
-                    model.USER_ID = _USERID;
-                    model.MOB_NBR = USERLIST.FirstOrDefault(obj => obj.USER_ID == _USERID).TEL;
-                    models.Add(model2);
+                        var model2 = CommonHelper.DeepClone(model);
+                        model2.WARN_LEVEL = 2;
+                        model.USER_ID = _USERID;
+                        model.MOB_NBR = USERLIST.FirstOrDefault(obj => obj.USER_ID == _USERID).TEL;
+                        models.Add(model2);
 
-                    var model3 = CommonHelper.DeepClone(model);
-                    model3.WARN_LEVEL = 3;
-                    model.USER_ID = _USERID;
-                    model.MOB_NBR = USERLIST.FirstOrDefault(obj => obj.USER_ID == _USERID).TEL;
-                    models.Add(model3);
+                        var model3 = CommonHelper.DeepClone(model);
+                        model3.WARN_LEVEL = 3;
+                        model.USER_ID = _USERID;
+                        model.MOB_NBR = USERLIST.FirstOrDefault(obj => obj.USER_ID == _USERID).TEL;
+                        models.Add(model3);
+                    }
                 }
             }
-            new WARN_PARAM_DAL().AddParamUserList(models);
+            new WARN_PARAM_DAL().AddParamUserList(hallno,id,models);
             Alter("提交成功！", AlterTypeEnum.Error, true, true);
             return RedirectToAction("ParamSendUsr", new { hallno = hallno,id = id});
         }

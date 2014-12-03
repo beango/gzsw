@@ -29,7 +29,6 @@ namespace gzsw.controller.STAT
             {
                 default:
                     return RedirectToAction("HallIndex");
-                    break;
             }
         }
 

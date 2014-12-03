@@ -11,6 +11,7 @@ using gzsw.model;
 using gzsw.util.cache;
 using Ninject.Activation;
 using gzsw.util;
+using gzsw.util.Cache;
 
 namespace gzsw.controller
 {
@@ -28,7 +29,12 @@ namespace gzsw.controller
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
-
+        [AllowAnonymous]
+        public ActionResult Login1(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -141,6 +147,17 @@ namespace gzsw.controller
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult NoAuth()
+        {
+            //ViewBag.F = new SYS_USER_DAL().GetUserFunc(UserState.UserID);
+            //ViewBag.TD = dal.GetUserORG(UserState.UserID);
+            return View();
+        }
+
+        [Ninject.Inject]
+        public SYS_USER_DAL dal { get; set; }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Change(LocalPasswordModel model)
@@ -187,11 +204,6 @@ namespace gzsw.controller
         public ActionResult CheckPasswordIntensity(string NewPassword)
         {
             return null;
-        }
-
-        public ActionResult NoAuth()
-        {
-            return View();
         }
 
         #region Helper

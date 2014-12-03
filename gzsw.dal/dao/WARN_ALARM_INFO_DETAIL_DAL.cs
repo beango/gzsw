@@ -14,20 +14,20 @@ namespace gzsw.dal.dao
             var db = gzswDB.GetInstance();
 
             var sql = PetaPoco.Sql.Builder.Append(@"SELECT  W.ALARM_SEQ,
-W.STAFF_ID,
-S.STAFF_NAM,
-W.COUNTER_ID,
-W.ALARM_TYP,
-W.CREATE_DTIME,
-W.HALL_NO,
-H.HALL_NAM,
-W.[STATE],
-W.HANDLE_USER,
-W.HANDLE_TIME,
-W.ALARM_REASON,
-W.ALARM_METHOD FROM WARN_ALARM_INFO_DETAIL W
-JOIN SYS_HALL H ON W.HALL_NO=H.HALL_NO
-LEFT JOIN SYS_STAFF  S ON W.STAFF_ID=S.STAFF_ID");
+                W.STAFF_ID,
+                S.STAFF_NAM,
+                W.COUNTER_ID,
+                W.ALARM_TYP,
+                W.CREATE_DTIME,
+                W.HALL_NO,
+                H.HALL_NAM,
+                W.[STATE],
+                W.HANDLE_USER,
+                W.HANDLE_TIME,
+                W.ALARM_REASON,
+                W.ALARM_METHOD FROM WARN_ALARM_INFO_DETAIL W
+                JOIN SYS_HALL H ON W.HALL_NO=H.HALL_NO
+                LEFT JOIN SYS_STAFF  S ON W.STAFF_ID=S.STAFF_ID");
             if (!string.IsNullOrEmpty(hallno))
                 sql.Append("where h.HALL_NO =@0 ", "%" + hallno + "%", hallno);
             if (strat != null)
@@ -57,21 +57,21 @@ LEFT JOIN SYS_STAFF  S ON W.STAFF_ID=S.STAFF_ID");
             var db = gzswDB.GetInstance();
 
             var sql = PetaPoco.Sql.Builder.Append(@"select w.SENDINFO_DETAIL_ID,
-w.ALARM_SEQ,
-w.MOB_NBR,
-w.USER_ID,
-u.USER_NAM,
-w.ALARM_INFO,
-w.SEND_TIME,
-w.MOB_SEND_STATE,
-w.CLI_SEND_STATE,
-w.CLI_READ_IND,
-w.SMS_SEND_TIME,
-w.HALL_NO,
-h.HALL_NAM
-from [WARN_ALARM_SENDINFO_DETAIL] w
-join SYS_HALL h  on w.hall_NO=h.hall_no
-left join SYS_USER u on w.user_id = u.user_id");
+                w.ALARM_SEQ,
+                w.MOB_NBR,
+                w.USER_ID,
+                u.USER_NAM,
+                w.ALARM_INFO,
+                w.SEND_TIME,
+                w.MOB_SEND_STATE,
+                w.CLI_SEND_STATE,
+                w.CLI_READ_IND,
+                w.SMS_SEND_TIME,
+                w.HALL_NO,
+                h.HALL_NAM
+                from [WARN_ALARM_SENDINFO_DETAIL] w
+                join SYS_HALL h  on w.hall_NO=h.hall_no
+                left join SYS_USER u on w.user_id = u.user_id");
             if (!string.IsNullOrEmpty(name))
                 sql.Append("where u.USER_NAM  like @0 ", "%" + name + "%", name);
             var data = db.Page<dynamic>(page, PageSize, sql);
@@ -84,21 +84,21 @@ left join SYS_USER u on w.user_id = u.user_id");
             var db = gzswDB.GetInstance();
 
             var sql = PetaPoco.Sql.Builder.Append(@"select w.SENDINFO_DETAIL_ID,
-w.ALARM_SEQ,
-w.MOB_NBR,
-w.USER_ID,
-u.USER_NAM,
-w.ALARM_INFO,
-w.SEND_TIME,
-w.MOB_SEND_STATE,
-w.CLI_SEND_STATE,
-w.CLI_READ_IND,
-w.SMS_SEND_TIME,
-w.HALL_NO,
-h.HALL_NAM
-from [WARN_ALARM_SENDINFO_DETAIL] w
-join SYS_HALL h  on w.hall_NO=h.hall_no
-left join SYS_USER u on w.user_id = u.user_id");
+                w.ALARM_SEQ,
+                w.MOB_NBR,
+                w.USER_ID,
+                u.USER_NAM,
+                w.ALARM_INFO,
+                w.SEND_TIME,
+                w.MOB_SEND_STATE,
+                w.CLI_SEND_STATE,
+                w.CLI_READ_IND,
+                w.SMS_SEND_TIME,
+                w.HALL_NO,
+                h.HALL_NAM
+                from [WARN_ALARM_SENDINFO_DETAIL] w
+                join SYS_HALL h  on w.hall_NO=h.hall_no
+                left join SYS_USER u on w.user_id = u.user_id");
             sql.Append("where w.HALL_NO =@0 ", hallno);
             sql.Append(" and  w.SEND_TIME >=@0 ", DateTime.Now.ToShortDateString());
             var data = db.Page<dynamic>(page, PageSize, sql);
@@ -110,8 +110,9 @@ left join SYS_USER u on w.user_id = u.user_id");
         {
             var db = gzswDB.GetInstance();
 
-            var sql = PetaPoco.Sql.Builder.Append(@"select t2.* from WARN_ALARM_INFO_DETAIL t1 join WARN_ALARM_SENDINFO_DETAIL t2 on t1.ALARM_SEQ=t2.ALARM_SEQ
-              where t2.CLI_READ_IND=0 and t2.CLI_SEND_STATE=0 and t2.USER_ID=@0 and t1.STATE=1"
+            var sql = PetaPoco.Sql.Builder.Append(@"select t2.* from 
+                WARN_ALARM_INFO_DETAIL t1 join WARN_ALARM_SENDINFO_DETAIL t2 on t1.ALARM_SEQ=t2.ALARM_SEQ
+                where t2.CLI_READ_IND=0 and t2.CLI_SEND_STATE=0 and t2.USER_ID=@0 and t1.STATE=1"
                 , userid);
             return db.Fetch<WARN_ALARM_SENDINFO_DETAIL>(sql);
         }
@@ -122,7 +123,7 @@ left join SYS_USER u on w.user_id = u.user_id");
         /// <param name="id"></param>
         public void UPDATE_WARN_ALARM_INFO_DETAIL(IEnumerable<long> id)
         {
-            if (null!=id&&id.Count()>0)
+            if (null != id && id.Count() > 0)
             {
                 var sql = Sql.Builder.Append("update WARN_ALARM_SENDINFO_DETAIL set CLI_SEND_STATE=1 where SENDINFO_DETAIL_ID in(@0)", id);
                 gzswDB.GetInstance().Execute(sql);

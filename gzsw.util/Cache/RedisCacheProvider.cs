@@ -8,16 +8,26 @@ namespace gzsw.util.cache
 {
     public class RedisCacheProvider : ICacheProvider
     {
-        //private readonly ConnectionMultiplexer _connectionMultiplexer;
-        //private readonly IDatabase _database;
+        public object Get(string key)
+        {
+            return null;
+        }
 
-        //public RedisCacheProvider(ConnectionMultiplexer connectionMultiplexer)
-        //{
-            //if (connectionMultiplexer == null)
-            //    throw new ArgumentException("connectionMultiplexer");
-            //_connectionMultiplexer = connectionMultiplexer;
-            //_database = _connectionMultiplexer.GetDatabase();
-        //}
+        public T Get<T>(string key, Expression<Func<T>> expression, double expiry)
+        {
+            var func = expression.Compile();
+            var result = func();
+            //var cacheItem = _database.Get<T>(key);
+            //if (EqualityComparer<T>.Default.Equals(cacheItem, default(T)))
+            //    cacheItem = SetAndGet(key, expression, expiry);
+            //return cacheItem;
+            return result;
+        }
+
+        public void Set(string key, object data, double expiry)
+        {
+
+        }
 
         public T Get<T>(string key, Expression<Func<T>> expression, TimeSpan? expiry = null)
         {

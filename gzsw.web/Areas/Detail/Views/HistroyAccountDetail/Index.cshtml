@@ -188,9 +188,9 @@
             });
             // 顶部导航
             var ligerToolBar = $("#toptoolbar").ligerToolBar(); 
-            @if (Html.ChkAuth("MON_Warning"))
+            @if (Html.ChkAuth("Detail_SYS_CURRQUEUEHIST_VIW"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Detail"), "查看", "MON_Warning", 800, 450));
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Detail"), "查看", "Detail_SYS_CURRQUEUEHIST_VIW", 800, 450));
                 @:ligerToolBar.addItem({ line: true });
             }
 

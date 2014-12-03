@@ -26,7 +26,7 @@ using gzsw.util.Extensions;
 
 namespace gzsw.controller.STAT
 {
-    public class StatStaffCallController : BaseController<STAT_STAFF_BUSI_TOT_D>
+    public class StatStaffCallController : StatBaseController
     {
         [Inject]
         public IDao<SYS_HALL> DaoHall { get; set; }
@@ -34,23 +34,16 @@ namespace gzsw.controller.STAT
         public IDao<SYS_STAFF> DaoStaff { get; set; }
         [Inject]
         public IDao<SYS_USER> DaoUser { get; set; }
-        #region 省权限报表
-        private string GetSubTitle(string orgid, DateTime? beginTime, DateTime? endTime)
+        [Inject]
+        public SYS_USER_DAL DalUser { get; set; }
+
+        public StatStaffCallController()
         {
-            var orgall = new SYS_USER_DAL().GetUserORG(UserState.UserID);
-            string subTitle = "";
-            if (!string.IsNullOrEmpty(orgid))
-                subTitle += orgall.FirstOrDefault((o => o.ORG_ID == orgid)).ORG_NAM;
-            else
-                subTitle += orgall.OrderBy(o => o.ORG_LEVEL).FirstOrDefault().ORG_NAM;
-            subTitle += "排队叫号分析";
-            if (beginTime != null && endTime != null)
-            {
-                subTitle += "<span style='font-size:12px;'>（" + beginTime.Value.ToString("yyyy年MM月dd日");
-                subTitle += " - " + endTime.Value.ToString("yyyy年MM月dd日") + "）</span>";
-            }
-            return subTitle;
+            StatNAM = "排队叫号分析";
+            StatURL = "/STAT/StatStaffCall";
         }
+
+        #region 省权限报表
         
         /// <summary>
         /// 报表
@@ -65,90 +58,39 @@ namespace gzsw.controller.STAT
         [UserAuth("STAT_STAFF_QUEUE_BUSI_D_VIW")]
         public ActionResult Index(DateTime? beginTime, DateTime? endTime, string orgid, int pageIndex = 1, int pageSize = 20, bool export = false)
         {
-            base.DateTimeInit(ref beginTime, ref endTime);
+            CHK_AUTH();//判断权限
+            base.DateTimeInit(ref beginTime, ref endTime);//时间初始化
 
             ViewBag.beginTime = beginTime == null ? "" : beginTime.Value.ToString("yyyy-MM-dd");
             ViewBag.endTime = endTime == null ? "" : endTime.Value.ToString("yyyy-MM-dd");
-            var t = 3;//员工报表
-            ViewBag.NAM = "员工";
-            if (string.IsNullOrEmpty(Request.QueryString["t"])
-                || !int.TryParse(Request.QueryString["t"], out t))
-            {
-                t = 1;
-            }
-            if (t == 1)
-            {
-                ViewBag.NAM = "省市";
-                ViewBag.NAMLink = "/STAT/StatStaffCall?t=2";//如果是省级，点击进入市级
-            }
-            if (t == 2)
-            {
-                ViewBag.NAM = "服务厅";
-                ViewBag.NAMLink = "/STAT/StatStaffCall?t=3";//如果是省级，点击进入员工报表
-            }
-            if (GetHighLV == model.Enums.UserLV_ENUM.市级 && t < 2)//判断是否有权限
-            {
-                return Redirect("/STAT/StatStaffCall?t=2");
-            }
-            if (GetHighLV == model.Enums.UserLV_ENUM.区级 && t < 2)//判断是否有权限
-            {
-                return Redirect("/STAT/StatStaffCall?t=2");
-            }
-            if (GetHighLV == model.Enums.UserLV_ENUM.服务厅级 && t < 3)//判断是否有权限
-            {
-                return Redirect("/STAT/StatStaffCall?t=3");
-            }
-            if (GetHighLV == model.Enums.UserLV_ENUM.无权限)//判断是否有权限
-            {
-                return NoAuth;
-            }
-            var re = base.UserHall;
-            var orgall = new SYS_USER_DAL().GetUserORG(UserState.UserID);
-            ViewBag.UserORG = new SelectList(orgall.Where(obj => obj.ORG_LEVEL == 4)
+            ViewBag.NAM = LV.ToString();
+            var userorg = DalUser.GetUserORG(UserState.UserID);
+            ViewBag.UserORG = new SelectList(userorg.Where(obj => obj.ORG_LEVEL == 4)
                 , "ORG_ID", "ORG_NAM", orgid);
-            if (!string.IsNullOrEmpty(orgid))
-            {
-                orgall = orgall.Where(obj => obj.ORG_ID == orgid).ToList();
-                if (null == orgall || orgall.Count() == 0)
-                {
-                    orgall = new List<SYS_ORGANIZE> { new SYS_ORGANIZE { ORG_ID = "-1" } };
-                }
-            }
+            if (LV == ENUM_STATLV.省市)
+                ViewBag.NAMLink = "/STAT/StatStaffCall?t=2";//如果是省级，点击进入市级
+            if (LV == ENUM_STATLV.服务厅)
+                ViewBag.NAMLink = "/STAT/StatStaffCall?t=3";//如果是省级，点击进入员工报表
+            string subTitle = GetStatTitle(orgid, beginTime, endTime);
+            ViewBag.subTitle = subTitle;
 
-            if (export)
-                pageIndex = 0;
             List<dynamic> data = null;
-
-            if (t == 1)
-            {
+            if (LV == ENUM_STATLV.省市)
                 data = new STAT_STAFF_BUSI_TOT_D_DAL().Q_STATDATA_GROUP_CITY(null, beginTime, endTime);
-            }
-            if (t == 2)
+            if (LV == ENUM_STATLV.服务厅)
             {
                 var halllist = new SYS_HALL_DAL().GetOrgHallAndChild(orgid).ToArray();
                 data = new STAT_STAFF_BUSI_TOT_D_DAL().Q_STATDATA_GROUP_HALL(halllist, beginTime, endTime);
             }
-            if (t == 3)
+            if (LV == ENUM_STATLV.员工)
             {
                 var halllist = new SYS_HALL_DAL().GetOrgHallAndChild(orgid).ToArray();
                 data = new STAT_STAFF_BUSI_TOT_D_DAL().Q_STATDATA_GROUP_STAFF(halllist, beginTime, endTime);
             }
-            string subTitle = "";
-            if (beginTime == null && endTime == null)
-            {
-                subTitle = GetSubTitle(orgid, data.Select(o => o.MIN_STAT_DT).Min(), data.Select(o => o.MAX_STAT_DT).Max());
-            }
-            else
-                subTitle = GetSubTitle(orgid, beginTime, endTime);
-            ViewBag.subTitle = subTitle;
+            
             if (export)//导出
             {
-                string xlnam = "排队叫号分析－省市";
-                if (t == 2)
-                    xlnam = "排队叫号分析－服务厅";
-                if (t == 3)
-                    xlnam = "排队叫号分析－员工";
-                return ExportData(xlnam, subTitle, data);
+                return ExportData(StatNAM + "－" + LV.ToString(), subTitle, data);
             }
             else
             {
@@ -169,9 +111,9 @@ namespace gzsw.controller.STAT
                     dt.Rows.Add(r);
                 }
                 subTitle = subTitle.Replace("<span style='font-size:12px;'>", "")
-                    .Replace("</span>", "").Replace("排队叫号分析", "");
-                ViewBag.ChartColumn3DXML = CreateMSColumn3DChart("排队叫号分析", ds.Tables[0], 420, subTitle, true);
-                ViewBag.ChartSplineXML = CreateMSSplineChart("排队叫号分析", ds, 420, null, null, subTitle);
+                    .Replace("</span>", "").Replace(StatNAM, "");
+                ViewBag.ChartColumn3DXML = CreateMSColumn3DChart(StatNAM, ds.Tables[0], 420, subTitle, true);
+                ViewBag.ChartSplineXML = CreateMSSplineChart(StatNAM, ds, 420, null, null, subTitle);
                 var page = new Page<dynamic>() { Items = data.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(), ItemsPerPage = pageSize, CurrentPage = pageIndex, TotalItems = data.Count };
                 return View("Index", page);
             }
@@ -219,20 +161,20 @@ namespace gzsw.controller.STAT
                     xlsrow.CreateCell(0).SetCellValue(rowIndex - 3);
                     xlsrow.CreateCell(1).SetCellValue(row.NAM);
                     xlsrow.CreateCell(2).SetCellValue(row.CALL_CNT);
-                    xlsrow.CreateCell(3).SetCellValue(CommonHelper.DivisionOfPercent(row.CALL_CNT , exportData.Sum(obj => obj.CALL_CNT)));
+                    xlsrow.CreateCell(3).SetCellValue(CommonHelper.DivisionOfPercent(row.CALL_CNT, exportData.Sum(obj => obj.CALL_CNT)));
                     xlsrow.CreateCell(4).SetCellValue(row.HANDLE_CNT);
-                    xlsrow.CreateCell(5).SetCellValue(CommonHelper.DivisionOfPercent(row.HANDLE_CNT ,exportData.Sum(obj => obj.CALL_CNT)));
+                    xlsrow.CreateCell(5).SetCellValue(CommonHelper.DivisionOfPercent(row.HANDLE_CNT, exportData.Sum(obj => obj.CALL_CNT)));
                     xlsrow.CreateCell(6).SetCellValue(row.OVERTIME_WAIT_CNT);
-                    xlsrow.CreateCell(7).SetCellValue(CommonHelper.DivisionOfPercent(row.OVERTIME_WAIT_CNT , exportData.Sum(obj => obj.CALL_CNT)));
+                    xlsrow.CreateCell(7).SetCellValue(CommonHelper.DivisionOfPercent(row.OVERTIME_WAIT_CNT, exportData.Sum(obj => obj.CALL_CNT)));
                     xlsrow.CreateCell(8).SetCellValue(row.SECOND_SVR_CNT);
-                    xlsrow.CreateCell(9).SetCellValue(CommonHelper.DivisionOfPercent(row.SECOND_SVR_CNT , exportData.Sum(obj => obj.CALL_CNT)));
-                    xlsrow.CreateCell(10).SetCellValue(CommonHelper.DivisionOfTimeString(row.WAIT_DUR , row.CALL_CNT));
+                    xlsrow.CreateCell(9).SetCellValue(CommonHelper.DivisionOfPercent(row.SECOND_SVR_CNT, exportData.Sum(obj => obj.CALL_CNT)));
+                    xlsrow.CreateCell(10).SetCellValue(CommonHelper.DivisionOfTimeString(row.WAIT_DUR, row.CALL_CNT));
                     xlsrow.CreateCell(11).SetCellValue(row.LOCAL_CNT);
-                    xlsrow.CreateCell(12).SetCellValue(CommonHelper.DivisionOfPercent(row.LOCAL_CNT , exportData.Sum(obj => obj.CALL_CNT)));
+                    xlsrow.CreateCell(12).SetCellValue(CommonHelper.DivisionOfPercent(row.LOCAL_CNT, exportData.Sum(obj => obj.CALL_CNT)));
                     xlsrow.CreateCell(13).SetCellValue(row.VOTE_MULTI_CNT);
-                    xlsrow.CreateCell(14).SetCellValue(CommonHelper.DivisionOfPercent(row.VOTE_MULTI_CNT , exportData.Sum(obj => obj.CALL_CNT)));
+                    xlsrow.CreateCell(14).SetCellValue(CommonHelper.DivisionOfPercent(row.VOTE_MULTI_CNT, exportData.Sum(obj => obj.CALL_CNT)));
                     xlsrow.CreateCell(15).SetCellValue(row.ABANDON_CNT);
-                    xlsrow.CreateCell(16).SetCellValue(CommonHelper.DivisionOfPercent(row.ABANDON_CNT , exportData.Sum(obj => obj.CALL_CNT)));
+                    xlsrow.CreateCell(16).SetCellValue(CommonHelper.DivisionOfPercent(row.ABANDON_CNT, exportData.Sum(obj => obj.CALL_CNT)));
                     #region 设置单元格样式
                     foreach (var cell in xlsrow.Cells)
                     {
@@ -253,21 +195,21 @@ namespace gzsw.controller.STAT
                 footer.CreateCell(0).SetCellValue("合计");//#fffdbb
                 footer.CreateCell(1).SetCellValue("合计");//#fffdbb
                 footer.CreateCell(2).SetCellValue(totalCALLCNT);
-                footer.CreateCell(3).SetCellValue(CommonHelper.DivisionOfPercent(exportData.Sum(obj => obj.CALL_CNT) , totalCALLCNT));
+                footer.CreateCell(3).SetCellValue(CommonHelper.DivisionOfPercent(exportData.Sum(obj => obj.CALL_CNT), totalCALLCNT));
                 footer.CreateCell(4).SetCellValue(exportData.Sum(obj => obj.HANDLE_CNT));
                 footer.CreateCell(5).SetCellValue(CommonHelper.DivisionOfPercent(exportData.Sum(obj => obj.HANDLE_CNT), totalCALLCNT));
                 footer.CreateCell(6).SetCellValue(exportData.Sum(obj => obj.OVERTIME_WAIT_CNT));
-                footer.CreateCell(7).SetCellValue(CommonHelper.DivisionOfPercent(exportData.Sum(obj => obj.OVERTIME_WAIT_CNT) , totalCALLCNT));
+                footer.CreateCell(7).SetCellValue(CommonHelper.DivisionOfPercent(exportData.Sum(obj => obj.OVERTIME_WAIT_CNT), totalCALLCNT));
                 footer.CreateCell(8).SetCellValue(exportData.Sum(obj => obj.SECOND_SVR_CNT));
                 footer.CreateCell(9).SetCellValue(CommonHelper.DivisionOfPercent(exportData.Sum(obj => obj.SECOND_SVR_CNT), totalCALLCNT));
 
-                footer.CreateCell(10).SetCellValue(CommonHelper.DivisionOfTimeString(exportData.Sum(obj2 => (double)obj2.WAIT_DUR) , exportData.Sum(obj2 => obj2.CALL_CNT)));
+                footer.CreateCell(10).SetCellValue(CommonHelper.DivisionOfTimeString(exportData.Sum(obj2 => (double)obj2.WAIT_DUR), exportData.Sum(obj2 => obj2.CALL_CNT)));
                 footer.CreateCell(11).SetCellValue(exportData.Sum(obj => obj.LOCAL_CNT));
                 footer.CreateCell(12).SetCellValue(CommonHelper.DivisionOfPercent(exportData.Sum(obj => obj.LOCAL_CNT), totalCALLCNT));
                 footer.CreateCell(13).SetCellValue(exportData.Sum(obj => obj.VOTE_MULTI_CNT));
-                footer.CreateCell(14).SetCellValue(CommonHelper.DivisionOfPercent(exportData.Sum(obj => obj.VOTE_MULTI_CNT) , totalCALLCNT));
+                footer.CreateCell(14).SetCellValue(CommonHelper.DivisionOfPercent(exportData.Sum(obj => obj.VOTE_MULTI_CNT), totalCALLCNT));
                 footer.CreateCell(15).SetCellValue(exportData.Sum(obj => obj.ABANDON_CNT));
-                footer.CreateCell(16).SetCellValue(CommonHelper.DivisionOfPercent(exportData.Sum(obj => obj.ABANDON_CNT) , totalCALLCNT));
+                footer.CreateCell(16).SetCellValue(CommonHelper.DivisionOfPercent(exportData.Sum(obj => obj.ABANDON_CNT), totalCALLCNT));
                 #region 底部样式
                 var footercellFont = hssfworkbook.CreateFont();
                 var footercellStyle = hssfworkbook.CreateCellStyle();
@@ -356,7 +298,8 @@ namespace gzsw.controller.STAT
                 dataDT.Columns[3].SetOrdinal(1);
             while (dataDT.Columns.Count > 2)
                 dataDT.Columns.RemoveAt(2);
-            var orgall = new SYS_USER_DAL().GetUserORG(UserState.UserID);
+            var orgall = DalUser.GetUserORG(UserState.UserID);
+            
             string MainTitle = "";
             if (!string.IsNullOrEmpty(orgid))
                 MainTitle += orgall.FirstOrDefault((o => o.ORG_ID == orgid)).ORG_NAM;
@@ -370,14 +313,15 @@ namespace gzsw.controller.STAT
             }
             MainTitle += "<span style='font-size:12px;'>（" + btime.Value.ToString("yyyy年MM月dd日");
             MainTitle += " - " + etime.Value.ToString("yyyy年MM月dd日") + "）</span>";
+
             ViewBag.MainTitle = MainTitle;
             MainTitle = MainTitle.Replace("<span style='font-size:12px;'>", "")
                     .Replace("</span>", "");
 
             if (ct == "WAITPERCENT")
             {
-                ViewBag.ChartXml = CreateMSColumn3DChart(caption, dataDT, 580, MainTitle, true, true, "分", "60", "分");
-                ViewBag.ChartSplineXML = CreateMSSplineChart(caption, dataDT, 550, null, null, MainTitle, true, "分", "60", "分");
+                ViewBag.ChartXml = CreateMSColumn3DChart(caption, dataDT, 580, MainTitle, true, true, "秒", "60", "分");
+                ViewBag.ChartSplineXML = CreateMSSplineChart(caption, dataDT, 550, null, null, MainTitle, true, "秒", "60", "分");
             }
             else
             {
@@ -401,7 +345,7 @@ namespace gzsw.controller.STAT
         /// <returns></returns>
         public List<ZtreeNode_ORG> GetOrgs2Tree()
         {
-            var all = new SYS_USER_DAL().GetUserORG(UserState.UserID);
+            var all = DalUser.GetUserORG(UserState.UserID);
             var hallall = DaoHall.FindList();
             var staffall = DaoStaff.FindList();
             foreach (var org in all.Where(obj => obj.PAR_ORG_ID == ""))

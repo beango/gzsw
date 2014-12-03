@@ -5,6 +5,7 @@ using System.Linq;
 using gzsw.model;
 using gzsw.util;
 using PetaPoco;
+using gzsw.util.Cache;
 
 namespace gzsw.dal
 {
@@ -15,7 +16,8 @@ namespace gzsw.dal
         /// </summary>
         /// <param name="userid"></param>
         /// <returns></returns>
-        public List<UserFuncs> GetUserFunc(string userid)
+        /// [InterceptCache(TimeOut = 2)]
+        public virtual List<UserFuncs> GetUserFunc(string userid)
         {
             var db = gzswDB.GetInstance();
 
@@ -31,7 +33,8 @@ namespace gzsw.dal
         /// <summary>
         /// 获取用户有权限访问的组织机构
         /// </summary>
-        public List<SYS_ORGANIZE> GetUserORG(string userid)
+        /// [InterceptCache(TimeOut = 1)]
+        public virtual List<SYS_ORGANIZE> GetUserORG(string userid)
         {
             var db = gzswDB.GetInstance();
             var sql = PetaPoco.Sql.Builder.Append("");

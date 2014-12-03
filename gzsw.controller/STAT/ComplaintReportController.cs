@@ -37,10 +37,8 @@ namespace gzsw.controller.STAT
                         }
                     }
                     return RedirectToAction("PersonalIndex", new { hallNo = hallNo });
-                    break;
                 default:
                     return RedirectToAction("HallIndex");
-                    break;
             }
         }
 

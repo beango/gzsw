@@ -24,7 +24,7 @@ namespace gzsw.controller.CHK
         public IDao<SYS_USER> SysuserDao { get; set; }
         [Ninject.Inject]
         public IDao<CHK_HALL_CHKITEM_CON> Chkhallchkitemcon { get; set; }
-        [UserAuth("CHK_HALL_STAT_M_VIW")]
+        [UserAuth("CHK_HALL_STAT_M_VIW,CHK_HALL_ITEM_MARK_SCORE_VIW")]
         public ActionResult Index( string orgId, int pageIndex = 1, int pageSize = 20)
         {
             var organDao = new SYS_ORGANIZE_DAL();
@@ -49,7 +49,7 @@ namespace gzsw.controller.CHK
 
 
 
-        [UserAuth("CHK_STAT_STAFF_SVRSTAT_M_VIW")]
+        [UserAuth("CHK_STAT_STAFF_SVRSTAT_M_VIW,CHK_HALL_ITEM_MARK_SCORE_VIW")]
         public ActionResult Detail(string id)
         {
             try
@@ -69,7 +69,7 @@ namespace gzsw.controller.CHK
             }
         }
 
-        [UserAuth("CHK_STAT_STAFF_SVRSTAT_M_EDT")]
+        [UserAuth("CHK_STAT_STAFF_SVRSTAT_M_EDT,CHK_HALL_ITEM_MARK_SCORE_EDT")]
         public ActionResult Edit(string id, string orgId)
         {
             ViewBag.orgId = orgId;
@@ -111,7 +111,7 @@ namespace gzsw.controller.CHK
         }
 
         [HttpPost]
-        [UserAuth("CHK_STAT_STAFF_SVRSTAT_M_EDT")]
+        [UserAuth("CHK_STAT_STAFF_SVRSTAT_M_EDT,CHK_HALL_ITEM_MARK_SCORE_EDT")]
         public ActionResult Edit(CHK_HALL_ITEM_MARKViewModel model)
         {
 
@@ -234,7 +234,7 @@ namespace gzsw.controller.CHK
             }
             return View(model); 
         }
-        [UserAuth("CHK_STAT_STAFF_SVRSTAT_M_DEL")]
+        [UserAuth("CHK_STAT_STAFF_SVRSTAT_M_DEL,CHK_HALL_ITEM_MARK_SCORE_DEL")]
         public ActionResult Delete(string id)
         {
             try

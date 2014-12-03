@@ -48,13 +48,11 @@ namespace gzsw.controller.WARN
         public ActionResult Details(int id)
         {
             var data = SenduserconDao.GetEntity("SEQ", id);
-            var hallname = "";
             var hall= Halldao.GetEntity("HALL_NO", data.HALL_NO);
             ViewBag.HallName = "";
             if (hall != null)
                 ViewBag.HallName = hall.HALL_NAM;
 
-            ViewBag.HallName = hallname;
             ViewBag.UserName = "";
             if (!string.IsNullOrEmpty(data.USER_ID))
             {

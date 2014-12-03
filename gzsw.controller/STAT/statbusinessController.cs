@@ -101,7 +101,6 @@ namespace gzsw.controller.STAT
                 ViewBag.ChartSplineXML = CreateMSSplineChart("业务大类分析", ds, 430, null, null, subtitle);
                 return View(data);
             }
-            return null;
         }
 
         /// <summary>
@@ -177,7 +176,6 @@ namespace gzsw.controller.STAT
 
             TimeSpan timeSpan = eTime.Subtract(bTime);
             var tlist = new List<string>();
-            TimeSpenEnum tempsan;
             base.SetLineYName(timeSpan, bTime, lineTable, tlist, eTime);
             
             for (int i = 0; i < lineTable.Rows.Count; i++)
@@ -298,7 +296,6 @@ namespace gzsw.controller.STAT
                 ViewBag.ChartSplineXML = CreateMSSplineChart(titleName, lineTable, 550, null, null, "", true, "分", "60", "分");
             }
             return View(lineTable);
-            return null;
         }
 
     }

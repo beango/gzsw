@@ -24,7 +24,7 @@ namespace gzsw.util.Extensions
         public static DateTime? DefaultBeginDateTime(this DateTime dt)
         {
             var data =  dt.AddDays(1 - Convert.ToInt32(dt.DayOfWeek.ToString("d"))); 
-            return new DateTime(data.Year, data.Month, data.Day-1);
+            return data.Date.AddDays(-1);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace gzsw.util.Extensions
         {
             DateTime startWeek = dt.AddDays(1 - Convert.ToInt32(dt.DayOfWeek.ToString("d")));
             startWeek = startWeek.AddDays(6);
-            return new DateTime(startWeek.Year, startWeek.Month, startWeek.Day-1);
+            return startWeek.AddDays(-1);
         }
 
 

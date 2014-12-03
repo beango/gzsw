@@ -74,5 +74,16 @@ namespace gzsw.dal.dao
                 });
             return gzswDB.GetInstance().Execute(sql);
         }
+
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <param name="hallno"></param>
+        /// <param name="id"></param>
+        public void Delete(string hallno, int[] id)
+        {
+            var db = gzswDB.GetInstance();
+            db.Execute("delete SYS_COUNTER where HALL_NO=@0 and COUNTER_ID in(@1)", hallno, id);
+        }
     }
 }

@@ -106,13 +106,20 @@ namespace gzsw.controller.WARN
                 CHKVALID(info);
                 info.RELEASE_TIME = DateTime.Now;
                 info.RELEASE_USER_ID = UserState.UserID;
+                string mtype = Request["MType"];
+                if (mtype == "3" || mtype == "2")//发送给看板
+                {
+                    if (ModelState.ContainsKey("STAFF_ID"))
+                    {
+                        ModelState.Remove("STAFF_ID");
+                    }
+                }
 
                 if (!ModelState.IsValid)
                 {
                     ModelState.AddModelError("", "数据验证出错！");
                     return JsonResult(false, "新增失败！", "WARN");
                 }
-                string mtype = Request["MType"];
                 if (mtype == "1")//发送给员工
                 {
                     string reqstaffid = Request["STAFF_ID"];

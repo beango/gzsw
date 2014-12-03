@@ -51,6 +51,9 @@
     <Reference Include="FusionCharts">
       <HintPath>..\lib\FusionCharts.dll</HintPath>
     </Reference>
+    <Reference Include="LinFu.DynamicProxy">
+      <HintPath>..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\log4net.dll</HintPath>
@@ -59,6 +62,13 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Interception, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.Extensions.Interception.3.2.0.0\lib\net40\Ninject.Extensions.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Interception.LinFu">
+      <HintPath>..\packages\Ninject.Extensions.Interception.Linfu.3.2.0.0\lib\net40\Ninject.Extensions.Interception.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -206,6 +216,7 @@
     <Content Include="Upload\质量考核分数管理模板.xls" />
     <Content Include="Areas\STAT\Views\statstaffqueuebusid\ShowQueueCNT.cshtml" />
     <Content Include="Areas\STAT\Views\statstaffqueuebusid\OtherIndex.cshtml" />
+    <None Include="Views\Shared\Login1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />

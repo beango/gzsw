@@ -404,7 +404,7 @@ namespace gzsw.controller.CHK
                 Alter("删除成功!", AlterTypeEnum.Success);
                 return Json(new {success = 0, message = "上传文件成功."}, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception e)
+            catch
             {
 
                 return Json(new {success = -1, message = "导入文件失败，请稍后再试"}, JsonRequestBehavior.AllowGet);

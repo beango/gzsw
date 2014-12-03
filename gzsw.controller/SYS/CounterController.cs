@@ -19,9 +19,11 @@ namespace gzsw.controller.SYS
         public IDao<SYS_HALL> DaoHall { get; set; }
         [Inject]
         public IDao<SYS_QUEUESERIAL> DaoQueueserial { get; set; }
+        [Inject]
+        public IDao<SYS_TICKETQUEUESERIAL> DaoTicketQueueserial { get; set; }
 
         [UserAuth("SYS_COUNTER_VIW")]
-        public ActionResult Index(string hallno, string orgid, string orgnam, int pageIndex = 1,int pageSize=20)
+        public ActionResult Index(string hallno, string orgid, string orgnam, int pageIndex = 1, int pageSize = 20)
         {
             ViewBag.HALLNO = hallno;
             ViewBag.ORGID = orgid;
@@ -33,7 +35,7 @@ namespace gzsw.controller.SYS
                 , "ORG_ID", "ORG_NAM", orgid);
 
             var orgs = orgall.Select(obj => obj.ORG_ID);
-           
+
             if (!string.IsNullOrEmpty(orgid))
             {
                 orgs = orgs.Where(obj => obj == orgid);
@@ -101,11 +103,11 @@ namespace gzsw.controller.SYS
 
         [HttpGet]
         [UserAuth("SYS_COUNTER_VIW")]
-        public ActionResult Details(int id)
+        public ActionResult Details(string hallno, int id)
         {
             try
             {
-                var detail = dao.GetEntity("COUNTER_ID", id);
+                var detail = dao.GetEntity("HALL_NO", hallno, "COUNTER_ID", id);
                 InitData(new List<SYS_COUNTER> { detail });
                 return View(detail);
             }
@@ -124,11 +126,11 @@ namespace gzsw.controller.SYS
             {
                 ViewBag.ORG = DaoOrganize.GetEntity("ORG_ID", orgid);
             }
-            GetCreateData();
+            GetCreateData(null,orgid);
             return View();
         }
 
-        private void GetCreateData(string sele=null)
+        private void GetCreateData(string sele,string orgid)
         {
             ViewBag.HallList = new SelectList(DaoHall.FindList(), "HALL_NO", "HALL_NAM");
             var statelist = EnumHelper.GetCategorySelectList(typeof(SYS_COUNTER.STATE_ENUM));
@@ -139,7 +141,7 @@ namespace gzsw.controller.SYS
                     selitem.Selected = true;
             }
             ViewBag.STATE = statelist;
-            ViewBag.QueueSerial = new SelectList(DaoQueueserial.FindList(), "Q_SERIALID", "Q_SERIALNAME");
+            ViewBag.QueueSerial = new SelectList(DaoTicketQueueserial.FindList("", "Q_SYSNO", orgid), "Q_SERIALID", "Q_SERIALNAME");
         }
 
         [HttpPost]
@@ -148,7 +150,7 @@ namespace gzsw.controller.SYS
         {
             try
             {
-                GetCreateData();
+                GetCreateData(null,info.HALL_NO);
                 STAFFVALID(info);
                 if (!ModelState.IsValid)
                 {
@@ -179,7 +181,7 @@ namespace gzsw.controller.SYS
         private void STAFFVALID(SYS_COUNTER info, bool isEdit = false)
         {
             if (!string.IsNullOrEmpty(Request.Form["PRI1_BUSI_SER"]))
-                info.PRI1_BUSI_SER = Request.Form["PRI1_BUSI_SER"].Replace(",","-");
+                info.PRI1_BUSI_SER = Request.Form["PRI1_BUSI_SER"].Replace(",", "-");
             if (!string.IsNullOrEmpty(Request.Form["PRI2_BUSI_SER"]))
                 info.PRI2_BUSI_SER = Request.Form["PRI2_BUSI_SER"].Replace(",", "-");
             if (!string.IsNullOrEmpty(Request.Form["PRI3_BUSI_SER"]))
@@ -199,7 +201,7 @@ namespace gzsw.controller.SYS
             }
             else
             {
-                if (!isEdit && dao.GetEntity("COUNTER_ID", info.COUNTER_ID,"HALL_NO", info.HALL_NO) != null)
+                if (!isEdit && dao.GetEntity("COUNTER_ID", info.COUNTER_ID, "HALL_NO", info.HALL_NO) != null)
                     ModelState.AddModelError("COUNTER_ID", "窗口ID已经存在！");
             }
             if (info.PRI1_BUSI_SER == null)
@@ -273,23 +275,23 @@ namespace gzsw.controller.SYS
                 }
                 quArr.AddRange(arr1);
             }
-            if (info.MAX_BUSI_CNT==null)
+            if (info.MAX_BUSI_CNT == null)
             {
                 ModelState.AddModelError("MAX_BUSI_CNT", "不能为空！");
             }
-            else if (info.MAX_BUSI_CNT.Value <=0)
+            else if (info.MAX_BUSI_CNT.Value <= 0)
             {
                 ModelState.AddModelError("MAX_BUSI_CNT", "必须大于0！");
             }
         }
         [HttpGet]
         [UserAuth("SYS_COUNTER_EDT")]
-        public ActionResult Edit(string hallno,int id)
+        public ActionResult Edit(string hallno, int id)
         {
             try
             {
-                var info = dao.GetEntity("HALL_NO",hallno,"COUNTER_ID", id);
-                GetCreateData(info.STATE.ToString());
+                var info = dao.GetEntity("HALL_NO", hallno, "COUNTER_ID", id);
+                GetCreateData(info.STATE.ToString(),hallno);
                 InitData(new List<SYS_COUNTER> { info });
                 return View(info);
             }
@@ -305,7 +307,7 @@ namespace gzsw.controller.SYS
         {
             try
             {
-                STAFFVALID(info,true);
+                STAFFVALID(info, true);
 
                 if (!ModelState.IsValid)
                 {
@@ -334,16 +336,13 @@ namespace gzsw.controller.SYS
             }
         }
         [UserAuth("SYS_COUNTER_DEL")]
-        public ActionResult Delete(string id)
+        public ActionResult Delete(string hallno, string id)
         {
             try
             {
-                var deleteId = id.Split(',');
-                
-                foreach (var did in deleteId)
-                {
-                    dao.Delete("COUNTER_ID", did);
-                }
+                new SYS_COUNTER_DAL().Delete(hallno,
+                    id.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(o => int.Parse(o)).ToArray()
+                );
                 return RedirectToAction("/");
             }
             catch (Exception ex)

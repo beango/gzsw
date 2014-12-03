@@ -47,13 +47,13 @@ namespace gzsw.dal.dao
             }
         }
 
-        public bool AddParamUserList(List<model.WARN_PARAM_SEND_USER_CON> models)
+        public bool AddParamUserList(string hallno,byte warntyp,List<model.WARN_PARAM_SEND_USER_CON> models)
         {
             try
             {
                 var db = gzswDB.GetInstance();
                 db.BeginTransaction();
-                var exists = db.Execute("Delete WARN_PARAM_SEND_USER_CON where HALL_NO=@0 and WARN_TYP=@1", models.FirstOrDefault().HALL_NO,models.FirstOrDefault().WARN_TYP);
+                var exists = db.Execute("Delete WARN_PARAM_SEND_USER_CON where HALL_NO=@0 and WARN_TYP=@1", hallno, warntyp);
                 foreach (var model in models)
                 {
                     db.Insert(model);

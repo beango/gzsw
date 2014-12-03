@@ -136,9 +136,9 @@
         // 顶部导航
         var ligerToolBar = $("#toptoolbar").ligerToolBar();
 
-        @if (Html.ChkAuth("Detail_CHK_STAFF_USU_ACT_MARK"))
+        @if (Html.ChkAuth("Detail_CHK_STAFF_USU_ACT_MARK_VIW"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "Detail_CHK_STAFF_USU_ACT_MARK", 600, 450));
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "Detail_CHK_STAFF_USU_ACT_MARK_VIW", 600, 450));
                 @:ligerToolBar.addItem({ line: true });
              }
 

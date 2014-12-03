@@ -12,6 +12,7 @@ using gzsw.util;
 using gzsw.model.Enums;
 using gzsw.dal;
 using PetaPoco;
+using System.Globalization;
 
 namespace gzsw.test
 {
@@ -67,8 +68,8 @@ namespace gzsw.test
         [TestMethod]
         public void GetHighLV()
         {
-            var e1 = EnumHelper.ConvertToEnum<UserLV_ENUM>("6");
-            Assert.AreEqual(UserLV_ENUM.省级, (UserLV_ENUM)e1);
+            var e1 = EnumHelper.ConvertToEnum<UserLV_ENUM>("1");
+            Assert.AreEqual(UserLV_ENUM.省级, ((UserLV_ENUM)e1));
         }
 
         [TestMethod]
@@ -93,7 +94,16 @@ namespace gzsw.test
         {
             var sql = Sql.Builder.Append("From SYS_USER where USER_ID=@0", "admin or 1=1");
             var admin = gzswDB.GetInstance().Fetch<SYS_USER>(sql);
-            Assert.AreEqual(1, admin.Count);
+            Assert.AreEqual(0, admin.Count);
+        }
+
+        [TestMethod]
+        public void T5()
+        {
+            var dt = DateTime.Now;
+            var data = dt.AddDays(1 - Convert.ToInt32(dt.DayOfWeek.ToString("d")));
+            var d2 = data.Date.AddDays(-1);
+            Assert.AreEqual(DateTime.Parse("2014-11-23"),d2);
         }
     }
 }

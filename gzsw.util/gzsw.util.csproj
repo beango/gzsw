@@ -59,6 +59,12 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Interception">
+      <HintPath>..\packages\Ninject.Extensions.Interception.3.2.0.0\lib\net40\Ninject.Extensions.Interception.dll</HintPath>
+    </Reference>
     <Reference Include="NPOI">
       <HintPath>..\packages\NPOI.2.0.6\lib\net40\NPOI.dll</HintPath>
     </Reference>
@@ -90,6 +96,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionResult\ImageActionResult.cs" />
+    <Compile Include="Cache\CacheAttribute.cs" />
+    <Compile Include="Cache\CacheInterceptor.cs" />
+    <Compile Include="Cache\CachePlanningStrategy.cs" />
     <Compile Include="Cache\ICacheProvider.cs" />
     <Compile Include="Cache\MemoryCacheProvider.cs" />
     <Compile Include="Cache\RedisCacheProvider.cs" />

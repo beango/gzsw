@@ -1,0 +1,90 @@
+﻿@using gzsw.web
+@model gzsw.model.LoginModel
+@{
+    ViewBag.Title = "用户登录";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+}
+<div class="newLogin">
+    <div class="nLContent">
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post, new {@returnUrl = this.ViewBag.ReturnUrl,@autocomplete="off" }))
+    {
+            @Html.AntiForgeryToken()
+        <div class="nLpostion">
+            <div class="wid980">
+                <div>
+                    <div>
+                        <div class="login_box">
+                            <div style="height: 10px;"></div>
+                            <table class="login_table">
+                                <tr>
+                                    <td class="txtRight"><i class="username"></i> 用户名</td>
+                                    <td>
+                                        @Html.TextBoxFor(x => x.UserID, new
+                                                                        {
+                                                                            @class = "txtLong",
+                                                                            @onclick = "javascript:this.value=''",
+                                                                            @tabIndex="1"
+                                                                        })
+
+                                    </td>
+                                    <td rowspan="2">
+                                        <!--登录-->
+                                        <a class="btnlogin" id="btnLogin" tabIndex="4" href="javascript:void(0);"></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="txtRight"><i class="password"></i> 密&nbsp;&nbsp;码</td>
+                                    <td>
+                                        @Html.PasswordFor(x => x.Password, new
+                                                                           {
+                                                                               @class = "txtLong",
+                                                                               @onclick = "JavaScript:this.value=''",
+                                                                               @tabIndex="2"
+                                                                           })
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="txtRight">验证码</td>
+                                    <td>
+                                        @Html.TextBoxFor(x => x.Code, new
+                                                                      {
+                                                                          @class = "txtshort",
+                                                                          @onclick = "JavaScript:this.value=''",
+                                                                          @tabIndex = "3"
+                                                                      })
+                                        <span style="padding-top: 5px; display: inline-block;line-height: 30px;position: relative;top:3px;">
+                                            <img id="imgCode" class="logincode_Img" src="#" />
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="submit" value="提交"/>
+}
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $("#imgCode").click(function () {
+            var url = "@Url.Action("GetCode", "Utility")";
+            $("#imgCode").attr("src", url.urlstamp());
+        });
+        var url = "@Url.Action("GetCode", "Utility")";
+        $("#imgCode").attr("src", url.urlstamp());
+
+        $("#UserID").focus();
+
+        $("#btnLogin").on("click", function() {
+            $("form").submit();
+        });
+       
+        if (self != top)
+            window.parent.frames.location.href = location.href;
+    });
+</script>

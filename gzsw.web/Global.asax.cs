@@ -4,6 +4,7 @@ using gzsw.controller;
 using gzsw.model;
 using gzsw.util;
 using Ninject;
+using Ninject.Extensions.Interception.Infrastructure.Language;
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
@@ -14,6 +15,9 @@ using gzsw.dal;
 using System.Web.Optimization;
 using gzsw.util.cache;
 using System.Web.Security;
+using gzsw.util.Cache;
+using Ninject.Planning.Strategies;
+using System.EnterpriseServices;
 
 namespace gzsw.web
 {
@@ -100,6 +104,11 @@ namespace gzsw.web
             var formsIdentity = HttpContext.Current.User.Identity as FormsIdentity;
             if (formsIdentity != null && formsIdentity.IsAuthenticated && formsIdentity.AuthenticationType == "Forms")
             {
+                var exts = new[] { ".js", ".css", ".gif", ".png", ".jpg", ".swf", ".xls", ".csv", ".xlsx", ".txt" };
+                if (exts.Contains(HttpContext.Current.Request.CurrentExecutionFilePathExtension))
+                {
+                    return;
+                }
                 var principal = MyFormsAuthentication<MyUserDataPrincipal>.TryParsePrincipal(HttpContext.Current.Request);
                 if (null != principal && principal.UserState.UserState.UserFuncs == null)
                 {
@@ -175,6 +184,9 @@ namespace gzsw.web
         {
             _kernel.Bind(typeof(IDao<>)).To(typeof(DaoTemplate<>));
             _kernel.Bind<ICacheProvider>().To<MemoryCacheProvider>();
+
+            //_kernel.Components.Add<IPlanningStrategy, CachePlanningStrategy<InterceptCacheAttribute, CacheInterceptor>>();
+            _kernel.Bind<SYS_USER_DAL>().ToSelf();
         }
 
         public object GetService(Type serviceType)

@@ -107,38 +107,30 @@
                       icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
                 });
 
-
-             
             // 顶部导航
             var ligerToolBar = $("#toptoolbar").ligerToolBar();
 
-            @if (Html.ChkAuth("CHK_STAT_STAFF_SVRSTAT_M_VIW"))
+            @if (Html.ChkAuth("CHK_STAT_STAFF_SVRSTAT_M_VIW,CHK_HALL_STAT_M_VIW"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Detail"), "查看", "CHK_STAT_STAFF_SVRSTAT_M_VIW", 450, 400));
-                                        @:ligerToolBar.addItem({ line: true });
-                                    }
-            
-            @if (Html.ChkAuth("CHK_STAT_STAFF_SVRSTAT_M_ADD"))
+                @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Detail"), "查看", "CHK_STAT_STAFF_SVRSTAT_M_VIW,CHK_HALL_STAT_M_VIW", 450, 400));
+                @:ligerToolBar.addItem({ line: true });
+            }
+            @if (Html.ChkAuth("CHK_STAT_STAFF_SVRSTAT_M_ADD,CHK_HALL_STAT_M_ADD"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIAddButton(Url.Action("Create"), "增加", "CHK_STAT_STAFF_SVRSTAT_M_ADD", 600, 500,"orgId", "@:$('#ddlORGID').val()"));
-                                        @:ligerToolBar.addItem({ line: true });
-                                    } 
-            
-             @if (Html.ChkAuth("CHK_STAT_STAFF_SVRSTAT_M_EDT"))
+                @:ligerToolBar.addItem(@Html.LigerUIAddButton(Url.Action("Create"), "增加", "CHK_STAT_STAFF_SVRSTAT_M_ADD,CHK_HALL_STAT_M_ADD", 600, 500,"orgId", "@:$('#ddlORGID').val()"));
+                @:ligerToolBar.addItem({ line: true });
+            } 
+             @if (Html.ChkAuth("CHK_STAT_STAFF_SVRSTAT_M_EDT,CHK_HALL_STAT_M_EDT"))
             {
-                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "CHK_STAT_STAFF_SVRSTAT_M_EDT", 600, 500));
-                                        @:ligerToolBar.addItem({ line: true });
-                        }
-            @if (Html.ChkAuth("CHK_STAT_STAFF_SVRSTAT_M_DEL"))
+                @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "CHK_STAT_STAFF_SVRSTAT_M_EDT,CHK_HALL_STAT_M_EDT", 600, 500));
+                @:ligerToolBar.addItem({ line: true });
+            }
+            @if (Html.ChkAuth("CHK_STAT_STAFF_SVRSTAT_M_DEL,CHK_HALL_STAT_M_DEL"))
             { 
 
-                @:ligerToolBar.addItem(@Html.LigerUIcancelButton(Url.Action("Delete"), "删除", "CHK_STAT_STAFF_SVRSTAT_M_DEL"));
-                               @:ligerToolBar.addItem({ line: true });
-                        }
-            
-            
-
- 
+                @:ligerToolBar.addItem(@Html.LigerUIcancelButton(Url.Action("Delete"), "删除", "CHK_STAT_STAFF_SVRSTAT_M_DEL,CHK_HALL_STAT_M_DEL"));
+                @:ligerToolBar.addItem({ line: true });
+            }
         });
     </script>
 }

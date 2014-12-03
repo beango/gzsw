@@ -8,13 +8,14 @@ namespace gzsw.util.cache
 {
     public interface ICacheProvider
     {
+        object Get(string key);
+
+        void Set(string key, object data, double expiry);
+
         T Get<T>(string key, Expression<Func<T>> expression, TimeSpan? expiry = null);
+
+        T Get<T>(string key, Expression<Func<T>> expression, double expiry);
+
         void Bust(string key);
-
-        //TV Get<TV>(TK cacheKey, Func<TV> getUncachedValue, DateTimeOffset dateTimeOffset);
-
-        //TV Get<TV>(TK cacheKey, Func<TV> getUncachedValue, TimeSpan timeSpan);
-
-        //void Remove(TK cacheKey);
     }
 }

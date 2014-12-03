@@ -940,25 +940,20 @@ namespace gzsw.controller
             base.DateTimeInit(ref beginTime, ref endTime);
             // 获取数据
             var bll = new Statistics_DAL();
-            var columnName = "VERY_SATISFY_CNT";
             var columnDisplayName = "很满意量";
             // 标题 
             switch (type)
             {
                 case 2:
-                    columnName = "SATISFY_CNT";
                     columnDisplayName = "满意量";
                     break;
                 case 3:
-                    columnName = "COMMON_CNT";
                     columnDisplayName = "基本满意量";
                     break;
                 case 4:
-                    columnName = "UNSATISFY_CNT";
                     columnDisplayName = "不满意量";
                     break;
                 case 5:
-                    columnName = "NON_EVAL_CNT";
                     columnDisplayName = "未评价量";
                     break;
                 case 6:

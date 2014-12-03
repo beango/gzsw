@@ -26,10 +26,6 @@ namespace gzsw.controller.MyAuth
         /// </summary>
         public UserAuthAttribute()
         {
-            //DaoUserole = new DaoTemplate<SYS_USEROLE>();
-            //DaoRolefunction = new DaoTemplate<SYS_ROLEFUNCTION>();
-            //DaoUserole = daourserrole;
-            //DaoRolefunction = _DaoRolefunction;
         }
 
         /// <summary>
@@ -41,6 +37,11 @@ namespace gzsw.controller.MyAuth
             Funcs = funs;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="httpContext"></param>
+        /// <returns></returns>
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
             var user = httpContext.User as MyFormsPrincipal<MyUserDataPrincipal>;
@@ -55,7 +56,11 @@ namespace gzsw.controller.MyAuth
             return false;
         }
 
+        /// <summary>
+        /// 判断是没有权限还是没有登录，0没有登录，1没有权限
+        /// </summary>
         private int chktype = 0;
+
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
             if (filterContext == null)

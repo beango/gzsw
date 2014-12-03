@@ -36,7 +36,7 @@ namespace gzsw.controller.Detail
         public IDao<WARN_COMPLAIN_TYP_CON> WarncomplaintypedaoDao { get; set; }
 
 
-        [UserAuth("WARN_COMPLAIN_DETAIL_VIW")]
+        [UserAuth("WARN_COMPLAIN_DETAIL_VIW,DETAIL_WARN_COMPLAIN_DETAIL_VIW")]
         public ActionResult Index(string nameorcode, string start, string end, int pageIndex = 1, int pageSize = 20, int status = 0)
         {
 
@@ -80,8 +80,8 @@ namespace gzsw.controller.Detail
 
             ViewBag.UserORG = new SelectList(orgs, "ORG_ID", "ORG_NAM", org);
         }
-         
-        [UserAuth("WARN_COMPLAIN_DETAIL_VIW")]
+
+        [UserAuth("WARN_COMPLAIN_DETAIL_VIW,DETAIL_WARN_COMPLAIN_DETAIL_VIW")]
         public ActionResult Detail(int id)
         {
             var data = WarncomplaindetailDao.GetEntity("SEQ", id);

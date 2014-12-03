@@ -116,7 +116,6 @@ namespace gzsw.controller.STAT
 
             if (export)
             {
-                var index = 0;
                 return ExportData(exceltitle,
                     "业务办理分析报表-服务厅", "服务厅", dic);
             }
@@ -164,7 +163,6 @@ namespace gzsw.controller.STAT
 
             if (export)
             {
-                var index = 0;
                 return ExportData(exceltitle,
                     "业务办理分析报表-员工", "员工名称", dic);
             }

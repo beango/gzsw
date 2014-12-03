@@ -90,29 +90,27 @@
                 },
                 icon: "@Html.Url("Content/lib/ligerUI/skins/icons/search.png")"
             });
+            
             // 顶部导航
             var bar = $("#toptoolbar").ligerToolBar();
 
-              @if (Html.ChkAuth("CHK_HALL_CHKITEM_CON_ADD"))
-              {
-                            @:bar.addItem(@Html.AuthAddButton("CHK_HALL_CHKITEM_CON_ADD", Url.Action("Create"), "新增", 500, 400));
-                                                                @:bar.addItem({ line: true });
-                                                }
+            @if (Html.ChkAuth("CHK_HALL_CHKITEM_CON_ADD"))
+            {
+                @:bar.addItem(@Html.AuthAddButton("CHK_HALL_CHKITEM_CON_ADD", Url.Action("Create"), "新增", 500, 400));
+                @:bar.addItem({ line: true });
+            }
 
-                        @if (Html.ChkAuth("CHK_HALL_CHKITEM_CON_EDT"))
-                        {
-                            @:bar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "CHK_HALL_CHKITEM_CON_EDT", 600, 400));
+            @if (Html.ChkAuth("CHK_HALL_CHKITEM_CON_EDT"))
+            {
+                @:bar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "CHK_HALL_CHKITEM_CON_EDT", 600, 400));
 
-                            @:bar.addItem({ line: true });
-                                    }
+                @:bar.addItem({ line: true });
+            }
 
-            
-                      
-              @if (Html.ChkAuth("CHK_HALL_CHKITEM_CON_DEL"))
-              {
-                  @:bar.addItem(@Html.AuthDelButton("CHK_HALL_CHKITEM_CON_DEL", Url.Action("Delete")));
-                        
-              }
+            @if (Html.ChkAuth("CHK_HALL_CHKITEM_CON_DEL"))
+            {
+              @:bar.addItem(@Html.AuthDelButton("CHK_HALL_CHKITEM_CON_DEL", Url.Action("Delete")));
+            }
         });
     </script>
 }

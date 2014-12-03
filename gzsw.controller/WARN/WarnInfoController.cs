@@ -168,26 +168,29 @@ namespace gzsw.controller.WARN
             }
         }
 
-
         public ActionResult SendInfoTip()
         {
+            //报警
             var dallist = new WARN_INFO_DETAIL_DAL().GetNoSendInfoList(UserState.UserID);
             List<TipModel> unread = dallist
                 .Select(item => new TipModel { typ = "WARNSENDINFODETAIL", id = item.WARN_INFO_DETAIL_ID, msg = item.WARN_INFO })
                 .ToList();
             new WARN_SENDINFO_DETAIL_DAL().UPDATE_WARN_SENDINFO_DETAIL(dallist.Select(o => o.SENDINFO_DETAIL_ID));
 
+            //预警
             var dal1 = new WARN_ALARM_INFO_DETAIL_DAL();
             var unreadalarmlist = dal1.GetALARMSendInfo(UserState.UserID);
             var unreadalarm = unreadalarmlist.Select(item => new TipModel { typ = "ALARMSENDINFODETAIL", id = item.ALARM_SEQ, msg = item.ALARM_INFO })
                 .ToList();
             dal1.UPDATE_WARN_ALARM_INFO_DETAIL(unreadalarmlist.Select(o => o.SENDINFO_DETAIL_ID));
 
+            //投诉
             var _hall = DAO_WARN_ALARM_SEND_USER_CON.FindList("", "ALARM_TYP", 4, "USER_ID", UserState.UserID);
             var unreadalarm2 = DaoComplainDetail.FindList("", "STATE", 1, "HALL_NO in", _hall.Select(o => o.HALL_NO))
                 .Select(item => new TipModel { typ = "COMPLAINSENDINFODETAIL", id = item.SEQ, msg = item.COMPLAIN_PRO })
                 .ToList();
 
+            //合并
             if (null != unreadalarm && unreadalarm.Count() > 0)
                 unread.AddRange(unreadalarm);
             if (null != unreadalarm2 && unreadalarm2.Count() > 0)

@@ -81,26 +81,24 @@
             // 顶部导航
             var bar = $("#toptoolbar").ligerToolBar();
 
-              @if (Html.ChkAuth("WARN_COMPLAIN_TYP_CON_EDL"))
-              {
-                            @:bar.addItem(@Html.AuthAddButton("WARN_COMPLAIN_TYP_CON_ADD", Url.Action("Create", "WarnComplain"), "新增", 500, 400));
-                                                    @:bar.addItem({ line: true });
-                                    }
+            @if (Html.ChkAuth("WARN_COMPLAIN_TYP_CON_ADD"))
+            {
+                @:bar.addItem(@Html.AuthAddButton("WARN_COMPLAIN_TYP_CON_ADD", Url.Action("Create", "WarnComplain"), "新增", 500, 400));
+                @:bar.addItem({ line: true });
+            }
 
-                        @if (Html.ChkAuth("WARN_COMPLAIN_TYP_CON_EDL"))
-                        {
-                            @:bar.addItem(@Html.LigerUIEditButton(Url.Action("Edit", "WarnComplain"), "修改", "WARN_COMPLAIN_TYP_CON_EDL", 600, 400));
+            @if (Html.ChkAuth("WARN_COMPLAIN_TYP_CON_EDT"))
+            {
+                @:bar.addItem(@Html.LigerUIEditButton(Url.Action("Edit", "WarnComplain"), "修改", "WARN_COMPLAIN_TYP_CON_EDT", 600, 400));
 
-                            @:bar.addItem({ line: true });
-                        }
-
+                @:bar.addItem({ line: true });
+            }
+       
+            @if (Html.ChkAuth("WARN_COMPLAIN_TYP_CON_DEL"))
+            {
+                @:bar.addItem(@Html.AuthDelButton("WARN_COMPLAIN_TYP_CON_DEL", Url.Action("Delete", "WarnComplain")));
             
-                      
-              @if (Html.ChkAuth("WARN_COMPLAIN_TYP_CON_EDL"))
-              {
-                  @:bar.addItem(@Html.AuthDelButton("WARN_COMPLAIN_TYP_CON_DEL", Url.Action("Delete", "WarnComplain")));
-            
-              }
+            }
         });
     </script>
 }

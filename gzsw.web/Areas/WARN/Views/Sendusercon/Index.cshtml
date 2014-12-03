@@ -108,11 +108,11 @@
             // 顶部导航
             var bar = $("#toptoolbar").ligerToolBar();
 
-            bar.addItem(@Html.AuthViewButton("WARN_RELEASE_VIW", Url.Action("Details"),"查看",500,400));
+            bar.addItem(@Html.AuthViewButton("WARN_ALARM_SEND_USER_CON_VIW", Url.Action("Details"),"查看",500,400));
             bar.addItem({ line: true });
-            bar.addItem(@Html.AuthAddButton("WARN_RELEASE_ADD", Url.Action("Create"), "新增", 500, 400));
+            bar.addItem(@Html.AuthAddButton("WARN_ALARM_SEND_USER_CON_ADD", Url.Action("Create"), "新增", 500, 400));
             bar.addItem({ line: true });
-            bar.addItem(@Html.AuthDelButton("WARN_RELEASE_DEL", Url.Action("Delete")));
+            bar.addItem(@Html.AuthDelButton("WARN_ALARM_SEND_USER_CON_DEL", Url.Action("Delete")));
             bar.addItem({ line: true });
         });
     </script>

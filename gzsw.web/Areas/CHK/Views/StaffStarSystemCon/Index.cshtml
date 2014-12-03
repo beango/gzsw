@@ -52,7 +52,7 @@
         {
             <tr>
                 <td>
-                    <input name="cbId" value="@item.ORG_ID" type='checkbox' />
+                    <input name="cbId" value="@string.Format("{0}*{1}", item.ORG_ID, item.TIME_DUR_TYP)" type='checkbox' />
                 </td>
                 <td>
                     @(i++)

@@ -105,13 +105,13 @@
             @if (Html.ChkAuth("CHK_DETAIL_SVR_COEF_CON_VIW"))
             {
                 @:ligerToolBar.addItem(@Html.LigerUIViewButton(Url.Action("Details"), "查看", "CHK_DETAIL_SVR_COEF_CON_VIW", 450, 400, "orgId", "@:$('table.tablelist').getSelAttr('d-orgId')"));
-                            @:ligerToolBar.addItem({ line: true });
-                        }
+                @:ligerToolBar.addItem({ line: true });
+            }
 
             @if (Html.ChkAuth("CHK_DETAIL_SVR_COEF_CON_ADD"))
             {
                 @:ligerToolBar.addItem(@Html.LigerUIAddButton(Url.Action("Create"), "增加", "CHK_DETAIL_SVR_COEF_CON_ADD", 600, 300));
-                            @:ligerToolBar.addItem({ line: true });
+                @:ligerToolBar.addItem({ line: true });
             }
             
             @if (Html.ChkAuth("CHK_DETAIL_SVR_COEF_CON_ADD"))
@@ -123,16 +123,13 @@
             @if (Html.ChkAuth("CHK_DETAIL_SVR_COEF_CON_EDT"))
             {
                 @:ligerToolBar.addItem(@Html.LigerUIEditButton(Url.Action("Edit"), "修改", "CHK_DETAIL_SVR_COEF_CON_EDT", 600, 300, "orgId", "@:$('table.tablelist').getSelAttr('d-orgId')"));
-                            @:ligerToolBar.addItem({ line: true });
-                        }
-
+                @:ligerToolBar.addItem({ line: true });
+            }
 
             @if (Html.ChkAuth("CHK_DETAIL_SVR_COEF_CON_DEL"))
             {
                 @:ligerToolBar.addItem(@Html.LigerUIDeleteButton(Url.Action("Delete"), "删除", "CHK_DETAIL_SVR_COEF_CON_DEL", "orgId", "@:$('table.tablelist').getSelAttr('d-orgId')"));
-                        }
-
-
+            }
         });
     </script>
 }
